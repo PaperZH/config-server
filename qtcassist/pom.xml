@@ -13,7 +13,6 @@
 
     <modules>
         <module>qtcassist-base</module>
-        <module>qtcassist-discovery</module>
         <module>qtcassist-course</module>
         <module>qtcassist-courseware</module>
         <module>qtcassist-schedule</module>
@@ -67,7 +66,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
