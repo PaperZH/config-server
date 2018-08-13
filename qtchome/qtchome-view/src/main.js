@@ -28,7 +28,7 @@ Vue.component('page-head', Head) // 注册头部组件
 Vue.component('page-footer', Footer) // 注册页面底部组件
 Vue.component('course-ist', CourseList) // 注册课件列表组件
 Vue.component('tabs-breadcrumb', Breadcrumb) // 面包屑组件
-Vue.component('dialog-plan', dialogplan) // 注册制定计划弹框组件
+Vue.component('dialog-edit-plan', dialogplan) // 注册制定计划弹框组件
 /**
  * element-ui hack
  */
