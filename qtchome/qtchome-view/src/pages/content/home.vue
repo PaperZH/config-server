@@ -29,7 +29,7 @@
     export default {
       data () {
         return {
-          height:'380px',
+          height: '380px',
           images: [{
             id: 1,
             src: 'static/image/1.jpg'
