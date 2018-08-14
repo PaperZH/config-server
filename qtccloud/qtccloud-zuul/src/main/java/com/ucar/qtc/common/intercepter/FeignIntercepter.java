@@ -13,11 +13,17 @@ import org.slf4j.LoggerFactory;
  * @date: 2018/8/7 10:19
  */
 public class FeignIntercepter implements RequestInterceptor {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestInterceptor.class);
 
+    /**
+     * 设置token
+     * @param requestTemplate
+     */
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        logger.info("------feign设置token" + Thread.currentThread().getId());
-        requestTemplate.header(CommonConstants.CONTEXT_TOKEN, FilterContextHandler.getToken());
+        String token = FilterContextHandler.getToken();
+        logger.info("------feign设置token: "+token);
+        requestTemplate.header(CommonConstants.CONTEXT_TOKEN, token);
     }
 }

@@ -1,5 +1,8 @@
 package com.ucar.qtc.zuul.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 import com.ucar.qtc.common.constants.CommonConstants;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.MenuDTO;
@@ -7,9 +10,9 @@ import com.ucar.qtc.common.dto.UserToken;
 import com.ucar.qtc.common.utils.JSONUtils;
 import com.ucar.qtc.common.utils.JwtUtils;
 import com.ucar.qtc.common.utils.ResponseResult;
-import com.ucar.qtc.zuul.prc.admin.MenuService;
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import com.ucar.qtc.zuul.api.MenuService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +28,11 @@ import java.util.Set;
  * @date: 2018/8/7 10:19
  */
 public class AccessFilter extends ZuulFilter {
+
+    private static Logger logger = LoggerFactory.getLogger(AccessFilter.class);
+
     @Autowired
     MenuService menuService;
-
 
     private String ignorePath = "/api-admin/login";
 
@@ -45,7 +50,6 @@ public class AccessFilter extends ZuulFilter {
     public boolean shouldFilter() {
         return true;
     }
-
 
     @Override
     public Object run() {
@@ -65,6 +69,7 @@ public class AccessFilter extends ZuulFilter {
         }
         try {
             UserToken userToken = JwtUtils.getInfoFromToken(accessToken);
+            logger.info("用户信息: "+JSON.toJSONString(userToken));
         } catch (Exception e) {
             setFailedRequest(ResponseResult.error401(), 200);
             return null;
@@ -74,18 +79,11 @@ public class AccessFilter extends ZuulFilter {
             setFailedRequest(ResponseResult.error403(), 200);
             return null;
         }
-        Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
-        //We need our JWT tokens relayed to resource servers
-        //添加自己header
-//        ctx.addZuulRequestHeader(CommonConstants.CONTEXT_TOKEN, accessToken);
+
         //移除忽略token
+        Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
         headers.remove("authorization");
         return null;
-//        RequestContext ctx = RequestContext.getCurrentContext();
-//        Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
-//        // We need our JWT tokens relayed to resource servers
-//        headers.remove("authorization");
-//        return null;
     }
 
     private void setFailedRequest(Object body, int code) {
