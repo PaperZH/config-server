@@ -11,6 +11,11 @@
       <div class="topbar-title">
         <span style="font-size: 18px;color: #fff;"></span>
       </div>
+      <!--展开折叠开关-->
+        <div class="menu-toggle" @click.prevent="collapse">
+          <i class="fa fa-bars" v-show="!collapsed"></i>
+          <i class="fa fa-bars fa-rotate-90" v-show="collapsed"></i>
+        </div>
       <div class="topbar-account topbar-btn">
         <el-dropdown trigger="click">
           <span class="el-dropdown-link userinfo-inner"><i class="iconfont icon-user"></i> {{nickname}}  <i
@@ -32,11 +37,7 @@
     <el-col :span="24" class="main">
       <!--左侧导航-->
       <aside :class="{showSidebar:!collapsed}">
-        <!--展开折叠开关-->
-        <div class="menu-toggle" @click.prevent="collapse">
-          <i class="fa fa-bars" v-show="!collapsed"></i>
-          <i class="fa fa-bars fa-rotate-90" v-show="collapsed"></i>
-        </div>
+        
         <!--导航菜单-->
         <el-menu :default-active="defaultActiveIndex" router :collapse="collapsed" @select="handleSelect">
           <template v-for="(item,index) in menus" v-if="item.menuShow">
@@ -269,11 +270,12 @@
     }
 
     .menu-toggle {
-      background: #4a5064;
+      float: left;
+      background: #373d41;
       text-align: center;
       color: white;
-      height: 26px;
-      line-height: 30px;
+      padding-left: 10px;
+
     }
 
     .content-container {

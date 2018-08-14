@@ -1,4 +1,4 @@
-package com.ucar.qtc.zuul.prc.admin;
+package com.ucar.qtc.zuul.api;
 
 import com.ucar.qtc.common.dto.MenuDTO;
 import com.ucar.qtc.common.intercepter.FeignIntercepter;

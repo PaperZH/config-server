@@ -19,15 +19,26 @@ import java.util.Map;
 @RequestMapping("/log")
 @RestController
 public class LogController {
+
     @Autowired
     LogService logService;
 
+    /**
+     * 日志列表
+     * @param params
+     * @return
+     */
     @GetMapping()
     ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
         return ResponseResult.page(new PageUtils(logService.queryList(query), logService.count(query)));
     }
 
+    /**
+     * 保存日志信息
+     * @param logDO
+     * @return
+     */
     @PostMapping("/save")
     ResponseResult save(@RequestBody LogDO logDO) {
         if (logService.save(logDO) > 0) {
@@ -36,6 +47,11 @@ public class LogController {
         return ResponseResult.error();
     }
 
+    /**
+     * 删除日志
+     * @param id
+     * @return
+     */
     @DeleteMapping()
     ResponseResult remove(Long id) {
         if (logService.remove(id) > 0) {
@@ -44,6 +60,11 @@ public class LogController {
         return ResponseResult.error();
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @PostMapping("/batchRemove")
     ResponseResult batchRemove(@RequestParam("ids[]") Long[] ids) {
         int r = logService.batchRemove(ids);
