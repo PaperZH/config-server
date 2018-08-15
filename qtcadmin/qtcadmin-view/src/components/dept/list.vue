@@ -35,6 +35,9 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="addForm.name" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="排序" prop="orderNum">
+            <el-input v-model="addForm.object.orderNum" auto-complete="off"></el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -47,7 +50,7 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="editForm.name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="排序" prop="icon">
+          <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
