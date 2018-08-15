@@ -20,18 +20,15 @@
     delete from praise_user_course_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
-    insert into praise_user_course_relation (id, user_id, course_id, 
+  <insert id="insert" parameterType="com.ucar.qtcassist.model.PraiseUserCourse"   useGeneratedKeys="true" keyProperty="id">
+    insert into praise_user_course_relation (user_id, course_id,
       publish_date)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, 
+    values (#{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT},
       #{publishDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.PraiseUserCourse"   useGeneratedKeys="true" keyProperty="id">
     insert into praise_user_course_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="userId != null" >
         user_id,
       </if>
@@ -43,9 +40,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>

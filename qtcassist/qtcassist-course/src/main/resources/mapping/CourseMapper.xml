@@ -28,22 +28,19 @@
     delete from course
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.Course" >
-    insert into course (id, type_id, course_name, 
+  <insert id="insert" parameterType="com.ucar.qtcassist.model.Course" useGeneratedKeys="true" keyProperty="id">
+    insert into course (type_id, course_name,
       course_cover, course_description, course_score, 
       read_num, praise_num, invalid_date, 
       publish_time, update_time)
-    values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR}, 
+    values (#{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR},
       #{courseCover,jdbcType=VARCHAR}, #{courseDescription,jdbcType=VARCHAR}, #{courseScore,jdbcType=REAL}, 
       #{readNum,jdbcType=INTEGER}, #{praiseNum,jdbcType=INTEGER}, #{invalidDate,jdbcType=TIMESTAMP}, 
       #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.Course" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.Course" useGeneratedKeys="true" keyProperty="id">
     insert into course
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+    <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="typeId != null" >
         type_id,
       </if>
@@ -76,9 +73,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="typeId != null" >
         #{typeId,jdbcType=BIGINT},
       </if>

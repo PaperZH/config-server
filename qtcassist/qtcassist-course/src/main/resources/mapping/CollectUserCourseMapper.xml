@@ -24,12 +24,9 @@
     insert into collect_user_course_relation (user_id, course_id, publish_date)
     values (#{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, #{publishDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CollectUserCourse" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CollectUserCourse"   useGeneratedKeys="true" keyProperty="id">
     insert into collect_user_course_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="userId != null" >
         user_id,
       </if>
@@ -41,9 +38,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
