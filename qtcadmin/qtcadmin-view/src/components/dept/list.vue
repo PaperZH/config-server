@@ -105,14 +105,13 @@
           function (result) {
             console.log(result);
             that.deptdata = result
-            console.log(result)
+           
           }
 
         )
       },
       showAddDialog: function (parentId) {
         this.addForm.parentId = parentId
-
         this.addFormVisible = true
       },
       showEditDialog: function (index, row) {

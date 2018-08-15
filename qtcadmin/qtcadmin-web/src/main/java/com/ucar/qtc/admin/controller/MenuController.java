@@ -30,6 +30,8 @@ public class MenuController {
     Tree<MenuDO>  tree(){
         return menuService.getTree();
     }
+
+    @Log("访问菜单列表")
     @GetMapping
     List<Tree<MenuDO>>  list(){
         return menuService.getTree().getChildren();
@@ -51,6 +53,7 @@ public class MenuController {
      * @param params
      * @return
      */
+    @Log("访问菜单列表")
     @GetMapping("list")
     List<MenuDO> list(@RequestParam Map<String, Object> params) {
         List<MenuDO> menus = menuService.list(params);
@@ -62,6 +65,7 @@ public class MenuController {
      * @param menuDO
      * @return
      */
+    @Log("修改菜单")
     @PutMapping()
     ResponseResult update(@RequestBody MenuDO menuDO){
         if(menuService.update(menuDO)>0){
@@ -75,6 +79,7 @@ public class MenuController {
      * @param menuDO
      * @return
      */
+    @Log("添加菜单")
     @PostMapping
     ResponseResult save(@RequestBody MenuDO menuDO){
         return ResponseResult.operate(menuService.save(menuDO)>0);
@@ -85,6 +90,7 @@ public class MenuController {
      * @param id
      * @return
      */
+    @Log("删除菜单")
     @DeleteMapping()
     ResponseResult remove(Long id){
         if(menuService.remove(id)>0){
@@ -124,6 +130,7 @@ public class MenuController {
      * 当前用户菜单的树形结构
      * @return
      */
+    @Log("当前用户菜单")
     @RequestMapping("/currentUserMenus")
     List<Tree<MenuDO>> currentUserMenus() {
         List<Tree<MenuDO>> menus = menuService.listMenuTree(Long.parseLong(FilterContextHandler.getUserID()));
