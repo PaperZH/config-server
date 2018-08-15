@@ -19,18 +19,13 @@
     delete from course_courseware_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.CourseCourseware" >
-    insert into course_courseware_relation (id, cours_id, courseware_id
-      )
-    values (#{id,jdbcType=BIGINT}, #{coursId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT}
-      )
+  <insert id="insert" parameterType="com.ucar.qtcassist.model.CourseCourseware"   useGeneratedKeys="true" keyProperty="id">
+    insert into course_courseware_relation (cours_id, courseware_id)
+    values (#{coursId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CourseCourseware" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CourseCourseware"   useGeneratedKeys="true" keyProperty="id">
     insert into course_courseware_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="coursId != null" >
         cours_id,
       </if>
@@ -39,9 +34,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="coursId != null" >
         #{coursId,jdbcType=BIGINT},
       </if>

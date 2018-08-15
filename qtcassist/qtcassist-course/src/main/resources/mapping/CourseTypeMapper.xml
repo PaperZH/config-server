@@ -18,24 +18,18 @@
     delete from course_type
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.CourseType" >
-    insert into course_type (id, type_name)
-    values (#{id,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.ucar.qtcassist.model.CourseType"   useGeneratedKeys="true" keyProperty="id">
+    insert into course_type (type_name)
+    values (#{typeName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CourseType" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CourseType"   useGeneratedKeys="true" keyProperty="id">
     insert into course_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="typeName != null" >
         type_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="typeName != null" >
         #{typeName,jdbcType=VARCHAR},
       </if>
