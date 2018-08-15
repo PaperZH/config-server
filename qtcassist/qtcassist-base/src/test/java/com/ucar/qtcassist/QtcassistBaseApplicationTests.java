@@ -2,9 +2,13 @@ package com.ucar.qtcassist;
 
 import com.ucar.qtcassist.util.RedisStringDemo;
 import com.zuche.framework.common.SpringApplicationContext;
+import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.remote.RemoteClient;
 import com.zuche.framework.remote.RemoteClientFactory;
 import com.zuche.framework.remote.RemoteType;
+import com.zuche.framework.udfs.client.UDFSClient;
+import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
+import com.zuche.framework.udfs.client.upload.UDFSUploadVO;
 import com.zuche.framework.upload.ResourceUploadResultVO;
 import com.zuche.framework.upload.ResourceUploadScaleVO;
 import com.zuche.framework.upload.ResourceUploadVO;
@@ -59,19 +63,32 @@ public class QtcassistBaseApplicationTests extends AbstractJUnit4SpringContextTe
         FileInputStream inputStream = new FileInputStream(file);
         byte[] bytes = getByteArrayInputStreamResource(inputStream);
 
-        ResourceUploadVO vo = new ResourceUploadVO();
-        vo.setName("123/322/723.jpg");
+        UDFSUploadVO vo = new UDFSUploadVO();
+        vo.setName("123/456/7890.jpg");
         vo.setData(bytes);
-        vo.setCompress(true);
-        vo.setCompressSize(10);
+        vo.setBusinessLine(BusinessLineEnum.EVP);
 
-        List<ResourceUploadScaleVO> list = new ArrayList<ResourceUploadScaleVO>();
-        vo.setScaleInfos(list);
-        ResourceUploadScaleVO scaleVO = new ResourceUploadScaleVO("small", 500, 500,null,true);
-        list.add(scaleVO);
-
-        ResourceUploadResultVO resultVO= (ResourceUploadResultVO)client.executeToObject("carresources.commonResourceInsert.service", vo);
+        UDFSUploadResultVO resultVO= (UDFSUploadResultVO)client.executeToObject("ucarudfs.commonResourceInsert.service", vo);
         System.out.println(resultVO.getOriginalName());
+    }
+
+    @Test
+    public void uploadtest2() throws Exception {
+        RemoteClient client = RemoteClientFactory.getInstance(RemoteType.HESSIAN);
+
+        File file = new File("D:\\img2.jpg");
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = getByteArrayInputStreamResource(inputStream);
+
+        UDFSUploadVO vo = new UDFSUploadVO();
+        vo.setName("123/456/7890.jpg");
+        vo.setData(bytes);
+        vo.setBusinessLine(BusinessLineEnum.EVP);
+
+        UDFSUploadResultVO resultVO=  UDFSClient.upload(vo);
+        System.out.println(resultVO.getOriginalName());
+
+
     }
 
     private static byte[] getByteArrayInputStreamResource(InputStream inputStream) throws IOException {
