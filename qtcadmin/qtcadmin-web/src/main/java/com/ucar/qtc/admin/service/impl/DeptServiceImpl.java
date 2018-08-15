@@ -67,9 +67,10 @@ public class DeptServiceImpl implements DeptService {
 			tree.setId(sysDept.getDeptId().toString());
 			tree.setParentId(sysDept.getParentId().toString());
 			tree.setText(sysDept.getName());
-			Map<String, Object> state = new HashMap<>(16);
-			state.put("opened", true);
-			tree.setState(state);
+			Map<String, Object> obj = new HashMap<>(16);
+			obj.put("orderNum", sysDept.getOrderNum());
+			obj.put("name", sysDept.getName());
+			tree.setObject(obj);
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整

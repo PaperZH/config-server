@@ -20,7 +20,7 @@
     <el-col :span="24" class="warp-main" v-loading="loading" element-loading-text="拼命加载中">
       <tree-table :data="deptdata" :columns="columns" border highlight-current-row v-loading="loading"
                   style="width: 100%;">
-        <el-table-column label="部门ID" prop="id"></el-table-column>
+        <el-table-column label="部门ID" prop="object.orderNum"></el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="showAddDialog(scope.row.id)">增加</el-button>
@@ -35,6 +35,9 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="addForm.name" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="排序" prop="orderNum">
+            <el-input v-model="addForm.object.orderNum" auto-complete="off"></el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -47,7 +50,7 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="editForm.name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="排序" prop="icon">
+          <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
