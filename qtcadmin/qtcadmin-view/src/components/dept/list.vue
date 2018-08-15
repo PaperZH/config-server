@@ -20,7 +20,7 @@
     <el-col :span="24" class="warp-main" v-loading="loading" element-loading-text="拼命加载中">
       <tree-table :data="deptdata" :columns="columns" border highlight-current-row v-loading="loading"
                   style="width: 100%;">
-        <el-table-column label="部门ID" prop="id"></el-table-column>
+        <el-table-column label="部门ID" prop="object.orderNum"></el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="showAddDialog(scope.row.id)">增加</el-button>
@@ -102,9 +102,9 @@
           function (result) {
             console.log(result);
             that.deptdata = result
-           
+
           }
-         
+
         )
       },
       showAddDialog: function (parentId) {
