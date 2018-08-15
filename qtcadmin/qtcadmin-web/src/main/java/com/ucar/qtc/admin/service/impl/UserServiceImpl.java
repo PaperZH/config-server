@@ -29,10 +29,13 @@ import java.util.*;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class UserServiceImpl implements UserService {
+
 	@Autowired
     UserDao userMapper;
+
 	@Autowired
     UserRoleDao userRoleMapper;
+
 	@Autowired
     DeptDao deptMapper;
 
@@ -43,7 +46,7 @@ public class UserServiceImpl implements UserService {
 		List<Long> roleIds = userRoleMapper.listRoleId(id);
 		UserDO user = userMapper.get(id);
 		user.setDeptName(deptMapper.get(user.getDeptId()).getName());
-		user.setroleIds(roleIds);
+		user.setRoleIds(roleIds);
 		return user;
 	}
 
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	public int save(UserDO user) {
 		int count = userMapper.save(user);
 		Long userId = user.getUserId();
-		List<Long> roles = user.getroleIds();
+		List<Long> roles = user.getRoleIds();
 		userRoleMapper.removeByUserId(userId);
 		List<UserRoleDO> list = new ArrayList<>();
 		for (Long roleId : roles) {
@@ -80,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	public int update(UserDO user) {
 		int r = userMapper.update(user);
 		Long userId = user.getUserId();
-		List<Long> roles = user.getroleIds();
+		List<Long> roles = user.getRoleIds();
 		if(null!=roles){
 			userRoleMapper.removeByUserId(userId);
 			List<UserRoleDO> list = new ArrayList<>();
@@ -130,7 +133,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int adminResetPwd(UserVO userVO) throws Exception {
 		UserDO userDO =get(userVO.getUserDO().getUserId());
-		if("admin".equals(userDO.getUsername())){
+		if(userDO.getUserId() == 1){
 			throw new Exception("超级管理员的账号不允许直接重置！");
 		}
 		userDO.setPassword(MD5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
@@ -194,6 +197,4 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Object> updatePersonalImg(MultipartFile file, String avatar_data, Long userId) throws Exception {
 		return null;
 	}
-
-
 }

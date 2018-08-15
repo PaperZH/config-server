@@ -74,6 +74,7 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     @Override
     public int save(RoleDO role) {
+        role.setDelFlag(1);
         int count = roleMapper.save(role);
         List<Long> menuIds = role.getMenuIds();
         Long roleId = role.getRoleId();
@@ -94,6 +95,10 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     @Override
     public int remove(Long id) {
+        List<Long> list = userRoleMapper.listUserId(id);
+        if (list != null && !list.isEmpty()) {
+            return 1;
+        }
         int count = roleMapper.remove(id);
         roleMenuMapper.removeByRoleId(id);
         return count;

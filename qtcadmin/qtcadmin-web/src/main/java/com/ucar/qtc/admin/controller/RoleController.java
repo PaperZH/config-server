@@ -22,6 +22,11 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    /**
+     * 角色列表
+     * @param params
+     * @return
+     */
     @GetMapping()
     PageUtils list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
@@ -31,11 +36,21 @@ public class RoleController {
         return pageUtil;
     }
 
+    /**
+     * 根据用户查询角色
+     * @param userId
+     * @return
+     */
     @GetMapping("/userId/{userId}")
     List<Long> roleIdByUserId(@PathVariable Long userId){
         return roleService.RoleIdsByUserId(userId);
     }
 
+    /**
+     * 保存角色
+     * @param roleDO
+     * @return
+     */
     @PostMapping
     ResponseResult save(@RequestBody RoleDO roleDO){
         if(roleService.save(roleDO)>0){
@@ -44,6 +59,11 @@ public class RoleController {
         return ResponseResult.error();
     }
 
+    /**
+     * 更新角色
+     * @param roleDO
+     * @return
+     */
     @PutMapping
     ResponseResult update(@RequestBody RoleDO roleDO){
         if(roleService.update(roleDO)>0){
@@ -52,4 +72,13 @@ public class RoleController {
         return ResponseResult.error();
     }
 
+    /**
+     * 删除角色
+     * @param id
+     * @return
+     */
+    @DeleteMapping()
+    ResponseResult remove(Long id) {
+        return ResponseResult.operate (roleService.remove(id) > 0);
+    }
 }

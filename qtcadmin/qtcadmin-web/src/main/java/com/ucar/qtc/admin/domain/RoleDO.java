@@ -1,6 +1,7 @@
 package com.ucar.qtc.admin.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,14 +10,13 @@ import java.util.List;
  * @date: 2018/8/7 10:19
  */
 public class RoleDO {
-	
 	private Long roleId;
 	private String roleName;
-	private String roleSign;
+	private String roleDesc;
 	private String remark;
-	private Long userIdCreate;
-	private Timestamp gmtCreate;
-	private Timestamp gmtModified;
+	private Integer delFlag;
+	private Date createTime;
+	private Date updateTime;
 	private List<Long> menuIds;
 
 	public Long getRoleId() {
@@ -35,14 +35,6 @@ public class RoleDO {
 		this.roleName = roleName;
 	}
 
-	public String getRoleSign() {
-		return roleSign;
-	}
-
-	public void setRoleSign(String roleSign) {
-		this.roleSign = roleSign;
-	}
-
 	public String getRemark() {
 		return remark;
 	}
@@ -51,28 +43,36 @@ public class RoleDO {
 		this.remark = remark;
 	}
 
-	public Long getUserIdCreate() {
-		return userIdCreate;
+	public String getRoleDesc() {
+		return roleDesc;
 	}
 
-	public void setUserIdCreate(Long userIdCreate) {
-		this.userIdCreate = userIdCreate;
+	public void setRoleDesc(String roleDesc) {
+		this.roleDesc = roleDesc;
 	}
 
-	public Timestamp getGmtCreate() {
-		return gmtCreate;
+	public Integer getDelFlag() {
+		return delFlag;
 	}
 
-	public void setGmtCreate(Timestamp gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
 	}
 
-	public Timestamp getGmtModified() {
-		return gmtModified;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setGmtModified(Timestamp gmtModified) {
-		this.gmtModified = gmtModified;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public List<Long> getMenuIds() {
@@ -88,11 +88,11 @@ public class RoleDO {
 		return "RoleDO{" +
 				"roleId=" + roleId +
 				", roleName='" + roleName + '\'' +
-				", roleSign='" + roleSign + '\'' +
+				", roleDesc='" + roleDesc + '\'' +
 				", remark='" + remark + '\'' +
-				", userIdCreate=" + userIdCreate +
-				", gmtCreate=" + gmtCreate +
-				", gmtModified=" + gmtModified +
+				", createTime=" + createTime +
+				", updateTime=" + updateTime +
+				", delFlag=" + delFlag +
 				", menuIds=" + menuIds +
 				'}';
 	}

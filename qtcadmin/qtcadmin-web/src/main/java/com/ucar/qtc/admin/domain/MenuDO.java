@@ -10,10 +10,7 @@ import java.util.Date;
  */
 public class MenuDO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	//
-	private String component;
-	//
+	//菜单ID
 	private Long menuId;
 	//父菜单ID，一级菜单为0
 	private Long parentId;
@@ -21,6 +18,8 @@ public class MenuDO implements Serializable {
 	private String name;
 	//菜单URL
 	private String url;
+	// component
+	private String component;
 	//授权(多个用逗号分隔，如：user:list,user:create)
 	private String perms;
 	//类型   0：目录   1：菜单   2：按钮
@@ -30,24 +29,12 @@ public class MenuDO implements Serializable {
 	//排序
 	private Integer orderNum;
 	//创建时间
-	private Date gmtCreate;
+	private Date createTime;
 	//修改时间
-	private Date gmtModified;
+	private Date updateTime;
 	//
-	private String redirect;
+	private Integer delFlag;
 
-	/**
-	 * 设置：
-	 */
-	public void setComponent(String component) {
-		this.component = component;
-	}
-	/**
-	 * 获取：
-	 */
-	public String getComponent() {
-		return component;
-	}
 	/**
 	 * 设置：
 	 */
@@ -144,40 +131,36 @@ public class MenuDO implements Serializable {
 	public Integer getOrderNum() {
 		return orderNum;
 	}
-	/**
-	 * 设置：创建时间
-	 */
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+
+	public String getComponent() {
+		return component;
 	}
-	/**
-	 * 获取：创建时间
-	 */
-	public Date getGmtCreate() {
-		return gmtCreate;
+
+	public void setComponent(String component) {
+		this.component = component;
 	}
-	/**
-	 * 设置：修改时间
-	 */
-	public void setGmtModified(Date gmtModified) {
-		this.gmtModified = gmtModified;
+
+	public Date getCreateTime() {
+		return createTime;
 	}
-	/**
-	 * 获取：修改时间
-	 */
-	public Date getGmtModified() {
-		return gmtModified;
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
-	/**
-	 * 设置：
-	 */
-	public void setRedirect(String redirect) {
-		this.redirect = redirect;
+
+	public Date getUpdateTime() {
+		return updateTime;
 	}
-	/**
-	 * 获取：
-	 */
-	public String getRedirect() {
-		return redirect;
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
 	}
 }

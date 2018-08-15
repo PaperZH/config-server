@@ -11,7 +11,7 @@ public class LoginDTO {
     @NotNull
     private String username;
     @NotNull
-    private String pwd;
+    private String password;
 
     public String getUsername() {
         return username;
@@ -21,11 +21,11 @@ public class LoginDTO {
         this.username = username;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPwd(String password) {
-        this.pwd = password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
