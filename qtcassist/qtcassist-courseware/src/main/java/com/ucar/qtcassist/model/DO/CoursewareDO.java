@@ -7,7 +7,7 @@ public class CoursewareDO {
 
     private Long typeId;
 
-    private Integer baseCoursewareId;
+    private Long baseCoursewareId;
 
     private String coursewareName;
 
@@ -33,11 +33,11 @@ public class CoursewareDO {
         this.typeId = typeId;
     }
 
-    public Integer getBaseCoursewareId() {
+    public Long getBaseCoursewareId() {
         return baseCoursewareId;
     }
 
-    public void setBaseCoursewareId(Integer baseCoursewareId) {
+    public void setBaseCoursewareId(Long baseCoursewareId) {
         this.baseCoursewareId = baseCoursewareId;
     }
 

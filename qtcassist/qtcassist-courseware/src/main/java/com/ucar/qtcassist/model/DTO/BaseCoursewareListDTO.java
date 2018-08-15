@@ -1,24 +1,29 @@
 package com.ucar.qtcassist.model.DTO;
 
 /**
- * 用于向前端返回系统库中所有课件信息的列表实例
+ * 用于向前端返回系统库中所有课件信息的
+ * 列表实例
  *
  * @author shijie.xu
  * @since 2018年08月14日
  */
 public class BaseCoursewareListDTO {
     /**
-     * id
-     * */
+     * base_courseware表中的id
+     */
     private Long id;
     /**
      * 课件名称
-     * */
+     */
     private String coursewareName;
     /**
      * 课件类型
-     * */
+     */
     private String typeName;
+    /**
+     * 课件类型id
+     */
+    private Long typeId;
 
     public Long getId() {
         return id;
@@ -42,5 +47,13 @@ public class BaseCoursewareListDTO {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 }

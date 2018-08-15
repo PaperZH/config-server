@@ -10,8 +10,12 @@ import java.util.Date;
  */
 public class FrontCoursewareDTO {
     /**
+     * Base_Courseware中的id
+     */
+    private Long baseCoursewareId;
+    /**
      * 课件类型
-     * */
+     */
     private Long typeId;
 
     /*
@@ -20,20 +24,28 @@ public class FrontCoursewareDTO {
     private Integer baseCoursewareId;*/
     /**
      * 课件名称
-     * */
+     */
     private String coursewareName;
     /**
      * 课件描述
-     * */
+     */
     private String coursewareDescription;
     /**
      * 发布时间
-     * */
+     */
     private Date publishTime;
     /**
      * 更新时间
-     * */
+     */
     private Date updateTime;
+
+    public Long getBaseCoursewareId() {
+        return baseCoursewareId;
+    }
+
+    public void setBaseCoursewareId(Long baseCoursewareId) {
+        this.baseCoursewareId = baseCoursewareId;
+    }
 
     public Long getTypeId() {
         return typeId;
@@ -43,13 +55,6 @@ public class FrontCoursewareDTO {
         this.typeId = typeId;
     }
 
-    /*public Integer getBaseCoursewareId() {
-        return baseCoursewareId;
-    }
-
-    public void setBaseCoursewareId(Integer baseCoursewareId) {
-        this.baseCoursewareId = baseCoursewareId;
-    }*/
 
     public String getCoursewareName() {
         return coursewareName;

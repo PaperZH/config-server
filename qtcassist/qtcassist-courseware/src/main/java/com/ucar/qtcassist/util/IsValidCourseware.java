@@ -13,8 +13,8 @@ public class IsValidCourseware {
     @Autowired
     BaseCoursewareMapper baseCoursewareMapper;
 
-    public boolean isValid(Long id){
-        if(baseCoursewareMapper.selectByPrimaryKey(id)!=null){
+    public boolean isValid(Long id) {
+        if(baseCoursewareMapper.selectByPrimaryKey(id) != null) {
             return true;
         }
         return false;

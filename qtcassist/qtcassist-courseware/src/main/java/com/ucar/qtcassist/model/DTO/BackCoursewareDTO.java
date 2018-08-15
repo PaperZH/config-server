@@ -1,7 +1,5 @@
 package com.ucar.qtcassist.model.DTO;
 
-import java.util.Date;
-
 /**
  * 后端返回给前端的课件类
  *
@@ -10,8 +8,8 @@ import java.util.Date;
  */
 public class BackCoursewareDTO {
     /**
-     * 课件id
-     * */
+     * 课件id(base_courseware表中的id)
+     */
     private Long id;
     /**
      * 课件类型
@@ -19,7 +17,7 @@ public class BackCoursewareDTO {
     private String typeName;
     /**
      * 课件名称
-     * */
+     */
     private String coursewareName;
 
     /*private String coursewareDescription;
@@ -29,11 +27,11 @@ public class BackCoursewareDTO {
     private Date updateTime;*/
     /**
      * 预览时PDF url
-     * */
+     */
     private String previewUrl;
     /**
      * 用户上传的原文件 url
-     * */
+     */
     private String sourceUrl;
 
     /*public Long getTypeId() {
