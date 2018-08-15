@@ -10,10 +10,11 @@ import java.io.Serializable;
 public class UserToken implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    public UserToken(String username, String userId, String name) {
+    public UserToken(String username, String userId, String name, String nickname) {
         this.userId = userId;
         this.username = username;
         this.name = name;
+        this.nickname = nickname;
     }
 
     /**
@@ -28,6 +29,8 @@ public class UserToken implements Serializable{
      * 用户真实姓名
      */
     private String name;
+
+    private String nickname;
 
     public String getUserId() {
         return userId;
@@ -53,12 +56,21 @@ public class UserToken implements Serializable{
         this.name = name;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public String toString() {
         return "UserToken{" +
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }

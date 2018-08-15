@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @RequestMapping("/user")
 @RestController
-public class UserController extends BaseController {
+public class UserController {
     @Autowired
     UserService userService;
     @Autowired
@@ -38,9 +38,10 @@ public class UserController extends BaseController {
     @GetMapping("/currentUser")
 	LoginUserDTO currentUser(){
 		LoginUserDTO loginUserDTO = new LoginUserDTO();
-		loginUserDTO.setUserId(FilterContextHandler.getUserID());
+		loginUserDTO.setId(FilterContextHandler.getUserID());
 		loginUserDTO.setUsername(FilterContextHandler.getUsername());
 		loginUserDTO.setName(FilterContextHandler.getName());
+		loginUserDTO.setNickname(FilterContextHandler.getNickname());
 		return loginUserDTO;
 	}
 
@@ -64,7 +65,8 @@ public class UserController extends BaseController {
     @GetMapping()
     ResponseResult listByPage(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
-        List<UserDTO> userDTOS = UserConvert.MAPPER.dos2dtos((userService.list(query)));
+        List<UserDO> list = userService.list(query);
+        List<UserDTO> userDTOS = UserConvert.MAPPER.dos2dtos(list);
         int total = userService.count(query);
         PageUtils pageUtil = new PageUtils(userDTOS, total);
         return ResponseResult.ok().put("page",pageUtil);
@@ -77,6 +79,7 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping()
     ResponseResult save(@RequestBody UserDO user) {
+		user.setDelFlag(1);
 		user.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
 		return ResponseResult.operate(userService.save(user) > 0);
 	}

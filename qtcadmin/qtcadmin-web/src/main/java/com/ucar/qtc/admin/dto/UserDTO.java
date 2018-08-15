@@ -9,47 +9,40 @@ import java.util.List;
  * @date: 2018/8/7 10:19
  */
 public class UserDTO {
-    //
+    // 用户ID
     private Long userId;
     // 用户名
     private String username;
     // 用户真实姓名
     private String name;
-
-    // 部门
-    private Long deptId;
-
-    private String deptName;
+    // 昵称
+    private String nickname;
+    // 工号
+    private String userno;
+    //性别
+    private Long sex;
     // 邮箱
     private String email;
     // 手机号
     private String mobile;
-    // 状态 0:禁用，1:正常
-    private Integer status;
-    // 创建用户id
-    private Long userIdCreate;
+    // 部门
+    private Long deptId;
+    // 部门名称
+    private String deptName;
+    // 生日
+    private Date birth;
+    // 图片
+    private String avatar;
+    // 地址
+    private String address;
     // 创建时间
-    private Date gmtCreate;
+    private Date createTime;
     // 修改时间
-    private Date gmtModified;
+    private Date updateTime;
     //角色
     private List<Long> roleIds;
-    //性别
-    private Long sex;
-
-    private Date birth;
-    //图片ID
-    private Long picId;
-    //现居住地
-    private String liveAddress;
-    //爱好
-    private String hobby;
-    //省份
-    private String province;
-    //所在城市
-    private String city;
-    //所在地区
-    private String district;
+    // 状态 0:禁用，1:正常
+    private Integer delFlag;
 
     public Long getUserId() {
         return userId;
@@ -75,20 +68,28 @@ public class UserDTO {
         this.name = name;
     }
 
-    public Long getDeptId() {
-        return deptId;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getDeptName() {
-        return deptName;
+    public String getUserno() {
+        return userno;
     }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
+    public void setUserno(String userno) {
+        this.userno = userno;
+    }
+
+    public Long getSex() {
+        return sex;
+    }
+
+    public void setSex(Long sex) {
+        this.sex = sex;
     }
 
     public String getEmail() {
@@ -107,52 +108,20 @@ public class UserDTO {
         this.mobile = mobile;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
-    public Long getUserIdCreate() {
-        return userIdCreate;
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setUserIdCreate(Long userIdCreate) {
-        this.userIdCreate = userIdCreate;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    public List<Long> getRoleIds() {
-        return roleIds;
-    }
-
-    public void setRoleIds(List<Long> roleIds) {
-        this.roleIds = roleIds;
-    }
-
-    public Long getSex() {
-        return sex;
-    }
-
-    public void setSex(Long sex) {
-        this.sex = sex;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public Date getBirth() {
@@ -163,51 +132,51 @@ public class UserDTO {
         this.birth = birth;
     }
 
-    public Long getPicId() {
-        return picId;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setPicId(Long picId) {
-        this.picId = picId;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getLiveAddress() {
-        return liveAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLiveAddress(String liveAddress) {
-        this.liveAddress = liveAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getHobby() {
-        return hobby;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getProvince() {
-        return province;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public String getCity() {
-        return city;
+    public List<Long> getRoleIds() {
+        return roleIds;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
-    public String getDistrict() {
-        return district;
+    public Integer getDelFlag() {
+        return delFlag;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 }

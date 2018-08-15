@@ -12,7 +12,7 @@
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
         <el-form :inline="true" :model="filters">
           <el-form-item>
-            <el-input v-model="filters.name" placeholder="角色名" @keyup.enter.native="handleSearch"></el-input>
+            <el-input v-model="filters.roleName" placeholder="角色名" @keyup.enter.native="handleSearch"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="handleSearch">查询</el-button>
@@ -24,16 +24,17 @@
       </el-col>
 
       <!--列表-->
-      <el-table :data="role" highlight-current-row @selection-change="selsChange"
+      <el-table :data="role" border highlight-current-row @selection-change="selsChange"
                 style="width: 100%;">
-        <el-table-column type="selection" width="55"></el-table-column>
+        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <el-table-column type="index" width="60"></el-table-column>
-        <el-table-column prop="roleName" label="角色名" sortable></el-table-column>
-        <el-table-column prop="remark" label="备注" sortable></el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column prop="roleName" label="角色名" align="center" sortable></el-table-column>
+        <el-table-column prop="roleDesc" label="角色描述" align="center" sortable></el-table-column>
+        <el-table-column prop="remark" label="备注" align="center"></el-table-column>
+        <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
-            <el-button type="danger" @click="delBook(scope.$index,scope.row)" size="mini">删除</el-button>
+            <el-button type="danger" @click="removeRole(scope.$index,scope.row)" size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -49,6 +50,9 @@
         <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
           <el-form-item label="角色名" prop="roleName">
             <el-input v-model="editForm.roleName" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="角色描述" prop="roleDesc">
+            <el-input v-model="editForm.roleDesc" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="editForm.remark" :rows="2"></el-input>
@@ -75,8 +79,11 @@
           <el-form-item label="角色名" prop="roleName">
             <el-input v-model="addForm.roleName" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="角色描述" prop="roleDesc">
+            <el-input v-model="addForm.roleDesc" auto-complete="off"></el-input>
+          </el-form-item>
           <el-form-item label="备注" prop="remark">
-            <el-input type="textarea" v-model="addForm.remark" :rows="8"></el-input>
+            <el-input type="textarea" v-model="addForm.remark" :rows="2"></el-input>
           </el-form-item>
           <el-form-item label="权限">
             <el-tree
@@ -106,7 +113,7 @@
     data() {
       return {
         filters: {
-          name: ''
+          roleName: ''
         },
         role: [],
         total: 0,
@@ -124,43 +131,35 @@
         //编辑相关数据
         editFormVisible: false,//编辑界面是否显示
         editFormRules: {
-          name: [
-            {required: true, message: '请输入书名', trigger: 'blur'}
-          ],
-          author: [
-            {required: true, message: '请输入作者', trigger: 'blur'}
-          ],
-          description: [
-            {required: true, message: '请输入简介', trigger: 'blur'}
+          roleName: [
+            {required: true, message: '请输入角色名', trigger: 'blur'}
+          ],  
+          roleDesc: [
+            {required: true, message: '请输入角色描述', trigger: 'blur'}
           ]
         },
         editForm: {
           id: 0,
-          name: '',
-          author: '',
-          publishAt: '',
-          description: ''
+          roleName: '',
+          roleDesc: '',
+          remark: ''
         },
 
         //新增相关数据
         addFormVisible: false,//新增界面是否显示
         addLoading: false,
         addFormRules: {
-          name: [
-            {required: true, message: '请输入书名', trigger: 'blur'}
-          ],
-          author: [
-            {required: true, message: '请输入作者', trigger: 'blur'}
-          ],
-          description: [
-            {required: true, message: '请输入简介', trigger: 'blur'}
+          roleName: [
+            {required: true, message: '请输入角色名', trigger: 'blur'}
+          ],  
+          roleDesc: [
+            {required: true, message: '请输入角色描述', trigger: 'blur'}
           ]
         },
         addForm: {
-          name: '',
-          author: '',
-          publishAt: '',
-          description: ''
+          roleName: '',
+          roleDesc: '',
+          remark: ''
         },
 
       }
@@ -175,12 +174,12 @@
         this.page = 1;
         this.search();
       },
-      search() {
+      search: function () {
         let that = this;
         let params = {
           page: that.page,
           limit: 10,
-          name: that.filters.name
+          roleName: that.filters.roleName
         };
 
         that.loading = true;
@@ -203,26 +202,44 @@
         this.sels = sels;
       },
       //删除
-      delBook: function (index, row) {
+      removeRole: function (index, row) {
         let that = this;
         this.$confirm('确认删除该记录吗?', '提示', {type: 'warning'}).then(() => {
           that.loading = true;
-          API.remove(row.id).then(function (result) {
-            that.loading = false;
-            if (result && parseInt(result.errcode) === 0) {
-              that.$message.success({showClose: true, message: '删除成功', duration: 1500});
-              that.search();
-            }
-          }, function (err) {
-            that.loading = false;
-            that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-          }).catch(function (error) {
-            that.loading = false;
-            console.log(error);
-            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
+          API.removeRole({id: row.roleId}) 
+          .then(
+                function (result) {
+                  that.loading = false;
+                  if (result && parseInt(result.code) === 0) {
+                    that.$message.success({
+                      showClose: true,
+                      message: "删除成功",
+                      duration: 1500
+                    });
+                    that.search();
+                  }
+                },
+                function (err) {
+                  that.loading = false;
+                  that.$message.error({
+                    showClose: true,
+                    message: err.toString(),
+                    duration: 2000
+                  });
+                }
+              )
+              .catch(function (error) {
+                that.loading = false;
+                console.log(error);
+                that.$message.error({
+                  showClose: true,
+                  message: "请求出现异常",
+                  duration: 2000
+                });
+              });
+          })
+          .catch(() => {
           });
-        }).catch(() => {
-        });
       },
       //显示编辑界面
       showEditDialog: function (index, row) {
@@ -349,9 +366,3 @@
     }
   }
 </script>
-
-<!--<style>-->
-<!--.demo-table-expand label {-->
-<!--font-weight: bold;-->
-<!--}-->
-<!--</style>-->
