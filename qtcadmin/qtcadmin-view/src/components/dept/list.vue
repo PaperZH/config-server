@@ -20,7 +20,7 @@
     <el-col :span="24" class="warp-main" v-loading="loading" element-loading-text="拼命加载中">
       <tree-table :data="deptdata" :columns="columns" border highlight-current-row v-loading="loading"
                   style="width: 100%;">
-        <el-table-column label="部门ID" prop="object.orderNum"></el-table-column>
+        <el-table-column label="排序" prop="object.orderNum"></el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="showAddDialog(scope.row.id)">增加</el-button>
@@ -36,7 +36,7 @@
             <el-input v-model="addForm.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="orderNum">
-            <el-input v-model="addForm.object.orderNum" auto-complete="off"></el-input>
+            <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -105,25 +105,19 @@
           function (result) {
             console.log(result);
             that.deptdata = result
-
+            console.log(result)
           }
 
         )
       },
       showAddDialog: function (parentId) {
         this.addForm.parentId = parentId
+
         this.addFormVisible = true
       },
       showEditDialog: function (index, row) {
-        console.log(row)
-        this.editForm.name = row.text;
-        this.editForm.orderNum = row.attributes.orderNum;
-        this.editForm.deptId = row.id;
-        this.editFormVisible = true;
-        // this.editForm.perms = JSON.parse(this.editForm.perms)
-        // if(!Array.isArray(this.editForm.perms)){
-        //   this.editForm.perms = new Array()
-        // }
+        this.editFormVisible = true
+        this.editForm = Object.assign({}, row.object)
       },
       editSubmit: function () {
         let that = this;
