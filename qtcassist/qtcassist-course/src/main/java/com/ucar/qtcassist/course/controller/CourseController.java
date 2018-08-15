@@ -13,8 +13,7 @@ import com.ucar.qtcassist.course.service.CreateUserCourseService;
 import com.ucar.qtcassist.course.service.EvaluateUserCourseService;
 import com.ucar.qtcassist.course.service.PraiseUserCourseService;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import com.ucar.qtcassist.courseware.service.CoursewareService;
-import com.ucar.qtcassist.service.*;
+import com.ucar.qtcassist.courseware.service.CoursewareService;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
