@@ -5,8 +5,8 @@
     <el-form-item prop="username">
       <el-input type="text" v-model="account.username" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-    <el-form-item prop="pwd">
-      <el-input type="password" v-model="account.pwd" auto-complete="off" placeholder="密码"></el-input>
+    <el-form-item prop="password">
+      <el-input type="password" v-model="account.password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
     <el-form-item style="width:100%;">
@@ -23,17 +23,15 @@ export default {
     return {
       loading: false,
       account: {
-        username: "admin",
-        pwd: "123456"
+        username: "",
+        password: ""
       },
       rules: {
         username: [
           { required: true, message: "请输入账号", trigger: "blur" }
-          //{ validator: validaePass }
         ],
-        pwd: [
+        password: [
           { required: true, message: "请输入密码", trigger: "blur" }
-          //{ validator: validaePass2 }
         ]
       },
       checked: true
@@ -47,25 +45,17 @@ export default {
           this.loading = true;
           let loginParams = {
             username: this.account.username,
-            pwd: this.account.pwd
+            password: this.account.password
           };
           API.login(loginParams)
             .then(
               function(result) {
                 that.loading = false;
                 if (result && result.code === 0) {
-                  // localStorage.setItem(
-                  //   "access-user",
-                  //   JSON.stringify(result.user)
-                  // );
                   localStorage.setItem("access-token", result.token);
                   console.log(result.router)
                   localStorage.setItem("menus", JSON.stringify(result.router));
                   localStorage.setItem("perms",JSON.stringify(result.perms))
-                  // that.$store.commit("SET_ROUTERS", result.router);
-                  // that.$router.addRoutes(that.$store.getters.addRouters);
-                  //that.$router.addRoutes(result.router)
-                  // that.$router.options.routes = that.$store.getters.routers;
                   that.$router.push({ path: "/" });
                 } else {
                   that.$message.error({

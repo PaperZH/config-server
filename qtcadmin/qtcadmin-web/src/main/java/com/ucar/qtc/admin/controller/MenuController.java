@@ -35,18 +35,33 @@ public class MenuController {
         return menuService.getTree().getChildren();
     }
 
+    /**
+     * 根据ID获取菜单
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     MenuDO get(@PathVariable("id") Long id) {
         MenuDO menu = menuService.get(id);
         return menu;
     }
 
+    /**
+     * 菜单列表
+     * @param params
+     * @return
+     */
     @GetMapping("list")
     List<MenuDO> list(@RequestParam Map<String, Object> params) {
         List<MenuDO> menus = menuService.list(params);
         return menus;
     }
 
+    /**
+     * 修改菜单
+     * @param menuDO
+     * @return
+     */
     @PutMapping()
     ResponseResult update(@RequestBody MenuDO menuDO){
         if(menuService.update(menuDO)>0){
@@ -54,11 +69,22 @@ public class MenuController {
         }
         return  ResponseResult.error();
     }
+
+    /**
+     * 添加菜单
+     * @param menuDO
+     * @return
+     */
     @PostMapping
     ResponseResult save(@RequestBody MenuDO menuDO){
         return ResponseResult.operate(menuService.save(menuDO)>0);
     }
 
+    /**
+     * 删除菜单
+     * @param id
+     * @return
+     */
     @DeleteMapping()
     ResponseResult remove(Long id){
         if(menuService.remove(id)>0){
@@ -67,6 +93,10 @@ public class MenuController {
         return ResponseResult.error();
     }
 
+    /**
+     * 用户菜单
+     * @return
+     */
     @GetMapping("userMenus")
     List<MenuDTO> userMenus(){
         List<MenuDO> menuDOS = menuService.userMenus(Long.parseLong(FilterContextHandler.getUserID()));

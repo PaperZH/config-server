@@ -28,11 +28,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api': {
-      //   target: 'http://localhost:3000',
+      // '/api-admin/dept/list': {
+      //   target: 'http://localhost:8005',
       //   changeOrigin: true,
       //   pathRewrite: {
-      //     '^/api': '/api'
+      //     '^/api-admin/dept/list': '/dept/list'
+      //   }
+      // },
+      // '/api-admin/login': {
+      //   target: 'http://localhost:8005',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api-admin/login': '/login'
       //   }
       // }
     },

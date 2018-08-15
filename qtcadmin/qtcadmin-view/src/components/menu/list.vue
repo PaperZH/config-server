@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
         <el-table-column label="路径" prop="object.url"></el-table-column>
-        <el-table-column label="路径类型" prop="object.urlType"></el-table-column>
+        <el-table-column label="图标" prop="object.icon"></el-table-column>
         <el-table-column label="权限" prop="object.perms"></el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
@@ -55,17 +55,14 @@
           <el-form-item label="路径" prop="url">
             <el-input v-model="addForm.url" auto-complete="off"></el-input>
           </el-form-item>
-          <!--<el-form-item label="api类型" prop="perms">-->
-          <!--<el-checkbox-group v-model="addForm.perms">-->
-          <!--<el-checkbox v-for="item in permsItems" :label="item.key">{{item.value}}</el-checkbox>-->
-          <!--</el-checkbox-group>-->
-          <!--</el-form-item>-->
           <el-form-item label="权限" prop="perms">
             <el-input v-model="addForm.perms" auto-complete="off"></el-input>
           </el-form-item>
-
           <el-form-item label="图标" prop="icon">
             <el-input v-model="addForm.icon" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="排序" prop="orderNum">
+            <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -93,15 +90,10 @@
           <el-form-item label="路径" prop="url">
             <el-input v-model="editForm.perms" auto-complete="off"></el-input>
           </el-form-item>
-          <!--<el-form-item label="api类型" prop="perms">-->
-          <!--<el-checkbox-group v-model="editForm.perms">-->
-          <!--<el-checkbox v-for="item in permsItems" :label="item.key" :key="item.value">{{item.key}}</el-checkbox>-->
-          <!--</el-checkbox-group>-->
-          <!--</el-form-item>-->
           <el-form-item label="图标" prop="icon">
             <el-input v-model="editForm.icon" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="排序" prop="icon">
+          <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -115,9 +107,6 @@
 </template>
 
 <script>
-  /**
-
-   */
   import treeTable from '@/components/TreeTable'
   import API from '../../api/api_menu'
 
@@ -170,10 +159,6 @@
       showEditDialog: function (index, row) {
         this.editFormVisible = true
         this.editForm = Object.assign({}, row.object)
-        // this.editForm.perms = JSON.parse(this.editForm.perms)
-        // if(!Array.isArray(this.editForm.perms)){
-        //   this.editForm.perms = new Array()
-        // }
       },
       editSubmit: function () {
         let that = this;
@@ -181,7 +166,6 @@
           if (valid) {
             that.loading = true;
             let params = Object.assign({}, that.editForm);
-            // params.perms = JSON.stringify(params.perms)
             API.editMenu(params).then(function (result) {
               if (0 === result.code) {
                 that.loading = false;

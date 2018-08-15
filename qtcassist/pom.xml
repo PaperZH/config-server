@@ -130,6 +130,10 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.caucho</groupId>
+                    <artifactId>hessian</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>

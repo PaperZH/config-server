@@ -2,7 +2,6 @@ package com.ucar.qtc.admin.controller;
 
 import com.ucar.qtc.admin.domain.UserDO;
 import com.ucar.qtc.admin.service.MenuService;
-import com.ucar.qtc.admin.service.TokenService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.common.annotation.Log;
@@ -29,18 +28,25 @@ import java.util.Map;
 @RequestMapping()
 @RestController
 public class LoginController {
+
     @Autowired
     UserService userService;
-    @Autowired
-    TokenService tokenService;
+
     @Autowired
     MenuService menuService;
 
+    /**
+     * 用户登陆
+     * @param loginDTO
+     * @param request
+     * @param response
+     * @return
+     */
     @Log("登录")
     @PostMapping("/login")
     ResponseResult login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
         String username = loginDTO.getUsername().trim();
-        String password = loginDTO.getPwd().trim();
+        String password = loginDTO.getPassword().trim();
         password = MD5Utils.encrypt(username, password);
         Map<String, Object> param = new HashMap<>();
         param.put("username", username);
@@ -52,7 +58,8 @@ public class LoginController {
         if (null == userDO || !userDO.getPassword().equals(password)) {
             return ResponseResult.error("用户或密码错误");
         }
-        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(), userDO.getName());
+        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
+                userDO.getName(), userDO.getNickname());
         String token = "";
         try {
             token = JwtUtils.generateToken(userToken, 2 * 60 * 60 * 1000);
@@ -61,19 +68,21 @@ public class LoginController {
         }
         //首先清除用户缓存权限
         menuService.clearCache(userDO.getUserId());
-        // String token = tokenService.createToken(userDO.getUserId());
         return ResponseResult.ok("登录成功")
                 .put("token", token).put("user", userDO)
                 .put("perms", menuService.PermsByUserId(userDO.getUserId()))
                 .put("router", menuService.RouterDTOsByUserId(userDO.getUserId()));
     }
 
-
+    /**
+     * 用户退出
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/logout")
     ResponseResult logout(HttpServletRequest request, HttpServletResponse response) {
         menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
         return ResponseResult.ok();
     }
-
-
 }

@@ -5,22 +5,23 @@
 
 	<select id="get" resultType="com.ucar.qtc.admin.domain.RoleDO">
 		select
-		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
+		`role_id`,`role_name`,`role_desc`,`remark`,`create_time`,`update_time`,`del_flag`
 		from sys_role where role_id = #{value}
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.admin.domain.RoleDO">
 		select
-		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
-		from sys_role
+		`role_id`,`role_name`,`role_desc`,`remark`,`create_time`,`update_time`,`del_flag`
+		from sys_role a
 		<where>
+			a.del_flag = 1
 			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
-			<if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
-			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
-			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
-			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
-			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
-			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="roleName != null and roleName != ''">
+				AND a.role_name LIKE concat('%',#{roleName},'%')
+			</if>
+			<if test="roleDesc != null and roleDesc != ''">
+				AND a.role_desc LIKE concat('%',#{roleDesc},'%')
+			</if>
 		</where>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">
@@ -36,15 +37,16 @@
 	</select>
 
 	<select id="count" resultType="int">
-		select count(*) from sys_role
+		select count(*) from sys_role a
 		<where>
+			a.del_flag = 1
 			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
-			<if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
-			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
-			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
-			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
-			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
-			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="roleName != null and roleName != ''">
+				AND a.role_name LIKE concat('%',#{roleName},'%')
+			</if>
+			<if test="roleDesc != null and roleDesc != ''">
+				AND a.role_desc LIKE concat('%',#{roleDesc},'%')
+			</if>
 		</where>
 	</select>
 
@@ -53,20 +55,16 @@
 		insert into sys_role
 		(
 		`role_name`,
-		`role_sign`,
+		`role_desc`,
 		`remark`,
-		`user_id_create`,
-		`gmt_create`,
-		`gmt_modified`
+		`del_flag`
 		)
 		values
 		(
 		#{roleName},
-		#{roleSign},
+		#{roleDesc},
 		#{remark},
-		#{userIdCreate},
-		#{gmtCreate},
-		#{gmtModified}
+		#{delFlag}
 		)
 	</insert>
 
@@ -74,21 +72,19 @@
 		update sys_role
 		<set>
 			<if test="roleName != null">`role_name` = #{roleName}, </if>
-			<if test="roleSign != null">`role_sign` = #{roleSign}, </if>
+			<if test="roleDesc != null">`role_desc` = #{roleDesc}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
-			<if test="userIdCreate != null">`user_id_create` = #{userIdCreate}, </if>
-			<if test="gmtCreate != null">`gmt_create` = #{gmtCreate}, </if>
-			<if test="gmtModified != null">`gmt_modified` = #{gmtModified}</if>
 		</set>
 		where role_id = #{roleId}
 	</update>
 
 	<delete id="remove">
-		delete from sys_role where role_id = #{value}
+        update sys_role set del_flag = 0 where role_id = #{value}
 	</delete>
 
 	<delete id="batchRemove">
-		delete from sys_role where role_id in
+		update sys_role set del_flag = 0
+		where role_id in
 		<foreach item="roleId" collection="array" open="(" separator=","
 			close=")">
 			#{roleId}

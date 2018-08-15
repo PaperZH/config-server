@@ -54,24 +54,44 @@ public class MenuServiceImpl implements MenuService {
         return t;
     }
 
+    /**
+     * 获取用户菜单
+     * @param userId
+     * @return
+     */
     @Cacheable(value = "permission", key = "#userId")
     @Override
     public List<MenuDO> userMenus(Long userId) {
         return menuMapper.listMenuByUserId(userId);
     }
 
+    /**
+     * 清除用户权限
+     * @param userId
+     * @return
+     */
     @Override
     @CacheEvict(value = "permission", key = "#userId")
     public boolean clearCache(Long userId) {
         return true;
     }
 
+    /**
+     * 菜单列表
+     * @param params
+     * @return
+     */
     @Override
     public List<MenuDO> list(Map<String, Object> params) {
         List<MenuDO> menus = menuMapper.list(params);
         return menus;
     }
 
+    /**
+     * 移除菜单
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int remove(Long id) {
@@ -80,6 +100,11 @@ public class MenuServiceImpl implements MenuService {
         return result;
     }
 
+    /**
+     * 保存菜单
+     * @param menu
+     * @return
+     */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int save(MenuDO menu) {
@@ -87,6 +112,11 @@ public class MenuServiceImpl implements MenuService {
         return r;
     }
 
+    /**
+     * 更新菜单
+     * @param menu
+     * @return
+     */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int update(MenuDO menu) {
@@ -94,12 +124,21 @@ public class MenuServiceImpl implements MenuService {
         return r;
     }
 
+    /**
+     * 获取菜单
+     * @param id
+     * @return
+     */
     @Override
     public MenuDO get(Long id) {
         MenuDO menuDO = menuMapper.get(id);
         return menuDO;
     }
 
+    /**
+     * 获取菜单树
+     * @return
+     */
     @Override
     public Tree<MenuDO> getTree() {
         List<Tree<MenuDO>> trees = new ArrayList<Tree<MenuDO>>();
@@ -110,18 +149,18 @@ public class MenuServiceImpl implements MenuService {
             tree.setParentId(menuDO.getParentId().toString());
             tree.setText(menuDO.getName());
             tree.setObject(menuDO);
-//			Map<String,Object> map =new HashMap<>(16);
-//			map.put("url",menuDO.getUrl());
-//			map.put("perms",menuDO.getPerms());
-//
-//			tree.setAttributes(map);
             trees.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
+        // 默认顶级菜单为０
         Tree<MenuDO> t = BuildTree.build(trees);
         return t;
     }
 
+    /**
+     * 根据角色获取菜单树
+     * @param id
+     * @return
+     */
     @Override
     public Tree<MenuDO> getTree(Long id) {
         // 根据roleId查询权限
@@ -155,6 +194,11 @@ public class MenuServiceImpl implements MenuService {
         return t;
     }
 
+    /**
+     * 用户权限
+     * @param userId
+     * @return
+     */
     @Override
     public Set<String> listPerms(Long userId) {
         List<String> perms = menuMapper.listUserPerms(userId);
@@ -169,7 +213,6 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * 获取角色下的权限所有id
-     *
      * @param roleId
      * @return
      */
@@ -243,5 +286,4 @@ public class MenuServiceImpl implements MenuService {
         List<Tree<MenuDO>> list = BuildTree.buildList(trees, "0");
         return list;
     }
-
 }

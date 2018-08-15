@@ -9,7 +9,7 @@ public class LoginUserDTO {
     /**
      * 用户id
      */
-    private String userId;
+    private String id;
     /**
      * 用户登录名
      */
@@ -18,13 +18,22 @@ public class LoginUserDTO {
      * 用户真实姓名
      */
     private String name;
+    /**
+     * 昵称
+     */
+    private String nickname;
+    /**
+     * 图片
+     */
+    private String avatar;
 
-    public String getUserId() {
-        return userId;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -41,5 +50,21 @@ public class LoginUserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
