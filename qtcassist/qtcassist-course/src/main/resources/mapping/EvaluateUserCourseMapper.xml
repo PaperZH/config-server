@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.EvaluateUserCourseMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.EvaluateUserCourse" >
+<mapper namespace="com.ucar.qtcassist.course.dao.EvaluateUserCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.EvaluateUserCourse" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
@@ -22,7 +22,7 @@
     delete from evaluate_user_course_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.EvaluateUserCourse"   useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.EvaluateUserCourse" useGeneratedKeys="true" keyProperty="id">
     insert into evaluate_user_course_relation (user_id, course_id,
       evaluate_score, evaluate_content, publish_date
       )
@@ -30,7 +30,7 @@
       #{evaluateScore,jdbcType=REAL}, #{evaluateContent,jdbcType=VARCHAR}, #{publishDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.EvaluateUserCourse"   useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.EvaluateUserCourse" useGeneratedKeys="true" keyProperty="id">
     insert into evaluate_user_course_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -67,7 +67,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.EvaluateUserCourse" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.EvaluateUserCourse" >
     update evaluate_user_course_relation
     <set >
       <if test="userId != null" >
@@ -88,7 +88,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.EvaluateUserCourse" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.EvaluateUserCourse" >
     update evaluate_user_course_relation
     set user_id = #{userId,jdbcType=BIGINT},
       course_id = #{courseId,jdbcType=BIGINT},

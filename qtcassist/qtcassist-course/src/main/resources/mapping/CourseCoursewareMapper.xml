@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.CourseCoursewareMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.CourseCourseware" >
+<mapper namespace="com.ucar.qtcassist.course.dao.CourseCoursewareMapper" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.CourseCourseware" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="cours_id" property="coursId" jdbcType="BIGINT" />
     <result column="courseware_id" property="coursewareId" jdbcType="BIGINT" />
@@ -19,11 +19,11 @@
     delete from course_courseware_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.CourseCourseware"   useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.CourseCourseware" useGeneratedKeys="true" keyProperty="id">
     insert into course_courseware_relation (cours_id, courseware_id)
     values (#{coursId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.CourseCourseware"   useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.CourseCourseware" useGeneratedKeys="true" keyProperty="id">
     insert into course_courseware_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="coursId != null" >
@@ -42,7 +42,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.CourseCourseware" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.CourseCourseware" >
     update course_courseware_relation
     <set >
       <if test="coursId != null" >
@@ -54,7 +54,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.CourseCourseware" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.CourseCourseware" >
     update course_courseware_relation
     set cours_id = #{coursId,jdbcType=BIGINT},
       courseware_id = #{coursewareId,jdbcType=BIGINT}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.BaseCoursewareMapper">
-    <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.DO.BaseCoursewareDO">
+<mapper namespace="com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper">
+    <resultMap id="BaseResultMap" type="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="type_id" property="typeId" jdbcType="BIGINT"/>
         <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR"/>
@@ -25,7 +25,7 @@
     delete from base_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.ucar.qtcassist.model.DO.BaseCoursewareDO">
+    <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
     insert into base_courseware (id, type_id, courseware_name, 
       courseware_description, publish_time, update_time, 
       preview_url, source_url)
@@ -33,7 +33,7 @@
       #{coursewareDescription,jdbcType=VARCHAR}, #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{previewUrl,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.DO.BaseCoursewareDO">
+    <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
         insert into base_courseware
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -89,7 +89,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.DO.BaseCoursewareDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
         update base_courseware
         <set>
             <if test="typeId != null">
@@ -116,7 +116,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.DO.BaseCoursewareDO">
+    <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
     update base_courseware
     set type_id = #{typeId,jdbcType=BIGINT},
       courseware_name = #{coursewareName,jdbcType=VARCHAR},
