@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.DemoMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.Demo" >
+<mapper namespace="com.ucar.qtcassist.base.dao.DemoMapper" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.base.model.Demo" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
@@ -18,11 +18,11 @@
     delete from demo
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.Demo" >
+  <insert id="insert" parameterType="com.ucar.qtcassist.base.model.Demo" >
     insert into demo (id, content)
     values (#{id,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.Demo" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.base.model.Demo" >
     insert into demo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -41,7 +41,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.Demo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.base.model.Demo" >
     update demo
     <set >
       <if test="content != null" >
@@ -50,7 +50,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.Demo" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.base.model.Demo" >
     update demo
     set content = #{content,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

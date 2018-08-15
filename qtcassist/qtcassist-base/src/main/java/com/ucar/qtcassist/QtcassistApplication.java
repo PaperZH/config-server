@@ -11,8 +11,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
-@MapperScan("com.ucar.qtcassist.dao")
-@ComponentScan({"com.ucar.qtcassist"})
+@MapperScan("com.ucar.qtcassist.*.dao")
+@ComponentScan("com.ucar.qtcassist")
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableCaching

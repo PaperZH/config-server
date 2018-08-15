@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.PraiseUserCourseMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.PraiseUserCourse" >
+<mapper namespace="com.ucar.qtcassist.course.dao.PraiseUserCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.PraiseUserCourse" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
@@ -20,18 +20,15 @@
     delete from praise_user_course_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
-    insert into praise_user_course_relation (id, user_id, course_id, 
+  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.PraiseUserCourse" useGeneratedKeys="true" keyProperty="id">
+    insert into praise_user_course_relation (user_id, course_id,
       publish_date)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, 
+    values (#{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT},
       #{publishDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.PraiseUserCourse" useGeneratedKeys="true" keyProperty="id">
     insert into praise_user_course_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="userId != null" >
         user_id,
       </if>
@@ -43,9 +40,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
@@ -57,7 +51,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.PraiseUserCourse" >
     update praise_user_course_relation
     <set >
       <if test="userId != null" >
@@ -72,7 +66,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.PraiseUserCourse" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.PraiseUserCourse" >
     update praise_user_course_relation
     set user_id = #{userId,jdbcType=BIGINT},
       course_id = #{courseId,jdbcType=BIGINT},

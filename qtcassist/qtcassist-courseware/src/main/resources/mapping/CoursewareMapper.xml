@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.CoursewareMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.DO.CoursewareDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="type_id" property="typeId" jdbcType="BIGINT" />
-    <result column="base_courseware_id" property="baseCoursewareId" jdbcType="INTEGER" />
-    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR" />
-    <result column="courseware_description" property="coursewareDescription" jdbcType="VARCHAR" />
-    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.ucar.qtcassist.courseware.dao.CoursewareMapper">
+    <resultMap id="BaseResultMap" type="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="type_id" property="typeId" jdbcType="BIGINT"/>
+        <result column="base_courseware_id" property="baseCoursewareId" jdbcType="INTEGER"/>
+        <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR"/>
+        <result column="courseware_description" property="coursewareDescription" jdbcType="VARCHAR"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, type_id, base_courseware_id, courseware_name, courseware_description, publish_time, 
     update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from courseware
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from courseware
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.DO.CoursewareDO" >
-    insert into courseware (id, type_id, base_courseware_id, 
+    <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+    insert into courseware ( type_id, base_courseware_id,
       courseware_name, courseware_description, 
       publish_time, update_time)
-    values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER}, 
+    values ( #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER},
       #{coursewareName,jdbcType=VARCHAR}, #{coursewareDescription,jdbcType=VARCHAR}, 
       #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.DO.CoursewareDO" >
-    insert into courseware
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="typeId != null" >
-        type_id,
-      </if>
-      <if test="baseCoursewareId != null" >
-        base_courseware_id,
-      </if>
-      <if test="coursewareName != null" >
-        courseware_name,
-      </if>
-      <if test="coursewareDescription != null" >
-        courseware_description,
-      </if>
-      <if test="publishTime != null" >
-        publish_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="typeId != null" >
-        #{typeId,jdbcType=BIGINT},
-      </if>
-      <if test="baseCoursewareId != null" >
-        #{baseCoursewareId,jdbcType=INTEGER},
-      </if>
-      <if test="coursewareName != null" >
-        #{coursewareName,jdbcType=VARCHAR},
-      </if>
-      <if test="coursewareDescription != null" >
-        #{coursewareDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="publishTime != null" >
-        #{publishTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.DO.CoursewareDO" >
-    update courseware
-    <set >
-      <if test="typeId != null" >
-        type_id = #{typeId,jdbcType=BIGINT},
-      </if>
-      <if test="baseCoursewareId != null" >
-        base_courseware_id = #{baseCoursewareId,jdbcType=INTEGER},
-      </if>
-      <if test="coursewareName != null" >
-        courseware_name = #{coursewareName,jdbcType=VARCHAR},
-      </if>
-      <if test="coursewareDescription != null" >
-        courseware_description = #{coursewareDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="publishTime != null" >
-        publish_time = #{publishTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.DO.CoursewareDO" >
+    <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+        insert into courseware
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="baseCoursewareId != null">
+                base_courseware_id,
+            </if>
+            <if test="coursewareName != null">
+                courseware_name,
+            </if>
+            <if test="coursewareDescription != null">
+                courseware_description,
+            </if>
+            <if test="publishTime != null">
+                publish_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=BIGINT},
+            </if>
+            <if test="baseCoursewareId != null">
+                #{baseCoursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="coursewareName != null">
+                #{coursewareName,jdbcType=VARCHAR},
+            </if>
+            <if test="coursewareDescription != null">
+                #{coursewareDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+        update courseware
+        <set>
+            <if test="typeId != null">
+                type_id = #{typeId,jdbcType=BIGINT},
+            </if>
+            <if test="baseCoursewareId != null">
+                base_courseware_id = #{baseCoursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="coursewareName != null">
+                courseware_name = #{coursewareName,jdbcType=VARCHAR},
+            </if>
+            <if test="coursewareDescription != null">
+                courseware_description = #{coursewareDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
     update courseware
     set type_id = #{typeId,jdbcType=BIGINT},
       base_courseware_id = #{baseCoursewareId,jdbcType=INTEGER},

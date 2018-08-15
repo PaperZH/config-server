@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ucar.qtcassist.dao.CourseCoursewareRelationMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.model.DO.CourseCoursewareRelationDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="cours_id" property="coursId" jdbcType="BIGINT" />
-    <result column="courseware_id" property="coursewareId" jdbcType="BIGINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.ucar.qtcassist.courseware.dao.CourseCoursewareRelationMapper">
+    <resultMap id="BaseResultMap" type="com.ucar.qtcassist.courseware.model.DO.CourseCoursewareRelationDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="cours_id" property="coursId" jdbcType="BIGINT"/>
+        <result column="courseware_id" property="coursewareId" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, cours_id, courseware_id
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from course_courseware_relation
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from course_courseware_relation
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from course_courseware_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.model.DO.CourseCoursewareRelationDO" >
+    <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CourseCoursewareRelationDO">
     insert into course_courseware_relation (id, cours_id, courseware_id
       )
     values (#{id,jdbcType=BIGINT}, #{coursId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.model.DO.CourseCoursewareRelationDO" >
-    insert into course_courseware_relation
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="coursId != null" >
-        cours_id,
-      </if>
-      <if test="coursewareId != null" >
-        courseware_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="coursId != null" >
-        #{coursId,jdbcType=BIGINT},
-      </if>
-      <if test="coursewareId != null" >
-        #{coursewareId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.model.DO.CourseCoursewareRelationDO" >
-    update course_courseware_relation
-    <set >
-      <if test="coursId != null" >
-        cours_id = #{coursId,jdbcType=BIGINT},
-      </if>
-      <if test="coursewareId != null" >
-        courseware_id = #{coursewareId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.model.DO.CourseCoursewareRelationDO" >
+    <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CourseCoursewareRelationDO">
+        insert into course_courseware_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="coursId != null">
+                cours_id,
+            </if>
+            <if test="coursewareId != null">
+                courseware_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="coursId != null">
+                #{coursId,jdbcType=BIGINT},
+            </if>
+            <if test="coursewareId != null">
+                #{coursewareId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CourseCoursewareRelationDO">
+        update course_courseware_relation
+        <set>
+            <if test="coursId != null">
+                cours_id = #{coursId,jdbcType=BIGINT},
+            </if>
+            <if test="coursewareId != null">
+                courseware_id = #{coursewareId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.CourseCoursewareRelationDO">
     update course_courseware_relation
     set cours_id = #{coursId,jdbcType=BIGINT},
       courseware_id = #{coursewareId,jdbcType=BIGINT}

@@ -1,6 +1,6 @@
 package com.ucar.qtcassist;
 
-import com.ucar.qtcassist.util.RedisStringDemo;
+import com.ucar.qtcassist.base.util.RedisStringDemo;
 import com.zuche.framework.common.SpringApplicationContext;
 import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.remote.RemoteClient;
@@ -9,31 +9,21 @@ import com.zuche.framework.remote.RemoteType;
 import com.zuche.framework.udfs.client.UDFSClient;
 import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
 import com.zuche.framework.udfs.client.upload.UDFSUploadVO;
-import com.zuche.framework.upload.ResourceUploadResultVO;
-import com.zuche.framework.upload.ResourceUploadScaleVO;
-import com.zuche.framework.upload.ResourceUploadVO;
-import com.zuche.framework.zk.utils.ZkUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
