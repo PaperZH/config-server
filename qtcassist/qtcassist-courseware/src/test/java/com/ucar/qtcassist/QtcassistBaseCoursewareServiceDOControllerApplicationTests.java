@@ -1,6 +1,6 @@
 package com.ucar.qtcassist;
 
-import com.ucar.qtcassist.service.RemoteFileService;
+import com.ucar.qtcassist.courseware.service.RemoteFileService;
 import com.zuche.framework.common.SpringApplicationContext;
 import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
