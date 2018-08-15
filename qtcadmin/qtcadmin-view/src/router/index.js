@@ -66,7 +66,18 @@ let router = new Router({
       leaf: true, // 只有一个节点
       iconCls: 'fa fa-server', // 图标样式class
       children: [
-        {path: '/admin/menu', component: MenuList, name: '菜单列表', menuShow: true}
+        {path: '/admin/menu', component:MenuList, name: '菜单列表', menuShow: true}
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: '部门管理',
+      menuShow: true,
+      leaf: true, // 只有一个节点
+      iconCls: 'fa fa-star', // 图标样式class
+      children: [
+        {path: '/admin/dept', component: DeptList, name: '部门列表', menuShow: true}
       ]
     },
     {
