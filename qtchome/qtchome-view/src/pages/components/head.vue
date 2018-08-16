@@ -23,8 +23,8 @@
               <el-input  v-model="input" placeholder="请输入内容" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
             </div>
             <div style="float: right;color: #f7f6f6;">
-              <label  style="margin-top: 1.7%;" class="fa fa-user-o" :onclick="login" v-show="isShow"> 登录</label>
-              <div style="margin-top: 0.8%;">
+              <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
+              <div style="margin-top: 0.8%;" v-show="isUser">
               <img style="width: 40px;height: 40px ;border-radius:20px" src="static/timg.jpg"/>&nbsp&nbsp
               <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link" style="color: #faf7f7;">
@@ -42,7 +42,22 @@
       </div>
       </el-col>
     </el-row>
+    <el-dialog title="用户登录" :visible.sync="dialogFormVisible" style="width: 51%;">
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="login">登 录</el-button>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 <script>
   export default {
@@ -66,7 +81,14 @@
     },
     data () {
       return {
-        isShow: false
+        dialogFormVisible: false,
+        formLabelWidth: '120px',
+        isShow: true,
+        isUser: false,
+        form: {
+          name: '',
+          password: ''
+        }
       }
     },
     methods: {
@@ -74,7 +96,10 @@
         this.$emit('getActiveIndex', key)
       },
       login () {
-
+        console.log(0)
+        this.dialogFormVisible = false
+        this.isShow = false
+        this.isUser = true
       },
       handleCommand (val) {
         this.$router.push(val)

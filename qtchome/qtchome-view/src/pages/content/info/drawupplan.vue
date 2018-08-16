@@ -95,7 +95,7 @@
       </div>
     </div>
   </el-card>
-    <dialog-plan  :show.sync="show" v-bind:message="message" title="制定计划"></dialog-plan>
+
   </div>
 </template>
 

@@ -53,7 +53,6 @@ export default {
                 that.loading = false;
                 if (result && result.code === 0) {
                   localStorage.setItem("access-token", result.token);
-                  console.log(result.router)
                   localStorage.setItem("menus", JSON.stringify(result.router));
                   localStorage.setItem("perms",JSON.stringify(result.perms))
                   that.$router.push({ path: "/" });

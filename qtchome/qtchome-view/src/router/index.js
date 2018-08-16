@@ -13,14 +13,9 @@ import addCourse from '@/pages/content/info/addCourse'
 import myplan from '@/pages/content/info/myplan'
 import drawupplan from '@/pages/content/info/drawupplan'
 import releasecourse from '@/pages/content/info/releasecourse'
-import admin from '@/pages/admin'
 
 const router = new Router({
   routes: [{
-    path: '/admin',
-    component: admin
-  },
-  {
     path: '/',
     component: index,
     children: [ {
@@ -41,15 +36,18 @@ const router = new Router({
       children: [ {
         path: '/userInfo',
         name: 'userInfo',
-        component: userInfo
+        component: userInfo,
+        meta: { title: '基本设置' }
       }, {
         path: '/release',
         name: 'release',
-        component: release
+        component: release,
+        meta: { title: '发布课程' }
       }, {
         path: '/favorite',
         name: 'favorite',
-        component: favorite
+        component: favorite,
+        meta: { title: '我的收藏' }
       }, {
         path: '/addCourse',
         name: 'addCourse',
@@ -57,15 +55,18 @@ const router = new Router({
       }, {
         path: '/myplan',
         name: 'myplan',
-        component: myplan
+        component: myplan,
+        meta: { title: '我的计划' }
       }, {
         path: '/drawupplan',
         name: 'drawupplan',
+        meta: { title: '制定计划' },
         component: drawupplan
       }, {
         path: '/releasecourse',
         name: 'releasecourse',
-        component: releasecourse
+        component: releasecourse,
+        meta: { title: '我发布的课程' }
       }]
     }, {
       path: 'details',
@@ -86,7 +87,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  next()                                                                          // 如果匹配到正确跳转
+  if (to.path === '/login') {
+
+  }
+  next()                                                                    // 如果匹配到正确跳转
 })
 
 export default router

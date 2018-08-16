@@ -3,6 +3,7 @@ package com.ucar.qtc.admin.controller;
 import com.ucar.qtc.admin.domain.DeptDO;
 import com.ucar.qtc.admin.domain.Tree;
 import com.ucar.qtc.admin.service.DeptService;
+import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class DeptController {
 	@Autowired
 	private DeptService deptService;
 
-
+	@Log("获取部门列表")
 	@GetMapping
 	public List<Tree<DeptDO>> list() {
 		return deptService.getTree().getChildren();
@@ -38,7 +39,7 @@ public class DeptController {
 	/**
 	 * 保存
 	 */
-
+	@Log("保存部门")
 	@PostMapping
 	public ResponseResult save(@RequestBody DeptDO sysDept) {
 
@@ -51,10 +52,9 @@ public class DeptController {
 	/**
 	 * 修改
 	 */
-
+	@Log("修改部门")
 	@PutMapping
 	public ResponseResult update(@RequestBody DeptDO sysDept) {
-
 		if (deptService.update(sysDept) > 0) {
 			return ResponseResult.ok();
 		}
@@ -64,6 +64,7 @@ public class DeptController {
 	/**
 	 * 删除
 	 */
+	@Log("删除部门")
 	@DeleteMapping
 	public ResponseResult remove(Long id) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -84,6 +85,7 @@ public class DeptController {
 	/**
 	 * 删除
 	 */
+	@Log("批量删除部门")
 	@PostMapping("batchRemove")
 	public ResponseResult remove(@RequestParam("ids[]") Long[] deptIds) {
 		deptService.batchRemove(deptIds);
