@@ -103,7 +103,6 @@
         let that = this
         API.depts().then(
           function (result) {
-            console.log(result);
             that.deptdata = result
            
           }
@@ -120,7 +119,6 @@
       },
       editSubmit: function () {
         let that = this;
-        console.log(this.editForm);
         this.$refs.editForm.validate(valid => {
           if (valid) {
             that.loading = true;
@@ -143,8 +141,17 @@
                   showClose: true,
                   message: "修改失败",
                   duration: 2000
-                });
+                })
+                that.editFormVisible = false
               }
+            }, function (err) {
+              that.loading = false;
+              that.editFormVisible = false
+              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
+            }).catch(function (error) {
+              that.loading = false;
+              console.log(error);
+              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
             });
           }
         });
@@ -152,12 +159,10 @@
       //新增
       addSubmit: function () {
         let that = this;
-        console.log(this.addForm)
         this.$refs.addForm.validate((valid) => {
           if (valid) {
             that.loading = true;
             let para = Object.assign({}, this.addForm);
-            console.log(para);
             API.addDept(para).then(function (result) {
               that.loading = false;
               if (result && parseInt(result.code) === 0) {
@@ -166,7 +171,7 @@
                 that.addFormVisible = false;
                 that.search();
               } else {
-                that.$message.error({showClose: true, message: '修改失败', duration: 2000});
+                that.$message.error({showClose: true, message: '新增失败', duration: 2000});
               }
             }, function (err) {
               that.loading = false;

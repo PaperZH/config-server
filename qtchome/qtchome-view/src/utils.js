@@ -48,7 +48,6 @@ export const mixin = (obj) => {
     },
     computed: {
       userPermissions () {
-        console.log('aaaa')
         return this.$store.getters.permissions
       }
     },

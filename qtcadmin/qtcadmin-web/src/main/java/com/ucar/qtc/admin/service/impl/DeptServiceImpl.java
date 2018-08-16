@@ -70,6 +70,7 @@ public class DeptServiceImpl implements DeptService {
 			Map<String, Object> obj = new HashMap<>(16);
 			obj.put("orderNum", sysDept.getOrderNum());
 			obj.put("name", sysDept.getName());
+			obj.put("deptId", sysDept.getDeptId());
 			tree.setObject(obj);
 			trees.add(tree);
 		}

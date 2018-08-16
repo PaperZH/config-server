@@ -204,7 +204,7 @@
                 that.addFormVisible = false;
                 that.search();
               } else {
-                that.$message.error({showClose: true, message: '修改失败', duration: 2000});
+                that.$message.error({showClose: true, message: '新增失败', duration: 2000});
               }
             }, function (err) {
               that.loading = false;

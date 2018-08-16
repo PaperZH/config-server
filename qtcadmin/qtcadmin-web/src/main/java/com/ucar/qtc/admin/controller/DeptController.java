@@ -55,7 +55,6 @@ public class DeptController {
 	@Log("修改部门")
 	@PutMapping
 	public ResponseResult update(@RequestBody DeptDO sysDept) {
-
 		if (deptService.update(sysDept) > 0) {
 			return ResponseResult.ok();
 		}
