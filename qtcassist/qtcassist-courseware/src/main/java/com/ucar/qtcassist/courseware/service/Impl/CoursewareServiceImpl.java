@@ -6,6 +6,7 @@ import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 请填写类注释
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author shijie.xu
  * @since 2018年08月14日
  */
+@Service
 public class CoursewareServiceImpl implements CoursewareService {
     @Autowired
     private BaseCoursewareMapper baseCoursewareMapper;
