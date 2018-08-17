@@ -1,5 +1,7 @@
 package com.ucar.qtc.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,8 +31,10 @@ public class MenuDO implements Serializable {
 	//排序
 	private Integer orderNum;
 	//创建时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	//修改时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 	//
 	private Integer delFlag;

@@ -45,8 +45,10 @@ public class UserDO implements Serializable {
     // 住址
     private String address;
     // 创建时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     // 修改时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     // 状态 0:禁用，1:正常
     private Integer delFlag;
