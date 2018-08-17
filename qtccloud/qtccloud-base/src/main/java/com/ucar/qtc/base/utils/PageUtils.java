@@ -1,4 +1,4 @@
-package com.ucar.qtc.common.utils;
+package com.ucar.qtc.base.utils;
 
 import java.io.Serializable;
 import java.util.List;

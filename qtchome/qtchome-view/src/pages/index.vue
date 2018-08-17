@@ -18,7 +18,13 @@
 
 </template>
 <script>
+  import Head from '@/pages/components/head'  // 头部
+  import Footer from '@/pages/components/footer' // 底部
   export default {
+    components: {
+      'page-head': Head,
+      'page-footer': Footer
+    },
     data () {
       return {
         activeIndex: 'home',

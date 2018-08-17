@@ -95,7 +95,7 @@ let router = new Router({
       leaf: true,
       iconCls: 'fa fa-group',
       children: [
-        {path: '/cms/file', component: FileList, name: '文件管理', menuShow: true},
+        {path: '/admin/file', component: FileList, name: '文件管理', menuShow: true},
       ]
     },
     {
@@ -112,7 +112,7 @@ let router = new Router({
     {
       path: '/',
       component: Home,
-      name: '设置',
+      name: '个人信息',
       menuShow: true,
       iconCls: 'iconfont icon-setting1',
       children: [

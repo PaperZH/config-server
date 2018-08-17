@@ -23,3 +23,7 @@ mybatis:
       map-underscore-to-camel-case: true
 logging:
   level: debug
+
+file:
+  filePath: e:/file/uploaded_files/
+  pre: /files

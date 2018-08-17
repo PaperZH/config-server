@@ -7,12 +7,8 @@ security:
     enabled: false
 server:
   port: 8006
-spring:
-  application:
-    name: api-home
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qtccloud?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: 123456
 logging:
   level: debug
+spring:
+  application:
+    name: front-end-service
