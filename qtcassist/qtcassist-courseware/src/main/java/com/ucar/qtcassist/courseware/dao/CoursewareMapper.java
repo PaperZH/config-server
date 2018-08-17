@@ -1,7 +1,6 @@
 package com.ucar.qtcassist.courseware.dao;
 
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component

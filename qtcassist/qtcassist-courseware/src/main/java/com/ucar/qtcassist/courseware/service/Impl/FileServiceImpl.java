@@ -1,15 +1,11 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
-import com.ucar.qtcassist.base.util.DocumentConverUtil;
 import com.ucar.qtcassist.courseware.constant.FileType;
 import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 
 /**
  * 文件处理
@@ -20,13 +16,10 @@ import java.io.File;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private static final String LOCATION = "qtcassist/tempFile";
-
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
 
     @Override
-    public boolean typeCheck(MultipartFile file) {
-        String coursewareName =file.getOriginalFilename();
+    public boolean typeCheck(String coursewareName) {
         int point = coursewareName.lastIndexOf(".");
         //名称
         String Name = coursewareName.substring(0, point);

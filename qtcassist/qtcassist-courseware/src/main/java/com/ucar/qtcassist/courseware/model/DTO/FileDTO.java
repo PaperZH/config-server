@@ -1,8 +1,7 @@
 package com.ucar.qtcassist.courseware.model.DTO;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * 请填写类注释
@@ -10,23 +9,20 @@ import java.io.File;
  * @author shijie.xu
  * @since 2018年08月17日
  */
-public class FileDTO {
+public class FileDTO implements Serializable {
+
+    static final long serialVersionUID = -1;
     /**
      * 文件
-     * */
-    private MultipartFile file;
-    /**
+     */
+    private File file;
+    /**阿
      * baseCoursewareId
-     * */
+     */
     private Long id;
 
-    public MultipartFile getFile() {
-        return file;
-    }
+    private String originalFilename;
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
 
     public Long getId() {
         return id;
@@ -34,5 +30,21 @@ public class FileDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
     }
 }
