@@ -103,7 +103,11 @@
 </template>
 
 <script>
+    import Breadcrumb from '@/pages/components/breadcrumb' //  面包屑 导航
     export default {
+      components: {
+        'tabs-breadcrumb': Breadcrumb
+      },
       data () {
         return {
           items: {},

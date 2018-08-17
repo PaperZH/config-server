@@ -13,6 +13,36 @@ public class CreateUserCourseServiceImpl implements CreateUserCourseService {
     private CreateUserCourseMapper createUserCourseMapper;
 
     @Override
+    public int deleteByPrimaryKey(Long id) {
+        return createUserCourseMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int insert(CreateUserCourse record) {
+        return createUserCourseMapper.insert(record);
+    }
+
+    @Override
+    public int insertSelective(CreateUserCourse record) {
+        return createUserCourseMapper.insertSelective(record);
+    }
+
+    @Override
+    public CreateUserCourse selectByPrimaryKey(Long id) {
+        return createUserCourseMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(CreateUserCourse record) {
+        return createUserCourseMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public int updateByPrimaryKey(CreateUserCourse record) {
+        return createUserCourseMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
     public CreateUserCourse selectByCourseId(Long courseId) {
         return createUserCourseMapper.selectByCourseId(courseId);
     }

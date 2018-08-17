@@ -18,7 +18,7 @@
          font-weight: bold;">课程</span>
          <span style="margin-left: 80%;"><a v-on:click="handleCourse" href="#">更多>>></a></span>
        </div>
-       <course-ist></course-ist>
+       <course-list></course-list>
      </div>
      </el-col>
    </el-row>
@@ -26,7 +26,11 @@
 </template>
 
 <script>
+    import CourseList from '@/pages/components/courselist' // 课程列表
     export default {
+      components: {
+        'course-list': CourseList
+      },
       data () {
         return {
           height: '380px',
