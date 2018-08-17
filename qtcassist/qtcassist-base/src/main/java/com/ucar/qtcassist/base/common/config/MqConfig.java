@@ -7,12 +7,11 @@ import com.taobao.metamorphosis.client.extension.spring.MessageListenerContainer
 import com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFactoryBean;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTemplate;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTopic;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Description: Mq相关的bean
@@ -23,6 +22,9 @@ import java.util.Map;
 
 @Configuration
 public class MqConfig {
+
+    @Autowired
+    private List<DefaultMessageListener> list ;
 
     @Bean(name="sessionFactory")
     public MetaqMessageSessionFactoryBean sessionFactory () {
@@ -66,14 +68,17 @@ public class MqConfig {
         return  metaqTopic;
     }
 
-    @Bean(name="metaqTemplate")
+
+    @Bean(name="listenerContainer")
     public MessageListenerContainer listenerContainer() throws Exception {
         MessageListenerContainer messageListenerContainer = new MessageListenerContainer();
         messageListenerContainer.setMessageSessionFactory(sessionFactory().getObject());
         messageListenerContainer.setMessageBodyConverter(messageBodyConverter());
-        messageListenerContainer.setShareConsumer(true);
-        messageListenerContainer.setDefaultTopic(defaultTopic());
-        //messageListenerContainer.setDefaultMessageListener();
+        if (list != null && !list.isEmpty()){
+            messageListenerContainer.setShareConsumer(true);
+            messageListenerContainer.setDefaultTopic(defaultTopic());
+            messageListenerContainer.setDefaultMessageListener(list.get(0));
+        }
         return  messageListenerContainer;
     }
 }
