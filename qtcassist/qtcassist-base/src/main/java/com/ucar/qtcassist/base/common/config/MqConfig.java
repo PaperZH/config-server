@@ -8,10 +8,13 @@ import com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFacto
 import com.taobao.metamorphosis.client.extension.spring.MetaqTemplate;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTopic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: Mq相关的bean
@@ -23,8 +26,9 @@ import java.util.List;
 @Configuration
 public class MqConfig {
 
-    @Autowired
-    private List<DefaultMessageListener> list ;
+    @Autowired(required=false)
+    @Qualifier("mesListener")
+    private DefaultMessageListener defaultMessageListener ;
 
     @Bean(name="sessionFactory")
     public MetaqMessageSessionFactoryBean sessionFactory () {
@@ -74,11 +78,9 @@ public class MqConfig {
         MessageListenerContainer messageListenerContainer = new MessageListenerContainer();
         messageListenerContainer.setMessageSessionFactory(sessionFactory().getObject());
         messageListenerContainer.setMessageBodyConverter(messageBodyConverter());
-        if (list != null && !list.isEmpty()){
-            messageListenerContainer.setShareConsumer(true);
-            messageListenerContainer.setDefaultTopic(defaultTopic());
-            messageListenerContainer.setDefaultMessageListener(list.get(0));
-        }
+        Map<MetaqTopic,  DefaultMessageListener> map = new HashMap<>();
+        map.put(defaultTopic(), defaultMessageListener);
         return  messageListenerContainer;
     }
+
 }
