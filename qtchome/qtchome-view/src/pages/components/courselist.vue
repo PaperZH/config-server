@@ -2,27 +2,29 @@
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px;margin-right: 0px; margin-top: 0px;">
 
-       <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 20%; float: left">
-        <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' }" >
-          <div class="image" v-bind:style="{backgroundImage:'url(' + item.img + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
-          <div style="padding: 9px;">
-            <span v-on:click="handleDetails(item)">{{item.tilt}}</span>
-            <div class="bottom clearfix">
-              <span class="time">技术类</span>
-              <span class="time" >
-                 <i class="fa fa-thumbs-o-up" >0</i>
+      <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 20%; float: left">
+        <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
+          <div v-on:click="handleDetails(item)">
+            <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
+            <div style="padding: 9px;">
+              <span >{{item.courseName}}</span>
+              <div class="bottom clearfix">
+                <span class="time">{{item.type_name}}</span>
+                <span class="time" >
+                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
-              <time class="button">2018-07-25 13:36:23</time>
+                <time class="button">{{item.publishTime}}</time>
+              </div>
             </div>
           </div>
         </el-card>
-       </div>
+      </div>
     </el-row>
     <div class="block" v-show="isShow" style="text-align: right; margin-top: 2%;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage1"
+        :current-page="currentPage"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="50"
         layout="total, prev, pager, next, jumper"
@@ -40,11 +42,15 @@
         isShow: {
           type: Boolean,
           default: false
+        },
+        type: {
+          type: String,
+          default: ' '
         }
       },
       data () {
         return {
-          currentPage1: 5,
+          currentPage: 1,
           tableData: [{
             id: '1',
             date: '2017-06-02 14:45:00',
@@ -110,10 +116,22 @@
         },
         handleCurrentChange (val) {
           console.log(`当前页: ${val}`)
+          this.currentPage = val
+          this.getCourseList()
         },
         handleDetails (val) {
           this.$router.push({name: 'details', params: val})
+        },
+        getCourseList () {
+          const url = '/api-home/course/getList'
+          const data = {'type': this.type, 'currentPage': this.currentPage}
+          this.$store.dispatch('Post', {'url': url, 'data': data}).then(res => {
+            this.tableData = res.data.data
+          })
         }
+      },
+      mounted () {
+        this.getCourseList()
       }
 
     }
