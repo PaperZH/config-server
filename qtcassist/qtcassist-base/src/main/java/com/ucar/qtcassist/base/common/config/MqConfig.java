@@ -65,6 +65,7 @@ public class MqConfig {
         metaqTopic.setMaxIncreaseFetchDataRetries(5);
         return  metaqTopic;
     }
+
     @Bean(name="metaqTemplate")
     public MessageListenerContainer listenerContainer() throws Exception {
         MessageListenerContainer messageListenerContainer = new MessageListenerContainer();
