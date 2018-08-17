@@ -1,5 +1,6 @@
 package com.ucar.qtc.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,14 +62,14 @@ public class CourseController {
      * @param query (pageSize,currentPage,type)
      * @return
      */
-    @RequestMapping(value = "/getList", method =RequestMethod.GET)
-    public ResponseResult getCoursesList(@RequestBody Map<String,Object> query){
+    @RequestMapping(value = "/getList" ,produces ="application/json")
+    public ResponseResult getCoursesList(@RequestParam Map<String,Object> query){
         System.out.println(query);
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             HashMap<String,Object> hashMap = new HashMap<>();
             hashMap.put("courseId",Integer.toString(i));
-            hashMap.put("courseCover","static/image/2.jpg");
+            hashMap.put("courseCover","static/image/3.jpg");
             hashMap.put("courseName","课程名称"+i);
             hashMap.put("type_name","课程类型"+i);
             hashMap.put("courseDescription","课程描述说明");
@@ -88,7 +89,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/getDetails/{id}", method = RequestMethod.GET)
-    public ResponseResult getCourseWare(@PathVariable long id){
+    public ResponseResult getCourseDetails(@PathVariable long id){
         System.out.println(id);
         HashMap<String,Object> course = new HashMap<>();
         //课程基本信息
@@ -119,6 +120,31 @@ public class CourseController {
         course.put("teacher",teacher);
         course.put("courseWare",courseWarelist);
         return ResponseResult.data(course);
+    }
+
+    /**
+     * 根据查询条件来获取收藏的课程
+     * @return
+     */
+    @RequestMapping(value = "/getFavoriteCourse")
+    ResponseResult getFavoriteCourse(@RequestParam Map<String,Object> params){
+        System.out.println(params);
+        ArrayList<Map> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            HashMap<String,Object> hashMap = new HashMap<>();
+            hashMap.put("courseId",Integer.toString(i));
+            hashMap.put("courseCover","static/image/4.jpg");
+            hashMap.put("courseName","课程名称"+i);
+            hashMap.put("type_name","课程类型"+i);
+            hashMap.put("courseDescription","课程描述说明");
+            hashMap.put("courseScore",Integer.toString(i));
+            hashMap.put("readNum",Integer.toString(10*i));
+            hashMap.put("praiseNum",Integer.toString(i+10));
+            hashMap.put("publishTime","2018-8-15");
+            hashMap.put("updateTime","2018-8-15");
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
     }
     /**
      * 获取的课程

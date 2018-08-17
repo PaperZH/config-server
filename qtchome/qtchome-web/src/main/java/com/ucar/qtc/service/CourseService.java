@@ -1,6 +1,5 @@
 package com.ucar.qtc.service;
 
-import com.ucar.qtc.entity.CourseDTO;
 import com.ucar.qtc.utils.ResponseResult;
 
 import java.util.Map;
@@ -33,23 +32,23 @@ public interface CourseService {
     ResponseResult getCourseDetails(long courseId);
 
     /**
-     * 根据课程名字或发布时间区间获取课程列表
-     * @param params (String courseName,String startTime, String endTime)
+     * 获取收藏的课程列表
+     * @return
+     */
+    ResponseResult getFavoriteCourse(long userId);
+
+    /**
+     * 根据课程名字或发布时间区间获取收藏的课程列表
+     * @param params (long userId, String courseName,String startTime, String endTime)
      * @return
      */
     ResponseResult queryCourseByName(Map<String,Object> params);
 
     /**
-     * 获取收藏的课程列表
-     * @return
-     */
-    ResponseResult getFavoriteCourse();
-
-    /**
      * 获取发布的课程列表
      * @return
      */
-    ResponseResult getPublishedCourse();
+    ResponseResult getPublishedCourse(long userId);
 
     /**
      * 根据课程id删除课程
