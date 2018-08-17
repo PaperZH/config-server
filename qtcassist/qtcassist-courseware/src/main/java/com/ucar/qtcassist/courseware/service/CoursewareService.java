@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.courseware.service;
 
-import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
+import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 
 /**
  * course_ware
@@ -9,6 +9,6 @@ import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
  * @since 2018年08月14日
  */
 public interface CoursewareService {
-    Long addCourseware(FrontCoursewareDTO frontCoursewareDTO);
+    Long addCourseware(CoursewareDO coursewareDO);
 
 }

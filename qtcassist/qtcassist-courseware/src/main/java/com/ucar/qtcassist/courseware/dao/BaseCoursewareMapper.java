@@ -9,9 +9,9 @@ import java.util.List;
 public interface BaseCoursewareMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(BaseCoursewareDO record);
+    Long insert(BaseCoursewareDO record);
 
-    int insertSelective(BaseCoursewareDO record);
+    Long insertSelective(BaseCoursewareDO record);
 
     BaseCoursewareDO selectByPrimaryKey(Long id);
 
