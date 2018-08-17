@@ -38,9 +38,9 @@ export const user = {
       })
     },
     // get 请求
-    Get: function ({commit, state}, url, param) {
+    Get: function ({commit, state}, param) {
       return new Promise((resolve, reject) => {
-        get(url, param).then(response => {
+        get(param.url, param.data).then(response => {
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -48,9 +48,9 @@ export const user = {
       })
     },
     // post 请求
-    Post: function ({commit, state}, url, param) {
+    Post: function ({commit, state}, param) {
       return new Promise((resolve, reject) => {
-        post(url, param).then(response => {
+        post(param.url, param.data).then(response => {
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -58,9 +58,9 @@ export const user = {
       })
     },
     // put 请求
-    Put: function ({commit, state}, url, param) {
+    Put: function ({commit, state}, param) {
       return new Promise((resolve, reject) => {
-        put(url, param).then(response => {
+        put(param.url, param.data).then(response => {
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -68,9 +68,9 @@ export const user = {
       })
     },
     // delete 请求
-    Delete: function ({commit, state}, url, param) {
+    Delete: function ({commit, state}, param) {
       return new Promise((resolve, reject) => {
-        remove(state.token, url, param).then(response => {
+        remove(state.token, param.url, param.data).then(response => {
           resolve(response)
         }).catch(error => {
           reject(error)
