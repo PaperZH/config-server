@@ -2,11 +2,8 @@
   <el-row class="container">
     <!--头部-->
     <el-col :span="24" class="topbar-wrap">
-      <div class="topbar-logo topbar-btn">
-        <a href="/"><img src="../assets/logo.png" style="padding-left:8px;"></a>
-      </div>
-      <div class="topbar-logos" v-show="!collapsed">
-        <a href="/"><img src="../assets/logotxt.png"></a>
+      <div class="logobox">
+        <span>培训管理系统</span>
       </div>
       <div class="topbar-title">
         <span style="font-size: 18px;color: #fff;"></span>
@@ -176,24 +173,17 @@
       .topbar-btn {
         color: #fff;
       }
-      /*.topbar-btn:hover {*/
-      /*background-color: #4A5064;*/
-      /*}*/
-      .topbar-logo {
+
+      .logobox {
         float: left;
-        width: 59px;
-        line-height: 26px;
-      }
-      .topbar-logos {
-        float: left;
-        width: 120px;
-        line-height: 26px;
-      }
-      .topbar-logo img,
-      .topbar-logos img {
-        height: 40px;
-        margin-top: 5px;
-        margin-left: 2px;
+        height: 50px;
+        margin-left: 20px;
+        line-height: 40px;
+        color: #66BEFF;
+        font-size: 22px;
+        font-weight:bold;
+        text-align: center;
+        padding: 5px 0px;
       }
       .topbar-title {
         float: left;
@@ -274,7 +264,7 @@
       background: #373d41;
       text-align: center;
       color: white;
-      padding-left: 10px;
+      padding-left: 30px;
 
     }
 
