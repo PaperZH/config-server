@@ -72,7 +72,7 @@
             <el-input v-model="addForm.nickname" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="出生日期" prop="birth">
-            <el-date-picker type="date" placeholder="出生日期" v-model="addForm.birth"></el-date-picker>
+            <el-date-picker type="date" placeholder="出生日期" v-model="addForm.birth" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input type="email" v-model="addForm.email"></el-input>
@@ -103,7 +103,7 @@
             <el-input v-model="editForm.nickname" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="出生日期" prop="birth">
-            <el-date-picker type="date" placeholder="出生日期" v-model="editForm.birth"></el-date-picker>
+            <el-date-picker type="date" placeholder="出生日期" v-model="editForm.birth" value-format="yyyy-MM-dd"></el-date-picker>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input type="email" v-model="editForm.email"></el-input>

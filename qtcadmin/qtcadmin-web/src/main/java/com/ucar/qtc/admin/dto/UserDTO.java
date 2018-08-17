@@ -1,5 +1,8 @@
 package com.ucar.qtc.admin.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -29,15 +32,19 @@ public class UserDTO {
     private Long deptId;
     // 部门名称
     private String deptName;
-    // 生日
+    // 出生日期
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     // 图片
     private String avatar;
     // 地址
     private String address;
     // 创建时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     // 修改时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     //角色
     private List<Long> roleIds;
