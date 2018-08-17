@@ -37,6 +37,7 @@
         <el-table-column label="标题" prop="title" align="center"></el-table-column>
         <el-table-column label="内容" prop="content" align="center"></el-table-column>
         <el-table-column label="排序" prop="orderNum" align="center"></el-table-column>
+        <el-table-column label="修改时间" prop="updateTime" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>

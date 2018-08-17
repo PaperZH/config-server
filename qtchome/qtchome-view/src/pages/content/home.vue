@@ -5,7 +5,7 @@
        <div class="block">
        <el-carousel trigger="click" :height="height">
          <el-carousel-item v-for="(img,index) in images" :key="index" >
-           <img style="width: 100%;height: 430px;display: block;" v-bind:src="img.src">
+           <img style="width: 100%;height: 430px;display: block; " @click="handleDetails(img.id)"  v-bind:src="img.src">
          </el-carousel-item>
        </el-carousel>
        </div>
@@ -18,7 +18,7 @@
          font-weight: bold;">课程</span>
          <span style="margin-left: 80%;"><a v-on:click="handleCourse" href="#">更多>>></a></span>
        </div>
-       <course-list></course-list>
+       <recourse-list></recourse-list>
      </div>
      </el-col>
    </el-row>
@@ -26,10 +26,10 @@
 </template>
 
 <script>
-    import CourseList from '@/pages/components/courselist' // 课程列表
+    import ReCourseList from '@/pages/components/recourselist' // 推荐课程列表
     export default {
       components: {
-        'course-list': CourseList
+        'recourse-list': ReCourseList
       },
       data () {
         return {
@@ -55,11 +55,13 @@
         }
       },
       created: function () {
-
+        this.$store.dispatch('Get', {'url': '/api-home/course/getBannerCourse'}).then(res => {
+          this.images = res.data.data
+        })
       },
       methods: {
         handleDetails (val) {
-          this.$router.push({name: 'details', params: {id: val}
+          this.$router.push({name: 'details', params: {courseId: val}
           })
         },
         handleCourse () {

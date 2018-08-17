@@ -1,5 +1,7 @@
 package com.ucar.qtc.admin.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,8 +27,10 @@ public class FileDTO implements Serializable {
     // 排序
     private Integer orderNum;
     //创建时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     // 更新时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     // 删除标记
     private Integer delFlag;

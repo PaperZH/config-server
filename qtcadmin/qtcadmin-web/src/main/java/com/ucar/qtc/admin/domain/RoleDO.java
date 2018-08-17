@@ -1,5 +1,7 @@
 package com.ucar.qtc.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,11 @@ public class RoleDO {
 	private String roleDesc;
 	private String remark;
 	private Integer delFlag;
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 	private List<Long> menuIds;
 

@@ -95,11 +95,16 @@
       handleSelect (key, keyPath) {
         this.$emit('getActiveIndex', key)
       },
-      login () {
+      login: function () {
         console.log(0)
         this.dialogFormVisible = false
         this.isShow = false
         this.isUser = true
+        this.$store.dispatch('Post', {'url': '/api-home/user/login', 'data': this.form}).then(res => {
+          console.log(res)
+        }).catch(() => {
+          this.loading = false
+        })
       },
       handleCommand (val) {
         this.$router.push(val)
