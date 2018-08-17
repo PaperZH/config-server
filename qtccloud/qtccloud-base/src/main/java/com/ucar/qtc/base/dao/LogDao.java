@@ -1,6 +1,6 @@
 package com.ucar.qtc.base.dao;
 
-import com.ucar.qtc.common.dto.LogDO;
+import com.ucar.qtc.base.dto.LogDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.ucar.qtc.common.utils;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +15,12 @@ import java.util.UUID;
  * @date: 2018/8/7 10:19
  */
 public class FileUtils {
-    public static String saveFile(byte[] file, String filePath, String fileName) {
+    public static String saveFile(MultipartFile multipartFile, byte[]file, String filePath, String fileName) {
+        String originName = multipartFile.getOriginalFilename();
+        String suffix = originName.substring(originName.lastIndexOf(".")+1);
+        if (!StringUtils.isBlank(suffix)) {
+            suffix = "."+suffix;
+        }
         int random = (int) (Math.random() * 100 + 1);
         int random1 = (int) (Math.random() * 100 + 1);
         filePath = filePath + random + File.separator + random1 + File.separator;
@@ -23,7 +30,7 @@ public class FileUtils {
         }
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(filePath + fileName);
+            fileOutputStream = new FileOutputStream(filePath + fileName + suffix);
             FileChannel fileChannel = fileOutputStream.getChannel();
             ByteBuffer buf = ByteBuffer.wrap(file);
             while (fileChannel.write(buf) != 0) {
@@ -40,7 +47,7 @@ public class FileUtils {
             }
         }
         //url
-        return random + "/" + random1 + "/" + fileName;
+        return random + "/" + random1 + "/" + fileName+ suffix;
     }
 
     public static boolean deleteFile(String fileName) {

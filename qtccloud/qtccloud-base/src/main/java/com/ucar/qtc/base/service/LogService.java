@@ -1,8 +1,7 @@
 package com.ucar.qtc.base.service;
 
-
-import com.ucar.qtc.common.dto.LogDO;
-import com.ucar.qtc.common.utils.Query;
+import com.ucar.qtc.base.dto.LogDO;
+import com.ucar.qtc.base.utils.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

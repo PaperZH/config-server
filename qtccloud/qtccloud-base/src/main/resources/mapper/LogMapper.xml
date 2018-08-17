@@ -3,11 +3,11 @@
 
 <mapper namespace="com.ucar.qtc.base.dao.LogDao">
 
-	<select id="get" resultType="com.ucar.qtc.common.dto.LogDO">
+	<select id="get" resultType="com.ucar.qtc.base.dto.LogDO">
 		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from sys_log where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.ucar.qtc.common.dto.LogDO">
+	<select id="list" resultType="com.ucar.qtc.base.dto.LogDO">
 		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from sys_log
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
@@ -48,7 +48,7 @@
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.ucar.qtc.common.dto.LogDO" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.ucar.qtc.base.dto.LogDO" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_log
 		(
 			`user_id`, 
@@ -73,7 +73,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.ucar.qtc.common.dto.LogDO">
+	<update id="update" parameterType="com.ucar.qtc.base.dto.LogDO">
 		update sys_log 
 		<set>
 			<if test="userId != null">`user_id` = #{userId}, </if>

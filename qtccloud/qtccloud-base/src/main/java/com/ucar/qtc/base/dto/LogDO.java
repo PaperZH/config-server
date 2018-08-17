@@ -1,4 +1,4 @@
-package com.ucar.qtc.common.dto;
+package com.ucar.qtc.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

@@ -70,7 +70,11 @@
 </template>
 
 <script>
+    import dialogplan from '@/pages/content/dialog/dialogplan'  // 添加计划弹框
     export default {
+      components: {
+        'dialog-edit-plan': dialogplan
+      },
       data () {
         return {
           show: false,

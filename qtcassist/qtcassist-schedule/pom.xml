@@ -35,7 +35,6 @@
     </dependencies>
 
     <build>
-        <finalName>qtcassist</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
