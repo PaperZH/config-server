@@ -1,10 +1,9 @@
 package com.ucar.qtc.base.service.impl;
 
-
 import com.ucar.qtc.base.dao.LogDao;
 import com.ucar.qtc.base.service.LogService;
-import com.ucar.qtc.common.dto.LogDO;
-import com.ucar.qtc.common.utils.Query;
+import com.ucar.qtc.base.dto.LogDO;
+import com.ucar.qtc.base.utils.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

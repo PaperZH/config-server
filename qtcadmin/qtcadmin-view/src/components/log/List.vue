@@ -7,7 +7,7 @@
       </el-breadcrumb>
     </el-col>
     <el-col :span="24" class="wrap-main">
-      <el-table :data="rows">
+      <el-table :data="rows" border>
         <el-table-column label="用户" prop="username"></el-table-column>
         <el-table-column label="操作" prop="operation"></el-table-column>
         <el-table-column label="用时" prop="time"></el-table-column>

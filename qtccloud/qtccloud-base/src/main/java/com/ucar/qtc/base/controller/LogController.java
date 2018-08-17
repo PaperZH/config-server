@@ -1,11 +1,10 @@
 package com.ucar.qtc.base.controller;
 
-
 import com.ucar.qtc.base.service.LogService;
-import com.ucar.qtc.common.dto.LogDO;
-import com.ucar.qtc.common.utils.PageUtils;
-import com.ucar.qtc.common.utils.Query;
-import com.ucar.qtc.common.utils.ResponseResult;
+import com.ucar.qtc.base.dto.LogDO;
+import com.ucar.qtc.base.utils.PageUtils;
+import com.ucar.qtc.base.utils.Query;
+import com.ucar.qtc.base.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
