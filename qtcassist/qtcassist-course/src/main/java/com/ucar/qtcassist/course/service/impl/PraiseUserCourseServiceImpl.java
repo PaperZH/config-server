@@ -13,7 +13,32 @@ public class PraiseUserCourseServiceImpl implements PraiseUserCourseService {
     private PraiseUserCourseMapper praiseUserCourseMapper;
 
     @Override
+    public int deleteByPrimaryKey(Long id) {
+        return praiseUserCourseMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
     public int insert(PraiseUserCourse record) {
         return praiseUserCourseMapper.insert(record);
+    }
+
+    @Override
+    public int insertSelective(PraiseUserCourse record) {
+        return praiseUserCourseMapper.insertSelective(record);
+    }
+
+    @Override
+    public PraiseUserCourse selectByPrimaryKey(Long id) {
+        return praiseUserCourseMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(PraiseUserCourse record) {
+        return praiseUserCourseMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public int updateByPrimaryKey(PraiseUserCourse record) {
+        return praiseUserCourseMapper.updateByPrimaryKey(record);
     }
 }

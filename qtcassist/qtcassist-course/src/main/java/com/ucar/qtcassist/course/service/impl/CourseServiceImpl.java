@@ -13,7 +13,27 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
 
     @Override
+    public int insert(Course record) {
+        return courseMapper.insert(record);
+    }
+
+    @Override
+    public int insertSelective(Course record) {
+        return courseMapper.insertSelective(record);
+    }
+
+    @Override
     public Course selectByPrimaryKey(Long id) {
         return courseMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Course record) {
+        return courseMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public int updateByPrimaryKey(Course record) {
+        return courseMapper.updateByPrimaryKey(record);
     }
 }
