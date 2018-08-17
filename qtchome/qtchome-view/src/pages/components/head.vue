@@ -100,8 +100,7 @@
         this.dialogFormVisible = false
         this.isShow = false
         this.isUser = true
-        const json = {'url': '/api-home/user/login', 'data': this.form}
-        this.$store.dispatch('Post', json).then(res => {
+        this.$store.dispatch('Post', {'url': '/api-home/user/login', 'data': this.form}).then(res => {
           console.log(res)
         }).catch(() => {
           this.loading = false
