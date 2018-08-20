@@ -27,24 +27,12 @@ public class FileServiceImpl implements FileService {
         //后缀
         String suffix = coursewareName.substring(point + 1, coursewareName.length());
         LOGGER.error(suffix);
-
-
         //根据文件名后缀判断文件类型
         if(suffix.equals(FileType.DOC) || suffix.equals(FileType.DOCX) || suffix.equals(FileType.PPT) || suffix.equals(FileType.PPTX)) {
             return true;
         } else if(suffix.equals(FileType.PDF)) {
             return false;
         }
-
-        /*//暂存转换的pdf文件
-        File pdfFile = new File(pdfLocation);
-        File dir = new File(LOCATION);
-        if(!dir.exists()) {
-            dir.mkdirs();
-        }
-        String pdfLocation = LOCATION + "/" + Name + "." + FileType.PDF;
-        LOGGER.error("pdfLocation:" + pdfLocation);*/
-
 
         return false;
     }

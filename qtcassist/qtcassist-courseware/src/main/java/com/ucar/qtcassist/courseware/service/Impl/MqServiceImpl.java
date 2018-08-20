@@ -17,13 +17,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class MqServiceImpl implements MqService {
     @Autowired
-    MetaqTemplate template;
+    private MetaqTemplate template;
 
     @Override
-    public SendResult msgSend(FileDTO object) throws InterruptedException {
+    public SendResult msgSend(FileDTO fileDTO) throws InterruptedException {
         final String topic = "ucarabs_emp_update_topic";
 
-        final SendResult sendResult = template.send(MessageBuilder.withTopic(topic).withBody(object));
+        final SendResult sendResult = template.send(MessageBuilder.withTopic(topic).withBody(fileDTO));
+        if (!sendResult.isSuccess())
+        {
+            System.err.println("Send message failed,error message:" + sendResult.getErrorMessage());
+        }
+        else {
+            System.out.println("Send message successfully,sent to " + sendResult.getPartition());
+        }
 
         return sendResult;
     }

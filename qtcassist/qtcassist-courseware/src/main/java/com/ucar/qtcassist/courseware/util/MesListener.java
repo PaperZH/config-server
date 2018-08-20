@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 
 /**
- * 请填写类注释
+ * mq Listener
  *
  * @author shijie.xu
  * @since 2018年08月17日

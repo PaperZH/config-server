@@ -6,6 +6,7 @@ import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConne
 import com.artofsolving.jodconverter.openoffice.converter.StreamOpenOfficeDocumentConverter;
 import com.ucar.qtcassist.base.util.CustomerDocumentFormatRegistry;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
+import com.ucar.qtcassist.courseware.util.GetBytes;
 import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
 import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
@@ -26,21 +27,9 @@ import java.net.ConnectException;
  */
 @Service
 public class RemoteFileServiceImpl implements RemoteFileService {
-    private static byte[] getByteArrayInputStreamResource(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int length = 1024;
-        byte[] temp = new byte[length];
-        int i;
-        while((i = inputStream.read(temp, 0, length)) > 0) {
-            byteArrayOutputStream.write(temp, 0, i);
-        }
-        byte[] data = byteArrayOutputStream.toByteArray();
-        return data;
-    }
-
     @Override
     public String uploadFile(InputStream inputStream, String Name) throws IOException {
-        byte[] fileByte = getByteArrayInputStreamResource(inputStream);
+        byte[] fileByte = GetBytes.getByteArrayInputStreamResource(inputStream);
         UDFSUploadVO vo = new UDFSUploadVO();
         vo.setName(Name);
         vo.setData(fileByte);
