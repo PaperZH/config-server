@@ -4,6 +4,7 @@ import com.ucar.qtc.admin.domain.FileDO;
 import com.ucar.qtc.admin.dto.FileDTO;
 import com.ucar.qtc.admin.dto.do2dto.FileConvert;
 import com.ucar.qtc.admin.service.FileService;
+import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author cong.zhou01
@@ -58,6 +58,7 @@ public class FileController {
      * @param key
      * @return
      */
+    @Log("上传文件")
     @PostMapping("upload")
     public ResponseResult upload(MultipartFile file, String key) {
         try {
@@ -75,7 +76,10 @@ public class FileController {
 
     /**
      * 分页查询
+     * @param params
+     * @return
      */
+    @Log("获取文件列表")
     @GetMapping
     public ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
@@ -87,7 +91,10 @@ public class FileController {
 
     /**
      * 保存
+     * @param file
+     * @return
      */
+    @Log("添加文件数据")
     @PostMapping
     public ResponseResult save(@RequestBody FileDO file) {
         file.setDelFlag(1);
@@ -97,7 +104,10 @@ public class FileController {
 
     /**
      * 修改
+     * @param file
+     * @return
      */
+    @Log("修改文件数据")
     @PutMapping
     public ResponseResult update(@RequestBody FileDO file) {
         return ResponseResult.operate(fileService.update(file) > 0);
@@ -105,7 +115,10 @@ public class FileController {
 
     /**
      * 删除
+     * @param id
+     * @return
      */
+    @Log("删除文件数据")
     @DeleteMapping
     public ResponseResult remove(Long id) {
         return ResponseResult.operate(fileService.remove(id) > 0);
