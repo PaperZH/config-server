@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.CourseMapper;
-import com.ucar.qtcassist.course.model.Course;
+import com.ucar.qtcassist.course.model.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,27 +13,32 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
 
     @Override
-    public int insert(Course record) {
+    public int deleteByPrimaryKey(Long id) {
+        return courseMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int insert(CourseDO record) {
         return courseMapper.insert(record);
     }
 
     @Override
-    public int insertSelective(Course record) {
+    public int insertSelective(CourseDO record) {
         return courseMapper.insertSelective(record);
     }
 
     @Override
-    public Course selectByPrimaryKey(Long id) {
+    public CourseDO selectByPrimaryKey(Long id) {
         return courseMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(Course record) {
+    public int updateByPrimaryKeySelective(CourseDO record) {
         return courseMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
-    public int updateByPrimaryKey(Course record) {
+    public int updateByPrimaryKey(CourseDO record) {
         return courseMapper.updateByPrimaryKey(record);
     }
 }
