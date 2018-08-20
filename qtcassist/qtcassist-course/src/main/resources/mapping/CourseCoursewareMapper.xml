@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ucar.qtcassist.course.dao.CourseCoursewareMapper" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="courseware_id" property="coursewareId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, course_id, courseware_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from assist_course_courseware
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from assist_course_courseware
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO"  useGeneratedKeys="true" keyProperty="id">
+    insert into assist_course_courseware (course_id, courseware_id)
+    values (#{courseId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO"  useGeneratedKeys="true" keyProperty="id">
+    insert into assist_course_courseware
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="coursewareId != null" >
+        courseware_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="coursewareId != null" >
+        #{coursewareId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+    update assist_course_courseware
+    <set >
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="coursewareId != null" >
+        courseware_id = #{coursewareId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+    update assist_course_courseware
+    set course_id = #{courseId,jdbcType=BIGINT},
+      courseware_id = #{coursewareId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

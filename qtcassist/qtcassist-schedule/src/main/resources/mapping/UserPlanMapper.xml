@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ucar.qtcassist.schedule.dao.UserPlanMapper">
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.schedule.model.UserPlanDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
+    <result column="student_id" jdbcType="BIGINT" property="studentId" />
+    <result column="plan_id" jdbcType="BIGINT" property="planId" />
+    <result column="student_evaluate_content" jdbcType="VARCHAR" property="studentEvaluateContent" />
+    <result column="student_get_score" jdbcType="REAL" property="studentGetScore" />
+    <result column="student_summary" jdbcType="VARCHAR" property="studentSummary" />
+    <result column="teacher_evaluate_content" jdbcType="VARCHAR" property="teacherEvaluateContent" />
+    <result column="plan_student_score" jdbcType="REAL" property="planStudentScore" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, teacher_id, student_id, plan_id, student_evaluate_content, student_get_score, 
+    student_summary, teacher_evaluate_content, plan_student_score, start_date, end_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from assist_user_plan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from assist_user_plan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+    insert into assist_user_plan (id, teacher_id, student_id,
+      plan_id, student_evaluate_content, student_get_score, 
+      student_summary, teacher_evaluate_content, 
+      plan_student_score, start_date, end_date
+      )
+    values (#{id,jdbcType=BIGINT}, #{teacherId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, 
+      #{planId,jdbcType=BIGINT}, #{studentEvaluateContent,jdbcType=VARCHAR}, #{studentGetScore,jdbcType=REAL}, 
+      #{studentSummary,jdbcType=VARCHAR}, #{teacherEvaluateContent,jdbcType=VARCHAR}, 
+      #{planStudentScore,jdbcType=REAL}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+    insert into assist_user_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="studentEvaluateContent != null">
+        student_evaluate_content,
+      </if>
+      <if test="studentGetScore != null">
+        student_get_score,
+      </if>
+      <if test="studentSummary != null">
+        student_summary,
+      </if>
+      <if test="teacherEvaluateContent != null">
+        teacher_evaluate_content,
+      </if>
+      <if test="planStudentScore != null">
+        plan_student_score,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=BIGINT},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=BIGINT},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=BIGINT},
+      </if>
+      <if test="studentEvaluateContent != null">
+        #{studentEvaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="studentGetScore != null">
+        #{studentGetScore,jdbcType=REAL},
+      </if>
+      <if test="studentSummary != null">
+        #{studentSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEvaluateContent != null">
+        #{teacherEvaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="planStudentScore != null">
+        #{planStudentScore,jdbcType=REAL},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+    update assist_user_plan
+    <set>
+      <if test="teacherId != null">
+        teacher_id = #{teacherId,jdbcType=BIGINT},
+      </if>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=BIGINT},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=BIGINT},
+      </if>
+      <if test="studentEvaluateContent != null">
+        student_evaluate_content = #{studentEvaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="studentGetScore != null">
+        student_get_score = #{studentGetScore,jdbcType=REAL},
+      </if>
+      <if test="studentSummary != null">
+        student_summary = #{studentSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEvaluateContent != null">
+        teacher_evaluate_content = #{teacherEvaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="planStudentScore != null">
+        plan_student_score = #{planStudentScore,jdbcType=REAL},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+    update assist_user_plan
+    set teacher_id = #{teacherId,jdbcType=BIGINT},
+      student_id = #{studentId,jdbcType=BIGINT},
+      plan_id = #{planId,jdbcType=BIGINT},
+      student_evaluate_content = #{studentEvaluateContent,jdbcType=VARCHAR},
+      student_get_score = #{studentGetScore,jdbcType=REAL},
+      student_summary = #{studentSummary,jdbcType=VARCHAR},
+      teacher_evaluate_content = #{teacherEvaluateContent,jdbcType=VARCHAR},
+      plan_student_score = #{planStudentScore,jdbcType=REAL},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
