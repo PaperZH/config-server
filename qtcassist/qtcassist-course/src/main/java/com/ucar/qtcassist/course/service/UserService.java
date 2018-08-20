@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Headers("Content-Type:application/json")
 @FeignClient(name = "api-admin")
 public interface UserService {
-    @RequestMapping(value = "/user/get/{id}", method = RequestMethod.GET)
-    UserDO get(@PathVariable(value = "id") Long id);
+    @RequestMapping(value = "/user/getUser", method = RequestMethod.GET)
+    UserDO get();
 }

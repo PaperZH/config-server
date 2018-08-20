@@ -1,19 +1,19 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.course.model.CourseType;
+import com.ucar.qtcassist.course.model.CourseTypeDO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CourseTypeMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(CourseType record);
+    int insert(CourseTypeDO record);
 
-    int insertSelective(CourseType record);
+    int insertSelective(CourseTypeDO record);
 
-    CourseType selectByPrimaryKey(Long id);
+    CourseTypeDO selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(CourseType record);
+    int updateByPrimaryKeySelective(CourseTypeDO record);
 
-    int updateByPrimaryKey(CourseType record);
+    int updateByPrimaryKey(CourseTypeDO record);
 }

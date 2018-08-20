@@ -1,11 +1,9 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.base.model.Result;
-import com.ucar.qtcassist.course.dto.Teacher;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +18,83 @@ public class CourseController {
     private CourseService courseService;
 
     @Autowired
-    private CollectUserCourseService collectUserCourseService;
+    private CollectUserCourseRelationService collectUserCourseRelationService;
 
     @Autowired
-    private CreateUserCourseService createUserCourseService;
+    private CreateUserCourseRelationService createUserCourseRelationService;
 
     @Autowired
-    private EvaluateUserCourseService evaluateUserCourseService;
+    private EvaluateUserCourseRelationService evaluateUserCourseRelationService;
 
     @Autowired
-    private PraiseUserCourseService praiseUserCourseService;
+    private PraiseUserCourseRelationService praiseUserCourseRelationService;
 
     @Autowired
     private CoursewareService coursewareService;
 
     @Autowired
     private UserService userService;
+
+
+    /**
+     * 根据课程id删除课程
+     * @param id 课程Id
+     * @return
+     */
+    @GetMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") Long id) {
+        int count = courseService.deleteByPrimaryKey(id);
+        if(count != 0) {
+            return Result.getSuccessResult("删除课程信息成功");
+        } else {
+            return Result.getBusinessException("删除课程信息失败", "-2");
+        }
+    }
+
+    /**
+     * 添加课程
+     * @param course 课程对象
+     * @return
+     */
+    @PostMapping("/add")
+    public Result add(CourseDO course) {
+        Date date = new Date();
+        course.setPublishTime(date);
+        course.setUpdateTime(date);
+        int count = courseService.insertSelective(course);
+        if(count != 0) {
+            return Result.getSuccessResult("添加课程信息成功");
+        } else {
+            return Result.getBusinessException("添加课程信息失败", "-2");
+        }
+    }
+
+    /**
+     * 根据课程id得到课程对象
+     * @param id 课程id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    public Result get(@PathVariable("id") Long id) {
+        CourseDO course = courseService.selectByPrimaryKey(id);
+        return Result.getSuccessResult(course);
+    }
+
+    /**
+     * 更新课程信息
+     * @param course 课程对象
+     * @return
+     */
+    @PostMapping("/update")
+    public Result update(CourseDO course) {
+        course.setUpdateTime(new Date());
+        int count = courseService.updateByPrimaryKeySelective(course);
+        if(count != 0) {
+            return Result.getSuccessResult("更新课程信息成功");
+        } else {
+            return Result.getBusinessException("更新课程信息失败", "-2");
+        }
+    }
 
     /**
      * 查看课程详情
@@ -46,15 +105,15 @@ public class CourseController {
     public Result detail(@PathVariable("id") String id) {
 
         Map<String, Object> data = new HashMap<String, Object>();
-        Course course = courseService.selectByPrimaryKey(Long.valueOf(id));
+        CourseDO course = courseService.selectByPrimaryKey(Long.valueOf(id));
         data.put("course", course);
-        CreateUserCourse createUserCourse = createUserCourseService.selectByCourseId(course.getId());
+        CreateUserCourseRelationDO createUserCourse = createUserCourseRelationService.selectByCourseId(course.getId());
 
         //调用远程的用户服务查询User， 参数为createUserCourse.getUserId();
-        UserDO user = userService.get(createUserCourse.getUserId());
+//        UserDO user = userService.get(createUserCourse.getUserId());
 //        teacher.setUserId(user.getUserId());
 //        teacher.setUserName(user.getName());
-        data.put("teacher", user);
+//        data.put("teacher", user);
 
         List list = new ArrayList();
         //调用课件接口服务查询课程内容列表，参数为course.getId()
@@ -76,20 +135,16 @@ public class CourseController {
     @GetMapping("/collect/{courseId}/{userId}")
     public Result collect(@PathVariable("courseId") String cid, @PathVariable("userId") String uid) {
         Result result = new Result();
-        CollectUserCourse collectUserCourse = new CollectUserCourse();
+        CollectUserCourseRelationDO collectUserCourse = new CollectUserCourseRelationDO();
         collectUserCourse.setCourseId(Long.valueOf(cid));
         collectUserCourse.setUserId(Long.valueOf(uid));
         collectUserCourse.setPublishDate(new Date());
-        int count = collectUserCourseService.insert(collectUserCourse);
-        if(count == 1) {
-            result.setCode("1000");
-            result.setMsg("success");
+        int count = collectUserCourseRelationService.insert(collectUserCourse);
+        if(count != 0) {
+            return Result.getSuccessResult("收藏课程成功");
         } else {
-            result.setStatus(1);
-            result.setCode("1001");
-            result.setMsg("failed");
+            return Result.getBusinessException("收藏课程失败", "-2");
         }
-        return result;
     }
 
     /**
@@ -117,18 +172,15 @@ public class CourseController {
      * @return
      */
     @PostMapping("/evaluate")
-    public Result evaluate(EvaluateUserCourse evaluateUserCourse) {
+    public Result evaluate(EvaluateUserCourseRelationDO evaluateUserCourse) {
         Result result = new Result();
         evaluateUserCourse.setPublishDate(new Date());
-        int count = evaluateUserCourseService.insert(evaluateUserCourse);
-        if(count == 1) {
-            result.setCode("1000");
-            result.setMsg("success");
+        int count = evaluateUserCourseRelationService.insert(evaluateUserCourse);
+        if(count != 0) {
+            return Result.getSuccessResult("评论课程成功");
         } else {
-            result.setCode("1001");
-            result.setMsg("failed");
+            return Result.getBusinessException("评论课程失败", "-2");
         }
-        return result;
     }
 
     /**
@@ -140,29 +192,26 @@ public class CourseController {
     @GetMapping("/praise/{courseId}/{userId}")
     public Result praise(@PathVariable("courseId") String cid, @PathVariable("userId") String uid) {
         Result result = new Result();
-        PraiseUserCourse praiseUserCourse = new PraiseUserCourse();
+        PraiseUserCourseRelationDO praiseUserCourse = new PraiseUserCourseRelationDO();
         praiseUserCourse.setCourseId(Long.valueOf(cid));
         praiseUserCourse.setUserId(Long.valueOf(uid));
         praiseUserCourse.setPublishDate(new Date());
-        int count = praiseUserCourseService.insert(praiseUserCourse);
-        if(count == 1) {
-            result.setCode("1000");
-            result.setMsg("success");
+        int count = praiseUserCourseRelationService.insert(praiseUserCourse);
+        if(count != 0) {
+            return Result.getSuccessResult("点赞课程成功");
         } else {
-            result.setCode("1001");
-            result.setMsg("failed");
+            return Result.getBusinessException("点赞课程失败", "-2");
         }
-        return result;
     }
 
     @PostMapping("/addCourseware")
-    public Result addCourseware(FrontCoursewareDTO courseware) {
+    public Result addCourseware(CoursewareDO courseware) {
         Result result = new Result();
-//        FrontCoursewareDTO courseware = new FrontCoursewareDTO();
+//        CoursewareDO courseware = new CoursewareDO();
 //        courseware.setTypeId(1L);
 //        courseware.setCoursewareName("java courseware");
 //        courseware.setCoursewareDescription("d://java.txt");
-//        courseware.setPublishTime(new Date());
+        courseware.setPublishTime(new Date());
         courseware.setUpdateTime(new Date());
         Long id = coursewareService.addCourseware(courseware);
         if(id != null) {
@@ -177,4 +226,5 @@ public class CourseController {
         }
         return result;
     }
+
 }

@@ -1,16 +1,17 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.course.model.Course;
+import com.ucar.qtcassist.course.model.CourseDO;
 
 public interface CourseService {
+    int deleteByPrimaryKey(Long id);
 
-    int insert(Course record);
+    int insert(CourseDO record);
 
-    int insertSelective(Course record);
+    int insertSelective(CourseDO record);
 
-    Course selectByPrimaryKey(Long id);
+    CourseDO selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(Course record);
+    int updateByPrimaryKeySelective(CourseDO record);
 
-    int updateByPrimaryKey(Course record);
+    int updateByPrimaryKey(CourseDO record);
 }
