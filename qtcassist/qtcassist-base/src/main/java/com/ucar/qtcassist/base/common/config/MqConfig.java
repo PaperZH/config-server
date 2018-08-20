@@ -58,7 +58,9 @@ public class MqConfig {
 
     @Bean(name="defaultProducer")
     public MessageProducer defaultProducer() throws Exception {
-        return sessionFactory().createProducer();
+        MessageProducer messageProducer = sessionFactory().createProducer();
+        messageProducer.publish(defaultTopic().getTopic());
+        return messageProducer;
     }
 
     //@Bean(name="messageBodyConverter")

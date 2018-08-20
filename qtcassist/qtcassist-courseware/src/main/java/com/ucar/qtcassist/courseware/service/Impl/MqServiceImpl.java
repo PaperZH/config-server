@@ -28,8 +28,6 @@ public class MqServiceImpl implements MqService {
     @Override
     public SendResult msgSend(FileDTO fileDTO) throws Exception {
         String topic = defaultTopic.getTopic();
-
-        producer.publish(topic);
         final SendResult sendResult = producer.sendMessage(new Message(topic, HessianSerializerUtils.serialize(fileDTO)));
         if (!sendResult.isSuccess())
         {
