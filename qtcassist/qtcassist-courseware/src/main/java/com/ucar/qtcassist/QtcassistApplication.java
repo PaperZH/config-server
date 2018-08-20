@@ -1,6 +1,10 @@
 package com.ucar.qtcassist;
 
 import com.taobao.metamorphosis.client.MessageSessionFactory;
+import com.taobao.metamorphosis.client.consumer.MessageConsumer;
+import com.taobao.metamorphosis.client.consumer.MessageListener;
+import com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFactoryBean;
+import com.taobao.metamorphosis.client.extension.spring.MetaqTopic;
 import com.ucar.qtcassist.courseware.util.MesListener;
 import com.zuche.framework.common.SpringApplicationContext;
 import org.mybatis.spring.annotation.MapperScan;
@@ -22,11 +26,9 @@ import java.util.Map;
 @SpringBootApplication
 public class QtcassistApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         ApplicationContext applicationContext = SpringApplication.run(QtcassistApplication.class, args);
         SpringApplicationContext.initApplicationContext(applicationContext);
-
-        SpringApplicationContext.getBean("listenerContainer");
 
     }
 }

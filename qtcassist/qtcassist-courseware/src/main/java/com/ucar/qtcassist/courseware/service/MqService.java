@@ -15,5 +15,5 @@ public interface MqService {
      * @param fileDTO
      * @return
      * */
-    SendResult msgSend(FileDTO fileDTO) throws InterruptedException;
+    SendResult msgSend(FileDTO fileDTO) throws Exception;
 }
