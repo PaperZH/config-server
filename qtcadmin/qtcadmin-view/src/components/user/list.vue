@@ -50,9 +50,13 @@
         </el-table-column>
       </el-table>
       <!--工具条-->
-      <el-col :span="24" class="toolbar">
-        <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total"
-                       style="float:right;">
+      <el-col :span="24" class="toolbar" >
+        <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+              @size-change="handleSizeChange"  
+              @current-change="handleCurrentChange" 
+              :page-size="limit"
+              :total="total"
+              :page-sizes="[10, 20, 30]">
         </el-pagination>
       </el-col>
 
@@ -187,6 +191,10 @@
       //性别显示转换
       formatSex: function (row, column) {
         return row.sex == 1 ? "男" : row.sex == 0 ? "女" : "未知";
+      },
+      handleSizeChange(val) {
+        this.limit = val;
+        this.search();
       },
       handleCurrentChange(val) {
         this.page = val;
@@ -363,5 +371,9 @@
 </script>
 
 <style scoped>
-
+  .el-pagination {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    float: right
+  }
 </style>

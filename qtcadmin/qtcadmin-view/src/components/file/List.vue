@@ -47,11 +47,25 @@
       </el-table>
 
       <!--工具条-->
-      <el-col :span="24" class="toolbar">
-        <el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total"
-                        style="float:right;">
-          </el-pagination>
+      <el-col :span="24" class="toolbar" >
+        <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+              @size-change="handleSizeChange"  
+              @current-change="handleCurrentChange" 
+              :page-size="limit"
+              :total="total"
+              :page-sizes="[10, 20, 30]">
+        </el-pagination>
       </el-col>
+<!-- 
+      <el-col :span="24" class="version" style="margin-top:20px">
+        <div style="margin-left: auto; margin-right: auto;text-align: center">
+          <span>版权所有版权所有版权所有版权所有版权所有版权所有</span>
+        </div>
+        <div style="margin-left: auto; margin-right: auto;text-align: center">
+          <span>版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有</span>
+        </div>
+      </el-col> -->
+      
 
       <!--新增界面-->
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
@@ -165,6 +179,10 @@
       }
     },
     methods: {
+      handleSizeChange(val) {
+        this.limit = val;
+        this.search();
+      },
       handleCurrentChange(val) {
         this.page = val;
         this.search();
@@ -178,7 +196,7 @@
         let that = this;
         let params = {
           page: that.page,
-          limit: 10,
+          limit: that.limit,
           title: that.filters.title
         }
         that.loading = true;
@@ -404,5 +422,14 @@
       height: 178px;
       display: block;
     }
-  </style>
 
+    .el-pagination {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      float: right;
+      /* width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center */
+    }
+  </style>
