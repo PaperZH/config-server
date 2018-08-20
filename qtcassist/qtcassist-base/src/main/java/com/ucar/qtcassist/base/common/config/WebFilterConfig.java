@@ -11,7 +11,7 @@ import org.springframework.web.filter.CorsFilter;
  * @author 创建者 wei.wang
  * @author 修改者 wei.wang
  * @version 2018/8/3
- * @Description
+ * @Description 跨域设置
  * @since 2018/8/3
  */
 @Configuration

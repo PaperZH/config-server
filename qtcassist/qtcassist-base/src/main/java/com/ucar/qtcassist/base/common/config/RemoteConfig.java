@@ -16,7 +16,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * Description: TODO
+ * Description: 公司远程调用配置
  *
  * @author wangyang
  * @since 2018/8/14

@@ -16,6 +16,7 @@ import com.taobao.metamorphosis.client.producer.MessageProducer;
 import com.taobao.metamorphosis.utils.ZkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,13 +38,16 @@ public class MqConfig {
     @Qualifier("mesListener")
     private MessageListener messageListener;
 
+    @Value("${metaq.consumer.start-up}")
+    boolean mataqConsumerStartUp;
+
     @Bean(name="sessionFactory")
     public MessageSessionFactory sessionFactory() throws Exception {
         final MetaClientConfig metaClientConfig = new MetaClientConfig();
         final ZkUtils.ZKConfig zkConfig = new ZkUtils.ZKConfig("10.104.107.222:5181",30000,30000,5000);
         metaClientConfig.setZkConfig(zkConfig);
         MessageSessionFactory sessionFactory = new MetaMessageSessionFactory(metaClientConfig);
-        if (messageListener != null) {
+        if (messageListener != null && mataqConsumerStartUp) {
             MessageConsumer consumer = sessionFactory.createConsumer(defaultTopic().getConsumerConfig());
             consumer.subscribe(defaultTopic().getTopic(), 1024 * 1024, messageListener);
             consumer.completeSubscribe();
