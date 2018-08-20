@@ -12,12 +12,16 @@ import java.io.InputStream;
  */
 public interface RemoteFileService {
     /**
-     * 将流形式的文件上传至服务器，并返回url
+     * 将流形式的文件上传至服务器
+     * @param inputStream，Name
+     * @return
      */
     String uploadFile(InputStream inputStream, String Name) throws IOException;
 
     /**
      * 文件转化服务
+     * @param inputFile，outputFile
+     * @return
      */
     void fileConvert(File inputFile, File outputFile);
 }

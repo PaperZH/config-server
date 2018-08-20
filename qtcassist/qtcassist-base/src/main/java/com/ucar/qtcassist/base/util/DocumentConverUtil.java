@@ -30,7 +30,7 @@ public class DocumentConverUtil extends Thread {
 	public void docToPdf() {
 
 
-		OpenOfficeConnection connection = new SocketOpenOfficeConnection("10.104.102.225",7009);
+		/*OpenOfficeConnection connection = new SocketOpenOfficeConnection("10.104.102.225",7009);
 
 		try {
 
@@ -58,7 +58,7 @@ public class DocumentConverUtil extends Thread {
 
 			}
 
-		}
+		}*/
 
 	}
 

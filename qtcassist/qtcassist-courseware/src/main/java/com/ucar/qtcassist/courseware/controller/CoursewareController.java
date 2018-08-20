@@ -41,6 +41,8 @@ public class CoursewareController {
 
     /**
      * 系统库课件列表
+     * @param
+     * @return
      */
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     public List<BaseCoursewareListDTO> getAllBaseCoursewares() {
@@ -49,6 +51,7 @@ public class CoursewareController {
 
     /**
      * 从本地上传课件进行添加
+     * @param file,uploadCoursewareDTO
      */
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
     public FileDTO addCoursewareFromSys(@RequestParam("file") MultipartFile file, @RequestParam UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
