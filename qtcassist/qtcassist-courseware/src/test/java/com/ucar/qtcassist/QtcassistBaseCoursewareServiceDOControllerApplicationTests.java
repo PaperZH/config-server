@@ -100,7 +100,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         try {
             mqService.msgSend(fileDTO);
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

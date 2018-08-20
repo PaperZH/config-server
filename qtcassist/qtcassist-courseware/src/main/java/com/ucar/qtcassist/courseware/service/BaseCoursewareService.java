@@ -14,13 +14,21 @@ import java.util.List;
 public interface BaseCoursewareService {
     /**
      * 将从数据库中查询的所有BaseCourseware对象和CoursewareType对象进行拼接
-     * 返回BaseCoursewareListDTO对象列表
+     * @return List<BaseCoursewareListDTO>
      */
     List<BaseCoursewareListDTO> getAllBaseCoursewares();
 
     /**
      * 添加课件
+     * @param baseCoursewareDO
+     * @return Long
      */
     Long addBaseCourseware(BaseCoursewareDO baseCoursewareDO);
 
+    /**
+     * 判断是否为有效课件
+     * @param id
+     * @return
+     * */
+    boolean isValid(Long id);
 }

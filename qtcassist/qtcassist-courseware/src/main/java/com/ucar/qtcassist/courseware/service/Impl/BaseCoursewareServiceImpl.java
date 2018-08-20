@@ -63,5 +63,10 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
         return baseCoursewareMapper.insert(baseCoursewareDO);
     }
 
+    @Override
+    public boolean isValid(Long id) {
+        return false;
+    }
+
 
 }

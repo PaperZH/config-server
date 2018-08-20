@@ -1,12 +1,19 @@
 package com.ucar.qtcassist.base.common.config;
 
+import com.taobao.metamorphosis.client.MessageSessionFactory;
+import com.taobao.metamorphosis.client.MetaClientConfig;
+import com.taobao.metamorphosis.client.MetaMessageSessionFactory;
 import com.taobao.metamorphosis.client.consumer.LoadBalanceStrategy;
+import com.taobao.metamorphosis.client.consumer.MessageConsumer;
+import com.taobao.metamorphosis.client.consumer.MessageListener;
 import com.taobao.metamorphosis.client.extension.spring.DefaultMessageListener;
 import com.taobao.metamorphosis.client.extension.spring.JavaSerializationMessageBodyConverter;
 import com.taobao.metamorphosis.client.extension.spring.MessageListenerContainer;
 import com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFactoryBean;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTemplate;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTopic;
+import com.taobao.metamorphosis.client.producer.MessageProducer;
+import com.taobao.metamorphosis.utils.ZkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -28,37 +35,47 @@ public class MqConfig {
 
     @Autowired(required=false)
     @Qualifier("mesListener")
-    private DefaultMessageListener defaultMessageListener ;
+    private MessageListener messageListener;
 
     @Bean(name="sessionFactory")
-    public MetaqMessageSessionFactoryBean sessionFactory () {
-        MetaqMessageSessionFactoryBean metaqMessageSessionFactoryBean = new MetaqMessageSessionFactoryBean();
-        metaqMessageSessionFactoryBean.setZkConnect("10.104.107.222:5181");
-        metaqMessageSessionFactoryBean.setZkSessionTimeoutMs(30000);
-        metaqMessageSessionFactoryBean.setZkConnectionTimeoutMs(30000);
-        metaqMessageSessionFactoryBean.setZkSyncTimeMs(5000);
-        return  metaqMessageSessionFactoryBean;
+    public MessageSessionFactory sessionFactory() throws Exception {
+        final MetaClientConfig metaClientConfig = new MetaClientConfig();
+        final ZkUtils.ZKConfig zkConfig = new ZkUtils.ZKConfig("10.104.107.222:5181",30000,30000,5000);
+        metaClientConfig.setZkConfig(zkConfig);
+        MessageSessionFactory sessionFactory = new MetaMessageSessionFactory(metaClientConfig);
+        if (messageListener != null) {
+            MessageConsumer consumer = sessionFactory.createConsumer(defaultTopic().getConsumerConfig());
+            consumer.subscribe(defaultTopic().getTopic(), 1024 * 1024, messageListener);
+            consumer.completeSubscribe();
+        }
+
+        return  sessionFactory;
     }
 
-    @Bean(name="messageBodyConverter")
-    public JavaSerializationMessageBodyConverter messageBodyConverter () {
-        return  new JavaSerializationMessageBodyConverter();
+    @Bean(name="defaultProducer")
+    public MessageProducer defaultProducer() throws Exception {
+        return sessionFactory().createProducer();
     }
 
-    @Bean(name="metaqTemplate")
-    public MetaqTemplate metaqTemplate () throws Exception {
-        MetaqTemplate metaqTemplate = new MetaqTemplate();
-        metaqTemplate.setMessageBodyConverter(messageBodyConverter());
-        metaqTemplate.setMessageSessionFactory(sessionFactory().getObject());
-        metaqTemplate.setShareProducer(true);
-        metaqTemplate.setDefaultTopic("ucarabs_emp_update_topic");
-        return  metaqTemplate;
-    }
+    //@Bean(name="messageBodyConverter")
+    //public JavaSerializationMessageBodyConverter messageBodyConverter () {
+    //    return  new JavaSerializationMessageBodyConverter();
+    //}
+    //
+    //@Bean(name="metaqTemplate")
+    //public MetaqTemplate metaqTemplate () throws Exception {
+    //    MetaqTemplate metaqTemplate = new MetaqTemplate();
+    //    metaqTemplate.setMessageBodyConverter(messageBodyConverter());
+    //    metaqTemplate.setMessageSessionFactory(sessionFactory());
+    //    metaqTemplate.setShareProducer(true);
+    //    metaqTemplate.setDefaultTopic("ucarabs_emp_update_topic");
+    //    return  metaqTemplate;
+    //}
 
     @Bean(name="defaultTopic")
     public MetaqTopic defaultTopic (){
         MetaqTopic metaqTopic = new MetaqTopic();
-        metaqTopic.setGroup("qtcassist");
+        metaqTopic.setGroup("ucar_abs");
         metaqTopic.setTopic("ucarabs_emp_update_topic");
         metaqTopic.setMaxBufferSize(1048576);
         metaqTopic.setFetchRunnerCount(Runtime.getRuntime().availableProcessors());
@@ -73,14 +90,14 @@ public class MqConfig {
     }
 
 
-    @Bean(name="listenerContainer")
-    public MessageListenerContainer listenerContainer() throws Exception {
-        MessageListenerContainer messageListenerContainer = new MessageListenerContainer();
-        messageListenerContainer.setMessageSessionFactory(sessionFactory().getObject());
-        messageListenerContainer.setMessageBodyConverter(messageBodyConverter());
-        Map<MetaqTopic,  DefaultMessageListener> map = new HashMap<>();
-        map.put(defaultTopic(), defaultMessageListener);
-        return  messageListenerContainer;
-    }
+    //@Bean(name="listenerContainer")
+    //public MessageListenerContainer listenerContainer() throws Exception {
+    //    MessageListenerContainer messageListenerContainer = new MessageListenerContainer();
+    //    messageListenerContainer.setMessageSessionFactory(sessionFactory());
+    //    messageListenerContainer.setMessageBodyConverter(messageBodyConverter());
+    //    Map<MetaqTopic,  DefaultMessageListener> map = new HashMap<>();
+    //    map.put(defaultTopic(), defaultMessageListener);
+    //    return  messageListenerContainer;
+    //}
 
 }

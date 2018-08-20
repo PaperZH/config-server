@@ -8,24 +8,28 @@
     </el-col>
     <el-col :span="24" class="wrap-main">
       <el-table :data="rows" border>
-        <el-table-column label="用户" prop="username"></el-table-column>
-        <el-table-column label="操作" prop="operation"></el-table-column>
-        <el-table-column label="用时" prop="time"></el-table-column>
-        <el-table-column label="操作时间" prop="gmtCreate"></el-table-column>
-        <el-table-column label="方法" prop="method"></el-table-column>
-        <el-table-column label="ip" prop="ip"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="用户" prop="username" align="center" width="100"></el-table-column>
+        <el-table-column label="功能描述" prop="operation" align="center" width="160"></el-table-column>
+        <el-table-column label="用时(ms)" prop="time" align="center" width="80"></el-table-column>
+        <el-table-column label="方法" prop="method" align="center" width="400"></el-table-column>
+        <el-table-column label="IP" prop="ip" align="center" width="120"></el-table-column>
+        <el-table-column label="操作时间" prop="gmtCreate" align="center" width="160"></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button @click="remove(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="danger" @click="remove(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-col>
+
     <!--工具条-->
-    <el-col :span="24" class="toolbar">
-      <el-pagination layout="total,prev, pager, next" @current-change="search" :page-size="limit"
-                     :total="total"
-                     style="float:right;">
+    <el-col :span="24" class="toolbar" >
+      <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+            @size-change="handleSizeChange"  
+            @current-change="handleCurrentChange" 
+            :page-size="limit"
+            :total="total"
+            :page-sizes="[10, 20, 30]">
       </el-pagination>
     </el-col>
   </el-row>
@@ -40,16 +44,24 @@
       return {
         limit: 10,
         total: 0,
+        page: 1,
         rows: []
       }
     },
     methods: {
+      handleSizeChange(val) {
+        this.limit = val;
+        this.search();
+      },
+      handleCurrentChange(val) {
+        this.page = val;
+        this.search();
+      },
       search: function (val) {
         let that = this
-        that.page = val
         let params = {
           limit: that.limit,
-          page: val
+          page: that.page
         }
         API.list(params).then(res => {
           if (res.code === 0) {
@@ -77,5 +89,9 @@
 </script>
 
 <style scoped>
-
+  .el-pagination {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    float: right
+  }
 </style>
