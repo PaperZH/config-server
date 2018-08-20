@@ -30,17 +30,19 @@
         </el-table-column>
         <el-table-column prop="userno" label="工号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="120" align="center" sortable>
+        <el-table-column prop="name" label="姓名" width="100" align="center" sortable>
         </el-table-column>
         <el-table-column prop="username" label="用户名" width="120" align="center" sortable>
         </el-table-column>
         <el-table-column prop="nickname" label="昵称" width="120" align="center" sortable>
         </el-table-column>
-        <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" align="center" sortable>
+        <el-table-column prop="sex" label="性别" width="60" :formatter="formatSex" align="center">
         </el-table-column>
-        <el-table-column prop="email" label="邮箱" min-width="160" align="center" sortable>
+        <el-table-column prop="mobile" label="手机" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="birth" label="出生日期" min-width="160" align="center" sortable>
+        <el-table-column prop="email" label="邮箱" min-width="180" align="center" sortable>
+        </el-table-column>
+        <el-table-column prop="birth" label="出生日期" min-width="100" align="center" sortable>
         </el-table-column>
         <el-table-column label="操作" width="150" align="center">
           <template slot-scope="scope">
@@ -75,8 +77,14 @@
           <el-form-item label="昵称" prop="nickname">
             <el-input v-model="addForm.nickname" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="工号" prop="userno">
+            <el-input v-model="addForm.userno" auto-complete="off"></el-input>
+          </el-form-item>
           <el-form-item label="出生日期" prop="birth">
             <el-date-picker type="date" placeholder="出生日期" v-model="addForm.birth" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="手机号" prop="mobile">
+            <el-input v-model="addForm.mobile" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input type="email" v-model="addForm.email"></el-input>
@@ -106,8 +114,14 @@
           <el-form-item label="昵称" prop="nickname">
             <el-input v-model="editForm.nickname" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="工号" prop="userno">
+            <el-input v-model="editForm.userno" auto-complete="off"></el-input>
+          </el-form-item>
           <el-form-item label="出生日期" prop="birth">
             <el-date-picker type="date" placeholder="出生日期" v-model="editForm.birth" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="手机号" prop="mobile">
+            <el-input v-model="editForm.mobile" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input type="email" v-model="editForm.email"></el-input>

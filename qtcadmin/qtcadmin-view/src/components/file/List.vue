@@ -26,18 +26,18 @@
       <el-table :data="fileRows" border highlight-current-row v-loading="loading" style="width: 100%;">
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.url" width="70" height="50">
+            <img :src="scope.row.url" height="40">
           </template>
         </el-table-column>
-        <el-table-column label="类型" prop="type" align="center">
+        <el-table-column label="类型" width="80" prop="type" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.type === 1">图片</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="标题" prop="title" align="center"></el-table-column>
-        <el-table-column label="内容" prop="content" align="center"></el-table-column>
-        <el-table-column label="排序" prop="orderNum" align="center"></el-table-column>
-        <el-table-column label="修改时间" prop="updateTime" align="center"></el-table-column>
+        <el-table-column label="标题" prop="title" width="240" align="center"></el-table-column>
+        <el-table-column label="内容" prop="content" width="420" align="center"></el-table-column>
+        <el-table-column label="排序" prop="orderNum" width="60"  align="center"></el-table-column>
+        <!-- <el-table-column label="修改时间" prop="updateTime" align="center"></el-table-column> -->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>

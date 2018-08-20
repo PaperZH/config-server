@@ -8,15 +8,15 @@
     </el-col>
     <el-col :span="24" class="wrap-main">
       <el-table :data="rows" border>
-        <el-table-column label="用户" prop="username"></el-table-column>
-        <el-table-column label="操作" prop="operation"></el-table-column>
-        <el-table-column label="用时" prop="time"></el-table-column>
-        <el-table-column label="操作时间" prop="gmtCreate"></el-table-column>
-        <el-table-column label="方法" prop="method"></el-table-column>
-        <el-table-column label="ip" prop="ip"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="用户" prop="username" align="center" width="100"></el-table-column>
+        <el-table-column label="功能描述" prop="operation" align="center" width="160"></el-table-column>
+        <el-table-column label="用时(ms)" prop="time" align="center" width="80"></el-table-column>
+        <el-table-column label="方法" prop="method" align="center" width="400"></el-table-column>
+        <el-table-column label="IP" prop="ip" align="center" width="120"></el-table-column>
+        <el-table-column label="操作时间" prop="gmtCreate" align="center" width="160"></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button @click="remove(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="danger" @click="remove(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
