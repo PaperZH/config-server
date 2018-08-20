@@ -1,26 +1,26 @@
 package com.ucar.qtcassist.schedule.controller;
 
 import com.ucar.qtcassist.base.model.Result;
-import com.ucar.qtcassist.schedule.model.PlanDO;
-import com.ucar.qtcassist.schedule.service.PlanService;
+import com.ucar.qtcassist.schedule.model.UserPlanDO;
+import com.ucar.qtcassist.schedule.service.UserPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/plan")
-public class PlanController {
+@RequestMapping("/userPlan")
+public class UserPlanController {
 
     @Autowired
-    private PlanService planService;
+    private UserPlanService userPlanService;
 
     /**
-     * 删除培训计划
-     * @param id 培训计划id
+     * 删除用户培训计划关系
+     * @param id 用户培训计划id
      * @return
      */
     @GetMapping("/delete/{id}")
     public Result delete(@PathVariable("id") Long id) {
-        int count = planService.deleteByPrimaryKey(id);
+        int count = userPlanService.deleteByPrimaryKey(id);
         if(count != 0) {
             return Result.getSuccessResult("删除培训计划信息成功");
         } else {
@@ -29,13 +29,13 @@ public class PlanController {
     }
 
     /**
-     * 添加培训计划
-     * @param plan 培训计划对象
+     * 添加用户培训计划关系
+     * @param userPlan 用户培训计划关系对象
      * @return
      */
     @PostMapping("/add")
-    public Result add(PlanDO plan) {
-        int count = planService.insertSelective(plan);
+    public Result add(UserPlanDO userPlan) {
+        int count = userPlanService.insertSelective(userPlan);
         if(count != 0) {
             return Result.getSuccessResult("添加培训计划信息成功");
         } else {
@@ -44,29 +44,28 @@ public class PlanController {
     }
 
     /**
-     * 查询培训计划
-     * @param id 培训计划id
+     * 查询用户培训计划关系
+     * @param id 用户培训计划关系id
      * @return
      */
     @GetMapping("/get/{id}")
     public Result get(@PathVariable("id") Long id) {
-        PlanDO plan = planService.selectByPrimaryKey(id);
-        return Result.getSuccessResult(plan);
+        UserPlanDO userPlan = userPlanService.selectByPrimaryKey(id);
+        return Result.getSuccessResult(userPlan);
     }
 
     /**
-     * 更新培训计划
-     * @param plan 培训计划对象
+     * 更新用户培训计划关系
+     * @param userPlan 用户培训计划关系对象
      * @return
      */
     @PostMapping("/update")
-    public Result update(PlanDO plan) {
-        int count = planService.updateByPrimaryKeySelective(plan);
+    public Result update(UserPlanDO userPlan) {
+        int count = userPlanService.updateByPrimaryKeySelective(userPlan);
         if(count != 0) {
             return Result.getSuccessResult("更新培训计划信息成功");
         } else {
             return Result.getBusinessException("更新培训计划信息失败", "-2");
         }
     }
-
 }

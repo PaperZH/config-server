@@ -11,19 +11,19 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from course_type
+    from assist_course_type
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from course_type
+    delete from assist_course_type
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO" useGeneratedKeys="true" keyProperty="id">
-    insert into course_type (type_name)
+  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO"  useGeneratedKeys="true" keyProperty="id">
+    insert into assist_course_type (type_name)
     values (#{typeName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO" useGeneratedKeys="true" keyProperty="id">
-    insert into course_type
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO"  useGeneratedKeys="true" keyProperty="id">
+    insert into assist_course_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="typeName != null" >
         type_name,
@@ -36,7 +36,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO" >
-    update course_type
+    update assist_course_type
     <set >
       <if test="typeName != null" >
         type_name = #{typeName,jdbcType=VARCHAR},
@@ -45,7 +45,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.CourseTypeDO" >
-    update course_type
+    update assist_course_type
     set type_name = #{typeName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

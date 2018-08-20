@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "api-admin")
 public interface UserService {
     @RequestMapping(value = "/user/getUser", method = RequestMethod.GET)
-    UserDO get();
+    UserDO get(Long id);
 }

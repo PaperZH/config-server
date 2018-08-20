@@ -29,23 +29,19 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
         <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
-        <!--<table tableName="demo" domainObjectName="Demo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_course" domainObjectName="CourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="course" domainObjectName="CourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />-->
-        <!--<table tableName="course_type" domainObjectName="CourseTypeDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />-->
-        <!--<table tableName="create_user_course_relation" domainObjectName="CreateUserCourseRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_course_type" domainObjectName="CourseTypeDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="collect_user_course_relation" domainObjectName="CollectUserCourseRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_user_course" domainObjectName="UserCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="praise_user_course_relation" domainObjectName="PraiseUserCourseRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_collect_course" domainObjectName="CollectCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="evaluate_user_course_relation" domainObjectName="EvaluateUserCourseRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_praise_course" domainObjectName="PraiseCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="course_courseware_relation" domainObjectName="CourseCoursewareRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="assist_evaluate_course" domainObjectName="EvaluateCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="course_plan_relation" domainObjectName="CoursePlanRelationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />-->
+        <table tableName="assist_course_courseware" domainObjectName="CourseCoursewareDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false" />
     </context>
 </generatorConfiguration>

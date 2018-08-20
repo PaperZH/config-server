@@ -24,8 +24,8 @@ public class CourseDO {
     private Date publishTime;
 
     private Date updateTime;
-    // 状态 0:禁用，1:正常
-    private Integer delFlag;
+
+    private Byte delFlag;
 
     public Long getId() {
         return id;
@@ -115,11 +115,11 @@ public class CourseDO {
         this.updateTime = updateTime;
     }
 
-    public Integer getDelFlag() {
+    public Byte getDelFlag() {
         return delFlag;
     }
 
-    public void setDelFlag(Integer delFlag) {
+    public void setDelFlag(Byte delFlag) {
         this.delFlag = delFlag;
     }
 }
