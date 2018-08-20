@@ -2,12 +2,21 @@ import * as API from './'
 
 export default {
   files: params => {
-    return API.GET('/api-cms/file', params)
+    return API.GET('/api-admin/file', params)
   },
-  getToken:params =>{
-    return API.GET('/api-cms/file/getToken',params)
+  getUrl:params =>{
+    return API.GET('/api-admin/file/getToken',params)
   },
-  remove: params=>{
-    return API.DELETE('/api-cms/file', params)
+  add: params => {
+    return API.POST(`/api-admin/file`, params)
+  },
+  update: params =>{
+    return API.PUT('/api-admin/file',params)
+  },
+  remove:params =>{
+    return API.DELETE('/api-admin/file',params)
+  },
+  uploadFile:params=>{
+    return API.POST('/api-admin/file/upload',params)
   }
 }

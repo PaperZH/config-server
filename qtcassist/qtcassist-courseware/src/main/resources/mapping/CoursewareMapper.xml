@@ -25,13 +25,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-    insert into courseware ( type_id, base_courseware_id,
-      courseware_name, courseware_description, 
-      publish_time, update_time)
-    values ( #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER},
-      #{coursewareName,jdbcType=VARCHAR}, #{coursewareDescription,jdbcType=VARCHAR}, 
-      #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
+        insert into courseware ( type_id, base_courseware_id,
+        courseware_name, courseware_description,
+        publish_time, update_time)
+        values ( #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER},
+        #{coursewareName,jdbcType=VARCHAR}, #{coursewareDescription,jdbcType=VARCHAR},
+        #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+        <selectKey resultType="java.lang.Long" keyProperty="id">
+            SELECT @@IDENTITY AS ID
+        </selectKey>
+    </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
         insert into courseware
         <trim prefix="(" suffix=")" suffixOverrides=",">

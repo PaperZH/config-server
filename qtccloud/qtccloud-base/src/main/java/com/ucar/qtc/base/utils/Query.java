@@ -1,4 +1,4 @@
-package com.ucar.qtc.common.utils;
+package com.ucar.qtc.base.utils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

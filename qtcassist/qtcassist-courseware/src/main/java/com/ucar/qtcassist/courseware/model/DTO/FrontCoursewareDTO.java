@@ -18,10 +18,6 @@ public class FrontCoursewareDTO {
      */
     private Long typeId;
 
-    /*
-     * 课件在课件元库中所对应的id
-     *
-    private Integer baseCoursewareId;*/
     /**
      * 课件名称
      */

@@ -6,6 +6,9 @@ import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConne
 import com.artofsolving.jodconverter.openoffice.converter.StreamOpenOfficeDocumentConverter;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ConnectException;
 
 public class DocumentConverUtil extends Thread {
@@ -59,10 +62,26 @@ public class DocumentConverUtil extends Thread {
 
 	}
 
+	public static void inputStreamToFile(InputStream ins, File file) {
+		try {
+			OutputStream os = new FileOutputStream(file);
+			int bytesRead = 0;
+			byte[] buffer = new byte[8192];
+			while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+				os.write(buffer, 0, bytesRead);
+			}
+			os.close();
+			ins.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
 
-		File ppt = new File("F:\\开发环境搭建培训文稿v0.1--张钧.pptx");
-		File pdf = new File("F:\\开发环境搭建培训文稿v0.1--张钧.pdf");
+		File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test.pptx");
+		System.out.println(ppt.getName());
+		File pdf = new File("qtcassist/tempFile/开发环境搭建培训文稿v0.1--张钧2.pdf");
 
 		DocumentConverUtil docToPdf = new DocumentConverUtil(ppt, pdf);
 		docToPdf.docToPdf();

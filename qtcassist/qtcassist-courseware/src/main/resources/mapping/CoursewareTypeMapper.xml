@@ -19,9 +19,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
-    insert into courseware_type (id, type_name)
-    values (#{id,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR})
-  </insert>
+        insert into courseware_type (id, type_name)
+        values (#{id,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Long" keyProperty="id">
+            SELECT @@IDENTITY AS ID
+        </selectKey>
+    </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
         insert into courseware_type
         <trim prefix="(" suffix=")" suffixOverrides=",">

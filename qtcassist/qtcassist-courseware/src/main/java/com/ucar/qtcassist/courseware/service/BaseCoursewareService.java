@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.courseware.service;
 
+import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public interface BaseCoursewareService {
     List<BaseCoursewareListDTO> getAllBaseCoursewares();
 
     /**
-     *课件查询
-     * */
-
+     * 添加课件
+     */
+    Long addBaseCourseware(BaseCoursewareDO baseCoursewareDO);
 
 }

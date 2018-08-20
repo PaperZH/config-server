@@ -14,21 +14,11 @@ import 'font-awesome/css/font-awesome.min.css'
 import './css/study.css'
 import './icons' // icon
 import { UcarPagination, Permission } from '@ucar/ucar-vue'
-import Head from '@/pages/components/head'  // 头部
-import Footer from '@/pages/components/footer' // 底部
-import CourseList from '@/pages/components/courselist' // 课程列表
-import Breadcrumb from '@/pages/components/breadcrumb' //  面包屑 导航
-import dialogplan from '@/pages/content/dialog/dialogplan'  // 添加计划弹框
-
 Vue.use(Router)
 Vue.use(ElementUI)
 Vue.use(UcarPagination)
 Vue.use(Permission)
-Vue.component('page-head', Head) // 注册头部组件
-Vue.component('page-footer', Footer) // 注册页面底部组件
-Vue.component('course-ist', CourseList) // 注册课件列表组件
-Vue.component('tabs-breadcrumb', Breadcrumb) // 面包屑组件
-Vue.component('dialog-edit-plan', dialogplan) // 注册制定计划弹框组件
+
 /**
  * element-ui hack
  */

@@ -1,10 +1,10 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
+import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
+import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
 import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
-import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
-import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,10 @@ import java.util.List;
 @Service
 public class BaseCoursewareServiceImpl implements BaseCoursewareService {
     private static Logger LOGGER = LoggerFactory.getLogger(BaseCoursewareServiceImpl.class);
+
     @Autowired
     private BaseCoursewareMapper baseCoursewareMapper;
+
     @Autowired
     private CoursewareTypeMapper coursewareTypeMapper;
 
@@ -54,6 +56,11 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
             listDTO.add(baseCoursewareListDTO);
         }
         return listDTO;
+    }
+
+    @Override
+    public Long addBaseCourseware(BaseCoursewareDO baseCoursewareDO) {
+        return baseCoursewareMapper.insert(baseCoursewareDO);
     }
 
 
