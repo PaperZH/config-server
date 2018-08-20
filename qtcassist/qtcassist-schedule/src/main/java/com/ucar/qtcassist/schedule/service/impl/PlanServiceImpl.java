@@ -29,10 +29,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanDO selectByPrimaryKey(Long id) {
-        PlanDO planDO = null;
-        planDO = planMapper.selectByPrimaryKey(id);
-//        return planMapper.selectByPrimaryKey(id);
-        return planDO;
+        return planMapper.selectByPrimaryKey(id);
     }
 
     @Override

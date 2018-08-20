@@ -1,9 +1,9 @@
 package com.ucar.qtcassist.course.dao;
 
 import com.ucar.qtcassist.course.model.CourseDO;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Component
 public interface CourseMapper {
     int deleteByPrimaryKey(Long id);
 
