@@ -9,9 +9,10 @@
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.admin.domain.UserDO">
-		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
-		`birth`,`avatar`,`address`,`create_time`,`update_time`,`del_flag` from sys_user a
-        <where>
+		select user_id,username,password,a.name,userno,sex,nickname,email,mobile,d.dept_id as dept_id,d.name as dept_name,
+		birth,avatar,address,a.create_time,a.update_time,a.del_flag from sys_user a
+		left join sys_dept d on a.dept_id = d.dept_id
+		<where>
 			a.del_flag = 1
 			<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 			<if test="username != null and username != ''">

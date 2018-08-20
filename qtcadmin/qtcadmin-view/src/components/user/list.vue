@@ -26,23 +26,28 @@
 
       <!--列表-->
       <el-table :data="users" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column type="selection" width="60">
-        </el-table-column>
-        <el-table-column prop="userno" label="工号" width="80" align="center">
+        <!-- <el-table-column type="selection" width="60">
+        </el-table-column> -->
+        <el-table-column prop="username" label="用户名" width="100" align="center" sortable>
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="100" align="center" sortable>
         </el-table-column>
-        <el-table-column prop="username" label="用户名" width="120" align="center" sortable>
+        <el-table-column prop="nickname" label="昵称" width="100" align="center" sortable>
         </el-table-column>
-        <el-table-column prop="nickname" label="昵称" width="120" align="center" sortable>
+        <el-table-column prop="userno" label="工号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="sex" label="性别" width="60" :formatter="formatSex" align="center">
+        <!-- <el-table-column prop="sex" label="性别" width="60" :formatter="formatSex" align="center">
+        </el-table-column> -->
+        <el-table-column prop="deptName" label="部门" width="120" align="center">
         </el-table-column>
         <el-table-column prop="mobile" label="手机" width="120" align="center">
         </el-table-column>
         <el-table-column prop="email" label="邮箱" min-width="180" align="center" sortable>
         </el-table-column>
-        <el-table-column prop="birth" label="出生日期" min-width="100" align="center" sortable>
+        <el-table-column label="图像" align="center">
+          <template slot-scope="scope">
+            <img :src="scope.row.avatar" height="48">
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="150" align="center">
           <template slot-scope="scope">
@@ -53,7 +58,7 @@
       </el-table>
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
-        <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+        <el-pagination layout="total,sizes, prev,pager, next,jumper" background
               @size-change="handleSizeChange"  
               @current-change="handleCurrentChange" 
               :page-size="limit"
@@ -95,6 +100,30 @@
               </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <el-form-item label="部门">
+            <el-tree
+              :data="depts"
+              node-key="id"
+              show-checkbox
+              :props="treeProps"
+              @node-click="handleAddNodeClick"
+              @check-change="addCheckChange"
+              ref="deptAddTree">
+            </el-tree>
+          </el-form-item>
+          <el-form-item label="上传图片" prop="avatar">
+            <el-input v-model="addForm.avatar" auto-complete="off" placeholder="上传模板只能是 jpg/jpeg/png/gif 格式，且不超过5MB"></el-input>
+            <div slot="tip" class="el-upload__tip"></div>
+            <el-upload
+             class="avatar-uploader"
+              action=""
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="addImageUrl" :src="addImageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -132,6 +161,30 @@
               </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <el-form-item label="部门">
+            <el-tree
+              :data="depts"
+              node-key="id"
+              show-checkbox
+              :props="treeProps"
+              @node-click="handleAddNodeClick"
+              @check-change="addCheckChange"
+              ref="deptAddTree">
+            </el-tree>
+          </el-form-item>
+          <el-form-item label="上传图片" prop="avatar">
+            <el-input v-model="editForm.avatar" auto-complete="off"></el-input>
+            <el-upload
+             class="avatar-uploader"
+              action=""
+              :show-file-list="false"
+              :on-success="editHandleAvatarSuccess"
+              :before-upload="editBeforeAvatarUpload">
+              <div slot="tip" class="el-upload__tip" >上传模板只能是 jpg/jpeg/png/gif 格式，且不超过5MB</div>
+              <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -146,6 +199,8 @@
 <script>
   import API from "../../api/api_user";
   import ROLE_API from "../../api/api_role";
+  import DEPT_API from "../../api/api_dept";
+  import FILE_API from '../../api/api_file';
 
   export default {
     data() {
@@ -160,6 +215,15 @@
         total: 0,
         page: 1,
         limit: 10,
+
+        addImageUrl: '',
+        editCheckId:'',
+        depts: [],
+        deptId: "",
+        treeProps: {
+          children: 'children',
+          label: 'text'
+        },
         loading: false,
         addFormVisible: false,
         editFormVisible: false,
@@ -260,14 +324,19 @@
       showAddDialog: function () {
         let that = this;
         this.addFormVisible = true;
-        that.roleIds = []
+        that.roleIds = [];
         ROLE_API.findList('').then(function (result) {
           that.roles = result.rows;
+        })
+        DEPT_API.depts('').then(function (result) {
+          that.depts = result
         })
       },
       showEditDialog: function (index, row) {
         let that = this;
         that.roleIds = []
+        that.depts = []
+        let keys = [row.deptId]
         this.editFormVisible = true;
         this.editForm = Object.assign({}, row);
         ROLE_API.findList('').then(function (result) {
@@ -275,6 +344,12 @@
         })
         ROLE_API.findById(row.userId).then(function (result) {
           that.roleIds = result;
+        })
+        DEPT_API.depts('').then(function (result) {
+          that.depts = result
+        })
+        that.$nextTick(function () {
+          that.setTreeDeptId(keys)
         })
       },
       addSubmit: function () {
@@ -284,6 +359,7 @@
             that.loading = true;
             let params = Object.assign({}, this.addForm);
             params.roleIds = that.roleIds
+            params.deptId = that.editCheckId;
             API.addUser(params).then(function (result) {
               if (0 === result.code) {
                 that.loading = false;
@@ -314,10 +390,9 @@
             that.loading = true;
             let params = Object.assign({}, that.editForm);
             params.roleIds = that.roleIds
+            params.deptId = that.editCheckId;
             API.editUser(params).then(function (result) {
               if (0 === result.code) {
-                // that.loading = false;
-                // that.$message;
                 that.$message.success({
                   showClose: true,
                   message: "修改成功",
@@ -376,6 +451,111 @@
           })
           .catch(() => {
           });
+      },
+
+      handleAddNodeClick(item,node,self) {
+        this.editCheckId = item.id;
+        this.$refs.deptAddTree.setCheckedKeys([item.id]);
+      },
+
+      addCheckChange (item, node, self) {
+        if (node == true) {
+          this.editCheckId = item.id;
+          this.$refs.deptAddTree.setCheckedKeys([item.id]);
+        } else {
+          if (this.editCheckId == item.id) {
+            this.$refs.deptAddTree.setCheckedKeys([item.id]);
+          }
+        }
+      },  
+
+      setTreeDeptId (keys) {
+        this.$refs.deptAddTree.setCheckedKeys(keys, true)
+      },
+
+      beforeAvatarUpload(file) {
+        let that = this
+        const extension = file.name.split('.')[1] === 'jpg'
+        const extension2 = file.name.split('.')[1] === 'jpeg'
+        const extension3 = file.name.split('.')[1] === 'png'
+        const extension4 = file.name.split('.')[1] === 'gif'
+
+        const isLt2M = file.size / 1024 / 1024 < 5;
+
+        if (!extension && !extension2 && !extension3 && !extension4) {
+          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+          return false
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 5MB!');
+          return false;
+        }
+
+        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
+        fd.append('file', file);
+        FILE_API.uploadFile(fd).then(function (result) {
+          if (result && parseInt(result.code) === 0) {
+            that.addImageUrl = result.fileUrl
+            that.addForm.avatar = that.addImageUrl
+            that.$message.success({
+              showClose: true,
+              message: "上传成功",
+              duration: 2000
+            });
+          } else {
+            that.$message.error({
+              showClose: true,
+              message: "上传失败",
+              duration: 2000
+            });
+          }
+        });
+        return false;
+      },
+
+      handleAvatarSuccess(res, file) {
+          console.log(res);
+      },
+      editBeforeAvatarUpload(file) {
+        let that = this
+        const extension = file.name.split('.')[1] === 'jpg'
+        const extension2 = file.name.split('.')[1] === 'jpeg'
+        const extension3 = file.name.split('.')[1] === 'png'
+        const extension4 = file.name.split('.')[1] === 'gif'
+        const isLt2M = file.size / 1024 / 1024 < 5;
+
+        if (!extension && !extension2 && !extension3 && !extension4) {
+          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+          return false
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 5MB!');
+          return false;
+        }
+
+        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
+        fd.append('file', file);
+        FILE_API.uploadFile(fd).then(function (result) {
+          if (result && parseInt(result.code) === 0) {
+            that.editForm.avatar = result.fileUrl
+            that.$message.success({
+              showClose: true,
+              message: "上传成功",
+              duration: 2000
+            });
+          } else {
+            that.$message.error({
+              showClose: true,
+              message: "上传失败",
+              duration: 2000
+            });
+          }
+        });
+        return false;
+      },
+
+      editHandleAvatarSuccess(res, file) {
+          console.log(res);
       }
     },
     mounted() {
@@ -385,6 +565,29 @@
 </script>
 
 <style scoped>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
   .el-pagination {
     margin-top: 15px;
     margin-bottom: 15px;
