@@ -1,11 +1,9 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.base.model.Result;
-import com.ucar.qtcassist.course.dto.Teacher;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -207,13 +205,13 @@ public class CourseController {
     }
 
     @PostMapping("/addCourseware")
-    public Result addCourseware(FrontCoursewareDTO courseware) {
+    public Result addCourseware(CoursewareDO courseware) {
         Result result = new Result();
-//        FrontCoursewareDTO courseware = new FrontCoursewareDTO();
+//        CoursewareDO courseware = new CoursewareDO();
 //        courseware.setTypeId(1L);
 //        courseware.setCoursewareName("java courseware");
 //        courseware.setCoursewareDescription("d://java.txt");
-//        courseware.setPublishTime(new Date());
+        courseware.setPublishTime(new Date());
         courseware.setUpdateTime(new Date());
         Long id = coursewareService.addCourseware(courseware);
         if(id != null) {
