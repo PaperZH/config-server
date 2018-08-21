@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column label="标题" prop="title" width="240" align="center"></el-table-column>
         <el-table-column label="内容" prop="content" width="420" align="center"></el-table-column>
-        <el-table-column label="排序" prop="orderNum" width="60"  align="center"></el-table-column>
+        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>
         <!-- <el-table-column label="修改时间" prop="updateTime" align="center"></el-table-column> -->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -48,7 +48,7 @@
 
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
-        <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+        <el-pagination layout="total,sizes, prev,pager, next,jumper" background
               @size-change="handleSizeChange"  
               @current-change="handleCurrentChange" 
               :page-size="limit"
@@ -200,7 +200,7 @@
           title: that.filters.title
         }
         that.loading = true;
-        API.files(params)          .then(
+        API.files(params).then(
             function (result) {
               that.loading = false;
               if (result && result.page.rows) {

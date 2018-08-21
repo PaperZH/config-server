@@ -8,18 +8,21 @@
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.base.dto.LogDO">
-		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from sys_log
-        <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
-		  		  <if test="username != null and username != ''"> and username = #{username} </if>
-		  		  <if test="operation != null and operation != ''"> and operation = #{operation} </if>
-		  		  <if test="time != null and time != ''"> and time = #{time} </if>
-		  		  <if test="method != null and method != ''"> and method = #{method} </if>
-		  		  <if test="params != null and params != ''"> and params = #{params} </if>
-		  		  <if test="ip != null and ip != ''"> and ip = #{ip} </if>
-		  		  <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
-		  		</where>
+		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create`
+		from sys_log a
+        <where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+			<if test="username != null and username != ''">
+				AND a.username LIKE concat('%',#{username},'%')
+			</if>
+			<if test="operation != null and operation != ''"> and operation = #{operation} </if>
+			<if test="time != null and time != ''"> and time = #{time} </if>
+			<if test="method != null and method != ''"> and method = #{method} </if>
+			<if test="params != null and params != ''"> and params = #{params} </if>
+			<if test="ip != null and ip != ''"> and ip = #{ip} </if>
+			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}

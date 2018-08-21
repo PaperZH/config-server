@@ -63,7 +63,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/getList" ,produces ="application/json")
-    public ResponseResult getCoursesList(@RequestParam Map<String,Object> query){
+    public ResponseResult getCoursesList(@RequestBody Map<String,Object> query){
         System.out.println(query);
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
@@ -127,7 +127,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/getFavoriteCourse")
-    ResponseResult getFavoriteCourse(@RequestParam Map<String,Object> params){
+    ResponseResult getFavoriteCourse(@RequestBody Map<String,Object> params){
         System.out.println(params);
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -146,36 +146,71 @@ public class CourseController {
         }
         return ResponseResult.data(list);
     }
+
     /**
-     * 获取的课程
+     * 根据条件批量删除收藏的课程
      * @return
      */
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
-    public String getCourse(){
-        return  "";
+    @RequestMapping(value = "/deleteFavoriteCourse",produces = "application/json")
+    ResponseResult deleteFavoriteCourse(@RequestBody Map<String,Object> params){
+        System.out.println(params);
+        System.out.println(JSON.toJSONString(params));
+        System.out.println(params.get("courseId"));
+        System.out.println(params.get("courseId[0]"));
+//        System.out.println(list.get(0));
+        return ResponseResult.ok();
     }
+
     /**
      * 添加课程
      * @return
      */
-    @RequestMapping(value = "/add",method = RequestMethod.GET)
-    public String addCourse(){
-        return  "";
+    @RequestMapping(value = "/addCourse",method = RequestMethod.POST)
+    public ResponseResult addCourse(@RequestBody Map<String,Object> map){
+        System.out.println(map);
+        System.out.println(JSON.toJSONString(map));
+        System.out.println(map.get("courseWare"));
+        HashMap<String,Object> course = new HashMap<>();
+        //课程基本信息
+        course.put("courseCover","static/image/2.jpg");
+        course.put("courseName","课程名称");
+        course.put("type_name","课程类型");
+        course.put("courseDescription","课程描述说明");
+        course.put("courseScore",4.5);
+        course.put("readNum",100);
+        course.put("praiseNum",100);
+        course.put("publishTime","2018-8-15");
+        course.put("updateTime","2018-8-15");
+        //课程相关教师基本信息
+        HashMap<String,Object> teacher = new HashMap<>();
+        teacher.put("username", "教师名称");
+        teacher.put("email","教师邮箱");
+        teacher.put("imageUrl","static/to.jpg");
+        //课程相关课件信息
+        ArrayList<Map> courseWarelist = new ArrayList<>();
+        for (int i = 0; i <6; i++) {
+            HashMap<String,Object> courseWare = new HashMap<>();
+            courseWare.put("name","课件名称"+i);
+            courseWare.put("description","课件描述"+i);
+            courseWare.put("publishTime","2018-8-15");
+            courseWare.put("sourceUrl","static/source.pdf");
+            courseWarelist.add(courseWare);
+        }
+        course.put("teacher",teacher);
+        course.put("courseWare",courseWarelist);
+        return  ResponseResult.data(course);
     }
+
     /**
-     * 更新课程
+     * 根据条件批量删除发布的课程
      * @return
      */
-    @RequestMapping(value = "/update",method = RequestMethod.GET)
-    public String updateCourse(){
-        return  "";
+    @RequestMapping(value = "/deleteCourse",produces = "application/json")
+    ResponseResult deleteCourse(@RequestBody Map<String,Object> params){
+        System.out.println(params);
+        System.out.println(JSON.toJSONString(params));
+        System.out.println(params.get("courseId"));
+        return ResponseResult.ok();
     }
-    /**
-     * 删除课程
-     * @return
-     */
-    @RequestMapping(value = "/delete",method = RequestMethod.GET)
-    public String deleteCourse(){
-        return  "";
-    }
+
 }

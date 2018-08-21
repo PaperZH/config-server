@@ -5,27 +5,37 @@
       <div class="logobox">
         <span>培训管理系统</span>
       </div>
-      <div class="topbar-title">
-        <span style="font-size: 18px;color: #fff;"></span>
-      </div>
       <!--展开折叠开关-->
-        <div class="menu-toggle" @click.prevent="collapse">
-          <i class="fa fa-bars" v-show="!collapsed"></i>
-          <i class="fa fa-bars fa-rotate-90" v-show="collapsed"></i>
-        </div>
-      <div class="topbar-account topbar-btn">
-        <el-dropdown trigger="click">
-          <span class="el-dropdown-link userinfo-inner"><i class="iconfont icon-user"></i> {{nickname}}  <i
-            class="iconfont icon-down"></i></span>
+      <div class="menu-toggle" @click.prevent="collapse">
+        <i class="fa fa-bars" v-show="!collapsed"></i>
+        <i class="fa fa-bars fa-rotate-90" v-show="collapsed"></i>
+      </div>
+      <div class="topbar-account top-button">
+        <el-tooltip class="item"
+                  effect="dark"
+                  content="用户头像"
+                  placement="bottom">
+          <template v-if="avatar == null || avatar == ''">
+            <i class="iconfont icon-user userinfo-inner "></i>
+          </template>
+          <template v-else>
+            <img class="top-userImg" :src="avatar+'?imageView2/1/w/80/h/80'">
+          </template>
+        </el-tooltip>
+        <el-dropdown>
+          <span class="el-dropdown-link userinfo-inner">
+            {{nickname}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <div @click="jumpTo('/user/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <div @click="jumpTo('/user/changepwd')"><span style="color: #555;font-size: 14px;">修改密码</span></div>
-            </el-dropdown-item>
-            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
+              <el-dropdown-item>
+                <div @click="jumpTo('/user/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <div @click="jumpTo('/user/changepwd')"><span style="color: #555;font-size: 14px;">修改密码</span></div>
+              </el-dropdown-item>
+              <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-col>
@@ -96,6 +106,7 @@
       return {
         defaultActiveIndex: "0",
         nickname: "",
+        avatar: "",
         collapsed: false,
         menus: []
       };
@@ -124,7 +135,6 @@
           .then(() => {
             //确认
             that.loading = true;
-            //
             localStorage.removeItem("access-token");
             localStorage.removeItem("menus")
             API.logout('').then(function (res) {
@@ -140,13 +150,10 @@
     },
     mounted() {
       this.menus = JSON.parse(window.localStorage.getItem('menus'));
-      // if (user) {
-      //   user = JSON.parse(user);
-      //   this.nickname = user.nickname || '';
-      // }
       let that = this;
       API.tokenUser().then(function (result) {
         that.nickname = result.username
+        that.avatar = result.avatar
       }).catch(
         () => {
           localStorage.removeItem("access-token");
@@ -185,21 +192,14 @@
         text-align: center;
         padding: 5px 0px;
       }
-      .topbar-title {
-        float: left;
-        text-align: left;
-        width: 200px;
-        padding-left: 10px;
-        border-left: 1px solid #000;
-      }
       .topbar-account {
         float: right;
-        padding-right: 12px;
+        padding-right: 13px;
       }
       .userinfo-inner {
         cursor: pointer;
         color: #fff;
-        padding-left: 10px;
+        padding-left: 8px;
       }
     }
     .main {
@@ -279,6 +279,15 @@
         background-color: #fff;
         box-sizing: border-box;
       }
+    }
+    .top-userImg {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+    }
+    .top-button {
+        display: flex;
+        align-items: center;
     }
   }
 </style>
