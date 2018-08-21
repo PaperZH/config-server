@@ -18,15 +18,15 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from base_courseware
+        from assist_base_courseware
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from base_courseware
+    delete from assist_base_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
-        insert into base_courseware (id, type_id, courseware_name,
+        insert into assist_base_courseware (id, type_id, courseware_name,
         courseware_description, publish_time, update_time,
         preview_url, source_url)
         values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{coursewareName,jdbcType=VARCHAR},
@@ -37,7 +37,7 @@
         </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
-        insert into base_courseware
+        insert into assist_base_courseware
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -93,7 +93,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
-        update base_courseware
+        update assist_base_courseware
         <set>
             <if test="typeId != null">
                 type_id = #{typeId,jdbcType=BIGINT},
@@ -120,7 +120,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
-    update base_courseware
+    update assist_base_courseware
     set type_id = #{typeId,jdbcType=BIGINT},
       courseware_name = #{coursewareName,jdbcType=VARCHAR},
       courseware_description = #{coursewareDescription,jdbcType=VARCHAR},
@@ -134,6 +134,6 @@
     <select id="getAllBaseCoursewares" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from base_courseware
+        from assist_base_courseware
     </select>
 </mapper>
