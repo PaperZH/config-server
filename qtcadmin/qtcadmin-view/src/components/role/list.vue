@@ -41,7 +41,7 @@
 
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
-        <el-pagination layout="total,prev,sizes, pager, next,jumper" background
+        <el-pagination layout="total,sizes, prev,pager, next,jumper" background
               @size-change="handleSizeChange"  
               @current-change="handleCurrentChange" 
               :page-size="limit"

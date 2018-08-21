@@ -112,6 +112,18 @@ let router = new Router({
     {
       path: '/',
       component: Home,
+      name: '示例管理',
+      menuShow: true,
+      leaf: true,
+      iconCls: 'fa fa-group',
+      children: [
+        {path: '/admin/demo', component: LogList, name: '示例管理', menuShow: true},
+      ]
+    },
+
+    {
+      path: '/',
+      component: Home,
       name: '个人信息',
       menuShow: true,
       iconCls: 'iconfont icon-setting1',

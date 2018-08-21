@@ -64,9 +64,6 @@ public class Result<T> implements Serializable {
      */
     private String trace;
 
-    public Result() {
-    }
-
     /**
      * 得到服务异常Result.Result.msg字段值为"发生未知错误"
      */

@@ -42,6 +42,7 @@ public class UserController {
 		loginUserDTO.setUsername(FilterContextHandler.getUsername());
 		loginUserDTO.setName(FilterContextHandler.getName());
 		loginUserDTO.setNickname(FilterContextHandler.getNickname());
+		loginUserDTO.setAvatar(FilterContextHandler.getAvatar());
 		return loginUserDTO;
 	}
 

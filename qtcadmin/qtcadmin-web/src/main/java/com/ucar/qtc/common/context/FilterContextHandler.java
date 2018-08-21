@@ -46,6 +46,11 @@ public class FilterContextHandler {
         return returnObjectValue(value);
     }
 
+    public static String getAvatar() {
+        Object value = get(CommonConstants.CONTEXT_AVATAR);
+        return returnObjectValue(value);
+    }
+
     public static String getName() {
         Object value = get(CommonConstants.CONTEXT_NAME);
         return returnObjectValue(value);
@@ -74,6 +79,10 @@ public class FilterContextHandler {
 
     public static void setNickname(String nickname) {
         set(CommonConstants.CONTEXT_NICKNAME, nickname);
+    }
+
+    public static void setAvatar(String avatar) {
+        set(CommonConstants.CONTEXT_AVATAR, avatar);
     }
 
     private static String returnObjectValue(Object value) {

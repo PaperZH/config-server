@@ -26,7 +26,7 @@ import java.util.Map;
 @SpringBootApplication
 public class QtcassistApplication {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args){
         ApplicationContext applicationContext = SpringApplication.run(QtcassistApplication.class, args);
         SpringApplicationContext.initApplicationContext(applicationContext);
 
