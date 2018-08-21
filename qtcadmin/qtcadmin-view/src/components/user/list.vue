@@ -329,7 +329,9 @@
           that.roles = result.rows;
         })
         DEPT_API.depts('').then(function (result) {
-          that.depts = result
+          if (!result.code) {
+            that.depts = result
+          }
         })
       },
       showEditDialog: function (index, row) {
@@ -343,10 +345,14 @@
           that.roles = result.rows;
         })
         ROLE_API.findById(row.userId).then(function (result) {
-          that.roleIds = result;
+          if (!result.code) {
+            that.roleIds = result;
+          }
         })
         DEPT_API.depts('').then(function (result) {
-          that.depts = result
+          if (!result.code) {
+            that.depts = result
+          }
         })
         that.$nextTick(function () {
           that.setTreeDeptId(keys)

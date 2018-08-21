@@ -20,6 +20,7 @@ public class JwtUtils {
                 .claim(CommonConstants.CONTEXT_USER_ID, userToken.getUserId())
                 .claim(CommonConstants.CONTEXT_NAME, userToken.getName())
                 .claim(CommonConstants.CONTEXT_NICKNAME, userToken.getNickname())
+                .claim(CommonConstants.CONTEXT_AVATAR, userToken.getAvatar())
                 .claim(CommonConstants.RENEWAL_TIME,new Date(System.currentTimeMillis()+expire/2))
                 .setExpiration(new Date(System.currentTimeMillis()+expire))
                 .signWith(SignatureAlgorithm.HS256, CommonConstants.JWT_PRIVATE_KEY)
@@ -32,8 +33,10 @@ public class JwtUtils {
         Claims claims = Jwts.parser()
                 .setSigningKey(CommonConstants.JWT_PRIVATE_KEY).parseClaimsJws(token)
                 .getBody();
-        return new UserToken(claims.getSubject(), claims.get(CommonConstants.CONTEXT_USER_ID).toString(),
+        return new UserToken(claims.getSubject(),
+                claims.get(CommonConstants.CONTEXT_USER_ID).toString(),
                 claims.get(CommonConstants.CONTEXT_NAME).toString(),
-                claims.get(CommonConstants.CONTEXT_NICKNAME).toString());
+                claims.get(CommonConstants.CONTEXT_NICKNAME).toString(),
+                claims.get(CommonConstants.CONTEXT_AVATAR).toString());
     }
 }

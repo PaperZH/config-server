@@ -59,7 +59,7 @@ public class LoginController {
             return ResponseResult.error("用户或密码错误");
         }
         UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
-                userDO.getName(), userDO.getNickname());
+                userDO.getName(), userDO.getNickname(), userDO.getAvatar());
         String token = "";
         try {
             token = JwtUtils.generateToken(userToken, 2 * 60 * 60 * 1000);

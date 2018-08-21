@@ -15,7 +15,12 @@
                   effect="dark"
                   content="用户头像"
                   placement="bottom">
-          <img class="top-userImg" :src="avatar+'?imageView2/1/w/80/h/80'">
+          <template v-if="avatar == null || avatar == ''">
+            <i class="iconfont icon-user userinfo-inner "></i>
+          </template>
+          <template v-else>
+            <img class="top-userImg" :src="avatar+'?imageView2/1/w/80/h/80'">
+          </template>
         </el-tooltip>
         <el-dropdown>
           <span class="el-dropdown-link userinfo-inner">
@@ -101,7 +106,7 @@
       return {
         defaultActiveIndex: "0",
         nickname: "",
-        avatar: "http://localhost:8005/files/62/80/9b213bda1f044da2a8f3d0e8ac8df810.png",
+        avatar: "",
         collapsed: false,
         menus: []
       };
@@ -130,7 +135,6 @@
           .then(() => {
             //确认
             that.loading = true;
-            //
             localStorage.removeItem("access-token");
             localStorage.removeItem("menus")
             API.logout('').then(function (res) {
@@ -149,6 +153,7 @@
       let that = this;
       API.tokenUser().then(function (result) {
         that.nickname = result.username
+        that.avatar = result.avatar
       }).catch(
         () => {
           localStorage.removeItem("access-token");
