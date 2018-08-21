@@ -19,7 +19,7 @@ public interface CourseService {
 
     /**
      * 根据类型获取分页后的课程列表
-     * @param params (int currentPage, String type)
+     * @param params (int currentPage, int pageSize, String type)
      * @return
      */
     ResponseResult getCoursesList(Map<String,Object> params);
@@ -31,42 +31,46 @@ public interface CourseService {
      */
     ResponseResult getCourseDetails(long courseId);
 
-    /**
-     * 获取收藏的课程列表
-     * @return
-     */
-    ResponseResult getFavoriteCourse(long userId);
 
     /**
-     * 根据课程名字或发布时间区间获取收藏的课程列表
-     * @param params (long userId, String courseName,String startTime, String endTime)
+     * 根据课程名字或发布时间区间获取收藏的课程分页列表
+     * @param params (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
-    ResponseResult queryCourseByName(Map<String,Object> params);
+    ResponseResult queryFavoriteCourse(Map<String,Object> params);
 
     /**
-     * 获取发布的课程列表
+     * 根据用户ID和课程ID批量删除收藏的课程
+      * @param params (long userId, long[] courseId)
      * @return
      */
-    ResponseResult getPublishedCourse(long userId);
+    ResponseResult deleteFavoriteCourse(Map<String,Object> params);
+
 
     /**
-     * 根据课程id删除课程
-     * @param courseId
+     * 根据课程名字或发布时间区间获取发布的课程分页列表
+     * @param params (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
-    ResponseResult deleteCourse(long courseId);
+    ResponseResult queryPublishedCourse(Map<String,Object> params);
+
+    /**
+     * 根据用户ID和课程ID删除发布的课程
+     * @param params (long userId, long[] courseId)
+     * @return
+     */
+    ResponseResult deletePublishedCourse(Map<String,Object> params);
 
     /**
      * 增加课程
-     * @param course
+     * @param course (long userId , Course course)
      * @return
      */
     ResponseResult addCourse(Map<String,Object> course);
 
     /**
      * 更新课程
-     * @param course
+     * @param course ((long userId , Course course))
      * @return
      */
     ResponseResult updateCourse(Map<String,Object> course);
