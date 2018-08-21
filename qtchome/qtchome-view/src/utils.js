@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import { Message, MessageBox } from 'element-ui'
 // import store from '../store'
-import qs from 'qs'
+// import qs from 'qs'
 // 创建axios实例
 const service = axios.create({
   timeout: 5000, // 请求超时时间
@@ -9,10 +9,10 @@ const service = axios.create({
 })
 // request拦截器
 service.interceptors.request.use(config => {
-  config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-  config.data = qs.stringify({
-    ...config.data
-  })
+  config.headers['Content-Type'] = 'application/json'
+  // config.data = qs.stringify({
+  //   ...config.data
+  // })
   return config
 }, error => {
   // Do something with request error
