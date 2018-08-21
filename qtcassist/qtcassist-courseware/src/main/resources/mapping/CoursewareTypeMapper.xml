@@ -11,22 +11,22 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from courseware_type
+        from assist_course_type
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from courseware_type
+    delete from assist_course_type
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
-        insert into courseware_type (id, type_name)
+        insert into assist_course_type (id, type_name)
         values (#{id,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Long" keyProperty="id">
             SELECT @@IDENTITY AS ID
         </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
-        insert into courseware_type
+        insert into assist_course_type
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -45,7 +45,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
-        update courseware_type
+        update assist_course_type
         <set>
             <if test="typeName != null">
                 type_name = #{typeName,jdbcType=VARCHAR},
@@ -54,7 +54,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO">
-    update courseware_type
+    update assist_course_type
     set type_name = #{typeName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -62,6 +62,6 @@
     <select id="getAllTypes" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from courseware_type
+        from assist_course_type
     </select>
 </mapper>

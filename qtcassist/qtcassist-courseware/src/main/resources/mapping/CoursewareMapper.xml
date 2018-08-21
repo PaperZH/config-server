@@ -17,15 +17,15 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from courseware
+        from assist_courseware
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from courseware
+    delete from assist_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-        insert into courseware ( type_id, base_courseware_id,
+        insert into assist_courseware ( type_id, base_courseware_id,
         courseware_name, courseware_description,
         publish_time, update_time)
         values ( #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER},
@@ -36,7 +36,7 @@
         </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-        insert into courseware
+        insert into assist_courseware
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -85,7 +85,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-        update courseware
+        update assist_courseware
         <set>
             <if test="typeId != null">
                 type_id = #{typeId,jdbcType=BIGINT},
@@ -109,7 +109,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-    update courseware
+    update assist_courseware
     set type_id = #{typeId,jdbcType=BIGINT},
       base_courseware_id = #{baseCoursewareId,jdbcType=INTEGER},
       courseware_name = #{coursewareName,jdbcType=VARCHAR},
