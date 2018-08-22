@@ -8,6 +8,7 @@ import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
+import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.common.dto.LoginUserDTO;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
@@ -39,10 +40,13 @@ public class UserController {
 	LoginUserDTO currentUser(){
 		LoginUserDTO loginUserDTO = new LoginUserDTO();
 		loginUserDTO.setId(FilterContextHandler.getUserID());
-		loginUserDTO.setUsername(FilterContextHandler.getUsername());
-		loginUserDTO.setName(FilterContextHandler.getName());
-		loginUserDTO.setNickname(FilterContextHandler.getNickname());
-		loginUserDTO.setAvatar(FilterContextHandler.getAvatar());
+		UserDO userDo = userService.get(Long.parseLong(FilterContextHandler.getUserID().toString()));
+		loginUserDTO.setUsername(userDo.getUsername());
+		loginUserDTO.setName(userDo.getName());
+		loginUserDTO.setNickname(userDo.getNickname());
+		loginUserDTO.setAvatar(userDo.getAvatar());
+		loginUserDTO.setEmail(userDo.getEmail());
+		loginUserDTO.setUserno(userDo.getUserno());
 		return loginUserDTO;
 	}
 
@@ -93,6 +97,18 @@ public class UserController {
 	@PutMapping()
     ResponseResult update(@RequestBody UserDO user) {
 		return ResponseResult.operate(userService.update(user) > 0);
+	}
+
+	/**
+	 * 修改用户
+	 * @param user
+	 * @return
+	 */
+	@PostMapping("/changeProfile")
+	ResponseResult changeProfile(@RequestBody UserDO user) {
+		ResponseResult result = ResponseResult.operate(userService.changeProfile(user) > 0);
+		LoginUserDTO dto = currentUser();
+		return result.data(dto);
 	}
 
 

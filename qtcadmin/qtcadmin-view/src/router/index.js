@@ -6,7 +6,6 @@ import Dashboard from '@/components/Dashboard'
 import RoleList from '@/components/role/list'
 
 import UserList from '@/components/user/list'
-import UserChangePwd from '@/components/user/changepwd'
 import UserProfile from '@/components/user/profile'
 
 import MenuList from '@/components/menu/list'
@@ -130,8 +129,7 @@ let router = new Router({
       menuShow: true,
       iconCls: 'iconfont icon-setting1',
       children: [
-        {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true},
-        {path: '/user/changepwd', component: UserChangePwd, name: '修改密码', menuShow: true}
+        {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true}
       ]
     },
 
