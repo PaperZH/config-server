@@ -7,6 +7,7 @@ package com.ucar.qtcassist.courseware.constant;
  * @since 2018年08月15日
  */
 public class FileType {
+
     public static final String DOC = "doc";
     public static final String DOCX = "docx";
     public static final String PPT = "ppt";

@@ -1,6 +1,7 @@
 package com.ucar.qtcassist.courseware.service;
 
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
+import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareDTO;
 import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
 
 import java.util.List;
@@ -31,4 +32,14 @@ public interface BaseCoursewareService {
      * @return
      * */
     boolean isValid(Long id);
+
+    /**
+     * 查询课件信息
+     * */
+    BaseCoursewareDTO getBaseCourseware (Long id);
+
+    /**
+     * 获取当前添加字段的id
+     * */
+    Long getNewId();
 }

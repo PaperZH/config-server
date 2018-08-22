@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
+
 /**
  * 文件处理
  *
@@ -30,10 +32,8 @@ public class FileServiceImpl implements FileService {
         //根据文件名后缀判断文件类型
         if(suffix.equals(FileType.DOC) || suffix.equals(FileType.DOCX) || suffix.equals(FileType.PPT) || suffix.equals(FileType.PPTX)) {
             return true;
-        } else if(suffix.equals(FileType.PDF)) {
-            return false;
+        } else {
+            throw new BusinessRuntimeException("Invalid File");
         }
-
-        return false;
     }
 }

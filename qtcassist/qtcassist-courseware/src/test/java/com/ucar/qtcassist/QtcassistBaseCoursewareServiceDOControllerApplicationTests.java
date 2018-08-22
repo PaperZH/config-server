@@ -1,10 +1,13 @@
 package com.ucar.qtcassist;
 
+import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
+import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import com.ucar.qtcassist.courseware.service.MqService;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
+import com.ucar.qtcassist.courseware.util.GetBytes;
 import com.zuche.framework.common.SpringApplicationContext;
 import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
@@ -34,17 +37,9 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     @Autowired
     MqService mqService;
 
-    private static byte[] getByteArrayInputStreamResource(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int len = 1024;
-        byte tmp[] = new byte[len];
-        int i;
-        while((i = inputStream.read(tmp, 0, len)) > 0) {
-            baos.write(tmp, 0, i);
-        }
-        byte[] data = baos.toByteArray();
-        return data;
-    }
+    @Autowired
+    BaseCoursewareMapper baseCoursewareMapper;
+
 
     @Test
     public void contextLoads() {
@@ -67,7 +62,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
         File file = new File("D:\\img2.jpg");
         FileInputStream inputStream = new FileInputStream(file);
-        byte[] bytes = getByteArrayInputStreamResource(inputStream);
+        byte[] bytes = GetBytes.getByteArrayInputStreamResource(inputStream);
 
         UDFSUploadVO vo = new UDFSUploadVO();
         vo.setName("123/456/7890.jpg");
@@ -91,12 +86,28 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     }
 
     @Test
+    public void updateBaseCourseware(){
+        BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
+        baseCoursewareDO.setPreviewUrl("test123");
+        baseCoursewareDO.setTypeId(1L);
+        baseCoursewareDO.setCoursewareDescription("test123");
+        baseCoursewareDO.setCoursewareName("test123");
+        baseCoursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+        baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+        baseCoursewareDO.setSourceUrl("test123");
+        baseCoursewareDO.setId(4L);
+
+        baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+    }
+
+    @Test
     public void MqTest() {
         File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test.pptx");
         File pdf = new File("C:\\Users\\xsj\\Desktop\\qtc\\MQtest.pptx");
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(ppt);
         fileDTO.setId(1L);
+//        fileDTO.setLocation();
         try {
             mqService.msgSend(fileDTO);
 

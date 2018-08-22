@@ -3,26 +3,33 @@ package com.ucar.qtcassist.courseware.model.DTO;
 import java.util.Date;
 
 /**
- * 后端返回给前端的课件类
+ * 元课件库详情
  *
  * @author shijie.xu
- * @since 2018年08月13日
+ * @since 2018年08月21日
  */
-public class BackCoursewareDTO {
-    /**
-     * 课件名称
-     */
+public class BaseCoursewareDTO {
+    private String type;
+
     private String coursewareName;
 
     private String coursewareDescription;
 
     private Date publishTime;
 
-    /**
-     * 用户上传的原文件 url
-     */
+    private Date updateTime;
+
+    private String previewUrl;
+
     private String sourceUrl;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCoursewareName() {
         return coursewareName;
@@ -46,6 +53,22 @@ public class BackCoursewareDTO {
 
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
     }
 
     public String getSourceUrl() {

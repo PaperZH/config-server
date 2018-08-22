@@ -21,6 +21,10 @@
         from assist_base_courseware
         where id = #{id,jdbcType=BIGINT}
     </select>
+    <select id="getNewId" resultType="java.lang.Long">
+        select max(id)
+        from assist_base_courseware
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from assist_base_courseware
     where id = #{id,jdbcType=BIGINT}
@@ -33,7 +37,7 @@
         #{coursewareDescription,jdbcType=VARCHAR}, #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
         #{previewUrl,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Long" keyProperty="id">
-            SELECT @@IDENTITY AS ID
+            SELECT @@IDENTITY AS id
         </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">

@@ -1,6 +1,7 @@
 package com.ucar.qtcassist.courseware.service;
 
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
+import com.ucar.qtcassist.courseware.model.DTO.CoursewareDTO;
 
 /**
  * courseware相关服务
@@ -16,4 +17,8 @@ public interface CoursewareService {
      * */
     Long addCourseware(CoursewareDO coursewareDO);
 
+    /**
+     * 查询课件信息
+     * */
+    CoursewareDTO getCourseware(Long coursewareId);
 }

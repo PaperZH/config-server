@@ -4,6 +4,7 @@ import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
+import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareDTO;
 import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import org.slf4j.Logger;
@@ -44,8 +45,6 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
             baseCoursewareListDTO.setTypeId(baseCoursewareDO.getTypeId());
             //从所有的类型对象中找到当前课件的typeName
             for(int j = 0; j < listType.size(); j++) {
-                LOGGER.info(j + ".listType ID:" + listType.get(j).getId().toString());
-                LOGGER.info(j + ".baseCoursewareDO ID:" + baseCoursewareDO.getTypeId().toString());
                 if(listType.get(j).getId() == baseCoursewareDO.getTypeId()) {
                     baseCoursewareListDTO.setTypeName(listType.get(j).getTypeName());
                     break;
@@ -66,6 +65,31 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
     @Override
     public boolean isValid(Long id) {
         return false;
+    }
+
+    @Override
+    public BaseCoursewareDTO getBaseCourseware(Long id) {
+        BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(id);
+        CoursewareTypeDO coursewareTypeDO = coursewareTypeMapper.selectByPrimaryKey(baseCoursewareDO.getTypeId());
+        if(coursewareTypeDO != null) {
+            BaseCoursewareDTO baseCoursewareDTO = new BaseCoursewareDTO();
+            baseCoursewareDTO.setCoursewareDescription(baseCoursewareDO.getCoursewareDescription());
+            baseCoursewareDTO.setCoursewareName(baseCoursewareDO.getCoursewareName());
+            baseCoursewareDTO.setPreviewUrl(baseCoursewareDO.getPreviewUrl());
+            baseCoursewareDTO.setSourceUrl(baseCoursewareDO.getSourceUrl());
+            baseCoursewareDTO.setPublishTime(baseCoursewareDO.getPublishTime());
+            baseCoursewareDTO.setUpdateTime(baseCoursewareDO.getUpdateTime());
+            baseCoursewareDTO.setType(coursewareTypeDO.getTypeName());
+
+            return baseCoursewareDTO;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public Long getNewId() {
+        return baseCoursewareMapper.getNewId();
     }
 
 
