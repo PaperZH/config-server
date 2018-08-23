@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.api;
 
-import com.ucar.qtcassist.api.model.*;
+import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
+import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.UploadCoursewareDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +23,8 @@ public interface CoursewareApi {
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
-    Result<MqBackCoursewareDTO> addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception;
+    Result addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception;
 
     @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
-    Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId);
+    Result getBaseCourseware(@PathVariable Long baseCoursewareId);
 }

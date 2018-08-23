@@ -221,14 +221,14 @@ public class Result<T> implements Serializable {
      * 拆箱，如果{@link #isSuccess()}为true，则返回{@link #re}，如果为false则抛异常
      *
      * @return
-     * @throws BusinessRuntimeException 当{@link #isSuccess()}为false
+     * @throws RuntimeException 当{@link #isSuccess()}为false
      */
     public T unboxing() {
         if (isSuccess()) {
             return getRe();
         } else {
 //            logger.info("unboxing Exception:{} | {}", getCode(), getMsg());
-            throw new BusinessRuntimeException(getMsg(), getCode());
+            throw new RuntimeException(getCode()+":"+getMsg());
         }
     }
 
