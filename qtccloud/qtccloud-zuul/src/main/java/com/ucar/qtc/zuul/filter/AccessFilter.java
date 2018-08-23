@@ -92,11 +92,17 @@ public class AccessFilter extends ZuulFilter {
         HttpServletResponse response = ctx.getResponse();
         PrintWriter out = null;
         try{
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/html;charset=utf-8");
             out = response.getWriter();
             out.write(JSONUtils.beanToJson(body));
             out.flush();
         }catch(IOException e){
             e.printStackTrace();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
         }
         ctx.setSendZuulResponse(false);
     }
