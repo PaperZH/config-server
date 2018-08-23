@@ -10,6 +10,7 @@ import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import com.ucar.qtcassist.courseware.service.MqService;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
+import com.ucar.qtcassist.api.CoursewareApi;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import java.io.File;
  */
 @RestController
 @RequestMapping("/course")
-public class CoursewareController {
+public class CoursewareController implements CoursewareApi {
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
     @Autowired
     private BaseCoursewareService baseCoursewareService;

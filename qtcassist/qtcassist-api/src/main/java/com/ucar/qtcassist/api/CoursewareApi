@@ -1,0 +1,13 @@
+package com.ucar.qtcassist.api;
+
+/**
+ * Description: TODO
+ *
+ * @author
+ * @since
+ */
+public interface CoursewareApi {
+
+
+
+}

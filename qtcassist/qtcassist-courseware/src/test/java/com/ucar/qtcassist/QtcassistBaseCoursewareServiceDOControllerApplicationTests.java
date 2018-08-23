@@ -21,7 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Date;
 
 @RunWith(SpringRunner.class)
@@ -86,8 +87,8 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     }
 
     @Test
-    public void updateBaseCourseware(){
-        BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
+    public void updateBaseCourseware() {
+        BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
         baseCoursewareDO.setPreviewUrl("test123");
         baseCoursewareDO.setTypeId(1L);
         baseCoursewareDO.setCoursewareDescription("test123");
