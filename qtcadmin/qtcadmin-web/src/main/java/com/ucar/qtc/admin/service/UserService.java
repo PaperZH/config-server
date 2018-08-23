@@ -28,6 +28,14 @@ public interface UserService {
 
 	int update(UserDO user);
 
+
+	/**
+	 * 更新个人信息
+	 * @param user
+	 * @return
+	 */
+	int changeProfile(UserDO user);
+
 	int remove(Long userId);
 
 	int batchremove(Long[] userIds);

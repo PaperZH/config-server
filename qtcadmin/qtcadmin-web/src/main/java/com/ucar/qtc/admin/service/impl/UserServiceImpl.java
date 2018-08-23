@@ -101,6 +101,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int changeProfile(UserDO user) {
+		int r = userMapper.update(user);
+		return r;
+	}
+
+	@Override
 	public int remove(Long userId) {
 		userRoleMapper.removeByUserId(userId);
 		return userMapper.remove(userId);

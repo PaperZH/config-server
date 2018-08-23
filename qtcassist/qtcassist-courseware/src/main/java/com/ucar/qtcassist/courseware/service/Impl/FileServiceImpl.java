@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
+import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
 import com.ucar.qtcassist.courseware.constant.FileType;
 import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.service.FileService;
@@ -30,10 +31,8 @@ public class FileServiceImpl implements FileService {
         //根据文件名后缀判断文件类型
         if(suffix.equals(FileType.DOC) || suffix.equals(FileType.DOCX) || suffix.equals(FileType.PPT) || suffix.equals(FileType.PPTX)) {
             return true;
-        } else if(suffix.equals(FileType.PDF)) {
-            return false;
+        } else {
+            throw new BusinessRuntimeException("Invalid File");
         }
-
-        return false;
     }
 }

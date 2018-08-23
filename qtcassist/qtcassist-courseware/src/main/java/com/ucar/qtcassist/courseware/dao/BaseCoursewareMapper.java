@@ -20,4 +20,6 @@ public interface BaseCoursewareMapper {
     int updateByPrimaryKey(BaseCoursewareDO record);
 
     List<BaseCoursewareDO> getAllBaseCoursewares();
+
+    Long getNewId();
 }

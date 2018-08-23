@@ -1,8 +1,7 @@
 package com.ucar.qtcassist.courseware.model.DTO;
 
 /**
- * 用于向前端返回系统库中所有课件信息的
- * 列表实例
+ * 用于向前端返回系统库中所有元课件库的课件信息列表
  *
  * @author shijie.xu
  * @since 2018年08月14日
