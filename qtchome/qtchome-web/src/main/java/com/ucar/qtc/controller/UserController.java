@@ -1,8 +1,10 @@
 package com.ucar.qtc.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author : pingli.zheng
@@ -13,24 +15,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+
     /**
      * 获取用户信息
      * @return
      */
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
-    public  String getUser(){
-        return "";
+    @RequestMapping(value = "/get/{userId}")
+    public  ResponseResult getUser(@PathVariable long userId){
+        System.out.println(userId);
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("name" , "lee");
+        hashMap.put("nickname","shuaige");
+        hashMap.put("email","baidu@qq.com");
+        hashMap.put("avatar","static/image/2.jpg");
+        return ResponseResult.ok().put("user",hashMap);
     }
-    @RequestMapping(value = "/uodate",method = RequestMethod.POST)
-    public String updateUser(){
-        return "";
+
+    /**
+     * 更新用户信息
+     * @return
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    public ResponseResult updateUser(Map<String,Object> params){
+        System.out.println(params);
+        return ResponseResult.ok();
     }
+
     /**
      * 获取用户菜单信息
      * @return
      */
-    @RequestMapping(value = "/menu",method = RequestMethod.GET)
-    public String getMenu() {
-        return super.toString();
+    @RequestMapping(value = "/menu/{userId}")
+    public ResponseResult getMenu(@PathVariable long userId) {
+        System.out.println(userId);
+        return ResponseResult.ok();
     }
 }

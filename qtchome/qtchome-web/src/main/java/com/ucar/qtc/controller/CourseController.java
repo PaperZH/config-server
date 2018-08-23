@@ -1,6 +1,7 @@
 package com.ucar.qtc.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,7 +69,7 @@ public class CourseController {
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseId",Integer.toString(i));
+            hashMap.put("courseId",i);
             hashMap.put("courseCover","static/image/3.jpg");
             hashMap.put("courseName","课程名称"+i);
             hashMap.put("type_name","课程类型"+i);
@@ -93,20 +94,22 @@ public class CourseController {
         System.out.println(id);
         HashMap<String,Object> course = new HashMap<>();
         //课程基本信息
+        course.put("courseId",100);
         course.put("courseCover","static/image/2.jpg");
         course.put("courseName","课程名称");
-        course.put("type_name","课程类型");
+        course.put("typeId",2);
         course.put("courseDescription","课程描述说明");
         course.put("courseScore",4.5);
         course.put("readNum",100);
         course.put("praiseNum",100);
         course.put("publishTime","2018-8-15");
         course.put("updateTime","2018-8-15");
+        course.put("invalidDate", "2018-8-15");
         //课程相关教师基本信息
         HashMap<String,Object> teacher = new HashMap<>();
         teacher.put("username", "教师名称");
         teacher.put("email","教师邮箱");
-        teacher.put("imageUrl","static/to.jpg");
+        teacher.put("avatar","static/to.jpg");
         //课程相关课件信息
         ArrayList<Map> courseWarelist = new ArrayList<>();
         for (int i = 0; i <5 ; i++) {
@@ -132,14 +135,14 @@ public class CourseController {
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseId",Integer.toString(i));
+            hashMap.put("courseId",i);
             hashMap.put("courseCover","static/image/4.jpg");
             hashMap.put("courseName","课程名称"+i);
             hashMap.put("type_name","课程类型"+i);
             hashMap.put("courseDescription","课程描述说明");
-            hashMap.put("courseScore",Integer.toString(i));
-            hashMap.put("readNum",Integer.toString(10*i));
-            hashMap.put("praiseNum",Integer.toString(i+10));
+            hashMap.put("courseScore",i);
+            hashMap.put("readNum",10*i);
+            hashMap.put("praiseNum",i+10);
             hashMap.put("publishTime","2018-8-15");
             hashMap.put("updateTime","2018-8-15");
             list.add(hashMap);
@@ -147,6 +150,16 @@ public class CourseController {
         return ResponseResult.data(list);
     }
 
+    /**
+     * 根据用户ID和课程ID来收藏课程
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/addFavoriteCourse")
+    ResponseResult addFavoriteCourse(@RequestBody Map<String,Object> params){
+        System.out.println(params);
+        return ResponseResult.ok("收藏成功");
+    }
     /**
      * 根据条件批量删除收藏的课程
      * @return
@@ -157,10 +170,38 @@ public class CourseController {
         System.out.println(JSON.toJSONString(params));
         System.out.println(params.get("courseId"));
         System.out.println(params.get("courseId[0]"));
-//        System.out.println(list.get(0));
+        ArrayList<Integer> courseId = (ArrayList<Integer>)  params.get("courseId");
+        for (int course:courseId
+                ) {
+            System.out.println(course);
+        }
         return ResponseResult.ok();
     }
 
+    /**
+     * 根据查询条件来获取发布的课程
+     * @return
+     */
+    @RequestMapping(value = "/getPublishedCourse")
+    ResponseResult getPublishedCourse(@RequestBody Map<String,Object> params){
+        System.out.println(params);
+        ArrayList<Map> list = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            HashMap<String,Object> hashMap = new HashMap<>();
+            hashMap.put("courseId",i);
+            hashMap.put("courseCover","static/image/4.jpg");
+            hashMap.put("courseName","发布的课程名称"+i);
+            hashMap.put("type_name","课程类型"+i);
+            hashMap.put("courseDescription","课程描述说明");
+            hashMap.put("courseScore",i);
+            hashMap.put("readNum",10*i);
+            hashMap.put("praiseNum",i+10);
+            hashMap.put("publishTime","2018-8-15");
+            hashMap.put("updateTime","2018-8-15");
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
+    }
     /**
      * 添加课程
      * @return
@@ -208,9 +249,41 @@ public class CourseController {
     @RequestMapping(value = "/deleteCourse",produces = "application/json")
     ResponseResult deleteCourse(@RequestBody Map<String,Object> params){
         System.out.println(params);
+        System.out.println( JSONObject.parse((String) params.get("courseId")));
         System.out.println(JSON.toJSONString(params));
         System.out.println(params.get("courseId"));
+        int[] courseId = (int[])  params.get("courseId");
+        for (int course:courseId
+             ) {
+            System.out.println(course);
+        }
+        for (int i = 0; i <courseId.length ; i++) {
+            System.out.println(courseId[i]);
+        }
         return ResponseResult.ok();
+    }
+
+    /**
+     * 获取课程类型列表
+     * @return
+     */
+    @RequestMapping(value = "/getCourseType")
+    ResponseResult getCourseType(){
+        System.out.println("到了");
+        ArrayList<Map> list = new ArrayList<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("typeId", 1);
+            hashMap.put("typeName", "Java");
+        HashMap<String, Object> hashMap2 = new HashMap<>();
+        hashMap2.put("typeId", 2);
+        hashMap2.put("typeName", "MySQL");
+        HashMap<String, Object> hashMap3= new HashMap<>();
+        hashMap3.put("typeId", 3);
+        hashMap3.put("typeName", "SpringCloud");
+        list.add(hashMap);
+        list.add(hashMap2);
+        list.add(hashMap3);
+        return ResponseResult.ok().put("courseType",list);
     }
 
 }
