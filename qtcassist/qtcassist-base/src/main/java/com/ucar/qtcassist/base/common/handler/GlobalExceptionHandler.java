@@ -2,7 +2,7 @@ package com.ucar.qtcassist.base.common.handler;
 
 import com.ucar.qtcassist.base.common.constant.ErrorEnum;
 import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

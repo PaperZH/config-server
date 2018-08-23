@@ -49,4 +49,7 @@
     set type_name = #{typeName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="getIdByTypeName" resultType="java.lang.Long" parameterType="java.lang.String">
+    select id from assist_course_type where type_name = #{typeName, jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -13,6 +13,8 @@ public class PlanDO {
 
     private Long builderId;
 
+    private Byte delFlag;
+
     public Long getId() {
         return id;
     }
@@ -59,5 +61,13 @@ public class PlanDO {
 
     public void setBuilderId(Long builderId) {
         this.builderId = builderId;
+    }
+
+    public Byte getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Byte delFlag) {
+        this.delFlag = delFlag;
     }
 }

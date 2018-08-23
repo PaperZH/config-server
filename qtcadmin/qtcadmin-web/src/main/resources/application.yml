@@ -27,3 +27,4 @@ logging:
 file:
   filePath: e:/file/uploaded_files/
   pre: /files
+  server: http://10.103.13.242:8005

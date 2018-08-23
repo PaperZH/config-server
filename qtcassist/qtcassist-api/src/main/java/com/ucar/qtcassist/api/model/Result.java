@@ -1,8 +1,5 @@
-package com.ucar.qtcassist.base.model;
+package com.ucar.qtcassist.api.model;
 
-import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
@@ -23,7 +20,7 @@ import java.util.List;
  */
 public class Result<T> implements Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(Result.class);
+//    private static final Logger logger = LoggerFactory.getLogger(Result.class);
 
     /**
      * 成功
@@ -224,14 +221,14 @@ public class Result<T> implements Serializable {
      * 拆箱，如果{@link #isSuccess()}为true，则返回{@link #re}，如果为false则抛异常
      *
      * @return
-     * @throws BusinessRuntimeException 当{@link #isSuccess()}为false
+     * @throws RuntimeException 当{@link #isSuccess()}为false
      */
     public T unboxing() {
         if (isSuccess()) {
             return getRe();
         } else {
-            logger.info("unboxing Exception:{} | {}", getCode(), getMsg());
-            throw new BusinessRuntimeException(getMsg(), getCode());
+//            logger.info("unboxing Exception:{} | {}", getCode(), getMsg());
+            throw new RuntimeException(getCode()+":"+getMsg());
         }
     }
 

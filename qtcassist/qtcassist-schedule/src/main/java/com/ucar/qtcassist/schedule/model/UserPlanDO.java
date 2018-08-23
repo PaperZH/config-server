@@ -25,6 +25,8 @@ public class UserPlanDO {
 
     private Date endDate;
 
+    private Byte delFlag;
+
     public Long getId() {
         return id;
     }
@@ -111,5 +113,13 @@ public class UserPlanDO {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Byte getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Byte delFlag) {
+        this.delFlag = delFlag;
     }
 }

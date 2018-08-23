@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.courseware.model.DTO;
+package com.ucar.qtcassist.api.model;
 
 import java.util.Date;
 

@@ -14,4 +14,6 @@ public interface CourseTypeService {
     int updateByPrimaryKeySelective(CourseTypeDO record);
 
     int updateByPrimaryKey(CourseTypeDO record);
+
+    Long getIdByTypeName(String typeName);
 }
