@@ -41,4 +41,9 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     public int updateByPrimaryKey(CourseTypeDO record) {
         return courseTypeMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public Long getIdByTypeName(String typeName) {
+        return courseTypeMapper.getIdByTypeName(typeName);
+    }
 }

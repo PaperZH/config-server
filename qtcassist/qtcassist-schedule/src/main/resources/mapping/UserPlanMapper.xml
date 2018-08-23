@@ -13,10 +13,11 @@
     <result column="plan_student_score" jdbcType="REAL" property="planStudentScore" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List">
     id, teacher_id, student_id, plan_id, student_evaluate_content, student_get_score, 
-    student_summary, teacher_evaluate_content, plan_student_score, start_date, end_date
+    student_summary, teacher_evaluate_content, plan_student_score, start_date, end_date, del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -24,28 +25,26 @@
     from assist_user_plan
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from assist_user_plan
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update assist_user_plan
+    set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
-    insert into assist_user_plan (id, teacher_id, student_id,
+  </update>
+  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
+    insert into assist_user_plan (teacher_id, student_id,
       plan_id, student_evaluate_content, student_get_score, 
       student_summary, teacher_evaluate_content, 
       plan_student_score, start_date, end_date
       )
-    values (#{id,jdbcType=BIGINT}, #{teacherId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, 
+    values (#{teacherId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT},
       #{planId,jdbcType=BIGINT}, #{studentEvaluateContent,jdbcType=VARCHAR}, #{studentGetScore,jdbcType=REAL}, 
       #{studentSummary,jdbcType=VARCHAR}, #{teacherEvaluateContent,jdbcType=VARCHAR}, 
       #{planStudentScore,jdbcType=REAL}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_user_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="teacherId != null">
         teacher_id,
       </if>
@@ -76,11 +75,11 @@
       <if test="endDate != null">
         end_date,
       </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="teacherId != null">
         #{teacherId,jdbcType=BIGINT},
       </if>
@@ -110,6 +109,9 @@
       </if>
       <if test="endDate != null">
         #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -145,6 +147,9 @@
       </if>
       <if test="endDate != null">
         end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

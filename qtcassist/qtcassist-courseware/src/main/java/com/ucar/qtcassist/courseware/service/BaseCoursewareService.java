@@ -1,8 +1,8 @@
 package com.ucar.qtcassist.courseware.service;
 
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
-import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareDTO;
-import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
+import com.ucar.qtcassist.api.model.BaseCoursewareDTO;
+import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
 
 import java.util.List;
 

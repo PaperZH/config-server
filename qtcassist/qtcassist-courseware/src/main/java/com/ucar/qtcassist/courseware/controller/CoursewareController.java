@@ -1,15 +1,14 @@
 package com.ucar.qtcassist.courseware.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
-import com.ucar.qtcassist.courseware.model.DTO.MqBackCoursewareDTO;
-import com.ucar.qtcassist.courseware.model.DTO.UploadCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import com.ucar.qtcassist.courseware.service.MqService;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
+import com.ucar.qtcassist.api.CoursewareApi;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.List;
 
 /**
  * 请填写类注释
@@ -31,7 +31,7 @@ import java.io.File;
  */
 @RestController
 @RequestMapping("/course")
-public class CoursewareController {
+public class CoursewareController implements CoursewareApi {
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
     @Autowired
     private BaseCoursewareService baseCoursewareService;
@@ -49,7 +49,7 @@ public class CoursewareController {
      * @return
      */
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
-    public Result getAllBaseCoursewares() {
+    public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares() {
         return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
     }
 
@@ -59,7 +59,7 @@ public class CoursewareController {
      * @param file,uploadCoursewareDTO
      */
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
-    public Result addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
+    public Result<MqBackCoursewareDTO> addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
         FileDTO fileDTO = new FileDTO();
         BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
         CoursewareDO coursewareDO = new CoursewareDO();
@@ -125,7 +125,7 @@ public class CoursewareController {
      * 完成本地上传后获取课件详情
      */
     @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
-    public Result getBaseCourseware(@PathVariable Long baseCoursewareId) {
+    public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }

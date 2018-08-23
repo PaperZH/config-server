@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
-import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
+import com.ucar.qtcassist.api.model.BusinessRuntimeException;
 import com.ucar.qtcassist.courseware.constant.FileType;
 import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.service.FileService;

@@ -1,8 +1,11 @@
 package com.ucar.qtc.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 /**
  * @Author : pingli.zheng
  * @Description : 登录服务
@@ -16,8 +19,10 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String getLogin(){
-        return "";
+    public ResponseResult getLogin(@RequestBody Map<String,Object> user){
+        System.out.println(JSONObject.toJSONString(user));
+        System.out.println(user);
+        return ResponseResult.ok();
     }
 
 

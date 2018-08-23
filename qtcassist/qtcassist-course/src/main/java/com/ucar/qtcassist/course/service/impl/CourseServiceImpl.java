@@ -1,10 +1,12 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.CourseMapper;
-import com.ucar.qtcassist.course.model.CourseDO;
+import com.ucar.qtcassist.api.model.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -41,4 +43,20 @@ public class CourseServiceImpl implements CourseService {
     public int updateByPrimaryKey(CourseDO record) {
         return courseMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public List<CourseDO> getList(Integer firstIndex, Integer pageSize, Long typeId) {
+        return courseMapper.getList(firstIndex, pageSize, typeId);
+    }
+
+    @Override
+    public List<CourseDO> selectListById(List<Long> ids, Integer startIndex, Integer pageSize) {
+        return courseMapper.selectListById(ids, startIndex, pageSize);
+    }
+
+    @Override
+    public List<CourseDO> selectListByCourseName(List<Long> ids, String courseName, Integer startIndex, Integer pageSize) {
+        return courseMapper.selectListByCourseName(ids, courseName, startIndex, pageSize);
+    }
+
 }

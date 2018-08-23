@@ -42,4 +42,5 @@ public class CoursePlanServiceImpl implements CoursePlanService {
     public int updateByPrimaryKey(CoursePlanDO record) {
         return coursePlanMapper.updateByPrimaryKey(record);
     }
+
 }

@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -15,6 +17,8 @@ import org.springframework.context.annotation.Import;
 @ComponentScan("com.ucar.qtcassist")
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableHystrix
+@EnableHystrixDashboard
 @EnableCaching
 @SpringBootApplication
 public class QtcassistApplication {

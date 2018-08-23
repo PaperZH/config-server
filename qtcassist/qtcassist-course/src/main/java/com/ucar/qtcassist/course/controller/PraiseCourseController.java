@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.course.model.PraiseCourseDO;
 import com.ucar.qtcassist.course.service.PraiseCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class PraiseCourseController {
      * 添加点赞课程记录
      */
     @PostMapping("/add")
-    public Result add(PraiseCourseDO praiseCourse) {
+    public Result add(@RequestBody PraiseCourseDO praiseCourse) {
         praiseCourse.setPublishDate(new Date());
         int count = praiseCourseService.insert(praiseCourse);
         if(count != 0) {
@@ -49,7 +49,7 @@ public class PraiseCourseController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public Result get(@PathVariable("id") Long id) {
+    public Result<PraiseCourseDO> get(@PathVariable("id") Long id) {
         PraiseCourseDO praiseCourse = praiseCourseService.selectByPrimaryKey(id);
         return Result.getSuccessResult(praiseCourse);
     }
@@ -60,7 +60,7 @@ public class PraiseCourseController {
      * @return
      */
     @PostMapping("/update")
-    public Result update(PraiseCourseDO praiseCourse) {
+    public Result update(@RequestBody PraiseCourseDO praiseCourse) {
         int count = praiseCourseService.updateByPrimaryKeySelective(praiseCourse);
         if(count != 0) {
             return Result.getSuccessResult("更新点赞课程成功");
