@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.course.model.CourseCoursewareDO;
 import com.ucar.qtcassist.course.service.CourseCoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;

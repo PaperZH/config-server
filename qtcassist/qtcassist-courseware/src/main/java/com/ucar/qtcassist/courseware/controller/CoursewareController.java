@@ -1,11 +1,9 @@
 package com.ucar.qtcassist.courseware.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
-import com.ucar.qtcassist.courseware.model.DTO.MqBackCoursewareDTO;
-import com.ucar.qtcassist.courseware.model.DTO.UploadCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import com.ucar.qtcassist.courseware.service.MqService;
@@ -23,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.List;
 
 /**
  * 请填写类注释
@@ -50,7 +49,7 @@ public class CoursewareController implements CoursewareApi {
      * @return
      */
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
-    public Result getAllBaseCoursewares() {
+    public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares() {
         return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
     }
 
@@ -60,7 +59,7 @@ public class CoursewareController implements CoursewareApi {
      * @param file,uploadCoursewareDTO
      */
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
-    public Result addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
+    public Result<MqBackCoursewareDTO> addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
         FileDTO fileDTO = new FileDTO();
         BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
         CoursewareDO coursewareDO = new CoursewareDO();
@@ -126,7 +125,7 @@ public class CoursewareController implements CoursewareApi {
      * 完成本地上传后获取课件详情
      */
     @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
-    public Result getBaseCourseware(@PathVariable Long baseCoursewareId) {
+    public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }

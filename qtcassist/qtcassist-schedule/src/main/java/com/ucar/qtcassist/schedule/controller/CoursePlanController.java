@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.schedule.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.schedule.model.CoursePlanDO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
