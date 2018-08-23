@@ -1,6 +1,6 @@
 package com.ucar.test.controller;
 
-import com.ucar.qtcassit.api.DemoApi;
+import com.ucar.qtcassist.api.DemoApi;
 import org.springframework.cloud.netflix.feign.FeignClient;
 
 /**

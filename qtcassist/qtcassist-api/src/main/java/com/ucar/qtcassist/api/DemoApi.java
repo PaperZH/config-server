@@ -1,6 +1,6 @@
-package com.ucar.qtcassit.api;
+package com.ucar.qtcassist.api;
 
-import com.ucar.qtcassit.api.model.User;
+import com.ucar.qtcassist.api.model.User;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

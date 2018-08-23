@@ -1,7 +1,7 @@
 package com.ucar.test.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.ucar.qtcassit.api.model.User;
+import com.ucar.qtcassist.api.model.User;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

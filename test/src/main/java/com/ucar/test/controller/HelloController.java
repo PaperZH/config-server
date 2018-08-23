@@ -1,6 +1,6 @@
 package com.ucar.test.controller;
 
-import com.ucar.qtcassit.api.model.User;
+import com.ucar.qtcassist.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

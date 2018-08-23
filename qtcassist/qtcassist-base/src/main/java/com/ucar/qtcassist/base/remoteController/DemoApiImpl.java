@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.base.remoteController;
 
-import com.ucar.qtcassit.api.DemoApi;
-import com.ucar.qtcassit.api.model.User;
+import com.ucar.qtcassist.api.DemoApi;
+import com.ucar.qtcassist.api.model.User;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;

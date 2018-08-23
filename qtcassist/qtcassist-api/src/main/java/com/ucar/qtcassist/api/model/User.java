@@ -1,4 +1,4 @@
-package com.ucar.qtcassit.api.model;
+package com.ucar.qtcassist.api.model;
 
 import java.io.Serializable;
 
