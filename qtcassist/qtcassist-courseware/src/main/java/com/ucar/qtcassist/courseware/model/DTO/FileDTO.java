@@ -22,13 +22,12 @@ public class FileDTO implements Serializable {
     private Long id;
     /**
      * 文件全名（带文件后缀  eg: test.pptx）
-     * */
+     */
     private String originalFilename;
     /**
      * 文件在服务器中的绝对路径
-     * */
+     */
     private String location;
-
 
 
     public Long getId() {

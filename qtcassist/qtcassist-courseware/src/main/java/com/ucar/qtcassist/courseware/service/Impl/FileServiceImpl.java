@@ -1,13 +1,12 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
+import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
 import com.ucar.qtcassist.courseware.constant.FileType;
 import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
 
 /**
  * 文件处理
