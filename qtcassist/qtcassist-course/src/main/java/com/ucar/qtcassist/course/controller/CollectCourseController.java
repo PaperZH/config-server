@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.controller;
 
-import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.ResponseResult;
 import com.ucar.qtcassist.course.model.CollectCourseDO;
 import com.ucar.qtcassist.api.model.CourseDO;
