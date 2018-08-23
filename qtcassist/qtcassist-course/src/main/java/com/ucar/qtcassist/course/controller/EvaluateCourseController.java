@@ -34,7 +34,7 @@ public class EvaluateCourseController {
      * 添加评价课程记录
      */
     @PostMapping("/add")
-    public Result add(EvaluateCourseDO evaluateCourse) {
+    public Result add(@RequestBody EvaluateCourseDO evaluateCourse) {
         evaluateCourse.setPublishDate(new Date());
         int count = evaluateCourseService.insert(evaluateCourse);
         if(count != 0) {
@@ -50,7 +50,7 @@ public class EvaluateCourseController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public Result get(@PathVariable("id") Long id) {
+    public Result<EvaluateCourseDO> get(@PathVariable("id") Long id) {
         EvaluateCourseDO evaluateCourse = evaluateCourseService.selectByPrimaryKey(id);
         return Result.getSuccessResult(evaluateCourse);
     }
@@ -61,7 +61,7 @@ public class EvaluateCourseController {
      * @return
      */
     @PostMapping("/update")
-    public Result update(EvaluateCourseDO evaluateCourse) {
+    public Result update(@RequestBody EvaluateCourseDO evaluateCourse) {
         int count = evaluateCourseService.updateByPrimaryKeySelective(evaluateCourse);
         if(count != 0) {
             return Result.getSuccessResult("更新评价课程成功");

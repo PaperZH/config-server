@@ -16,4 +16,6 @@ public interface CourseTypeMapper {
     int updateByPrimaryKeySelective(CourseTypeDO record);
 
     int updateByPrimaryKey(CourseTypeDO record);
+
+    Long getIdByTypeName(String typeName);
 }

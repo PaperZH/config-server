@@ -11,6 +11,8 @@ public class CollectCourseDO {
 
     private Date publishDate;
 
+    private Byte delFlag;
+
     public Long getId() {
         return id;
     }
@@ -41,5 +43,13 @@ public class CollectCourseDO {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public Byte getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Byte delFlag) {
+        this.delFlag = delFlag;
     }
 }

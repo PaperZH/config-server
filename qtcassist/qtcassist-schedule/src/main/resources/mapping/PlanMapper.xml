@@ -8,9 +8,10 @@
     <result column="plan_destination" property="planDestination" jdbcType="VARCHAR" />
     <result column="plan_score" property="planScore" jdbcType="REAL" />
     <result column="builder_id" property="builderId" jdbcType="BIGINT" />
+    <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, plan_title, plan_content, plan_destination, plan_score, builder_id
+    id, plan_title, plan_content, plan_destination, plan_score, builder_id, del_flag
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -18,10 +19,11 @@
     from assist_plan
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from assist_plan
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update assist_plan
+    set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
-  </delete>
+  </update>
   <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.PlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_plan (plan_title, plan_content,
       plan_destination, plan_score, builder_id
@@ -48,6 +50,9 @@
       <if test="builderId != null" >
         builder_id,
       </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="planTitle != null" >
@@ -64,6 +69,9 @@
       </if>
       <if test="builderId != null" >
         #{builderId,jdbcType=BIGINT},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -84,6 +92,9 @@
       </if>
       <if test="builderId != null" >
         builder_id = #{builderId,jdbcType=BIGINT},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

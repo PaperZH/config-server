@@ -37,7 +37,7 @@ public class CourseTypeController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(CourseTypeDO courseType){
+    public Result add(@RequestBody CourseTypeDO courseType){
         Result result = null;
         int count = courseTypeService.insert(courseType);
         if(count > 0) {
@@ -54,7 +54,7 @@ public class CourseTypeController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public Result get(@PathVariable("id") Long id) {
+    public Result<CourseTypeDO> get(@PathVariable("id") Long id) {
         Result result = null;
         CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(id);
         if(courseType != null) {
@@ -71,7 +71,7 @@ public class CourseTypeController {
      * @return
      */
     @PostMapping("/update")
-    public Result update(CourseTypeDO courseType) {
+    public Result update(@RequestBody CourseTypeDO courseType) {
         Result result = null;
         int count = courseTypeService.updateByPrimaryKey(courseType);
         if(count > 0) {

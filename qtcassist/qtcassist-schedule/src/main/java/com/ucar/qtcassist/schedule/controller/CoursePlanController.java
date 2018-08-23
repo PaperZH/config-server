@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.schedule.controller;
 
 import com.ucar.qtcassist.base.model.Result;
+import com.ucar.qtcassist.api.model.CourseDO;
+import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.schedule.model.CoursePlanDO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ public class CoursePlanController {
 
     @Autowired
     private CoursePlanService coursePlanService;
+
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 删除课程计划关系
@@ -67,5 +72,11 @@ public class CoursePlanController {
         } else {
             return Result.getBusinessException("更新课程课件关联信息失败", "-2");
         }
+    }
+
+    @GetMapping("/getCourse/{id}")
+    public CourseDO getCourse(@PathVariable("id") Long id) {
+        CourseDO course = courseService.selectByPrimaryKey(id);
+        return course;
     }
 }
