@@ -6,6 +6,9 @@ import com.ucar.qtcassist.course.service.UserCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class UserCourseServiceImpl implements UserCourseService {
 
@@ -45,5 +48,20 @@ public class UserCourseServiceImpl implements UserCourseService {
     @Override
     public UserCourseDO selectByCourseId(Long courseId) {
         return userCourseMapper.selectByCourseId(courseId);
+    }
+
+    @Override
+    public List<Long> selectCourseIdListByUserId(Long userId) {
+        return userCourseMapper.selectCourseIdListByUserId(userId);
+    }
+
+    @Override
+    public List<Long> selectCourseIdListByDate(Long userId, Date startTime, Date endTime) {
+        return userCourseMapper.selectCourseIdListByDate(userId, startTime, endTime);
+    }
+
+    @Override
+    public int deleteListById(Long userId, Long[] courseIds) {
+        return userCourseMapper.deleteListById(userId, courseIds);
     }
 }

@@ -6,6 +6,9 @@ import com.ucar.qtcassist.course.service.CollectCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class CollectCourseServiceImpl implements CollectCourseService {
 
@@ -40,6 +43,21 @@ public class CollectCourseServiceImpl implements CollectCourseService {
     @Override
     public int updateByPrimaryKey(CollectCourseDO record) {
         return collectCourseMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public List<Long> selectCourseIdListByUserId(Long userId) {
+        return collectCourseMapper.selectCourseIdListByUserId(userId);
+    }
+
+    @Override
+    public List<Long> selectCourseIdListByDate(Long userId, Date startTime, Date endTime) {
+        return collectCourseMapper.selectCourseIdListByDate(userId, startTime, endTime);
+    }
+
+    @Override
+    public int deleteListById(Long userId, Long[] courseIds) {
+        return collectCourseMapper.deleteListById(userId, courseIds);
     }
 
 }

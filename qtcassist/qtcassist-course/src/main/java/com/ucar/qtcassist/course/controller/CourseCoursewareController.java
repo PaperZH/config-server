@@ -24,7 +24,7 @@ public class CourseCoursewareController {
     }
 
     @PostMapping("/add")
-    public Result add(CourseCoursewareDO courseCourseware) {
+    public Result add(@RequestBody CourseCoursewareDO courseCourseware) {
         int count = courseCoursewareService.insertSelective(courseCourseware);
         if(count != 0) {
             return Result.getSuccessResult("添加课程课件关联信息成功");
@@ -34,13 +34,13 @@ public class CourseCoursewareController {
     }
 
     @GetMapping("/get/{id}")
-    public Result get(@PathVariable("id") Long id) {
+    public Result<CourseCoursewareDO> get(@PathVariable("id") Long id) {
         CourseCoursewareDO courseCoursewareDO = courseCoursewareService.selectByPrimaryKey(id);
         return Result.getSuccessResult(courseCoursewareDO);
     }
 
     @PostMapping("/update")
-    public Result update(CourseCoursewareDO courseCourseware) {
+    public Result update(@RequestBody CourseCoursewareDO courseCourseware) {
         int count = courseCoursewareService.updateByPrimaryKeySelective(courseCourseware);
         if(count != 0) {
             return Result.getSuccessResult("更新课程课件关联信息成功");

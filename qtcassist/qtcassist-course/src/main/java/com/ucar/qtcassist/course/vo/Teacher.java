@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.course.dto;
+package com.ucar.qtcassist.course.vo;
 
 public class Teacher {
     private Long userId;

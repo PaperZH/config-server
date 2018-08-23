@@ -21,13 +21,13 @@
       </el-col>
 
       <el-table :data="rows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column type="selection" width="60">
+        <el-table-column type="selection" width="40">
         </el-table-column>
         <el-table-column label="用户" prop="username" align="center" width="100"></el-table-column>
-        <el-table-column label="功能描述" prop="operation" align="center" width="160"></el-table-column>
+        <el-table-column label="功能描述" prop="operation" align="center" width="120"></el-table-column>
         <el-table-column label="用时(ms)" prop="time" align="center" width="80"></el-table-column>
         <el-table-column label="方法" prop="method" align="center" width="400"></el-table-column>
-        <el-table-column label="IP" prop="ip" align="center" width="100"></el-table-column>
+        <el-table-column label="IP" prop="ip" align="center" width="160"></el-table-column>
         <el-table-column label="操作时间" prop="gmtCreate" align="center" width="160"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">

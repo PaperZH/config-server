@@ -2,6 +2,9 @@ package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.course.model.UserCourseDO;
 
+import java.util.Date;
+import java.util.List;
+
 public interface UserCourseService {
     int deleteByPrimaryKey(Long id);
 
@@ -16,4 +19,12 @@ public interface UserCourseService {
     int updateByPrimaryKey(UserCourseDO record);
 
     UserCourseDO selectByCourseId(Long courseId);
+
+    List<Long> selectCourseIdListByUserId(Long userId);
+
+    List<Long> selectCourseIdListByDate(Long userId,
+                                        Date startTime,
+                                        Date endTime);
+
+    int deleteListById(Long userId, Long[] courseIds);
 }

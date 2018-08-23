@@ -32,6 +32,9 @@ public class FileController {
     @Value("${file.pre}")
     String filePre;
 
+    @Value("${file.server}")
+    String fileServer;
+
     @Autowired
     private FileService fileService;
 
@@ -66,7 +69,7 @@ public class FileController {
                 key = StringUtils.generateUUID();
             }
             final String resPath = FileUtils.saveFile(file,file.getBytes(),filePath,key);
-            final String url = "http://localhost:8005" + filePre + "/"+resPath;
+            final String url = fileServer + filePre + "/"+resPath;
             return ResponseResult.ok().put("fileUrl", url);
         } catch (IOException e) {
             e.printStackTrace();
