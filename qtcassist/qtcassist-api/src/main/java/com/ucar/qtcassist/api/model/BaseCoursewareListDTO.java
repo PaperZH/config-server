@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.courseware.model.DTO;
+package com.ucar.qtcassist.api.model;
 
 /**
  * 用于向前端返回系统库中所有元课件库的课件信息列表

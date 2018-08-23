@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.base.common.exception;
+package com.ucar.qtcassist.api.model;
 
 import com.ucar.qtcassist.base.common.constant.BusinessExceptionEnumValue;
 
