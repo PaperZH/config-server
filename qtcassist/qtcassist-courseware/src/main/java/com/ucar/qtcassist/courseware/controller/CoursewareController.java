@@ -3,9 +3,8 @@ package com.ucar.qtcassist.courseware.controller;
 import com.ucar.qtcassist.base.model.Result;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareDTO;
-import com.ucar.qtcassist.courseware.model.DTO.MqBackCoursewareDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
+import com.ucar.qtcassist.courseware.model.DTO.MqBackCoursewareDTO;
 import com.ucar.qtcassist.courseware.model.DTO.UploadCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -15,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +40,7 @@ public class CoursewareController {
     @Autowired
     private RemoteFileService remoteFileService;
     @Autowired
-    MqService mqService;
+    private MqService mqService;
 
     /**
      * 系统库课件列表
@@ -63,16 +63,10 @@ public class CoursewareController {
         FileDTO fileDTO = new FileDTO();
         BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
         CoursewareDO coursewareDO = new CoursewareDO();
-        MqBackCoursewareDTO mqBackCoursewareDTO =new MqBackCoursewareDTO();
+        MqBackCoursewareDTO mqBackCoursewareDTO = new MqBackCoursewareDTO();
         if(!file.isEmpty()) {
             String coursewareName = file.getOriginalFilename();
             String sourceUrl = remoteFileService.uploadFile(file.getInputStream(), coursewareName);
-
-            /*LOGGER.error(coursewareName);
-            LOGGER.error(uploadCoursewareDTO.getCoursewareDescription());
-            LOGGER.error(uploadCoursewareDTO.getCoursewareName());
-            LOGGER.error(uploadCoursewareDTO.getPublishTime().toString());
-            LOGGER.error(uploadCoursewareDTO.getTypeId().toString());*/
 
             baseCoursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
             baseCoursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
@@ -81,7 +75,7 @@ public class CoursewareController {
             baseCoursewareDO.setTypeId(uploadCoursewareDTO.getTypeId());
 
             Long baseCourseId = null;
-            if(baseCoursewareService.addBaseCourseware(baseCoursewareDO)==1){
+            if(baseCoursewareService.addBaseCourseware(baseCoursewareDO) == 1) {
                 baseCourseId = baseCoursewareService.getNewId();
             }
 
@@ -103,7 +97,7 @@ public class CoursewareController {
             mqBackCoursewareDTO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
 
             String filePath = request.getSession().getServletContext().getRealPath("/upload/") + "";
-            LOGGER.warn("location:"+filePath);
+            LOGGER.info("fileLocation:" + filePath);
             File dir = new File(filePath);
             if(!dir.exists()) {
                 dir.mkdir();
@@ -129,9 +123,10 @@ public class CoursewareController {
 
     /**
      * 完成本地上传后获取课件详情
-     * */
-    @RequestMapping(value = "/getBaseCourseware", method = RequestMethod.POST)
-    public Result getBaseCourseware(Long baseCoursewareId){
+     */
+    @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
+    public Result getBaseCourseware(@PathVariable Long baseCoursewareId) {
+
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
 

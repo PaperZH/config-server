@@ -40,22 +40,22 @@ public class MesListener implements MessageListener {
     private BaseCoursewareMapper baseCoursewareMapper;
 
     @Override
-    public void recieveMessages(Message message)  {
-        Object obj=  HessianSerializerUtils.deserialize(message.getData());
+    public void recieveMessages(Message message) {
+        Object obj = HessianSerializerUtils.deserialize(message.getData());
         FileDTO fileDTO = (FileDTO) obj;
 
         String location = fileDTO.getLocation() + "convert/";
-        LOGGER.warn("location:"+location);
+        LOGGER.warn("location:" + location);
         File file = fileDTO.getFile();
         String coursewareName = fileDTO.getOriginalFilename();
-        String preUrl=null;
-        LOGGER.error("MqListener:"+coursewareName);
+        String preUrl = null;
+        LOGGER.error("MqListener:" + coursewareName);
 
         int point = coursewareName.lastIndexOf(".");
         String Name = coursewareName.substring(0, point);
         File fPPT = file;
         File fPDF = null;
-        if (obj instanceof  FileDTO){
+        if(obj instanceof FileDTO) {
             //判断是否为需要转化的文件类型
             if(fileService.typeCheck(coursewareName)) {
 
@@ -72,29 +72,29 @@ public class MesListener implements MessageListener {
             InputStream in = null;
             try {
                 in = new FileInputStream(fPDF);
-                preUrl=remoteFileService.uploadFile(in,Name + "." + FileType.PDF);
-                LOGGER.error("upload successfully[preUrl]"+preUrl);
+                preUrl = remoteFileService.uploadFile(in, Name + "." + FileType.PDF);
+                LOGGER.error("upload successfully[preUrl]" + preUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //查BaseCourseware表，将preUrl放入表中
             BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
-            if(baseCoursewareDO!=null){
+            if(baseCoursewareDO != null) {
                 baseCoursewareDO.setPreviewUrl(preUrl);
                 baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
-                int temp=baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
-                LOGGER.info("id:"+baseCoursewareDO.getId());
-                if(temp==1){
-                    LOGGER.error("add basecourseware successfully");
-                }else {
-                    LOGGER.error("add basecourseware failed");
+                int temp = baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+                LOGGER.info("id:" + baseCoursewareDO.getId());
+                if(temp == 1) {
+                    LOGGER.info("add basecourseware successfully");
+                } else {
+                    LOGGER.info("add basecourseware failed");
                 }
             }
         }
     }
 
     @Override
-    public Executor getExecutor(){
-        return  null;
+    public Executor getExecutor() {
+        return null;
     }
 }

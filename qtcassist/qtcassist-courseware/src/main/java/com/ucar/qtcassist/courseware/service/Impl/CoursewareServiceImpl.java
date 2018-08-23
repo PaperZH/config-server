@@ -36,9 +36,9 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public CoursewareDTO getCourseware(Long coursewareId) {
-        CoursewareDO coursewareDO=coursewareMapper.selectByPrimaryKey(coursewareId);
-        CoursewareTypeDO coursewareTypeDO =coursewareTypeMapper.selectByPrimaryKey(coursewareDO.getTypeId());
-        CoursewareDTO coursewareDTO =new CoursewareDTO();
+        CoursewareDO coursewareDO = coursewareMapper.selectByPrimaryKey(coursewareId);
+        CoursewareTypeDO coursewareTypeDO = coursewareTypeMapper.selectByPrimaryKey(coursewareDO.getTypeId());
+        CoursewareDTO coursewareDTO = new CoursewareDTO();
         coursewareDTO.setDescription(coursewareDO.getCoursewareDescription());
         coursewareDTO.setName(coursewareDO.getCoursewareName());
         coursewareDTO.setType(coursewareTypeDO.getTypeName());

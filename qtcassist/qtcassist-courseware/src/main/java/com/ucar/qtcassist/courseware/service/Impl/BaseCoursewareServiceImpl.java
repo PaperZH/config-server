@@ -82,7 +82,7 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
             baseCoursewareDTO.setType(coursewareTypeDO.getTypeName());
 
             return baseCoursewareDTO;
-        }else {
+        } else {
             return null;
         }
     }
