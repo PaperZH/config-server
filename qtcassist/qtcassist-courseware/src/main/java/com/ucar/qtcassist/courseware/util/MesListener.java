@@ -2,9 +2,9 @@ package com.ucar.qtcassist.courseware.util;
 
 import com.taobao.metamorphosis.Message;
 import com.taobao.metamorphosis.client.consumer.MessageListener;
-import com.taobao.metamorphosis.client.extension.spring.DefaultMessageListener;
-import com.taobao.metamorphosis.client.extension.spring.MetaqMessage;
 import com.ucar.qtcassist.courseware.constant.FileType;
+import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
+import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.FileService;
 import com.ucar.qtcassist.courseware.service.Impl.BaseCoursewareServiceImpl;
@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.concurrent.Executor;
 
 /**
@@ -27,45 +31,70 @@ import java.util.concurrent.Executor;
 @Component
 public class MesListener implements MessageListener {
 
-    private static final String LOCATION = "qtcassist/tempFile";
     private static Logger LOGGER = LoggerFactory.getLogger(BaseCoursewareServiceImpl.class);
     @Autowired
-    FileService fileService;
+    private FileService fileService;
     @Autowired
-    RemoteFileService remoteFileService;
+    private RemoteFileService remoteFileService;
+    @Autowired
+    private BaseCoursewareMapper baseCoursewareMapper;
 
     @Override
     public void recieveMessages(Message message) {
-        Object obj=  HessianSerializerUtils.deserialize(message.getData());
-        if (obj instanceof  FileDTO){
-            FileDTO fileDTO = (FileDTO) obj;
-            File file = fileDTO.getFile();
-            String coursewareName = fileDTO.getOriginalFilename();
-            LOGGER.error("MqListener:"+coursewareName);
+        Object obj = HessianSerializerUtils.deserialize(message.getData());
+        FileDTO fileDTO = (FileDTO) obj;
+
+        String location = fileDTO.getLocation() + "convert/";
+        LOGGER.warn("location:" + location);
+        File file = fileDTO.getFile();
+        String coursewareName = fileDTO.getOriginalFilename();
+        String preUrl = null;
+        LOGGER.error("MqListener:" + coursewareName);
+
+        int point = coursewareName.lastIndexOf(".");
+        String Name = coursewareName.substring(0, point);
+        File fPPT = file;
+        File fPDF = null;
+        if(obj instanceof FileDTO) {
+            //判断是否为需要转化的文件类型
             if(fileService.typeCheck(coursewareName)) {
 
-                int point = coursewareName.lastIndexOf(".");
-                //名称
-                String Name = coursewareName.substring(0, point);
-
-                String pdfLocation = LOCATION + "/" + Name + "." + FileType.PDF;
-                //            LOGGER.error("pdfLocation:" + pdfLocation);
-                File pdfFile = new File(pdfLocation);
-                File dir = new File(LOCATION);
+                String pdfLocation = location + Name + "." + FileType.PDF;
+                //LOGGER.error("pdfLocation:" + pdfLocation);
+                fPDF = new File(pdfLocation);
+                File dir = new File(location);
                 if(!dir.exists()) {
                     dir.mkdirs();
                 }
-
-                File fPPT = file;
-                File fPDF = null;
                 remoteFileService.fileConvert(fPPT, fPDF);
+                LOGGER.error("conver successfully");
+            }
+            InputStream in = null;
+            try {
+                in = new FileInputStream(fPDF);
+                preUrl = remoteFileService.uploadFile(in, Name + "." + FileType.PDF);
+                LOGGER.error("upload successfully[preUrl]" + preUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //查BaseCourseware表，将preUrl放入表中
+            BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
+            if(baseCoursewareDO != null) {
+                baseCoursewareDO.setPreviewUrl(preUrl);
+                baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+                int temp = baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+                LOGGER.info("id:" + baseCoursewareDO.getId());
+                if(temp == 1) {
+                    LOGGER.info("add basecourseware successfully");
+                } else {
+                    LOGGER.info("add basecourseware failed");
+                }
             }
         }
-
     }
 
     @Override
-    public Executor getExecutor(){
-        return  null;
+    public Executor getExecutor() {
+        return null;
     }
 }

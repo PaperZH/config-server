@@ -31,9 +31,9 @@
               <el-dropdown-item>
                 <div @click="jumpTo('/user/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
               </el-dropdown-item>
-              <el-dropdown-item>
+              <!-- <el-dropdown-item>
                 <div @click="jumpTo('/user/changepwd')"><span style="color: #555;font-size: 14px;">修改密码</span></div>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
@@ -152,7 +152,7 @@
       this.menus = JSON.parse(window.localStorage.getItem('menus'));
       let that = this;
       API.tokenUser().then(function (result) {
-        that.nickname = result.username
+        that.nickname = result.nickname
         that.avatar = result.avatar
       }).catch(
         () => {

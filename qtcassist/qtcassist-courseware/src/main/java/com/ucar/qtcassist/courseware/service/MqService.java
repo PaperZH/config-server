@@ -12,8 +12,9 @@ import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 public interface MqService {
     /**
      * 消息发送
+     *
      * @param fileDTO
      * @return
-     * */
+     */
     SendResult msgSend(FileDTO fileDTO) throws Exception;
 }

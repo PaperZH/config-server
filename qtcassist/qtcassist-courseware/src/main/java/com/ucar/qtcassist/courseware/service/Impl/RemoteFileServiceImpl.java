@@ -11,9 +11,9 @@ import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
 import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
 import com.zuche.framework.udfs.client.upload.UDFSUploadVO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +27,14 @@ import java.net.ConnectException;
  */
 @Service
 public class RemoteFileServiceImpl implements RemoteFileService {
+    @Value("${openOffice.host}")
+    String openOfficeHost;
+
+    @Value("${openOffice.port}")
+    int openOfficePort;
+
+
+
     @Override
     public String uploadFile(InputStream inputStream, String Name) throws IOException {
         byte[] fileByte = GetBytes.getByteArrayInputStreamResource(inputStream);
@@ -43,7 +51,7 @@ public class RemoteFileServiceImpl implements RemoteFileService {
 
     @Override
     public void fileConvert(File inputFile, File outputFile) {
-        OpenOfficeConnection connection = new SocketOpenOfficeConnection("10.104.102.225", 7009);
+        OpenOfficeConnection connection = new SocketOpenOfficeConnection(openOfficeHost, openOfficePort);
 
         try {
 

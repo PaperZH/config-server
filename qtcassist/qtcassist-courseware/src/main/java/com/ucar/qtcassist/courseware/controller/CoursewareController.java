@@ -1,26 +1,27 @@
 package com.ucar.qtcassist.courseware.controller;
 
+import com.ucar.qtcassist.base.model.Result;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
-import com.ucar.qtcassist.courseware.model.DTO.BaseCoursewareListDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
+import com.ucar.qtcassist.courseware.model.DTO.MqBackCoursewareDTO;
 import com.ucar.qtcassist.courseware.model.DTO.UploadCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
+import com.ucar.qtcassist.courseware.service.MqService;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.sql.Date;
-import java.util.List;
 
 /**
  * 请填写类注释
@@ -33,64 +34,123 @@ import java.util.List;
 public class CoursewareController {
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
     @Autowired
-    BaseCoursewareService baseCoursewareService;
+    private BaseCoursewareService baseCoursewareService;
     @Autowired
-    CoursewareService coursewareService;
+    private CoursewareService coursewareService;
     @Autowired
-    RemoteFileService remoteFileService;
+    private RemoteFileService remoteFileService;
+    @Autowired
+    private MqService mqService;
 
     /**
      * 系统库课件列表
+     *
      * @param
      * @return
      */
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
-    public List<BaseCoursewareListDTO> getAllBaseCoursewares() {
-        return baseCoursewareService.getAllBaseCoursewares();
+    public Result getAllBaseCoursewares() {
+        return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
     }
 
     /**
      * 从本地上传课件进行添加
+     *
      * @param file,uploadCoursewareDTO
      */
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
-    public FileDTO addCoursewareFromSys(@RequestParam("file") MultipartFile file, @RequestParam UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
-
-        String coursewareName = file.getOriginalFilename();
-        BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
-        baseCoursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
-        baseCoursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
-        baseCoursewareDO.setPublishTime(uploadCoursewareDTO.getPublishTime());
-        baseCoursewareDO.setSourceUrl(remoteFileService.uploadFile(file.getInputStream(), coursewareName));
-        baseCoursewareDO.setTypeId(uploadCoursewareDTO.getTypeId());
-
-        Long BaseCourseId = null;
-        BaseCourseId = baseCoursewareService.addBaseCourseware(baseCoursewareDO);
-
-        CoursewareDO coursewareDO = new CoursewareDO();
-        coursewareDO.setPublishTime(uploadCoursewareDTO.getPublishTime());
-        coursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
-        coursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
-        coursewareDO.setBaseCoursewareId(BaseCourseId);
-        coursewareDO.setTypeId(uploadCoursewareDTO.getTypeId());
-        coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
-        if(BaseCourseId != null) {
-            coursewareService.addCourseware(coursewareDO);
-        }
-
-        File f = null;
-        file.transferTo(f);
+    public Result addCoursewareFromSys(MultipartFile file, UploadCoursewareDTO uploadCoursewareDTO, HttpServletRequest request) throws Exception {
         FileDTO fileDTO = new FileDTO();
-        fileDTO.setFile(f);
-        fileDTO.setId(BaseCourseId);
-        fileDTO.setOriginalFilename(coursewareName);
+        BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
+        CoursewareDO coursewareDO = new CoursewareDO();
+        MqBackCoursewareDTO mqBackCoursewareDTO = new MqBackCoursewareDTO();
+        if(!file.isEmpty()) {
+            String coursewareName = file.getOriginalFilename();
+            String sourceUrl = remoteFileService.uploadFile(file.getInputStream(), coursewareName);
 
-        return fileDTO;
+            baseCoursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
+            baseCoursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
+            baseCoursewareDO.setPublishTime(uploadCoursewareDTO.getPublishTime());
+            baseCoursewareDO.setSourceUrl(sourceUrl);
+            baseCoursewareDO.setTypeId(uploadCoursewareDTO.getTypeId());
+
+            Long baseCourseId = null;
+            if(baseCoursewareService.addBaseCourseware(baseCoursewareDO) == 1) {
+                baseCourseId = baseCoursewareService.getNewId();
+            }
+
+
+            coursewareDO.setPublishTime(uploadCoursewareDTO.getPublishTime());
+            coursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
+            coursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
+            coursewareDO.setBaseCoursewareId(baseCourseId);
+            coursewareDO.setTypeId(uploadCoursewareDTO.getTypeId());
+            coursewareDO.setUpdateTime(uploadCoursewareDTO.getPublishTime());
+
+            if(baseCourseId != null) {
+                coursewareService.addCourseware(coursewareDO);
+            }
+
+            mqBackCoursewareDTO.setSourceUrl(sourceUrl);
+            mqBackCoursewareDTO.setPublishTime(uploadCoursewareDTO.getPublishTime());
+            mqBackCoursewareDTO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
+            mqBackCoursewareDTO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
+
+            String filePath = request.getSession().getServletContext().getRealPath("/upload/") + "";
+            LOGGER.info("fileLocation:" + filePath);
+            File dir = new File(filePath);
+            if(!dir.exists()) {
+                dir.mkdir();
+            }
+            String path = filePath + file.getOriginalFilename();
+            File tempFile = null;
+            //save to the /upload path
+            try {
+                tempFile = new File(path);
+                //copy MultipartFile into File
+                FileUtils.copyInputStreamToFile(file.getInputStream(), tempFile);
+                fileDTO.setFile(tempFile);
+                fileDTO.setId(baseCourseId);
+                fileDTO.setOriginalFilename(coursewareName);
+                fileDTO.setLocation(filePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mqService.msgSend(fileDTO);
+        }
+        return Result.getSuccessResult(mqBackCoursewareDTO);
+    }
+
+    /**
+     * 完成本地上传后获取课件详情
+     */
+    @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
+    public Result getBaseCourseware(@PathVariable Long baseCoursewareId) {
+
+        return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
+    }
+
+}
 
 
 
 
-        /*//将MultipartFile转换为File
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*//将MultipartFile转换为File
         File f = null;
         if(file.equals("") || file.getSize() <= 0) {
             file = null;
@@ -118,5 +178,3 @@ public class CoursewareController {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-    }
-}

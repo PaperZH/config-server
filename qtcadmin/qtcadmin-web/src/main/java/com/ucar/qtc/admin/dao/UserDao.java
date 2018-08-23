@@ -23,11 +23,12 @@ public interface UserDao {
 	int save(UserDO user);
 	
 	int update(UserDO user);
+
+	int changeProfile(UserDO user);
 	
 	int remove(Long userId);
 	
 	int batchRemove(Long[] userIds);
 	
 	Long[] listAllDept();
-
 }

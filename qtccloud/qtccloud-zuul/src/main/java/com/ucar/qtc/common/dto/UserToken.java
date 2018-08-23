@@ -10,6 +10,9 @@ import java.io.Serializable;
 public class UserToken implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    public UserToken() {
+    }
+
     public UserToken(String username, String userId, String name, String nickname, String avatar) {
         this.userId = userId;
         this.username = username;

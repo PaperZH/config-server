@@ -13,6 +13,7 @@ import java.io.InputStream;
 public interface RemoteFileService {
     /**
      * 将流形式的文件上传至服务器
+     *
      * @param inputStream，Name
      * @return
      */
@@ -20,6 +21,7 @@ public interface RemoteFileService {
 
     /**
      * 文件转化服务
+     *
      * @param inputFile，outputFile
      * @return
      */

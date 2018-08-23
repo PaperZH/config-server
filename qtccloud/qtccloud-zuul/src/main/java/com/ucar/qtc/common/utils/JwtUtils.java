@@ -33,10 +33,18 @@ public class JwtUtils {
         Claims claims = Jwts.parser()
                 .setSigningKey(CommonConstants.JWT_PRIVATE_KEY).parseClaimsJws(token)
                 .getBody();
-        return new UserToken(claims.getSubject(),
-                claims.get(CommonConstants.CONTEXT_USER_ID).toString(),
-                claims.get(CommonConstants.CONTEXT_NAME).toString(),
-                claims.get(CommonConstants.CONTEXT_NICKNAME).toString(),
-                claims.get(CommonConstants.CONTEXT_AVATAR).toString());
+        UserToken userToken = new UserToken();
+        userToken.setUsername(claims.getSubject());
+        userToken.setUserId(claims.get(CommonConstants.CONTEXT_USER_ID).toString());
+        if (claims.get(CommonConstants.CONTEXT_NAME) != null) {
+            userToken.setName(claims.get(CommonConstants.CONTEXT_NAME).toString());
+        }
+        if (claims.get(CommonConstants.CONTEXT_NICKNAME) != null) {
+            userToken.setNickname(claims.get(CommonConstants.CONTEXT_NICKNAME).toString());
+        }
+        if (claims.get(CommonConstants.CONTEXT_AVATAR) != null) {
+            userToken.setAvatar(claims.get(CommonConstants.CONTEXT_AVATAR).toString());
+        }
+        return userToken;
     }
 }

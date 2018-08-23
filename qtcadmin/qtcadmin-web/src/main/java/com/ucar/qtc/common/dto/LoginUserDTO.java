@@ -27,6 +27,9 @@ public class LoginUserDTO {
      */
     private String avatar;
 
+    private String userno;
+    private String email;
+
 
     public String getId() {
         return id;
@@ -66,5 +69,21 @@ public class LoginUserDTO {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getUserno() {
+        return userno;
+    }
+
+    public void setUserno(String userno) {
+        this.userno = userno;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

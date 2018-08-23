@@ -3,10 +3,9 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Dashboard from '@/components/Dashboard'
 
-import BookList from '@/components/role/list'
+import RoleList from '@/components/role/list'
 
 import UserList from '@/components/user/list'
-import UserChangePwd from '@/components/user/changepwd'
 import UserProfile from '@/components/user/profile'
 
 import MenuList from '@/components/menu/list'
@@ -16,6 +15,8 @@ import FileList from '../components/file/List.vue'
 import LogList from '../components/log/List'
 
 import DeptList from '../components/dept/list'
+
+import EurekaList from '../components/monitor/eureka/list'
 
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/components/Login'], resolve)
@@ -83,7 +84,7 @@ let router = new Router({
       leaf: true,
       iconCls: 'fa fa-group',
       children: [
-        {path: '/admin/role', component: BookList, name: '角色管理', menuShow: true},
+        {path: '/admin/role', component: RoleList, name: '角色管理', menuShow: true},
       ]
     },
 
@@ -128,8 +129,7 @@ let router = new Router({
       menuShow: true,
       iconCls: 'iconfont icon-setting1',
       children: [
-        {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true},
-        {path: '/user/changepwd', component: UserChangePwd, name: '修改密码', menuShow: true}
+        {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true}
       ]
     },
 
@@ -140,7 +140,7 @@ let router = new Router({
       menuShow: true,
       iconCls: 'iconfont icon-setting1',
       children: [
-        {path: '/service',component: UserProfile,  redirect: 'http://baidu.com',target:'_blank',name: '个人信息', menuShow: true},
+        {path: '/monitor/eureka',component: EurekaList, name: '服务监控', menuShow: true},
       ]
     },
   ]

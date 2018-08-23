@@ -16,12 +16,18 @@ public class FileDTO implements Serializable {
      * 文件
      */
     private File file;
-    /**阿
+    /**
      * baseCoursewareId
      */
     private Long id;
-
+    /**
+     * 文件全名（带文件后缀  eg: test.pptx）
+     */
     private String originalFilename;
+    /**
+     * 文件在服务器中的绝对路径
+     */
+    private String location;
 
 
     public Long getId() {
@@ -46,5 +52,13 @@ public class FileDTO implements Serializable {
 
     public void setOriginalFilename(String originalFilename) {
         this.originalFilename = originalFilename;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
