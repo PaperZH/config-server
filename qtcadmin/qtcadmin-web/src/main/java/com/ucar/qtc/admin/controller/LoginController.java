@@ -50,14 +50,12 @@ public class LoginController {
         password = MD5Utils.encrypt(username, password);
         Map<String, Object> param = new HashMap<>();
         param.put("username", username);
+        param.put("password",password);
         List<UserDO> userDOs = userService.list(param);
-        if (userDOs.size() < 1) {
+        if (userDOs == null || userDOs.size() != 1) {
             return ResponseResult.error("用户或密码错误");
         }
         UserDO userDO = userDOs.get(0);
-        if (null == userDO || !userDO.getPassword().equals(password)) {
-            return ResponseResult.error("用户或密码错误");
-        }
         UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
                 userDO.getName(), userDO.getNickname(), userDO.getAvatar());
         String token = "";
