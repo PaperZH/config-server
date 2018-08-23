@@ -40,6 +40,13 @@ public interface CourseService {
     ResponseResult queryFavoriteCourse(Map<String,Object> params);
 
     /**
+     * 根据用户ID和课程ID来收藏课程.
+     * @param params
+     * @return
+     */
+    ResponseResult addFavoriteCourse(Map<String,Object> params);
+
+    /**
      * 根据用户ID和课程ID批量删除收藏的课程
       * @param params (long userId, long[] courseId)
      * @return
@@ -74,5 +81,11 @@ public interface CourseService {
      * @return
      */
     ResponseResult updateCourse(Map<String,Object> course);
+
+    /**
+     * 获取课程类型列表
+     * @return
+     */
+    ResponseResult getCourseType();
 
 }
