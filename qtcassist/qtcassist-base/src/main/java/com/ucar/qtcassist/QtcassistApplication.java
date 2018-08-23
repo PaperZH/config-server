@@ -17,8 +17,6 @@ import org.springframework.context.annotation.Import;
 @ComponentScan("com.ucar.qtcassist")
 @EnableDiscoveryClient
 @EnableFeignClients
-@EnableHystrix
-@EnableHystrixDashboard
 @EnableCaching
 @SpringBootApplication
 public class QtcassistApplication {

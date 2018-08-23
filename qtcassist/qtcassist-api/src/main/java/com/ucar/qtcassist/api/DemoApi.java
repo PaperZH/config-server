@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.model.User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 public interface DemoApi {
 
-    @RequestMapping(value = "/hello2", method = RequestMethod.GET)
+    @GetMapping(value = "/hello2")
     User hello(@RequestHeader("name") String name,@RequestHeader("age") Integer age);
 
     @RequestMapping(value = "/hello1", method = RequestMethod.GET)
     String hello(@RequestParam("name") String name);
 
 
-    @RequestMapping(value = "/hello3", method = RequestMethod.POST)
+    @PostMapping(value = "/hello3")
     String hello(@RequestBody User user);
 
 }
