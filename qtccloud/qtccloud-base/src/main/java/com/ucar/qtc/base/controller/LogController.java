@@ -8,6 +8,7 @@ import com.ucar.qtc.base.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,11 +62,20 @@ public class LogController {
 
     /**
      * 批量删除
-     * @param ids
+     * @param params
      * @return
      */
     @PostMapping("/batchRemove")
-    ResponseResult batchRemove(@RequestParam("ids[]") Long[] ids) {
+    ResponseResult batchRemove(@RequestBody Map<String, Object> params) {
+        Object obj = params.get("ids");
+        if (obj == null) {
+            return ResponseResult.error();
+        }
+        List<Integer> list = (List<Integer>) obj;
+        Long[] ids = new Long[list.size()];
+        for (int index=0;index<list.size();index++) {
+            ids[index] = Long.valueOf(list.get(index));
+        }
         int r = logService.batchRemove(ids);
         if (r > 0) {
             return ResponseResult.ok();

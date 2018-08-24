@@ -6,5 +6,8 @@ export default {
   },
   remove: params => {
     return API.DELETE('/api-base/log', params)
+  },
+  batchRemove: params => {
+    return API.POST('/api-base/log/batchRemove', params)
   }
 }

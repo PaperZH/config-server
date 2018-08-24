@@ -82,6 +82,7 @@ public class MenuController {
     @Log("添加菜单")
     @PostMapping
     ResponseResult save(@RequestBody MenuDO menuDO){
+        menuDO.setDelFlag(1);
         return ResponseResult.operate(menuService.save(menuDO)>0);
     }
 
