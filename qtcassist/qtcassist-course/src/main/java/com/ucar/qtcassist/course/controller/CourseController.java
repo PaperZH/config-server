@@ -1,14 +1,13 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.api.CourseApi;
-import com.ucar.qtcassist.api.model.CourseDO;
-import com.ucar.qtcassist.api.model.ResponseResult;
+import com.ucar.qtcassist.api.common.Page;
+import com.ucar.qtcassist.api.common.PageResult;
+import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
-import com.ucar.qtcassist.course.vo.CourseVO;
-import com.ucar.qtcassist.api.model.Query;
+import com.ucar.qtcassist.api.model.vo.CourseVO;
 import com.ucar.qtcassist.course.vo.Teacher;
-import com.ucar.qtcassist.api.model.UserCourseVO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.slf4j.Logger;
@@ -111,7 +110,7 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public ResponseResult getCourseList(@RequestBody Query query) {
+    public Result<Page<CourseVO>> getCourseList(@RequestBody Query query) {
         Integer currentPage = query.getCurrentPage();
         Integer pageSize = query.getPageSize();
         String type = query.getType();
@@ -119,6 +118,7 @@ public class CourseController implements CourseApi {
         Integer startIndex = (currentPage - 1) * pageSize;
 
         List<CourseDO> courseDOList = null;
+        Integer total = courseService.getTotal();
         if(type.equals("default")) {
             courseDOList = courseService.getList(startIndex, pageSize);
         } else if (type.equals("time")) {
@@ -126,7 +126,7 @@ public class CourseController implements CourseApi {
         } else if(type.equals("hot")) {
             courseDOList = courseService.getListByPraiseNum(startIndex, pageSize);
         } else {
-            return ResponseResult.error("查询条件有问题");
+            return PageResult.getBusinessException("","");
         }
 
         List<CourseVO> courseVOList = new ArrayList<CourseVO>();
@@ -143,7 +143,7 @@ public class CourseController implements CourseApi {
             courseVO.setPublishTime(courseDO.getPublishTime());
             courseVOList.add(courseVO);
         }
-        return ResponseResult.data(courseVOList);
+        return PageResult.getSuccessResult(courseVOList, total);
     }
 
     /**

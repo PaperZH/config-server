@@ -168,6 +168,9 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select count(id) from assist_course where del_flag = 1
+  </select>
   <select id="getList" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

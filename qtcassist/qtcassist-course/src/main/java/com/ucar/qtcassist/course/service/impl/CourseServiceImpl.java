@@ -45,6 +45,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public Integer getTotal() {
+        return courseMapper.getTotal();
+    }
+
+    @Override
     public List<CourseDO> getList(Integer firstIndex, Integer pageSize) {
         return courseMapper.getList(firstIndex, pageSize);
     }

@@ -18,6 +18,8 @@ public interface CourseService {
 
     int updateByPrimaryKey(CourseDO record);
 
+    Integer getTotal();
+
     List<CourseDO> getList(Integer startIndex, Integer pageSize);
 
     List<CourseDO> getListByTime(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);

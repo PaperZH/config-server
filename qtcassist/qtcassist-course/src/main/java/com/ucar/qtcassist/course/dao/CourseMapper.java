@@ -20,6 +20,8 @@ public interface CourseMapper {
 
     int updateByPrimaryKey(CourseDO record);
 
+    Integer getTotal();
+
     List<CourseDO> getList(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 
     List<CourseDO> getListByTime(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
