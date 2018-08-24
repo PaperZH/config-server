@@ -17,10 +17,13 @@
           <el-form-item>
             <el-button type="primary" v-on:click="handleSearch">查询</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="danger" v-on:click="handleBatchRemove(sels)" :disabled="this.sels.length === 0">批量删除</el-button>
+          </el-form-item>
         </el-form>
       </el-col>
 
-      <el-table :data="rows" border highlight-current-row v-loading="loading" style="width: 100%;">
+      <el-table :data="rows" border highlight-current-row @selection-change="selsChange" v-loading="loading" style="width: 100%;">
         <el-table-column type="selection" width="40">
         </el-table-column>
         <el-table-column label="用户" prop="username" align="center" width="100"></el-table-column>
@@ -60,6 +63,7 @@
         filters: {
           username: ""
         },
+        sels: [],
         loading: false,
         limit: 10,
         total: 0,
@@ -104,6 +108,54 @@
             that.search(that.page)
           }
         })
+      },
+      selsChange(sels) { 
+        this.sels = sels;
+      },
+      handleBatchRemove: function (rows) {
+        let idsIds = [];
+        rows.forEach(element =>{
+          idsIds.push(element.id)
+        })
+        let that = this;
+        let params = Object.assign({}, {ids:idsIds});
+        this.$confirm("确认删除选中记录吗?", "提示", {type: "warning"})
+          .then(() => {
+            that.loading = true;
+            API.batchRemove(params)
+              .then(
+                function (result) {
+                  that.loading = false;
+                  if (result && parseInt(result.code) === 0) {
+                    that.$message.success({
+                      showClose: true,
+                      message: "批量删除成功",
+                      duration: 1500
+                    });
+                    that.search();
+                  }
+                },
+                function (err) {
+                  that.loading = false;
+                  that.$message.error({
+                    showClose: true,
+                    message: err.toString(),
+                    duration: 2000
+                  });
+                }
+              )
+              .catch(function (error) {
+                that.loading = false;
+                console.log(error);
+                that.$message.error({
+                  showClose: true,
+                  message: "请求出现异常",
+                  duration: 2000
+                });
+              });
+          })
+          .catch(() => {
+          });
       },
     },
 
