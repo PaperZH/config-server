@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.course.model.PraiseCourseDO;
+import com.ucar.qtcassist.api.model.DO.PraiseCourseDO;
 
 public interface PraiseCourseService {
     int deleteByPrimaryKey(Long id);

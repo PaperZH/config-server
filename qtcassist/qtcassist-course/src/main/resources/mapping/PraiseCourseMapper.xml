@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ucar.qtcassist.course.dao.PraiseCourseMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.PraiseCourseDO" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.api.model.DO.PraiseCourseDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
@@ -22,11 +22,11 @@
     set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.PraiseCourseDO"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.PraiseCourseDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_praise_course (user_id, course_id, publish_date)
     values (#{userId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, #{publishDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.PraiseCourseDO"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.PraiseCourseDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_praise_course
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -57,7 +57,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.PraiseCourseDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.PraiseCourseDO" >
     update assist_praise_course
     <set >
       <if test="userId != null" >
@@ -75,7 +75,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.PraiseCourseDO" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.PraiseCourseDO" >
     update assist_praise_course
     set user_id = #{userId,jdbcType=BIGINT},
       course_id = #{courseId,jdbcType=BIGINT},

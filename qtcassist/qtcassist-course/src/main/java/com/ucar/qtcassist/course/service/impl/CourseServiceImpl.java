@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.CourseMapper;
-import com.ucar.qtcassist.api.model.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +47,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Integer getTotal() {
         return courseMapper.getTotal();
+    }
+
+    @Override
+    public Integer getTotalById(List<Long> ids) {
+        return courseMapper.getTotalById(ids);
+    }
+
+    @Override
+    public Integer getTotalByCourseName(List<Long> ids, String courseName) {
+        return courseMapper.getTotalByCourseName(ids, courseName);
     }
 
     @Override

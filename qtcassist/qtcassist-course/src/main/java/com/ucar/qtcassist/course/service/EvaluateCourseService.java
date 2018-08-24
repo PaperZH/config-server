@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.course.model.EvaluateCourseDO;
+import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
+
+import java.util.List;
 
 public interface EvaluateCourseService {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +16,8 @@ public interface EvaluateCourseService {
     int updateByPrimaryKeySelective(EvaluateCourseDO record);
 
     int updateByPrimaryKey(EvaluateCourseDO record);
+
+    Integer getTotalByCourseId(Long courseId);
+
+    List<EvaluateCourseDO> getListByCourseId(Long courseId);
 }

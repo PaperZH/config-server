@@ -1,10 +1,12 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.CourseTypeMapper;
-import com.ucar.qtcassist.course.model.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.course.service.CourseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CourseTypeServiceImpl implements CourseTypeService {
@@ -45,5 +47,10 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     @Override
     public Long getIdByTypeName(String typeName) {
         return courseTypeMapper.getIdByTypeName(typeName);
+    }
+
+    @Override
+    public List<CourseTypeDO> getAllCourseType() {
+        return courseTypeMapper.getAllCourseType();
     }
 }

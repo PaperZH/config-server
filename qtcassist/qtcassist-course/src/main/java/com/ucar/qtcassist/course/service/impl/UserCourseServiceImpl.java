@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.UserCourseMapper;
-import com.ucar.qtcassist.course.model.UserCourseDO;
+import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.course.service.UserCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

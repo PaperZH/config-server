@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.api.model;
+package com.ucar.qtcassist.api.model.VO;
 
 import java.util.Date;
 

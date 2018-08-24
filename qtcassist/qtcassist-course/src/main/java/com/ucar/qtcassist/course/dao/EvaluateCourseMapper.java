@@ -1,7 +1,9 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.course.model.EvaluateCourseDO;
+import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface EvaluateCourseMapper {
@@ -16,4 +18,8 @@ public interface EvaluateCourseMapper {
     int updateByPrimaryKeySelective(EvaluateCourseDO record);
 
     int updateByPrimaryKey(EvaluateCourseDO record);
+
+    Integer getTotalByCourseId(Long courseId);
+
+    List<EvaluateCourseDO> getListByCourseId(Long courseId);
 }
