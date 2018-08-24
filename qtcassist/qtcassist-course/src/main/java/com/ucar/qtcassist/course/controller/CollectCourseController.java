@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.course.controller;
 
+import com.ucar.qtcassist.api.CollectCourseApi;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.ResponseResult;
 import com.ucar.qtcassist.course.model.CollectCourseDO;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collectCourse")
-public class CollectCourseController {
+public class CollectCourseController implements CollectCourseApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CollectCourseController.class);
 
@@ -88,7 +89,7 @@ public class CollectCourseController {
      * @param  query (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
-    @PostMapping("/getCollectCourse")
+    @Override
     public ResponseResult getCollectCourse(@RequestBody Query query) {
         Long userId = query.getUserId();
         Integer currentPage = query.getCurrentPage();
@@ -116,7 +117,7 @@ public class CollectCourseController {
      * @param courseId 课程ID
      * @return
      */
-    @GetMapping("/addCollectCourse/{userId}/{courseId}")
+    @Override
     public ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
         CollectCourseDO collectCourse = new CollectCourseDO();
         collectCourse.setUserId(userId);
@@ -137,7 +138,7 @@ public class CollectCourseController {
      * @param //params (long userId, long[] courseId)
      * @return
      */
-    @PostMapping("/deleteCollectCourse")
+    @Override
     public ResponseResult deleteCollectCourse(@RequestBody Query query) {
         Long userId = query.getUserId();
         Long[] courseIds = query.getCourseIds();

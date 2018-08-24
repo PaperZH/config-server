@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.course.vo;
+package com.ucar.qtcassist.api.model;
 
 import com.ucar.qtcassist.api.model.CourseDO;
 

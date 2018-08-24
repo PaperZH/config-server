@@ -8,7 +8,7 @@ import com.ucar.qtcassist.course.service.*;
 import com.ucar.qtcassist.course.vo.CourseVO;
 import com.ucar.qtcassist.api.model.Query;
 import com.ucar.qtcassist.course.vo.Teacher;
-import com.ucar.qtcassist.course.vo.UserCourseVO;
+import com.ucar.qtcassist.api.model.UserCourseVO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.slf4j.Logger;
@@ -114,21 +114,31 @@ public class CourseController implements CourseApi {
     public ResponseResult getCourseList(@RequestBody Query query) {
         Integer currentPage = query.getCurrentPage();
         Integer pageSize = query.getPageSize();
-        String typeName = query.getType();
+        String type = query.getType();
 
         Integer startIndex = (currentPage - 1) * pageSize;
-        Long typeId = courseTypeService.getIdByTypeName(typeName);
 
-        List<CourseDO> courseDOList = courseService.getList(startIndex, pageSize, typeId);
+        List<CourseDO> courseDOList = null;
+        if(type.equals("default")) {
+            courseDOList = courseService.getList(startIndex, pageSize);
+        } else if (type.equals("time")) {
+            courseDOList = courseService.getListByTime(startIndex, pageSize);
+        } else if(type.equals("hot")) {
+            courseDOList = courseService.getListByPraiseNum(startIndex, pageSize);
+        } else {
+            return ResponseResult.error("查询条件有问题");
+        }
+
         List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-
         for(int i = 0; i < courseDOList.size() && i < pageSize; i++) {
             CourseDO courseDO = courseDOList.get(i);
             CourseVO courseVO = new CourseVO();
-            courseVO.setId(courseDO.getId());
-            courseVO.setCourseCover(courseDO.getCourseCover());
+            courseVO.setCourseId(courseDO.getId());
+            CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+            courseVO.setTypeName(courseType.getTypeName());
             courseVO.setCourseName(courseDO.getCourseName());
-            courseVO.setType(typeName);
+            courseVO.setCourseCover(courseDO.getCourseCover());
+            courseVO.setCourseDescription(courseDO.getCourseDescription());
             courseVO.setPraiseNum(courseDO.getPraiseNum());
             courseVO.setPublishTime(courseDO.getPublishTime());
             courseVOList.add(courseVO);
@@ -141,7 +151,7 @@ public class CourseController implements CourseApi {
      * @param courseId
      * @return
      */
-    @GetMapping("/getCourseDetail/{courseId}")
+    @Override
     public ResponseResult getCourseDetail(@PathVariable("courseId") Long courseId) {
         Map<String, Object> data = new HashMap<String, Object>();
 
@@ -169,7 +179,7 @@ public class CourseController implements CourseApi {
      * @param userCourseVO (long userId , Course course)
      * @return
      */
-    @PostMapping("/addCourse")
+    @Override
     public ResponseResult addCourse(@RequestBody UserCourseVO userCourseVO) {
         Long userId = userCourseVO.getUserId();
         CourseDO course = userCourseVO.getCourse();
@@ -206,7 +216,7 @@ public class CourseController implements CourseApi {
      * @param userCourseVO ((long userId , Course course))
      * @return
      */
-    @PostMapping("/updateCourse")
+    @Override
     public ResponseResult updateCourse(@RequestBody UserCourseVO userCourseVO) {
         Long userId = userCourseVO.getUserId();
         CourseDO course = userCourseVO.getCourse();
@@ -234,7 +244,7 @@ public class CourseController implements CourseApi {
      * @param courseId 课程ID
      * @return
      */
-    @GetMapping("/deleteCourse/{userId}/{courseId}")
+    @Override
     public ResponseResult deleteCourse(@PathVariable("userId") Long userId, @PathVariable Long courseId) {
         UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
         if(userId.equals(userCourse.getUserId())) {

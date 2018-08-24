@@ -172,7 +172,23 @@
     select
     <include refid="Base_Column_List" />
     from assist_course
-    where type_id = #{typeId, jdbcType=BIGINT} and del_flag = 1
+    where del_flag = 1
+    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+  </select>
+  <select id="getListByTime" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from assist_course
+    where del_flag = 1
+    order by publish_time desc
+    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+  </select>
+  <select id="getListByPraiseNum" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from assist_course
+    where del_flag = 1
+    order by praise_num desc
     limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
   </select>
   <select id="selectListById" resultMap="BaseResultMap" >

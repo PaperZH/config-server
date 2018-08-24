@@ -3,32 +3,34 @@ package com.ucar.qtcassist.course.vo;
 import java.util.Date;
 
 public class CourseVO {
-    private Long id;
+    private Long courseId;
 
-    private String type;
+    private String typeName;
 
     private String courseName;
 
     private String courseCover;
 
+    private String courseDescription;
+
     private Integer praiseNum;
 
     private Date publishTime;
 
-    public Long getId() {
-        return id;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeName() {
+        return typeName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getCourseName() {
@@ -45,6 +47,14 @@ public class CourseVO {
 
     public void setCourseCover(String courseCover) {
         this.courseCover = courseCover;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
     }
 
     public Integer getPraiseNum() {

@@ -20,8 +20,11 @@ public interface CourseMapper {
 
     int updateByPrimaryKey(CourseDO record);
 
-    List<CourseDO> getList(@Param("startIndex") Integer startIndex,
-                           @Param("pageSize") Integer pageSize, @Param("typeId") Long typeId);
+    List<CourseDO> getList(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    List<CourseDO> getListByTime(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    List<CourseDO> getListByPraiseNum(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 
     List<CourseDO> selectListById(@Param("ids") List<Long> ids,
                                   @Param("startIndex") Integer startIndex,

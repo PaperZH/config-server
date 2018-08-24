@@ -45,8 +45,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDO> getList(Integer firstIndex, Integer pageSize, Long typeId) {
-        return courseMapper.getList(firstIndex, pageSize, typeId);
+    public List<CourseDO> getList(Integer firstIndex, Integer pageSize) {
+        return courseMapper.getList(firstIndex, pageSize);
+    }
+
+    @Override
+    public List<CourseDO> getListByTime(Integer startIndex, Integer pageSize) {
+        return courseMapper.getListByTime(startIndex, pageSize);
+    }
+
+    @Override
+    public List<CourseDO> getListByPraiseNum(Integer startIndex, Integer pageSize) {
+        return courseMapper.getListByPraiseNum(startIndex, pageSize);
     }
 
     @Override
