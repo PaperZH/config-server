@@ -20,6 +20,11 @@ public interface PlanService {
      */
     ResponseResult getStudentPlanList(Map<String,Object> params);
 
+    /**
+     * 增加计划
+     * @param params
+     * @return
+     */
     ResponseResult addPlan (Map<String,Object> params);
     /**
      * 删除制定的计划表
@@ -27,4 +32,6 @@ public interface PlanService {
      * @return
      */
     ResponseResult deletePlan(Map<String, Object> params);
+
+
 }
