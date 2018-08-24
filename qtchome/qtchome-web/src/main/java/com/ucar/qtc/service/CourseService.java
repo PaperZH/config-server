@@ -1,27 +1,21 @@
 package com.ucar.qtc.service;
 
 import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
+@FeignClient(value = "qtcassist")
 public interface CourseService {
-    /**
-     * 获取要轮播的课程列表
-     * @return
-     */
-    ResponseResult getBannerCourse();
 
-    /**
-     * 获取要推荐的课程列表
-     * @return
-     */
-    ResponseResult getRecCourse();
 
     /**
      * 根据类型获取分页后的课程列表
      * @param params (int currentPage, int pageSize, String type)
      * @return
      */
+    @RequestMapping(value = "/course/getCourseList")
     ResponseResult getCoursesList(Map<String,Object> params);
 
     /**
@@ -29,6 +23,7 @@ public interface CourseService {
      * @param courseId
      * @return
      */
+    @RequestMapping(value = "/course/getCourseDetails")
     ResponseResult getCourseDetails(long courseId);
 
 
@@ -37,13 +32,15 @@ public interface CourseService {
      * @param params (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
+    @RequestMapping(value = "/getFavoriteCourse")
     ResponseResult queryFavoriteCourse(Map<String,Object> params);
 
     /**
      * 根据用户ID和课程ID来收藏课程.
-     * @param params
+     * @param
      * @return
      */
+    @RequestMapping(value = "/addFavoriteCourse")
     ResponseResult addFavoriteCourse(Map<String,Object> params);
 
     /**
@@ -51,6 +48,7 @@ public interface CourseService {
       * @param params (long userId, long[] courseId)
      * @return
      */
+    @RequestMapping(value = "/deleteFavoriteCourse")
     ResponseResult deleteFavoriteCourse(Map<String,Object> params);
 
 
@@ -59,6 +57,7 @@ public interface CourseService {
      * @param params (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
+    @RequestMapping(value = "/getPublishedCourse")
     ResponseResult queryPublishedCourse(Map<String,Object> params);
 
     /**
@@ -66,6 +65,7 @@ public interface CourseService {
      * @param params (long userId, long[] courseId)
      * @return
      */
+    @RequestMapping(value = "course/deletePublishedCourse")
     ResponseResult deletePublishedCourse(Map<String,Object> params);
 
     /**
@@ -73,6 +73,7 @@ public interface CourseService {
      * @param course (long userId , Course course)
      * @return
      */
+    @RequestMapping("/course/addCourse")
     ResponseResult addCourse(Map<String,Object> course);
 
     /**
@@ -80,12 +81,14 @@ public interface CourseService {
      * @param course ((long userId , Course course))
      * @return
      */
+    @RequestMapping("/course/updateCourse")
     ResponseResult updateCourse(Map<String,Object> course);
 
     /**
      * 获取课程类型列表
      * @return
      */
+    @RequestMapping(value = "/course/getCourseType")
     ResponseResult getCourseType();
 
 }

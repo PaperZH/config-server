@@ -26,9 +26,9 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="50"
+        :page-size="8"
         layout="total, prev, pager, next, jumper"
-        :total="400">
+        :total=total>
       </el-pagination>
     </div>
   </div>
@@ -51,6 +51,7 @@
       data () {
         return {
           currentPage: 1,
+          total: '',
           tableData: [{
             id: '1',
             date: '2017-06-02 14:45:00',
@@ -124,9 +125,11 @@
         },
         getCourseList () {
           const url = '/api-home/course/getList'
-          const data = {'type': this.type, 'currentPage': this.currentPage}
-          this.$store.dispatch('Post', {'url': url, 'data': data}).then(res => {
-            this.tableData = res.data.data
+          const data = {'type': this.type, 'currentPage': this.currentPage, 'pageSize': 8}
+          this.$store.dispatch('Get', {'url': url, 'data': data}).then(res => {
+            console.log(res)
+            this.tableData = res.data.re.rows
+            this.total = res.data.re.total
           })
         }
       },

@@ -1,7 +1,9 @@
 package com.ucar.qtc.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtc.service.LoginService;
 import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -14,6 +16,8 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
+//    @Autowired
+//    private LoginService loginService;
     /**
      * 用户登录请求
      * @return
@@ -30,9 +34,10 @@ public class LoginController {
      * 退出登录请求
      * @return
      */
-    @RequestMapping(value = "/logOut",method = RequestMethod.GET)
-    public String getLogOut(){
-
-        return "";
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    public ResponseResult getLogOut(@RequestParam String userId){
+        System.out.println(userId);
+        System.out.println("dao le ");
+        return ResponseResult.ok();
     }
 }

@@ -12,10 +12,21 @@ import java.util.Map;
  * @Date : 8:22 2018/8/16
  */
 
-@FeignClient(value = "front-end-service")
+@FeignClient(value = "api-home")
 public interface LoginService {
 
-
+    /**
+     * 登陆用户
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "/login")
-    ResponseResult login(Map<String,Object> user);
+   public ResponseResult login(Map<String,Object> user);
+
+    /**
+     * 用户退出.
+     * @return
+     */
+    @RequestMapping(value = "/logOut")
+   public ResponseResult logOut();
 }

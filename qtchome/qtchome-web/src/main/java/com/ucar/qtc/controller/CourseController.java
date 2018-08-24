@@ -2,7 +2,9 @@ package com.ucar.qtc.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtc.service.CourseService;
 import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/course")
 public class CourseController {
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 获取要轮播的课程，返回课程基本信息
@@ -63,25 +67,25 @@ public class CourseController {
      * @param query (pageSize,currentPage,type)
      * @return
      */
-    @RequestMapping(value = "/getList" ,produces ="application/json")
-    public ResponseResult getCoursesList(@RequestBody Map<String,Object> query){
+    @RequestMapping(value = "/getList" ,method = RequestMethod.GET)
+    public ResponseResult getCoursesList(@RequestParam Map<String,Object> query){
         System.out.println(query);
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseId",i);
-            hashMap.put("courseCover","static/image/3.jpg");
-            hashMap.put("courseName","课程名称"+i);
-            hashMap.put("type_name","课程类型"+i);
-            hashMap.put("courseDescription","课程描述说明");
-            hashMap.put("courseScore",Integer.toString(i));
-            hashMap.put("readNum",Integer.toString(10*i));
-            hashMap.put("praiseNum",Integer.toString(i+10));
-            hashMap.put("publishTime","2018-8-15");
-            hashMap.put("updateTime","2018-8-15");
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list).put("totalDataNum","200");
+        System.out.println(courseService.getCoursesList(query));
+//        System.out.println(query);
+//        ArrayList<Map> list = new ArrayList<>();
+//        for (int i = 0; i < 8; i++) {
+//            HashMap<String,Object> hashMap = new HashMap<>();
+//            hashMap.put("courseId",i);
+//            hashMap.put("courseCover","static/image/3.jpg");
+//            hashMap.put("courseName","课程名称"+i);
+//            hashMap.put("typeName","课程类型"+i);
+//            hashMap.put("courseDescription","课程描述说明");
+//            hashMap.put("praiseNum",Integer.toString(i+10));
+//            hashMap.put("publishTime","2018-8-15");
+//            list.add(hashMap);
+//        }
+//        return ResponseResult.data(list).put("totalDataNum","200");
+        return  courseService.getCoursesList(query);
     }
 
     /**
@@ -129,8 +133,8 @@ public class CourseController {
      * 根据查询条件来获取收藏的课程
      * @return
      */
-    @RequestMapping(value = "/getFavoriteCourse")
-    ResponseResult getFavoriteCourse(@RequestBody Map<String,Object> params){
+    @RequestMapping(value = "/getFavoriteCourse",method = RequestMethod.GET)
+    ResponseResult getFavoriteCourse(@RequestParam Map<String,Object> params){
         System.out.println(params);
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -164,7 +168,7 @@ public class CourseController {
      * 根据条件批量删除收藏的课程
      * @return
      */
-    @RequestMapping(value = "/deleteFavoriteCourse",produces = "application/json")
+    @RequestMapping(value = "/deleteFavoriteCourse")
     ResponseResult deleteFavoriteCourse(@RequestBody Map<String,Object> params){
         System.out.println(params);
         System.out.println(JSON.toJSONString(params));
@@ -182,8 +186,8 @@ public class CourseController {
      * 根据查询条件来获取发布的课程
      * @return
      */
-    @RequestMapping(value = "/getPublishedCourse")
-    ResponseResult getPublishedCourse(@RequestBody Map<String,Object> params){
+    @RequestMapping(value = "/getPublishedCourse", method = RequestMethod.GET)
+    ResponseResult getPublishedCourse(@RequestParam Map<String,Object> params){
         System.out.println(params);
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
@@ -267,7 +271,7 @@ public class CourseController {
      * 获取课程类型列表
      * @return
      */
-    @RequestMapping(value = "/getCourseType")
+    @RequestMapping(value = "/getCourseType",method = RequestMethod.GET)
     ResponseResult getCourseType(){
         System.out.println("到了");
         ArrayList<Map> list = new ArrayList<>();
