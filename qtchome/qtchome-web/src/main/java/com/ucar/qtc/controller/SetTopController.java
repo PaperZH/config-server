@@ -1,4 +1,7 @@
 package com.ucar.qtc.controller;
+import com.ucar.qtc.service.SetTopService;
+import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/setTop")
 public class SetTopController {
-
+    @Autowired
+    private SetTopService setTopService;
     /**
-     * 首页图片推送
+     * 首页轮播图
      */
-      @RequestMapping(value = "/topImg",method = RequestMethod.GET)
-      public String  getTopImg(){
-          return "";
+      @RequestMapping(value = "/getBanner",method = RequestMethod.GET)
+      public ResponseResult getBanner(){
+          System.out.println("......");
+          System.out.println(setTopService.getBanner());
+          return  setTopService.getBanner();
       }
 
     /**
