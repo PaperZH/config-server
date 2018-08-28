@@ -16,16 +16,16 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" size="small">查询</el-button>
-        <el-button type="primary" @click="onAddPlan" size="small" >添加</el-button>
+        <el-button type="primary" @click="onAddPlan()" size="small" >添加</el-button>
       </el-form-item>
     </el-form>
     <div style="border: 1px solid #dcdfe6;">
       <el-row :gutter="24" style="margin-left: 88px;margin-right: 123px; margin-top: 10px;">
         <el-col :span="4" v-for="(o, index) in indexList" :key="index" >
-          <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?styleObject:''" >
-            <img src="static/image/5.jpg" class="image" @click="addStyleClick(o)">
+          <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject" >
+            <img :src=o.studentAvatar class="image" @click="addStyleClick(o)">
             <div style="padding: 14px;text-align: center">
-              <span>{{o.name}}</span>
+              <span>{{o.studentName}}</span>
             </div>
           </el-card>
         </el-col>
@@ -38,50 +38,52 @@
         style="width: 100%">
         <el-table-column
           fixed
-          prop="date"
+          prop="planTitle"
           label="计划名称"
           width="250">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="studentName"
           label="学员"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="province"
+          prop="startDate"
           label="开始时间"
           width="220">
         </el-table-column>
         <el-table-column
-          prop="city"
+          prop="endDate"
           label="结束时间"
           width="220">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="courseName"
           label="课程"
           width="280">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="studentGetScore"
           label="评分"
           width="100">
         </el-table-column>
         <el-table-column
-          prop="zip"
-          label="完成度"
+          prop="isFinished"
+         :formatter="formatterFinished"
+          label="完成状态"
           width="100">
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
+              @click="handleClick(scope.row,scope.$index)"
               size="mini"
               type="danger"
               >删除</el-button>
           </template>
         </el-table-column>
-
       </el-table>
+      <dialog-plan  :show.sync="show" v-bind:message="message" title="制定学习计划" v-bind:students="this.indexList"></dialog-plan>
       <div class="block" style="text-align: right">
         <el-pagination
           @size-change="handleSizeChange"
@@ -90,7 +92,7 @@
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
           layout="total, prev, pager, next, jumper"
-          :total="400">
+          :total=total>
         </el-pagination>
       </div>
     </div>
@@ -100,7 +102,11 @@
 </template>
 
 <script>
+    import dialogplan from '@/pages/content/dialog/dialogplan'  // 添加计划弹框
     export default {
+      components: {
+        'dialog-plan': dialogplan
+      },
       data () {
         return {
           show: false,
@@ -119,65 +125,80 @@
             name: '',
             date: ''
           },
+          total: 0,
           currentDate: '2018-07-25 10:23',
           currentPage4: 1,
-          tableData: [{
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }]
+          tableData: [],
+          queryParams: {
+            userId: '',
+            planName: '',
+            startDate: '',
+            endDate: '',
+            currentPage: 1,
+            pageSize: 5
+          }
         }
       },
       methods: {
         onSubmit () {
           console.log('submit!')
+          this.queryParams.planName = this.formInline.name
+          this.queryParams.startDate = this.formInline.date[0]
+          this.queryParams.endDate = this.formInline.date[1]
+          this.queryParams.currentPage = 1
+          this.getTeacherPlan()
         },
         onAddPlan () {
           this.show = true
         },
-        handleClick (row) {
+        handleClick (row, index) {
+          console.log('delete')
           console.log(row)
+          console.log(index)
+          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.planId}}).then(res => {
+            this.tableData.splice(index, 1)
+            console.log(res)
+          })
         },
         handleSizeChange (val) {
           console.log(`每页 ${val} 条`)
         },
         handleCurrentChange (val) {
+          this.queryParams.currentPage = val
+          this.getTeacherPlan()
           console.log(`当前页: ${val}`)
         },
         getMes (data) {
           console.log(data)
         },
         addStyleClick (o) {
+          console.log(o)
           if (o.style) {
             o.style = false
           } else {
             o.style = true
           }
+        },
+        formatterFinished (row, column, cellValue, index) {
+          if (cellValue === true) {
+            return '已完成'
+          } else {
+            return '未完成'
+          }
+        },
+        getTeacherPlan () {
+          console.log(this.queryParams)
+          this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
+            console.log(res)
+            this.tableData = res.data.data
+            this.indexList = res.data.students
+            this.total = res.data.total
+          })
         }
+      },
+      mounted () {
+        this.queryParams.userId = this.$store.getters.userId
+        this.getTeacherPlan()
       },
       name: 'drawupplan'
     }

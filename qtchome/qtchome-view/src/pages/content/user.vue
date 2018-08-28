@@ -8,6 +8,7 @@
         <el-tab-pane label="我发布的课程"name="releasecourse"></el-tab-pane>
         <el-tab-pane label="发布课程" name="release"></el-tab-pane>
         <el-tab-pane label="制定计划" name="drawupplan"></el-tab-pane>
+        <el-tab-pane label="发布计划" name="distributePlan"></el-tab-pane>
         <el-tab-pane label="我的计划" name="myplan"></el-tab-pane>
       </el-tabs>
     </div>
