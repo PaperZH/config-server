@@ -1,3 +1,6 @@
+/**
+ * 日志相关的api
+ */
 import * as API from './'
 
 export default {

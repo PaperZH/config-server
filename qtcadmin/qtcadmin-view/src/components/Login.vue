@@ -16,77 +16,77 @@
 </template>
 
 <script>
-import API from "../api/api_user";
+import API from '../api/api_user'
 
 export default {
-  data() {
+  data () {
     return {
       loading: false,
       account: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       },
       rules: {
         username: [
-          { required: true, message: "请输入账号", trigger: "blur" }
+          { required: true, message: '请输入账号', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
       checked: true
-    };
+    }
   },
   methods: {
-    handleLogin() {
-      let that = this;
+    handleLogin () {
+      let that = this
       this.$refs.AccountFrom.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           let loginParams = {
             username: this.account.username,
             password: this.account.password
-          };
+          }
           API.login(loginParams)
             .then(
-              function(result) {
-                that.loading = false;
+              function (result) {
+                that.loading = false
                 if (result && result.code === 0) {
-                  localStorage.setItem("access-token", result.token);
-                  localStorage.setItem("menus", JSON.stringify(result.router));
-                  localStorage.setItem("perms",JSON.stringify(result.perms))
-                  that.$router.push({ path: "/" });
+                  localStorage.setItem('access-token', result.token)
+                  localStorage.setItem('menus', JSON.stringify(result.router))
+                  localStorage.setItem('perms', JSON.stringify(result.perms))
+                  that.$router.push({ path: '/' })
                 } else {
                   that.$message.error({
                     showClose: true,
-                    message: result.msg || "登录失败",
+                    message: result.msg || '登录失败',
                     duration: 2000
-                  });
+                  })
                 }
               },
-              function(err) {
-                that.loading = false;
+              function (err) {
+                that.loading = false
                 that.$message.error({
                   showClose: true,
                   message: err.toString(),
                   duration: 2000
-                });
+                })
               }
             )
-            .catch(function(error) {
-              that.loading = false;
-              console.log(error);
+            .catch(function (error) {
+              that.loading = false
+              console.log(error)
               that.$message.error({
                 showClose: true,
-                message: "请求出现异常",
+                message: '请求出现异常',
                 duration: 2000
-              });
-            });
+              })
+            })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style>
 body {

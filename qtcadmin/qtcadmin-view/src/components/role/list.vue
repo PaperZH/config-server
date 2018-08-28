@@ -42,8 +42,8 @@
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
         <el-pagination layout="total,sizes, prev,pager, next,jumper" background
-              @size-change="handleSizeChange"  
-              @current-change="handleCurrentChange" 
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
               :page-size="limit"
               :total="total"
               :page-sizes="[10, 20, 30]">
@@ -109,270 +109,264 @@
   </el-row>
 </template>
 <script>
-  import util from '../../common/util'
-  import API from '../../api/api_role';
-  import MENU_API from '../../api/api_menu';
+import API from '../../api/api_role'
+import MENU_API from '../../api/api_menu'
 
-  export default {
-    data() {
-      return {
-        filters: {
-          roleName: ''
-        },
-        role: [],
-        total: 0,
-        page: 1,
-        limit: 10,
-        loading: false,
-        sels: [], //列表选中列
-        menus: [],
-        menuIds: [],//角色拥有的权限
-        treeProps: {
-          children: 'children',
-          label: 'text'
-        },
+export default {
+  data () {
+    return {
+      filters: {
+        roleName: ''
+      },
+      role: [],
+      total: 0,
+      page: 1,
+      limit: 10,
+      loading: false,
+      sels: [], // 列表选中列
+      menus: [],
+      menuIds: [], // 角色拥有的权限
+      treeProps: {
+        children: 'children',
+        label: 'text'
+      },
 
-        //编辑相关数据
-        editFormVisible: false,//编辑界面是否显示
-        editFormRules: {
-          roleName: [
-            {required: true, message: '请输入角色名', trigger: 'blur'}
-          ],  
-          roleDesc: [
-            {required: true, message: '请输入角色描述', trigger: 'blur'}
-          ]
-        },
-        editForm: {
-          id: 0,
-          roleName: '',
-          roleDesc: '',
-          remark: ''
-        },
+      // 编辑相关数据
+      editFormVisible: false, // 编辑界面是否显示
+      editFormRules: {
+        roleName: [
+          {required: true, message: '请输入角色名', trigger: 'blur'}
+        ],
+        roleDesc: [
+          {required: true, message: '请输入角色描述', trigger: 'blur'}
+        ]
+      },
+      editForm: {
+        id: 0,
+        roleName: '',
+        roleDesc: '',
+        remark: ''
+      },
 
-        //新增相关数据
-        addFormVisible: false,//新增界面是否显示
-        addLoading: false,
-        addFormRules: {
-          roleName: [
-            {required: true, message: '请输入角色名', trigger: 'blur'}
-          ],  
-          roleDesc: [
-            {required: true, message: '请输入角色描述', trigger: 'blur'}
-          ]
-        },
-        addForm: {
-          roleName: '',
-          roleDesc: '',
-          remark: ''
-        },
-
+      // 新增相关数据
+      addFormVisible: false, // 新增界面是否显示
+      addLoading: false,
+      addFormRules: {
+        roleName: [
+          {required: true, message: '请输入角色名', trigger: 'blur'}
+        ],
+        roleDesc: [
+          {required: true, message: '请输入角色描述', trigger: 'blur'}
+        ]
+      },
+      addForm: {
+        roleName: '',
+        roleDesc: '',
+        remark: ''
       }
+    }
+  },
+  methods: {
+    handleSizeChange (val) {
+      this.limit = val
+      this.search()
     },
-    methods: {
-      handleSizeChange(val) {
-        this.limit = val;
-        this.search();
-      },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.search();
-      },
-      handleSearch() {
-        this.total = 0;
-        this.page = 1;
-        this.search();
-      },
-      search: function () {
-        let that = this;
-        let params = {
-          page: that.page,
-          limit: 10,
-          roleName: that.filters.roleName
-        };
+    handleCurrentChange (val) {
+      this.page = val
+      this.search()
+    },
+    handleSearch () {
+      this.total = 0
+      this.page = 1
+      this.search()
+    },
+    search: function () {
+      let that = this
+      let params = {
+        page: that.page,
+        limit: 10,
+        roleName: that.filters.roleName
+      }
 
-        that.loading = true;
-        API.findList(params).then(function (result) {
-          that.loading = false;
-          if (result && result.rows) {
-            that.total = result.total;
-            that.role = result.rows;
+      that.loading = true
+      API.findList(params).then(function (result) {
+        that.loading = false
+        if (result && result.rows) {
+          that.total = result.total
+          that.role = result.rows
+        }
+      }, function (err) {
+        that.loading = false
+        that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+      }).catch(function (error) {
+        that.loading = false
+        console.log(error)
+        that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+      })
+    },
+    selsChange: function (sels) {
+      this.sels = sels
+    },
+    // 删除
+    removeRole: function (index, row) {
+      let that = this
+      this.$confirm('确认删除该记录吗?', '提示', {type: 'warning'}).then(() => {
+        that.loading = true
+        API.removeRole({id: row.roleId}).then(
+          function (result) {
+            that.loading = false
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({
+                showClose: true,
+                message: '删除成功',
+                duration: 1500
+              })
+              that.search()
+            }
+          },
+          function (err) {
+            that.loading = false
+            that.$message.error({
+              showClose: true,
+              message: err.toString(),
+              duration: 2000
+            })
           }
-        }, function (err) {
-          that.loading = false;
-          that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-        }).catch(function (error) {
-          that.loading = false;
-          console.log(error);
-          that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-        });
-      },
-      selsChange: function (sels) {
-        this.sels = sels;
-      },
-      //删除
-      removeRole: function (index, row) {
-        let that = this;
-        this.$confirm('确认删除该记录吗?', '提示', {type: 'warning'}).then(() => {
-          that.loading = true;
-          API.removeRole({id: row.roleId}) 
-          .then(
-                function (result) {
-                  that.loading = false;
-                  if (result && parseInt(result.code) === 0) {
-                    that.$message.success({
-                      showClose: true,
-                      message: "删除成功",
-                      duration: 1500
-                    });
-                    that.search();
-                  }
-                },
-                function (err) {
-                  that.loading = false;
-                  that.$message.error({
-                    showClose: true,
-                    message: err.toString(),
-                    duration: 2000
-                  });
-                }
-              )
-              .catch(function (error) {
-                that.loading = false;
-                console.log(error);
-                that.$message.error({
-                  showClose: true,
-                  message: "请求出现异常",
-                  duration: 2000
-                });
-              });
-          })
-          .catch(() => {
-          });
-      },
-      //显示编辑界面
-      showEditDialog: function (index, row) {
-        this.editFormVisible = true;
-        this.editForm = Object.assign({}, row);
-        let that = this
-        MENU_API.menuIdsByRoleId({roleId: row.roleId}).then(function (res) {
-          that.setMenuIds(res)
-          that.$nextTick(function () {
-            MENU_API.menus('').then(function (result) {
-              that.menus = result
+        )
+          .catch(function (error) {
+            that.loading = false
+            console.log(error)
+            that.$message.error({
+              showClose: true,
+              message: '请求出现异常',
+              duration: 2000
             })
           })
+      })
+        .catch(() => {
         })
-      },
-      //编辑
-      editSubmit: function () {
-        let that = this;
-        this.$refs.editForm.validate((valid) => {
-          if (valid) {
-            this.loading = true;
-            let para = Object.assign({}, this.editForm);
-            para.menuIds = that.getMenuIds()
-            API.update(para.id, para).then(function (result) {
-              that.loading = false;
-              if (result && parseInt(result.code) === 0) {
-                that.$message.success({showClose: true, message: '修改成功', duration: 2000});
-                that.$refs['editForm'].resetFields();
-                that.editFormVisible = false;
-                that.search();
-              } else {
-                that.$message.error({showClose: true, message: '修改失败', duration: 2000});
-              }
-            }, function (err) {
-              that.loading = false;
-              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-            }).catch(function (error) {
-              that.loading = false;
-              console.log(error);
-              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-            });
-          }
-        });
-      },
-      showAddDialog: function () {
-        this.addFormVisible = true;
-        this.addForm = {};
-        let that = this
-        MENU_API.menus('').then(function (result) {
-          that.menus = result
+    },
+    // 显示编辑界面
+    showEditDialog: function (index, row) {
+      this.editFormVisible = true
+      this.editForm = Object.assign({}, row)
+      let that = this
+      MENU_API.menuIdsByRoleId({roleId: row.roleId}).then(function (res) {
+        that.setMenuIds(res)
+        that.$nextTick(function () {
+          MENU_API.menus('').then(function (result) {
+            that.menus = result
+          })
         })
-
-      },
-      //新增
-      addSubmit: function () {
-        let that = this;
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            that.loading = true;
-            let para = Object.assign({}, this.addForm);
-            para.menuIds = that.getMenuIds()
-            API.add(para).then(function (result) {
-              that.loading = false;
-              if (result && parseInt(result.code) === 0) {
-                that.$message.success({showClose: true, message: '新增成功', duration: 2000});
-                that.$refs['addForm'].resetFields();
-                that.addFormVisible = false;
-                that.search();
-              } else {
-                that.$message.error({showClose: true, message: '修改失败', duration: 2000});
-              }
-            }, function (err) {
-              that.loading = false;
-              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-            }).catch(function (error) {
-              that.loading = false;
-              console.log(error);
-              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-            });
-
-          }
-        });
-      },
-      //批量删除
-      batchDeleteBook: function () {
-        let ids = this.sels.map(item => item.id).toString();
-        let that = this;
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        }).then(() => {
-          that.loading = true;
-          API.removeBatch(ids).then(function (result) {
-            that.loading = false;
-            if (result && parseInt(result.errcode) === 0) {
-              that.$message.success({showClose: true, message: '删除成功', duration: 1500});
-              that.search();
+      })
+    },
+    // 编辑
+    editSubmit: function () {
+      let that = this
+      this.$refs.editForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          let para = Object.assign({}, this.editForm)
+          para.menuIds = that.getMenuIds()
+          API.update(para.id, para).then(function (result) {
+            that.loading = false
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({showClose: true, message: '修改成功', duration: 2000})
+              that.$refs['editForm'].resetFields()
+              that.editFormVisible = false
+              that.search()
+            } else {
+              that.$message.error({showClose: true, message: '修改失败', duration: 2000})
             }
           }, function (err) {
-            that.loading = false;
-            that.$message.error({showClose: true, message: err.toString(), duration: 2000});
+            that.loading = false
+            that.$message.error({showClose: true, message: err.toString(), duration: 2000})
           }).catch(function (error) {
-            that.loading = false;
-            console.log(error);
-            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-          });
-        }).catch(() => {
-
-        });
-      },
-      //获取选中、半选中节点
-      getMenuIds: function () {
-        return this.$refs.menuAddTree.getCheckedKeys().concat(this.$refs.menuAddTree.getHalfCheckedKeys())
-      },
-      /**
-       * (keys, leafOnly) 接收两个参数，1. 勾选节点的 key 的数组 2. boolean 类型的参数，若为 true 则仅设置叶子节点的选中状态，默认值为 false
-       */
-      setMenuIds: function (keys) {
-        this.$refs.menuAddTree.setCheckedKeys(keys, true)
-      }
+            that.loading = false
+            console.log(error)
+            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+          })
+        }
+      })
     },
-    mounted() {
-      this.handleSearch()
+    showAddDialog: function () {
+      this.addFormVisible = true
+      this.addForm = {}
+      let that = this
+      MENU_API.menus('').then(function (result) {
+        that.menus = result
+      })
+    },
+    // 新增
+    addSubmit: function () {
+      let that = this
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          let para = Object.assign({}, this.addForm)
+          para.menuIds = that.getMenuIds()
+          API.add(para).then(function (result) {
+            that.loading = false
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({showClose: true, message: '新增成功', duration: 2000})
+              that.$refs['addForm'].resetFields()
+              that.addFormVisible = false
+              that.search()
+            } else {
+              that.$message.error({showClose: true, message: '修改失败', duration: 2000})
+            }
+          }, function (err) {
+            that.loading = false
+            that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+          }).catch(function (error) {
+            that.loading = false
+            console.log(error)
+            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+          })
+        }
+      })
+    },
+    // 批量删除
+    batchDeleteBook: function () {
+      let ids = this.sels.map(item => item.id).toString()
+      let that = this
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        that.loading = true
+        API.removeBatch(ids).then(function (result) {
+          that.loading = false
+          if (result && parseInt(result.errcode) === 0) {
+            that.$message.success({showClose: true, message: '删除成功', duration: 1500})
+            that.search()
+          }
+        }, function (err) {
+          that.loading = false
+          that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+        }).catch(function (error) {
+          that.loading = false
+          console.log(error)
+          that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+        })
+      }).catch(() => {
 
+      })
+    },
+    // 获取选中、半选中节点
+    getMenuIds: function () {
+      return this.$refs.menuAddTree.getCheckedKeys().concat(this.$refs.menuAddTree.getHalfCheckedKeys())
+    },
+    /**
+     * (keys, leafOnly) 接收两个参数，1. 勾选节点的 key 的数组 2. boolean 类型的参数，若为 true 则仅设置叶子节点的选中状态，默认值为 false
+     */
+    setMenuIds: function (keys) {
+      this.$refs.menuAddTree.setCheckedKeys(keys, true)
     }
+  },
+  mounted () {
+    this.handleSearch()
   }
+}
 </script>
 
 <style scoped>

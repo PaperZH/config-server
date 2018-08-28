@@ -64,170 +64,163 @@
 </template>
 
 <script>
-  /**
+import treeTable from '@/components/TreeTable'
+import API from '../../api/api_dept'
 
-   */
-  import treeTable from '@/components/TreeTable'
-  import API from '../../api/api_dept'
-
-  export default {
-    name: 'treeTableDemo',
-    components: {treeTable},
-    data() {
-      return {
-        loading: false,
-        addLoading: false,
-        permsItems: [
-          {key: "get", value: "get"},
-          {key: "post", value: "post"},
-          {key: "put", value: "put"},
-          {key: "delete", value: "delete"}
-        ],
-        columns: [
-          {
-            text: '名称',
-            value: 'text',
-            width: 200
-          },
-        ],
-        deptdata: [],
-        editFormVisible: false,
-        editForm: {},
-        editFormRules: {},
-        addFormVisible: false,
-        addForm: {}
-      }
+export default {
+  name: 'treeTableDemo',
+  components: {treeTable},
+  data () {
+    return {
+      loading: false,
+      addLoading: false,
+      permsItems: [
+        {key: 'get', value: 'get'},
+        {key: 'post', value: 'post'},
+        {key: 'put', value: 'put'},
+        {key: 'delete', value: 'delete'}
+      ],
+      columns: [
+        {
+          text: '名称',
+          value: 'text',
+          width: 200
+        }
+      ],
+      deptdata: [],
+      editFormVisible: false,
+      editForm: {},
+      editFormRules: {},
+      addFormVisible: false,
+      addForm: {}
+    }
+  },
+  methods: {
+    search: function () {
+      let that = this
+      API.depts().then(
+        function (result) {
+          that.deptdata = result
+        }
+      )
     },
-    methods: {
-      search: function () {
-        let that = this
-        API.depts().then(
-          function (result) {
-            that.deptdata = result
-           
-          }
-
-        )
-      },
-      showAddDialog: function (parentId) {
-        this.addForm.parentId = parentId
-        this.addFormVisible = true
-      },
-      showEditDialog: function (index, row) {
-        this.editFormVisible = true
-        this.editForm = Object.assign({}, row.object)
-      },
-      editSubmit: function () {
-        let that = this;
-        this.$refs.editForm.validate(valid => {
-          if (valid) {
-            that.loading = true;
-            let params = Object.assign({}, that.editForm);
-            // params.perms = JSON.stringify(params.perms)
-            API.editDept(params).then(function (result) {
-              if (0 === result.code) {
-                that.loading = false;
-                that.$message;
-                that.$message.success({
-                  showClose: true,
-                  message: "修改成功",
-                  duration: 2000
-                });
-                that.$refs["editForm"].resetFields();
-                that.editFormVisible = false;
-                that.search();
-              } else {
+    showAddDialog: function (parentId) {
+      this.addForm.parentId = parentId
+      this.addFormVisible = true
+    },
+    showEditDialog: function (index, row) {
+      this.editFormVisible = true
+      this.editForm = Object.assign({}, row.object)
+    },
+    editSubmit: function () {
+      let that = this
+      this.$refs.editForm.validate(valid => {
+        if (valid) {
+          that.loading = true
+          let params = Object.assign({}, that.editForm)
+          // params.perms = JSON.stringify(params.perms)
+          API.editDept(params).then(function (result) {
+            if (result.code === 0) {
+              that.loading = false
+              that.$message.success({
+                showClose: true,
+                message: '修改成功',
+                duration: 2000
+              })
+              that.$refs['editForm'].resetFields()
+              that.editFormVisible = false
+              that.search()
+            } else {
+              that.$message.error({
+                showClose: true,
+                message: '修改失败',
+                duration: 2000
+              })
+              that.editFormVisible = false
+            }
+          }, function (err) {
+            that.loading = false
+            that.editFormVisible = false
+            that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+          }).catch(function (error) {
+            that.loading = false
+            console.log(error)
+            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+          })
+        }
+      })
+    },
+    // 新增
+    addSubmit: function () {
+      let that = this
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          let para = Object.assign({}, this.addForm)
+          API.addDept(para).then(function (result) {
+            that.loading = false
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({showClose: true, message: '新增成功', duration: 2000})
+              that.$refs['addForm'].resetFields()
+              that.addFormVisible = false
+              that.search()
+            } else {
+              that.$message.error({showClose: true, message: '新增失败', duration: 2000})
+            }
+          }, function (err) {
+            that.loading = false
+            that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+          }).catch(function (error) {
+            that.loading = false
+            console.log(error)
+            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+          })
+        }
+      })
+    },
+    remove: function (index, row) {
+      let that = this
+      this.$confirm('确认删除该记录吗?', '提示', {type: 'warning'})
+        .then(() => {
+          that.loading = true
+          API.removeDept({id: row.id})
+            .then(
+              function (result) {
+                that.loading = false
+                if (result && parseInt(result.code) === 0) {
+                  that.$message.success({
+                    showClose: true,
+                    message: '删除成功',
+                    duration: 1500
+                  })
+                  that.search()
+                }
+              },
+              function (err) {
+                that.loading = false
                 that.$message.error({
                   showClose: true,
-                  message: "修改失败",
+                  message: err.toString(),
                   duration: 2000
                 })
-                that.editFormVisible = false
               }
-            }, function (err) {
-              that.loading = false;
-              that.editFormVisible = false
-              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-            }).catch(function (error) {
-              that.loading = false;
-              console.log(error);
-              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-            });
-          }
-        });
-      },
-      //新增
-      addSubmit: function () {
-        let that = this;
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            that.loading = true;
-            let para = Object.assign({}, this.addForm);
-            API.addDept(para).then(function (result) {
-              that.loading = false;
-              if (result && parseInt(result.code) === 0) {
-                that.$message.success({showClose: true, message: '新增成功', duration: 2000});
-                that.$refs['addForm'].resetFields();
-                that.addFormVisible = false;
-                that.search();
-              } else {
-                that.$message.error({showClose: true, message: '新增失败', duration: 2000});
-              }
-            }, function (err) {
-              that.loading = false;
-              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-            }).catch(function (error) {
-              that.loading = false;
-              console.log(error);
-              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-            });
-
-          }
-        });
-      },
-      remove: function (index, row) {
-        let that = this;
-        this.$confirm("确认删除该记录吗?", "提示", {type: "warning"})
-          .then(() => {
-            that.loading = true;
-            API.removeDept({id: row.id})
-              .then(
-                function (result) {
-                  that.loading = false;
-                  if (result && parseInt(result.code) === 0) {
-                    that.$message.success({
-                      showClose: true,
-                      message: "删除成功",
-                      duration: 1500
-                    });
-                    that.search();
-                  }
-                },
-                function (err) {
-                  that.loading = false;
-                  that.$message.error({
-                    showClose: true,
-                    message: err.toString(),
-                    duration: 2000
-                  });
-                }
-              )
-              .catch(function (error) {
-                that.loading = false;
-                console.log(error);
-                that.$message.error({
-                  showClose: true,
-                  message: "请求出现异常",
-                  duration: 2000
-                });
-              });
-          })
-          .catch(() => {
-          });
-      }
-    },
-    mounted() {
-      this.search();
+            )
+            .catch(function (error) {
+              that.loading = false
+              console.log(error)
+              that.$message.error({
+                showClose: true,
+                message: '请求出现异常',
+                duration: 2000
+              })
+            })
+        })
+        .catch(() => {
+        })
     }
+  },
+  mounted () {
+    this.search()
   }
+}
 </script>

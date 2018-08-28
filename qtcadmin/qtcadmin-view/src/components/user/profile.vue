@@ -47,115 +47,114 @@
 </template>
 
 <script>
-  import API from '../../api/api_user';
-  import {bus} from '../../bus.js'
-  import FILE_API from '../../api/api_file';
+import API from '../../api/api_user'
+import FILE_API from '../../api/api_file'
 
-  export default {
-    data() {
-      return {
-        loading: false,
-        form: {
-          useranme: '',
-          nickname: '',
-          name: '',
-          userno: '',
-          email: '',
-          avatar: '',
-          userId:''
-        },
-        rules: {
-          nickname: [
-            {required: true, message: '请输入昵称', trigger: 'blur'}
-          ]
-        },
-      }
-    },
-    methods: {
-      handleSaveProfile() {
-        let that = this;
-        that.$refs.form.validate((valid) => {
-          if (valid) {
-            that.loading = true;
-            let args = {
-              userId: that.form.userId,
-              nickname: that.form.nickname,
-              avatar: that.form.avatar
-            };
-            API.changeProfile(args).then(function (result) {
-              if (0 === result.code) {
-                location.reload()
-                that.$message.success({
-                  showClose: true,
-                  message: "修改成功",
-                  duration: 2000
-                })
-              } else {
-                that.$message.error({
-                  showClose: true,
-                  message: "修改失败",
-                  duration: 2000
-                })
-              }
-            })
-          }
-        })
+export default {
+  data () {
+    return {
+      loading: false,
+      form: {
+        useranme: '',
+        nickname: '',
+        name: '',
+        userno: '',
+        email: '',
+        avatar: '',
+        userId: ''
       },
-      beforeAvatarUpload(file) {
-        let that = this
-        const extension = file.name.split('.')[1] === 'jpg'
-        const extension2 = file.name.split('.')[1] === 'jpeg'
-        const extension3 = file.name.split('.')[1] === 'png'
-        const extension4 = file.name.split('.')[1] === 'gif'
-        const isLt2M = file.size / 1024 / 1024 < 5;
-
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-          return false
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-          return false;
-        }
-
-        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
-        fd.append('file', file);
-        FILE_API.uploadFile(fd).then(function (result) {
-          if (result && parseInt(result.code) === 0) {
-            that.form.avatar = result.fileUrl
-            that.$message.success({
-              showClose: true,
-              message: "上传成功",
-              duration: 2000
-            });
-          } else {
-            that.$message.error({
-              showClose: true,
-              message: "上传失败",
-              duration: 2000
-            });
-          }
-        });
-        return false;
-      },
-
-      handleAvatarSuccess(res, file) {
-          console.log(res);
+      rules: {
+        nickname: [
+          {required: true, message: '请输入昵称', trigger: 'blur'}
+        ]
       }
-    },
-    mounted() {
-      let that = this;
-      API.tokenUser().then(function (result) {
-        that.form.useranme = result.username;
-        that.form.nickname = result.nickname;
-        that.form.email = result.email;
-        that.form.name = result.name;
-        that.form.userno = result.userno;
-        that.form.avatar = result.avatar;
-        that.form.userId = result.id;
-      })
     }
+  },
+  methods: {
+    handleSaveProfile () {
+      let that = this
+      that.$refs.form.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          let args = {
+            userId: that.form.userId,
+            nickname: that.form.nickname,
+            avatar: that.form.avatar
+          }
+          API.changeProfile(args).then(function (result) {
+            if (result.code === 0) {
+              location.reload()
+              that.$message.success({
+                showClose: true,
+                message: '修改成功',
+                duration: 2000
+              })
+            } else {
+              that.$message.error({
+                showClose: true,
+                message: '修改失败',
+                duration: 2000
+              })
+            }
+          })
+        }
+      })
+    },
+    beforeAvatarUpload (file) {
+      let that = this
+      const extension = file.name.split('.')[1] === 'jpg'
+      const extension2 = file.name.split('.')[1] === 'jpeg'
+      const extension3 = file.name.split('.')[1] === 'png'
+      const extension4 = file.name.split('.')[1] === 'gif'
+      const isLt2M = file.size / 1024 / 1024 < 5
+
+      if (!extension && !extension2 && !extension3 && !extension4) {
+        console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+        return false
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+        return false
+      }
+
+      let fd = new FormData()
+      fd.append('file', file)
+      FILE_API.uploadFile(fd).then(function (result) {
+        if (result && parseInt(result.code) === 0) {
+          that.form.avatar = result.fileUrl
+          that.$message.success({
+            showClose: true,
+            message: '上传成功',
+            duration: 2000
+          })
+        } else {
+          that.$message.error({
+            showClose: true,
+            message: '上传失败',
+            duration: 2000
+          })
+        }
+      })
+      return false
+    },
+
+    handleAvatarSuccess (res, file) {
+      console.log(res)
+    }
+  },
+  mounted () {
+    let that = this
+    API.tokenUser().then(function (result) {
+      that.form.useranme = result.username
+      that.form.nickname = result.nickname
+      that.form.email = result.email
+      that.form.name = result.name
+      that.form.userno = result.userno
+      that.form.avatar = result.avatar
+      that.form.userId = result.id
+    })
   }
+}
 </script>
 
 <style scoped>
