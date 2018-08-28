@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.api.model.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,6 +19,10 @@ public interface CourseService {
     int updateByPrimaryKey(CourseDO record);
 
     Integer getTotal();
+
+    Integer getTotalById(List<Long> ids);
+
+    Integer getTotalByCourseName(List<Long> ids, String courseName);
 
     List<CourseDO> getList(Integer startIndex, Integer pageSize);
 

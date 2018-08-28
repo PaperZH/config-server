@@ -1,7 +1,8 @@
 package com.ucar.qtcassist.course.service;
 
 
-import com.ucar.qtcassist.api.model.ResponseResult;
+import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.course.model.UserDO;
 import feign.Headers;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "api-admin")
 public interface UserFeginClient {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    ResponseResult getUserById(Long id);
+    Result<UserDO> getUserById(Long id);
 }

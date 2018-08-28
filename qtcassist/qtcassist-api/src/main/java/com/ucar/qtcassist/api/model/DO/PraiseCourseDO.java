@@ -1,8 +1,8 @@
-package com.ucar.qtcassist.course.model;
+package com.ucar.qtcassist.api.model.DO;
 
 import java.util.Date;
 
-public class CollectCourseDO {
+public class PraiseCourseDO {
     private Long id;
 
     private Long userId;

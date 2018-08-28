@@ -1,10 +1,12 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.EvaluateCourseMapper;
-import com.ucar.qtcassist.course.model.EvaluateCourseDO;
+import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.course.service.EvaluateCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EvaluateCourseServiceImpl  implements EvaluateCourseService {
@@ -40,5 +42,15 @@ public class EvaluateCourseServiceImpl  implements EvaluateCourseService {
     @Override
     public int updateByPrimaryKey(EvaluateCourseDO record) {
         return evaluateCourseMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public Integer getTotalByCourseId(Long courseId) {
+        return evaluateCourseMapper.getTotalByCourseId(courseId);
+    }
+
+    @Override
+    public List<EvaluateCourseDO> getListByCourseId(Long courseId) {
+        return evaluateCourseMapper.getListByCourseId(courseId);
     }
 }

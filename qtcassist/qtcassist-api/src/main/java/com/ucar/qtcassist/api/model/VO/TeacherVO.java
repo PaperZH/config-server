@@ -1,7 +1,8 @@
-package com.ucar.qtcassist.course.vo;
+package com.ucar.qtcassist.api.model.VO;
 
-public class Teacher {
+public class TeacherVO {
     private Long userId;
+
     private String userName;
 
     public Long getUserId() {

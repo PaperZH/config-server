@@ -4,10 +4,16 @@ import com.ucar.qtcassist.api.CourseApi;
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.*;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.UserCourseDO;
+import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
+import com.ucar.qtcassist.api.model.VO.Query;
+import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
-import com.ucar.qtcassist.api.model.vo.CourseVO;
-import com.ucar.qtcassist.course.vo.Teacher;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
+import com.ucar.qtcassist.api.model.VO.TeacherVO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.slf4j.Logger;
@@ -37,72 +43,6 @@ public class CourseController implements CourseApi {
 
     @Autowired
     private UserFeginClient userFeginClient;
-
-    /**
-     * 根据课程id删除课程
-     * @param id 课程Id
-     * @return
-     */
-    @GetMapping("/delete/{id}")
-    public ResponseResult delete(@PathVariable("id") Long id) {
-        int count = courseService.deleteByPrimaryKey(id);
-        if(count > 0) {
-            logger.info("删除课程信息成功");
-            return ResponseResult.ok("删除课程信息成功");
-        } else {
-            logger.info("删除课程信息失败");
-            return ResponseResult.error("删除课程信息失败");
-        }
-    }
-
-    /**
-     * 添加课程
-     * @param course 课程对象
-     * @return
-     */
-    @PostMapping("/add")
-    public ResponseResult add(@RequestBody CourseDO course) {
-        Date date = new Date();
-        course.setPublishTime(date);
-        course.setUpdateTime(date);
-        int count = courseService.insertSelective(course);
-        if(count > 0) {
-            logger.info("添加课程信息成功");
-            return ResponseResult.ok("添加课程信息成功");
-        } else {
-            logger.info("添加课程信息失败");
-            return ResponseResult.error("添加课程信息失败");
-        }
-    }
-
-    /**
-     * 根据课程id得到课程对象
-     * @param id 课程id
-     * @return
-     */
-    @GetMapping("/get/{id}")
-    public ResponseResult get(@PathVariable("id") Long id) {
-        CourseDO course = courseService.selectByPrimaryKey(id);
-        return ResponseResult.data(course);
-    }
-
-    /**
-     * 更新课程信息
-     * @param course 课程对象
-     * @return
-     */
-    @PostMapping("/update")
-    public ResponseResult update(@RequestBody CourseDO course) {
-        course.setUpdateTime(new Date());
-        int count = courseService.updateByPrimaryKeySelective(course);
-        if(count > 0) {
-            logger.info("更新课程信息成功");
-            return ResponseResult.ok("更新课程信息成功");
-        } else {
-            logger.info("更新课程信息失败");
-            return ResponseResult.error("更新课程信息失败");
-        }
-    }
 
     /**
      * 根据类型获取分页后的课程列表
@@ -152,37 +92,38 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public ResponseResult getCourseDetail(@PathVariable("courseId") Long courseId) {
+    public Result<CourseDetailVO> getCourseDetail(@PathVariable("courseId") Long courseId) {
         Map<String, Object> data = new HashMap<String, Object>();
+        CourseDetailVO courseDetail = new CourseDetailVO();
 
         CourseDO course = courseService.selectByPrimaryKey(courseId);
-        data.put("course", course);
+        courseDetail.setCourse(course);
 
         UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
         //调用远程的用户服务查询User， 参数为userCourse.getUserId();
-        ResponseResult result = userFeginClient.getUserById(userCourse.getUserId());
-        UserDO user = (UserDO) result.get("data");
-        Teacher teacher = new Teacher();
+        Result result = userFeginClient.getUserById(userCourse.getUserId());
+        UserDO user = (UserDO) result.getRe();
+        TeacherVO teacher = new TeacherVO();
         teacher.setUserId(user.getUserId());
         teacher.setUserName(user.getName());
-        data.put("teacher", teacher);
+        courseDetail.setTeacher(teacher);
 
 //        List<CoursewareDO> coursewareList = coursewareService.getAllCoursewareByCourseId(courseId);
 //        调用课件接口服务查询课程内容列表，参数为course.getId()
-//        data.put("list", coursewareList);
+//        courseDetail.setCoursewares(coursewareList);
 
-        return ResponseResult.data(data);
+        return Result.getSuccessResult(courseDetail);
     }
 
     /**
      * 增加课程
-     * @param userCourseVO (long userId , Course course)
+     * @param courseUser (long userId , Course course)
      * @return
      */
     @Override
-    public ResponseResult addCourse(@RequestBody UserCourseVO userCourseVO) {
-        Long userId = userCourseVO.getUserId();
-        CourseDO course = userCourseVO.getCourse();
+    public Result addCourse(@RequestBody CourseUserVO courseUser) {
+        Long userId = courseUser.getUserId();
+        CourseDO course = courseUser.getCourse();
 
         Date date = new Date();
         course.setPublishTime(date);
@@ -200,26 +141,26 @@ public class CourseController implements CourseApi {
             int count2 = userCourseService.insertSelective(userCourse);
             if(count2 >= 0) {
                 logger.info("添加课程信息成功");
-                return ResponseResult.ok("添加课程信息成功");
+                return Result.getSuccessResult("添加课程信息成功");
             } else {
                 logger.info("添加课程信息失败");
-                return ResponseResult.error("添加课程信息失败");
+                return Result.getBusinessException("添加课程信息失败","");
             }
         } else {
             logger.info("添加课程信息失败");
-            return ResponseResult.error("添加课程信息失败");
+            return Result.getBusinessException("添加课程信息失败","");
         }
     }
 
     /**
      * 更新课程
-     * @param userCourseVO ((long userId , Course course))
+     * @param courseUser (long userId , Course course)
      * @return
      */
     @Override
-    public ResponseResult updateCourse(@RequestBody UserCourseVO userCourseVO) {
-        Long userId = userCourseVO.getUserId();
-        CourseDO course = userCourseVO.getCourse();
+    public Result updateCourse(@RequestBody CourseUserVO courseUser) {
+        Long userId = courseUser.getUserId();
+        CourseDO course = courseUser.getCourse();
         course.setUpdateTime(new Date());
 
         UserCourseDO userCourse = userCourseService.selectByCourseId(course.getId());
@@ -227,14 +168,14 @@ public class CourseController implements CourseApi {
             int count = courseService.updateByPrimaryKeySelective(course);
             if(count > 0) {
                 logger.info("更新课程信息成功");
-                return ResponseResult.ok("更新课程信息成功");
+                return Result.getSuccessResult("更新课程信息成功");
             } else {
                 logger.info("更新课程信息失败");
-                return ResponseResult.error("更新课程信息失败");
+                return Result.getBusinessException("更新课程信息失败","");
             }
         } else {
             logger.info("用户和课程不匹配");
-            return ResponseResult.error("用户和课程不匹配");
+            return Result.getBusinessException("用户和课程不匹配","");
         }
     }
 
@@ -245,20 +186,20 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public ResponseResult deleteCourse(@PathVariable("userId") Long userId, @PathVariable Long courseId) {
+    public Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable Long courseId) {
         UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
         if(userId.equals(userCourse.getUserId())) {
             int count = courseService.deleteByPrimaryKey(courseId);
             if(count > 0) {
                 logger.info("删除课程信息成功");
-                return ResponseResult.ok("删除课程信息成功");
+                return Result.getSuccessResult("删除课程信息成功");
             } else {
                 logger.info("删除课程信息失败");
-                return ResponseResult.error("删除课程信息失败");
+                return Result.getBusinessException("删除课程信息失败","");
             }
         } else {
             logger.info("用户和课程不匹配");
-            return ResponseResult.error("用户和课程不匹配");
+            return Result.getBusinessException("用户和课程不匹配","");
         }
     }
 
@@ -274,32 +215,28 @@ public class CourseController implements CourseApi {
      * @return 课件列表
      */
     @GetMapping("/listCourseware/{courseId}")
-    public ResponseResult listCourseware(@PathVariable("courseId") String id) {
+    public Result<List<CoursewareDO>> listCourseware(@PathVariable("courseId") String id) {
         List<CoursewareDO> coursewareList = null;
 
         //调用课件服务接口，参数为id
 //        coursewareList = coursewareService.getAllCourseware(Long.valueOf(id));
 
-        return ResponseResult.data(coursewareList);
+        return Result.getSuccessResult(coursewareList);
     }
 
 
     @PostMapping("/addCourseware")
-    public ResponseResult addCourseware(@RequestBody CoursewareDO courseware) {
-//        CoursewareDO courseware = new CoursewareDO();
-//        courseware.setTypeId(1L);
-//        courseware.setCoursewareName("java courseware");
-//        courseware.setCoursewareDescription("d://java.txt");
+    public Result addCourseware(@RequestBody CoursewareDO courseware) {
         Date date = new Date();
         courseware.setPublishTime(date);
         courseware.setUpdateTime(date);
         Long id = coursewareService.addCourseware(courseware);
         if(id != null) {
             courseware.setBaseCoursewareId(id);
-            return ResponseResult.data(courseware);
+            return Result.getSuccessResult(courseware);
         } else {
             logger.info("添加课件失败");
-            return ResponseResult.error("添加课件失败");
+            return Result.getBusinessException("添加课件失败","");
         }
     }
 

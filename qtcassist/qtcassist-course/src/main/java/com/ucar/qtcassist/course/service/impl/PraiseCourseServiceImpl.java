@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.course.service.impl;
 
 import com.ucar.qtcassist.course.dao.PraiseCourseMapper;
-import com.ucar.qtcassist.course.model.PraiseCourseDO;
+import com.ucar.qtcassist.api.model.DO.PraiseCourseDO;
 import com.ucar.qtcassist.course.service.PraiseCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

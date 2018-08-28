@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.course.model.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+
+import java.util.List;
 
 public interface CourseTypeService {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +18,6 @@ public interface CourseTypeService {
     int updateByPrimaryKey(CourseTypeDO record);
 
     Long getIdByTypeName(String typeName);
+
+    List<CourseTypeDO> getAllCourseType();
 }

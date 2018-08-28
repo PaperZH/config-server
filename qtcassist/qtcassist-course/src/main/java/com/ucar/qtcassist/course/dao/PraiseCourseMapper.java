@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.course.model.PraiseCourseDO;
+import com.ucar.qtcassist.api.model.DO.PraiseCourseDO;
 import org.springframework.stereotype.Component;
 
 @Component

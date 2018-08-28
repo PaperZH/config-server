@@ -1,13 +1,17 @@
-package com.ucar.qtcassist.course.model;
+package com.ucar.qtcassist.api.model.DO;
 
 import java.util.Date;
 
-public class UserCourseDO {
+public class EvaluateCourseDO {
     private Long id;
 
     private Long userId;
 
     private Long courseId;
+
+    private Float evaluateScore;
+
+    private String evaluateContent;
 
     private Date publishDate;
 
@@ -35,6 +39,22 @@ public class UserCourseDO {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+    public Float getEvaluateScore() {
+        return evaluateScore;
+    }
+
+    public void setEvaluateScore(Float evaluateScore) {
+        this.evaluateScore = evaluateScore;
+    }
+
+    public String getEvaluateContent() {
+        return evaluateContent;
+    }
+
+    public void setEvaluateContent(String evaluateContent) {
+        this.evaluateContent = evaluateContent == null ? null : evaluateContent.trim();
     }
 
     public Date getPublishDate() {

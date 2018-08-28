@@ -1,8 +1,8 @@
-package com.ucar.qtcassist.api.model;
+package com.ucar.qtcassist.api.model.VO;
 
-import com.ucar.qtcassist.api.model.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
 
-public class UserCourseVO {
+public class CourseUserVO {
     private Long userId;
     private CourseDO course;
 

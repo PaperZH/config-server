@@ -1,7 +1,9 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.course.model.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface CourseTypeMapper {
@@ -18,4 +20,6 @@ public interface CourseTypeMapper {
     int updateByPrimaryKey(CourseTypeDO record);
 
     Long getIdByTypeName(String typeName);
+
+    List<CourseTypeDO> getAllCourseType();
 }

@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.api.model.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +21,10 @@ public interface CourseMapper {
     int updateByPrimaryKey(CourseDO record);
 
     Integer getTotal();
+
+    Integer getTotalById(@Param("ids") List<Long> ids);
+
+    Integer getTotalByCourseName(@Param("ids") List<Long> ids, @Param("courseName") String courseName);
 
     List<CourseDO> getList(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 

@@ -49,15 +49,14 @@
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
         <el-pagination layout="total,sizes, prev,pager, next,jumper" background
-              @size-change="handleSizeChange"  
-              @current-change="handleCurrentChange" 
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
               :page-size="limit"
               :total="total"
               :page-sizes="[10, 20, 30]">
         </el-pagination>
       </el-col>
-<!-- 
-      <el-col :span="24" class="version" style="margin-top:20px">
+<!--<el-col :span="24" class="version" style="margin-top:20px">
         <div style="margin-left: auto; margin-right: auto;text-align: center">
           <span>版权所有版权所有版权所有版权所有版权所有版权所有</span>
         </div>
@@ -65,7 +64,6 @@
           <span>版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有</span>
         </div>
       </el-col> -->
-      
 
       <!--新增界面-->
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
@@ -136,266 +134,264 @@
 </template>
 
 <script>
-  import API from '../../api/api_file'
+import API from '../../api/api_file'
 
-  export default {
-    name: "List",
-    data() {
-      return {
-        filters: {
-          title: ''
-        },
-        total: 0,
-        page: 1,
-        limit: 10,
-        loading: false,
-        fileRows: [],
-        addImageUrl: '',
-        //新增相关数据
-        addFormVisible: false,//新增界面是否显示
-        addLoading: false,
-        addFormRules: {
-          title: [
-            {required: true, message: '请输入标题', trigger: 'blur'}
-          ]
-        },
-        addForm: {
-          title: '',
-          content: '',
-          orderNum: '',
-          url: ''
-        },
-        editFormVisible: false,
-        editFormRules: {
-          title: [
-            {required: true, message: '请输入标题', trigger: 'blur'}
-          ]
-        },
-        editForm: {
-          title: '',
-          content: '',
-          orderNum: ''
-        },
+export default {
+  name: 'List',
+  data () {
+    return {
+      filters: {
+        title: ''
+      },
+      total: 0,
+      page: 1,
+      limit: 10,
+      loading: false,
+      fileRows: [],
+      addImageUrl: '',
+      // 新增相关数据
+      addFormVisible: false, // 新增界面是否显示
+      addLoading: false,
+      addFormRules: {
+        title: [
+          {required: true, message: '请输入标题', trigger: 'blur'}
+        ]
+      },
+      addForm: {
+        title: '',
+        content: '',
+        orderNum: '',
+        url: ''
+      },
+      editFormVisible: false,
+      editFormRules: {
+        title: [
+          {required: true, message: '请输入标题', trigger: 'blur'}
+        ]
+      },
+      editForm: {
+        title: '',
+        content: '',
+        orderNum: ''
       }
+    }
+  },
+  methods: {
+    handleSizeChange (val) {
+      this.limit = val
+      this.search()
     },
-    methods: {
-      handleSizeChange(val) {
-        this.limit = val;
-        this.search();
-      },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.search();
-      },
-      handleSearch() {
-        this.total = 0;
-        this.page = 1;
-        this.search();
-      },
-      search: function () {
-        let that = this;
-        let params = {
-          page: that.page,
-          limit: that.limit,
-          title: that.filters.title
+    handleCurrentChange (val) {
+      this.page = val
+      this.search()
+    },
+    handleSearch () {
+      this.total = 0
+      this.page = 1
+      this.search()
+    },
+    search: function () {
+      let that = this
+      let params = {
+        page: that.page,
+        limit: that.limit,
+        title: that.filters.title
+      }
+      that.loading = true
+      API.files(params).then(
+        function (result) {
+          that.loading = false
+          if (result && result.page.rows) {
+            that.total = result.page.total
+            that.fileRows = result.page.rows
+          }
+        },
+        function (err) {
+          that.loading = false
+          that.$message.error({
+            showClose: true,
+            message: err.toString(),
+            duration: 2000
+          })
         }
-        that.loading = true;
-        API.files(params).then(
-            function (result) {
-              that.loading = false;
-              if (result && result.page.rows) {
-                that.total = result.page.total;
-                that.fileRows = result.page.rows;
-              }
-            },
-            function (err) {
-              that.loading = false;
+      )
+        .catch(function (error) {
+          that.loading = false
+          console.log(error)
+          that.$message.error({
+            showClose: true,
+            message: '请求出现异常',
+            duration: 2000
+          })
+        })
+    },
+
+    showAddDialog: function () {
+      this.addFormVisible = true
+      this.addForm = {}
+    },
+    showEditDialog: function (index, row) {
+      this.editFormVisible = true
+      this.editForm = Object.assign({}, row)
+    },
+
+    // 新增
+    addSubmit: function () {
+      let that = this
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          let para = Object.assign({}, this.addForm)
+          API.add(para).then(function (result) {
+            that.loading = false
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({showClose: true, message: '新增成功', duration: 2000})
+              that.$refs['addForm'].resetFields()
+              that.addFormVisible = false
+              that.search()
+            } else {
+              that.$message.error({showClose: true, message: '新增失败', duration: 2000})
+            }
+          }, function (err) {
+            that.loading = false
+            that.$message.error({showClose: true, message: err.toString(), duration: 2000})
+          }).catch(function (error) {
+            that.loading = false
+            console.log(error)
+            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000})
+          })
+        }
+      })
+    },
+
+    editSubmit: function () {
+      let that = this
+      this.$refs.editForm.validate(valid => {
+        if (valid) {
+          that.loading = true
+          let params = Object.assign({}, that.editForm)
+          API.update(params).then(function (result) {
+            if (result && parseInt(result.code) === 0) {
+              that.$message.success({
+                showClose: true,
+                message: '修改成功',
+                duration: 2000
+              })
+              that.$refs['editForm'].resetFields()
+              that.editFormVisible = false
+              that.search()
+            } else {
               that.$message.error({
                 showClose: true,
-                message: err.toString(),
+                message: '修改失败',
                 duration: 2000
-              });
+              })
             }
-          )
-          .catch(function (error) {
-            that.loading = false;
-            console.log(error);
-            that.$message.error({
-              showClose: true,
-              message: "请求出现异常",
-              duration: 2000
-            });
-          });
-      },
-
-      showAddDialog: function () {
-        this.addFormVisible = true
-        this.addForm = {}
-      },
-      showEditDialog: function (index, row) {
-        let that = this
-        this.editFormVisible = true
-        this.editForm = Object.assign({}, row)
-      },
-
-      //新增
-      addSubmit: function () {
-        let that = this;
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            that.loading = true;
-            let para = Object.assign({}, this.addForm);
-            API.add(para).then(function (result) {
-              that.loading = false;
-              if (result && parseInt(result.code) === 0) {
-                that.$message.success({showClose: true, message: '新增成功', duration: 2000});
-                that.$refs['addForm'].resetFields();
-                that.addFormVisible = false;
-                that.search();
-              } else {
-                that.$message.error({showClose: true, message: '新增失败', duration: 2000});
-              }
-            }, function (err) {
-              that.loading = false;
-              that.$message.error({showClose: true, message: err.toString(), duration: 2000});
-            }).catch(function (error) {
-              that.loading = false;
-              console.log(error);
-              that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
-            });
-
-          }
-        });
-      },
-
-      editSubmit: function () {
-        let that = this;
-        this.$refs.editForm.validate(valid => {
-          if (valid) {
-            that.loading = true;
-            let params = Object.assign({}, that.editForm);
-            API.update(params).then(function (result) {
-              if (result && parseInt(result.code) === 0) {
-                that.$message.success({
-                  showClose: true,
-                  message: "修改成功",
-                  duration: 2000
-                });
-                that.$refs["editForm"].resetFields();
-                that.editFormVisible = false;
-                that.search();
-              } else {
-                that.$message.error({
-                  showClose: true,
-                  message: "修改失败",
-                  duration: 2000
-                });
-              }
-            });
-          }
-        });
-      },
-
-      removeFile: function (id) {
-        let that = this
-        return API.remove({id: id}).then(res => {
-          if (res.code === 0) {
-            that.$message.success(res.msg)
-            that.search(this.page);
-          }
-        })
-      },
-      beforeAvatarUpload(file) {
-        let that = this
-        const extension = file.name.split('.')[1] === 'jpg'
-        const extension2 = file.name.split('.')[1] === 'jpeg'
-        const extension3 = file.name.split('.')[1] === 'png'
-        const extension4 = file.name.split('.')[1] === 'gif'
-
-        const isLt2M = file.size / 1024 / 1024 < 5;
-
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-          return false
+          })
         }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-          return false;
-        }
-
-        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
-        fd.append('file', file);
-        API.uploadFile(fd).then(function (result) {
-          if (result && parseInt(result.code) === 0) {
-            that.addImageUrl = result.fileUrl
-            that.addForm.url = that.addImageUrl
-            that.$message.success({
-              showClose: true,
-              message: "上传成功",
-              duration: 2000
-            });
-          } else {
-            that.$message.error({
-              showClose: true,
-              message: "上传失败",
-              duration: 2000
-            });
-          }
-        });
-        return false;
-      },
-
-      handleAvatarSuccess(res, file) {
-          console.log(res);
-      },
-
-      editBeforeAvatarUpload(file) {
-        let that = this
-        const extension = file.name.split('.')[1] === 'jpg'
-        const extension2 = file.name.split('.')[1] === 'jpeg'
-        const extension3 = file.name.split('.')[1] === 'png'
-        const extension4 = file.name.split('.')[1] === 'gif'
-        const isLt2M = file.size / 1024 / 1024 < 5;
-
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-          return false
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-          return false;
-        }
-
-        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
-        fd.append('file', file);
-        API.uploadFile(fd).then(function (result) {
-          if (result && parseInt(result.code) === 0) {
-            that.editForm.url = result.fileUrl
-            that.$message.success({
-              showClose: true,
-              message: "上传成功",
-              duration: 2000
-            });
-          } else {
-            that.$message.error({
-              showClose: true,
-              message: "上传失败",
-              duration: 2000
-            });
-          }
-        });
-        return false;
-      },
-
-      editHandleAvatarSuccess(res, file) {
-          console.log(res);
-      }
+      })
     },
 
-    mounted() {
-      this.search(1);
+    removeFile: function (id) {
+      let that = this
+      return API.remove({id: id}).then(res => {
+        if (res.code === 0) {
+          that.$message.success(res.msg)
+          that.search(this.page)
+        }
+      })
+    },
+    beforeAvatarUpload (file) {
+      let that = this
+      const extension = file.name.split('.')[1] === 'jpg'
+      const extension2 = file.name.split('.')[1] === 'jpeg'
+      const extension3 = file.name.split('.')[1] === 'png'
+      const extension4 = file.name.split('.')[1] === 'gif'
+
+      const isLt2M = file.size / 1024 / 1024 < 5
+
+      if (!extension && !extension2 && !extension3 && !extension4) {
+        console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+        return false
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+        return false
+      }
+
+      let fd = new FormData()
+      fd.append('file', file)
+      API.uploadFile(fd).then(function (result) {
+        if (result && parseInt(result.code) === 0) {
+          that.addImageUrl = result.fileUrl
+          that.addForm.url = that.addImageUrl
+          that.$message.success({
+            showClose: true,
+            message: '上传成功',
+            duration: 2000
+          })
+        } else {
+          that.$message.error({
+            showClose: true,
+            message: '上传失败',
+            duration: 2000
+          })
+        }
+      })
+      return false
+    },
+
+    handleAvatarSuccess (res, file) {
+      console.log(res)
+    },
+
+    editBeforeAvatarUpload (file) {
+      let that = this
+      const extension = file.name.split('.')[1] === 'jpg'
+      const extension2 = file.name.split('.')[1] === 'jpeg'
+      const extension3 = file.name.split('.')[1] === 'png'
+      const extension4 = file.name.split('.')[1] === 'gif'
+      const isLt2M = file.size / 1024 / 1024 < 5
+
+      if (!extension && !extension2 && !extension3 && !extension4) {
+        console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+        return false
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+        return false
+      }
+
+      let fd = new FormData()
+      fd.append('file', file)
+      API.uploadFile(fd).then(function (result) {
+        if (result && parseInt(result.code) === 0) {
+          that.editForm.url = result.fileUrl
+          that.$message.success({
+            showClose: true,
+            message: '上传成功',
+            duration: 2000
+          })
+        } else {
+          that.$message.error({
+            showClose: true,
+            message: '上传失败',
+            duration: 2000
+          })
+        }
+      })
+      return false
+    },
+
+    editHandleAvatarSuccess (res, file) {
+      console.log(res)
     }
+  },
+
+  mounted () {
+    this.search(1)
   }
+}
 </script>
 
 <style>

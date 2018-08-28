@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.course.model;
+package com.ucar.qtcassist.api.model.DO;
 
 public class CourseTypeDO {
     private Long id;
