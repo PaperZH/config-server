@@ -1,10 +1,15 @@
 package com.ucar.qtc.service;
 
+import com.netflix.ribbon.proxy.annotation.Http;
+import com.ucar.qtc.dto.LoginDTO;
 import com.ucar.qtc.utils.ResponseResult;
+import feign.Headers;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * @Author : pingli.zheng
@@ -12,16 +17,17 @@ import java.util.Map;
  * @Date : 8:22 2018/8/16
  */
 
-@FeignClient(value = "api-home")
+@Headers("application/json")
+@FeignClient(value = "api-admin")
 public interface LoginService {
 
     /**
      * 登陆用户
-     * @param user
+     * @param
      * @return
      */
-    @RequestMapping(value = "/login")
-   public ResponseResult login(Map<String,Object> user);
+    @PostMapping("/login")
+    public ResponseResult login(@RequestBody LoginDTO loginDTO, @RequestParam("request") HttpServletRequest request,@RequestParam("response") HttpServletResponse response);
 
     /**
      * 用户退出.
