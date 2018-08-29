@@ -17,12 +17,12 @@
             <div>
               <div><h4>课程上传老师</h4></div>
               <div style="height: 116px;">
-                <div style="width: 40%;float: left"><img style="max-width: 80px;height: 70px" v-bind:src="teacher.imageUrl"/></div>
+                <div style="width: 40%;float: left"><img style="max-width: 80px;height: 70px" v-bind:src="teacher.avatar"/></div>
                 <div style="width: 60%;float: left"><span>{{teacher.username}}</span><br/><br/><br/><span>{{teacher.email}}</span></div>
               </div>
               <div>
-                <div style=""><span>课时数：5</span><br/><br/><br/><span>有效期：从课程上架180天</span></div>
-                <div style="text-align: center; margin-top: 20%;"><el-button type="danger" round>收藏</el-button></div>
+                <div style=""><span>课时数：5</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
+                <div style="text-align: center; margin-top: 20%;"><el-button type="danger" round @click="addFavoriteCourse(items.courseId)">收藏</el-button></div>
               </div>
             </div>
 
@@ -57,7 +57,7 @@
 
                 <el-table-column
                   prop="name"
-                  label="课程名称"
+                  label="课件名称"
                   width="220">
                 </el-table-column>
                 <el-table-column
@@ -81,17 +81,17 @@
                 </el-table-column>
               </el-table>
             </div>
-                <div class="block" style="text-align: center">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-              </el-pagination>
-            </div>
+                <!--<div class="block" style="text-align: center">-->
+              <!--<el-pagination-->
+                <!--@size-change="handleSizeChange"-->
+                <!--@current-change="handleCurrentChange"-->
+                <!--:current-page="currentPage4"-->
+                <!--:page-sizes="[100, 200, 300, 400]"-->
+                <!--:page-size="100"-->
+                <!--layout="total, sizes, prev, pager, next, jumper"-->
+                <!--:total="400">-->
+              <!--</el-pagination>-->
+            <!--</div>-->
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -141,7 +141,21 @@
           console.log(`当前页: ${val}`)
         },
         handleClick (row) {
-
+          let data = {'sourceUrl': row.sourceUrl}
+          this.$store.dispatch('Post', {'url': '/api-home/file/download', 'data': data}).then(res => {
+            console.log(res)
+          })
+        },
+        addFavoriteCourse (val) {
+          let userId = this.$store.getters.userId
+          if (userId == null || userId === '') {
+            this.$notify.warning({'title': '收藏失败', 'message': '请先登陆'})
+          } else {
+            let data = {'userId': userId, 'courseId': val}
+            this.$store.dispatch('Post', {'url': '/api-home/course/addFavoriteCourse', 'data': data}).then(res => {
+              this.$notify.success(res.data.msg)
+            })
+          }
         },
         getCourseDetails (val) {
           this.$store.dispatch('Get', {'url': `/api-home/course/getDetails/${val}`}).then(res => {

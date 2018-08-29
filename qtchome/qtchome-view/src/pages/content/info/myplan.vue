@@ -26,7 +26,7 @@
         label="计划名称"
         width="180">
         <template slot-scope="scope">
-          <a href="#">{{scope.row.name}}</a>
+          <a href="#">{{scope.row.planTitle}}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -38,11 +38,12 @@
         label="结束时间">
       </el-table-column>
       <el-table-column
+        :formatter="formatterFinished"
         prop="state"
         label="完成状态">
       </el-table-column>
       <el-table-column
-        prop="score"
+        prop="studentGetScore"
         label="评分">
       </el-table-column>
       <el-table-column
@@ -63,14 +64,14 @@
         :page-sizes="[100, 200, 300, 400]"
         :page-size="5"
         layout="total, prev, pager, next, jumper"
-        :total="400">
+        :total=total>
       </el-pagination>
     </div>
   </el-card>
 </template>
 
 <script>
-    import dialogplan from '@/pages/content/dialog/dialogplan'  // 添加计划弹框
+    import dialogplan from '@/pages/content/dialog/dialogeditplan'  // 添加计划弹框
     export default {
       components: {
         'dialog-edit-plan': dialogplan
@@ -82,6 +83,7 @@
             name: '',
             date: ''
           },
+          total: 0,
           message: {},
           value5: 3.7,
           currentPage4: 4,
@@ -115,17 +117,32 @@
             '2、熟悉面向对象编程思想，熟悉封装、继承、多态特性\n' +
             '\n' +
             '3、熟练掌握JavaSE的核心语法，'
-          }]
+          }],
+          queryParams: {
+            userId: this.$store.getters.userId,
+            planName: '',
+            startDate: '',
+            endDate: '',
+            currentPage: 1,
+            pageSize: 5
+          }
         }
       },
       methods: {
         onSubmit () {
           console.log('submit!')
+          this.queryParams.planName = this.formInline.name
+          this.queryParams.startDate = this.formInline.date[0]
+          this.queryParams.endDate = this.formInline.date[1]
+          this.queryParams.currentPage = 1
+          this.getStudentPlan()
         },
         handleSizeChange (val) {
           console.log(`每页 ${val} 条`)
         },
         handleCurrentChange (val) {
+          this.queryParams.currentPage = val
+          this.getStudentPlan()
           console.log(`当前页: ${val}`)
         },
         getHtml (val) {
@@ -141,7 +158,24 @@
             return 'success-row'
           }
           return ''
+        },
+        getStudentPlan () {
+          console.log(this.queryParams)
+          this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
+            this.dataPlan = res.data.data
+            this.total = res.data.total
+          })
+        },
+        formatterFinished (row, column, cellValue, index) {
+          if (cellValue === true) {
+            return '已完成'
+          } else {
+            return '未完成'
+          }
         }
+      },
+      mounted () {
+        this.getStudentPlan()
       },
       name: 'myplan'
     }

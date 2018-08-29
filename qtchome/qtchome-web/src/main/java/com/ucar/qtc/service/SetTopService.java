@@ -4,7 +4,7 @@ import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient("api-admin")
+//@FeignClient("api-admin")
 public interface SetTopService {
     /**
      * 获得banner轮播图

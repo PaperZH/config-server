@@ -22,21 +22,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    /**
-     * 获取要轮播的课程，返回课程基本信息
-     * @return
-     */
-    @RequestMapping(value = "/getBannerCourse",method = RequestMethod.GET)
-    public ResponseResult getBannerCourse(){
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("id",Integer.toString(i));
-            hashMap.put("src","static/image/1.jpg");
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
-    }
+
     /**
      * 获取要推荐的课程列表,返回课程基本信息
      * @return
@@ -71,7 +57,6 @@ public class CourseController {
     public ResponseResult getCoursesList(@RequestParam Map<String,Object> query){
         System.out.println(query);
         System.out.println(courseService.getCoursesList(query));
-//        System.out.println(query);
 //        ArrayList<Map> list = new ArrayList<>();
 //        for (int i = 0; i < 8; i++) {
 //            HashMap<String,Object> hashMap = new HashMap<>();
@@ -84,9 +69,28 @@ public class CourseController {
 //            hashMap.put("publishTime","2018-8-15");
 //            list.add(hashMap);
 //        }
-//        return ResponseResult.data(list).put("totalDataNum","200");
+//        return ResponseResult.data(list);
         return  courseService.getCoursesList(query);
     }
+
+    /**
+     * 模糊查询课程列表
+     * @param courseName
+     * @return
+     */
+    @RequestMapping("/getCourseListByName")
+    public ResponseResult getCourseListByName(@RequestParam  String courseName){
+        System.out.println(courseName);
+        ArrayList<Map> list = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            HashMap<String,Object> hashMap = new HashMap<>();
+            hashMap.put("courseName","课程名称"+i);
+            hashMap.put("courseId",20*i);
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
+    }
+
 
     /**
      * 根据课程ID来查询课程详细信息，包含课程基本信息+课件信息+Teacher信息

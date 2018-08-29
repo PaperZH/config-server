@@ -3,15 +3,15 @@
 
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
       <el-form-item label="课程名">
-        <el-input  v-model="formInline.name" placeholder="输入计划名称" size="small"></el-input>
+        <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small"></el-input>
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker  size="small"
-          v-model="formInline.date"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
+                         v-model="formInline.date"
+                         type="daterange"
+                         range-separator="至"
+                         start-placeholder="开始日期"
+                         end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -21,28 +21,31 @@
     </el-form>
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
-      <el-col :span="8" v-for="(o, index) in 9" :key="o" style="margin-top: 20px;">
+      <el-checkbox-group v-model="checkList">
+      <el-col :span="8" v-for="(o, index) in course" :key="o.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
           <div style="position: absolute; color: #172dff;">
-            <el-checkbox ></el-checkbox>
+            <el-checkbox :label="o.courseId">&nbsp</el-checkbox>
           </div>
-          <img src="static/image/5.jpg" class="image">
+          <img v-bind:src="o.courseCover"  class="image">
           <div style="padding: 7px;">
-            <div style="position: relative">
-              <span style="display: block;float: left">Java 编程思想</span>
-              <span style="float: right"><a v-on:click="handleRelease" href="#">编辑</a></span>
+            <div  class="time" style="position: relative">
+              <span style="display: block;float: left">{{o.courseName}}</span>
+              <span style="float: right"><a v-on:click="handleRelease(o)" href="#">编辑</a></span>
             </div>
             <div class="bottom clearfix;"  style=" margin-top:  26px;">
-              <span class="time">技术类</span>
-              <span class="time" style="    margin-left: 1%">
+              <span class="time">{{o.type_name}}</span>
+              <span class="time" style="margin-left: 1%">
                  <i class="fa fa-thumbs-o-up" >0</i>
               </span>
-              <time class="button">2018-07-25 13:36</time>
+              <div>
+              <time class="time">2018-07-25 13:36</time>
+              </div>
             </div>
-
           </div>
         </el-card>
       </el-col>
+      </el-checkbox-group>
     </el-row>
     <div class="block" style="text-align: right">
       <el-pagination
@@ -63,12 +66,76 @@
     name: 'favorite',
     data () {
       return {
-        currentPage4: 4,
+        currentPage4: 1,
         checked: false,
         formInline: {
           name: '',
           date: ''
+        },
+        queryParams: {
+          userId: this.$store.getters.userId,
+          courseName: '',
+          startDate: '',
+          endDate: '',
+          currentPage: 1
+        },
+        checkList: [],
+        course: [{
+          courseId: 1,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 2,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 3,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 4,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 5,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 6,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 7,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 8,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
+        }, {
+          courseId: 9,
+          courseName: 'Spring+Java',
+          courseType: 'shanghai',
+          courseCover: 'static/image/5.jpg',
+          courseDescription: '这是个测试说明'
         }
+        ]
       }
     },
     methods: {
@@ -81,15 +148,28 @@
       getHtml (val) {
 
       },
-      handleRelease () {
-        this.$router.push('release')
+      handleRelease (o) {
+        this.$router.push({name: 'release', params: o})
       },
       handledelete (val) {
-
+        console.log(this.checkList)
       },
       onsubmit () {
-
+        this.queryParams.courseName = this.formInline.name
+        this.queryParams.startDate = this.formInline.date[0]
+        this.queryParams.endDate = this.formInline.date[1]
+        this.queryParams.currentPage = 1
+        this.getPublishedCourse()
+      },
+      getPublishedCourse () {
+        console.log(this.queryParams)
+        this.$store.dispatch('Get', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
+          this.course = res.data.data
+        })
       }
+    },
+    mounted () {
+      this.getPublishedCourse()
     }
   }
 </script>
