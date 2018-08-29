@@ -79,7 +79,6 @@ public class CoursewareController implements CoursewareApi {
                 baseCourseId = baseCoursewareService.getNewId();
             }
 
-
             coursewareDO.setPublishTime(uploadCoursewareDTO.getPublishTime());
             coursewareDO.setCoursewareName(uploadCoursewareDTO.getCoursewareName());
             coursewareDO.setCoursewareDescription(uploadCoursewareDTO.getCoursewareDescription());
@@ -129,7 +128,6 @@ public class CoursewareController implements CoursewareApi {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
-
 }
 
 
