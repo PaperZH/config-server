@@ -15,10 +15,10 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class QtcHoneApplication {
+public class QtcHomeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(QtcHoneApplication.class, args);
+        SpringApplication.run(QtcHomeApplication.class, args);
     }
 
 }
