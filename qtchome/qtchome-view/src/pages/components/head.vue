@@ -32,7 +32,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="user">个人中心</el-dropdown-item>
-                  <el-dropdown-item command="b">退出</el-dropdown-item>
+                  <el-dropdown-item command="quit">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               </div>
@@ -45,7 +45,7 @@
     <el-dialog title="用户登录" :visible.sync="dialogFormVisible" style="width: 51%;">
       <el-form :model="form">
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.username" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
@@ -86,7 +86,7 @@
         isShow: true,
         isUser: false,
         form: {
-          name: '',
+          username: '',
           password: ''
         }
       }
@@ -96,18 +96,27 @@
         this.$emit('getActiveIndex', key)
       },
       login: function () {
-        console.log(0)
         this.dialogFormVisible = false
         this.isShow = false
         this.isUser = true
-        this.$store.dispatch('Post', {'url': '/api-home/user/login', 'data': this.form}).then(res => {
+        this.$store.dispatch('Login', this.form).then(res => {
           console.log(res)
         }).catch(() => {
           this.loading = false
         })
       },
       handleCommand (val) {
-        this.$router.push(val)
+        if (val === 'quit') {
+          this.$confirm('确认退出？').then(_ => {
+            this.isShow = true
+            this.isUser = false
+            this.$store.dispatch('Logout', {'userId': 100}).then(res => {
+              this.$router.push('home')
+            })
+          })
+        } else {
+          this.$router.push(val)
+        }
       }
     }
   }

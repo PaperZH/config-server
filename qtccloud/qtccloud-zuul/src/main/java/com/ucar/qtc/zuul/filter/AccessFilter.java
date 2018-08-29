@@ -34,7 +34,7 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     MenuService menuService;
 
-    private String ignorePath = "/api-admin/login";
+    private String ignorePath = "/api-admin/login,/api-home/";
 
     @Override
     public String filterType() {

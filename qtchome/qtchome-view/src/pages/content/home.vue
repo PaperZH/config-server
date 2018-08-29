@@ -5,7 +5,8 @@
        <div class="block">
        <el-carousel trigger="click" :height="height">
          <el-carousel-item v-for="(img,index) in images" :key="index" >
-           <img style="width: 100%;height: 430px;display: block; " @click="handleDetails(img.id)"  v-bind:src="img.src">
+           <h3>{{img.bannerTitle}}</h3>
+           <img style="width: 100%;height: 430px;display: block; " @click="handleDetails(img.id)"  v-bind:src="img.bannerImg">
          </el-carousel-item>
        </el-carousel>
        </div>
@@ -55,7 +56,8 @@
         }
       },
       created: function () {
-        this.$store.dispatch('Get', {'url': '/api-home/course/getBannerCourse'}).then(res => {
+        this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
+          console.log(res)
           this.images = res.data.data
         })
       },
@@ -73,5 +75,13 @@
 </script>
 
 <style >
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+    text-align: center;
+  }
 
 </style>

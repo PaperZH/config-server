@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author : pingli.zheng
  * @Description : 页面推荐内容
@@ -14,15 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/setTop")
 public class SetTopController {
     @Autowired
-    private SetTopService setTopService;
+//    private SetTopService setTopService;
     /**
      * 首页轮播图
      */
       @RequestMapping(value = "/getBanner",method = RequestMethod.GET)
       public ResponseResult getBanner(){
           System.out.println("......");
-          System.out.println(setTopService.getBanner());
-          return  setTopService.getBanner();
+        ArrayList<Map> list = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            HashMap<String,Object> hashMap = new HashMap<>();
+            hashMap.put("id",Integer.toString(i));
+            hashMap.put("src","static/image/1.jpg");
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
       }
 
     /**

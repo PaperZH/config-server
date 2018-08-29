@@ -13,6 +13,7 @@ import addCourse from '@/pages/content/info/addCourse'
 import myplan from '@/pages/content/info/myplan'
 import drawupplan from '@/pages/content/info/drawupplan'
 import releasecourse from '@/pages/content/info/releasecourse'
+import distributePlan from '@/pages/content/info/distributePlan'
 
 const router = new Router({
   routes: [{
@@ -62,6 +63,11 @@ const router = new Router({
         name: 'drawupplan',
         meta: { title: '制定计划' },
         component: drawupplan
+      }, {
+        path: '/distributePlan',
+        name: 'distributePlan',
+        meta: {title: '发布计划'},
+        component: distributePlan
       }, {
         path: '/releasecourse',
         name: 'releasecourse',

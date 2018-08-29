@@ -1,5 +1,6 @@
 package com.ucar.qtc.service;
 
+import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +13,16 @@ import java.util.Map;
  * @Date : 8:22 2018/8/16
  */
 
-@FeignClient(value = "api-home")
+@FeignClient(value = "api-admin")
 public interface LoginService {
 
     /**
-     * 登陆用户
-     * @param user
+     *
+     * @param loginDTO
      * @return
      */
-    @RequestMapping(value = "/login")
-   public ResponseResult login(Map<String,Object> user);
+    @RequestMapping(value = "/homeLogin")
+   public ResponseResult login(LoginDTO loginDTO);
 
     /**
      * 用户退出.

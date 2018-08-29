@@ -9,10 +9,12 @@ const service = axios.create({
 })
 // request拦截器
 service.interceptors.request.use(config => {
-  config.headers['Content-Type'] = 'application/json'
-  // config.data = qs.stringify({
-  //   ...config.data
-  // })
+  // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+  // if (config.method === 'get') {
+  //   config.params = qs.stringify({
+  //     ...config.params
+  //   })
+  // }
   return config
 }, error => {
   // Do something with request error

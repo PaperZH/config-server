@@ -1,6 +1,8 @@
-import { login, get, post, remove, put } from '@/service/api'
+import { login, logout, get, post, remove, put } from '@/service/api'
 export const user = {
   state: {
+    token: '',
+    userId: 100,
     name: '',
     avatar: '',
     roles: [],
@@ -12,6 +14,9 @@ export const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_USERID: (state, userId) => {
+      state.userId = userId
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -30,8 +35,24 @@ export const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data
-          commit('SET_TOKEN', data)
-          resolve()
+          commit('SET_TOKEN', data.token)
+          commit('SET_ROLES', data.user.roles)
+          commit('SET_USERID', data.user.userId)
+          commit('SET_NAME', data.user.username)
+          commit('SET_AVATAR', data.user.avatar)
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    Logout: function ({commit}, param) {
+      console.log(param)
+      return new Promise((resolve, reject) => {
+        logout(param.userId).then(response => {
+          const data = response.data
+          resolve(data)
         }).catch(error => {
           reject(error)
         })
@@ -83,6 +104,7 @@ export const user = {
 export const getters = {
   token: state => state.user.token,
   avatar: state => state.user.avatar,
+  userId: state => state.user.userId,
   name: state => state.user.name,
   roles: state => state.user.roles,
   addRouters: state => state.user.addRouters,

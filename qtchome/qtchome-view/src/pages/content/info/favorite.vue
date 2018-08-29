@@ -26,21 +26,21 @@
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
-      <el-col :span="8" v-for="(o, index) in 9" :key="o" style="margin-top: 20px;">
+      <el-col :span="8" v-for="(o, index) in tableData" :key="o.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
           <div style="position: absolute; color: #172dff">
-            <el-checkbox  ></el-checkbox>
+            <el-checkbox  :label="o.courseId">&nbsp</el-checkbox>
           </div>
-          <img src="static/image/5.jpg" class="image">
+          <img v-bind:src="o.courseCover"  class="image">
           <div style="padding: 7px;">
-            <span>Java 编程思想</span>
+            <span class="time">{{o.courseName}}</span>
             <div class="bottom clearfix" style="margin-top: 6px;">
-              <span class="time">技术类</span>
+              <span class="time">{{o.type_name}}</span>
               <span class="time" style="    margin-left: 1%" >
-                 <i class="fa fa-thumbs-o-up" >0</i>
+                 <i class="fa fa-thumbs-o-up" >{{o.praiseNum}}</i>
               </span>
-              <time class="button">2018-07-25 13:36</time>
             </div>
+            <time class="time">{{o.publishTime}}</time>
           </div>
         </el-card>
       </el-col>
@@ -50,7 +50,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
+          :current-page="currentPage"
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
           layout="total, prev, pager, next, jumper"
@@ -65,12 +65,21 @@
       name: 'favorite',
       data () {
         return {
-          currentPage4: 4,
+          currentPage: 1,
           checked: false,
           checkList: [],
           formInline: {
             name: '',
             date: ''
+          },
+          tableData: {},
+          queryParams: {
+            userId: this.$store.getters.userId,
+            courseName: '',
+            startDate: '',
+            endDate: '',
+            currentPage: 1,
+            pageSize: 9
           }
         }
       },
@@ -79,6 +88,8 @@
           console.log(`每页 ${val} 条`)
         },
         handleCurrentChange (val) {
+          this.queryParams.currentPage = val
+          this.getFavoriteCourse()
           console.log(`当前页: ${val}`)
         },
         getHtml (val) {
@@ -86,10 +97,28 @@
         },
         handleDel (val) {
           console.log(this.checkList)
+          // let data = { courseId: [{'name': 'zhu', 'age': 10}, {'name': 'gou', 'age': 12}] }
+          let data = {'userId': this.queryParams.userId, 'courseId': [1, 2, 3, 4]}
+          this.$store.dispatch('Post', {'url': '/api-home/course/deleteFavoriteCourse', 'data': data}).then(res => {
+            console.log(res.data)
+          })
         },
         handSearch () {
-
+          this.queryParams.courseName = this.formInline.name
+          this.queryParams.startDate = this.formInline.date[0]
+          this.queryParams.endDate = this.formInline.date[1]
+          this.queryParams.currentPage = 1
+          this.getFavoriteCourse()
+        },
+        getFavoriteCourse () {
+          console.log(this.queryParams)
+          this.$store.dispatch('Get', {'url': '/api-home/course/getFavoriteCourse', 'data': this.queryParams}).then(res => {
+            this.tableData = res.data.data
+          })
         }
+      },
+      mounted () {
+        this.getFavoriteCourse()
       }
     }
 </script>

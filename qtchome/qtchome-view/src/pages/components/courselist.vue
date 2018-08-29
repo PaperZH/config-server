@@ -51,7 +51,7 @@
       data () {
         return {
           currentPage: 1,
-          total: '',
+          total: 0,
           tableData: [{
             id: '1',
             date: '2017-06-02 14:45:00',
@@ -128,8 +128,8 @@
           const data = {'type': this.type, 'currentPage': this.currentPage, 'pageSize': 8}
           this.$store.dispatch('Get', {'url': url, 'data': data}).then(res => {
             console.log(res)
-            this.tableData = res.data.re.rows
             this.total = res.data.re.total
+            this.tableData = res.data.re.rows
           })
         }
       },

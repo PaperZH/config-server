@@ -1,6 +1,7 @@
 package com.ucar.qtc.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.service.LoginService;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,16 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
-//    @Autowired
-//    private LoginService loginService;
+    @Autowired
+    private LoginService loginService;
     /**
      * 用户登录请求
      * @return
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseResult getLogin(@RequestBody Map<String,Object> user){
-        System.out.println(JSONObject.toJSONString(user));
-        System.out.println(user);
-        return ResponseResult.ok();
+    public ResponseResult getLogin(@RequestBody LoginDTO loginDTO){
+
+        return loginService.login(loginDTO);
     }
 
 

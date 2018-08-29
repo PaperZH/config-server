@@ -8,7 +8,6 @@ import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
-import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.common.dto.LoginUserDTO;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
