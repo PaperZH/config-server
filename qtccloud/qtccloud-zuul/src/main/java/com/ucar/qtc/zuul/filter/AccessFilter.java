@@ -7,6 +7,7 @@ import com.ucar.qtc.common.constants.CommonConstants;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.MenuDTO;
 import com.ucar.qtc.common.dto.UserToken;
+import com.ucar.qtc.common.utils.IPUtils;
 import com.ucar.qtc.common.utils.JSONUtils;
 import com.ucar.qtc.common.utils.JwtUtils;
 import com.ucar.qtc.common.utils.ResponseResult;
@@ -55,6 +56,9 @@ public class AccessFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
+
+        logger.info("Zuul run, req IP: "+IPUtils.getIpAddr(request));
+
         final String requestUri = request.getRequestURI();
         if (isStartWith(requestUri)) {
             return null;
