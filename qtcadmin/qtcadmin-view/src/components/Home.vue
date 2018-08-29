@@ -44,10 +44,11 @@
     <el-col :span="24" class="main">
       <!--左侧导航-->
       <aside :class="{showSidebar:!collapsed}">
+        
         <!--导航菜单-->
         <el-menu :default-active="defaultActiveIndex" router :collapse="collapsed" @select="handleSelect">
-          <template v-for="(item,index) in menus" v-if="item.menuShow" >
-            <el-submenu v-if="!item.leaf" :index="index+''" :key="item.id">
+          <template v-for="(item,index) in menus" v-if="item.menuShow">
+            <el-submenu v-if="!item.leaf" :index="index+''">
               <template slot="title"><i :class="item.iconCls"></i><span slot="title">{{item.name}}</span></template>
               <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow"
                             :class="$route.path==term.path?'is-active':''">
@@ -55,7 +56,7 @@
               </el-menu-item>
             </el-submenu>
             <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path"
-                          :class="$route.path==item.children[0].path?'is-active':''" :key="item.id">
+                          :class="$route.path==item.children[0].path?'is-active':''">
               <i :class="item.iconCls"></i><span slot="title">{{item.children[0].name}}</span>
             </el-menu-item>
           </template>
@@ -83,82 +84,84 @@
 </template>
 
 <script>
-import {bus} from '../bus.js'
-import API from '../api/api_user'
+  import {bus} from "../bus.js";
+  import API from "../api/api_user";
 
-export default {
-  name: 'home',
-  created () {
-    bus.$on('setNickName', text => {
-      this.nickname = text
-    })
+  export default {
+    name: "home",
+    created() {
+      bus.$on("setNickName", text => {
+        this.nickname = text;
+      });
 
-    bus.$on('goto', url => {
-      if (url === '/login') {
-        localStorage.removeItem('access-user')
-      }
-      this.$router.push(url)
-    })
-    this.defaultActiveIndex = this.$route.path
-  },
-  data () {
-    return {
-      defaultActiveIndex: '0',
-      nickname: '',
-      avatar: '',
-      collapsed: false,
-      menus: []
-    }
-  },
-  methods: {
-    handleSelect (index) {
-      this.defaultActiveIndex = index
+      bus.$on("goto", url => {
+        if (url === "/login") {
+          localStorage.removeItem("access-user");
+        }
+        this.$router.push(url);
+      });
+      this.defaultActiveIndex = this.$route.path
     },
-    // 折叠导航栏
-    collapse: function () {
-      this.collapsed = !this.collapsed
+    data() {
+      return {
+        defaultActiveIndex: "0",
+        nickname: "",
+        avatar: "",
+        collapsed: false,
+        menus: []
+      };
     },
-    jumpTo (url) {
-      if (url.indexOf('http') !== -1) {
-      } else {
-        this.defaultActiveIndex = url
-        this.$router.push(url) // 用go刷新
-      }
-    },
-    logout () {
-      let that = this
-      this.$confirm('确认退出吗?', '提示', {
-        confirmButtonClass: 'el-button--warning'
-      })
-        .then(() => {
-          // 确认
-          that.loading = true
-          localStorage.removeItem('access-token')
-          localStorage.removeItem('menus')
-          API.logout('').then(function (res) {
-            that.$message.error({showClose: true, message: res.msg, duration: 2000})
+    methods: {
+      handleSelect(index) {
+        this.defaultActiveIndex = index;
+      },
+      //折叠导航栏
+      collapse: function () {
+        this.collapsed = !this.collapsed;
+      },
+      jumpTo(url) {
+        if (url.indexOf("http") != -1) {
+        } else {
+          this.defaultActiveIndex = url;
+          this.$router.push(url); //用go刷新
+        }
+
+      },
+      logout() {
+        let that = this;
+        this.$confirm("确认退出吗?", "提示", {
+          confirmButtonClass: "el-button--warning"
+        })
+          .then(() => {
+            //确认
+            that.loading = true;
+            localStorage.removeItem("access-token");
+            localStorage.removeItem("menus")
+            API.logout('').then(function (res) {
+              that.$message.error({showClose: true, message: res.msg, duration: 2000});
+            })
+            that.$router.go("/login"); //用go刷新
           })
-          that.$router.go('/login') // 用go刷新
-        })
-        .catch(() => {
+          .catch(() => {
 
-        })
+          });
+      },
+
+    },
+    mounted() {
+      this.menus = JSON.parse(window.localStorage.getItem('menus'));
+      let that = this;
+      API.tokenUser().then(function (result) {
+        that.nickname = result.nickname
+        that.avatar = result.avatar
+      }).catch(
+        () => {
+          localStorage.removeItem("access-token");
+          that.$router.go("/login"); //用go刷新
+        }
+      );
     }
-  },
-  mounted () {
-    this.menus = JSON.parse(window.localStorage.getItem('menus'))
-    let that = this
-    API.tokenUser().then(function (result) {
-      that.nickname = result.nickname
-      that.avatar = result.avatar
-    }).catch(
-      () => {
-        localStorage.removeItem('access-token')
-        that.$router.go('/login') // 用go刷新
-      }
-    )
-  }
-}
+  };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">

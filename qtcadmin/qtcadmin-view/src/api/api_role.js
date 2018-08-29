@@ -1,18 +1,19 @@
 /**
+ * Created by bootdo.
  * 角色相关api
  */
 import * as API from './'
 
 export default {
 
-  // 查询获取role列表(通过page分页)
+  //查询获取role列表(通过page分页)
   findList: params => {
     return API.GET('/api-admin/role', params)
   },
 
-  // 查询获取一条role信息
+  //查询获取一条role信息
   findById: id => {
-    return API.GET('/api-admin/role/userId/' + id)
+    return API.GET('/api-admin/role/userId/'+id)
   },
 
   add: params => {
@@ -22,12 +23,12 @@ export default {
     return API.PUT('/api-admin/role', params)
   },
 
-  // 单个删除role
-  removeRole: params => {
-    return API.DELETE('/api-admin/role', params)
+  //单个删除role
+  removeRole:params =>{
+    return API.DELETE('/api-admin/role',params)
   },
 
-  // 批量删除，传ids数组
+  //批量删除，传ids数组
   removeBatch: (ids) => {
     return API.DELETE(`/api/v1/roles/batch/${ids}`)
   }
