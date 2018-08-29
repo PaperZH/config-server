@@ -73,6 +73,41 @@ public class LoginController {
     }
 
     /**
+     * 用户登陆
+     * @param loginDTO
+     * @param request
+     * @param response
+     * @return
+     */
+    @Log("登录")
+    @PostMapping("/homeLogin")
+    ResponseResult homeLogin(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
+        String username = loginDTO.getUsername().trim();
+        String password = loginDTO.getPassword().trim();
+        password = MD5Utils.encrypt(username, password);
+        Map<String, Object> param = new HashMap<>();
+        param.put("username", username);
+        param.put("password",password);
+        List<UserDO> userDOs = userService.list(param);
+        if (userDOs == null || userDOs.size() != 1) {
+            return ResponseResult.error("用户或密码错误");
+        }
+        UserDO userDO = userDOs.get(0);
+        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
+                userDO.getName(), userDO.getNickname(), userDO.getAvatar());
+        String token = "";
+        try {
+            token = JwtUtils.generateToken(userToken, 2 * 60 * 60 * 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //首先清除用户缓存权限
+        return ResponseResult.ok("登录成功")
+                .put("token", token).put("user", userDO);
+    }
+
+
+    /**
      * 用户退出
      * @param request
      * @param response

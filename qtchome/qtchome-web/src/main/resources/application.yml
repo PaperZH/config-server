@@ -11,4 +11,4 @@ logging:
   level: debug
 spring:
   application:
-    name: front-end-service
+    name: api-home
