@@ -1,6 +1,7 @@
 package com.ucar.qtc.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.service.LoginService;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
