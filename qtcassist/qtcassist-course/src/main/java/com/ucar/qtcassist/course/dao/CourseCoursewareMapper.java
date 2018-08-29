@@ -1,7 +1,11 @@
 package com.ucar.qtcassist.course.dao;
 
-import com.ucar.qtcassist.course.model.CourseCoursewareDO;
+import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
+import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface CourseCoursewareMapper {
@@ -16,4 +20,8 @@ public interface CourseCoursewareMapper {
     int updateByPrimaryKeySelective(CourseCoursewareDO record);
 
     int updateByPrimaryKey(CourseCoursewareDO record);
+
+    List<Long> getCoursewareIdListByCourseId(Long courseId);
+
+    Long getIdByCourseIdAndCoursewareId(@Param("courseId") Long courseId, @Param("coursewareId") Long coursewareId);
 }

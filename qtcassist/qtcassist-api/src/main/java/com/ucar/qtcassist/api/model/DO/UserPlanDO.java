@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.schedule.model;
+package com.ucar.qtcassist.api.model.DO;
 
 import java.util.Date;
 

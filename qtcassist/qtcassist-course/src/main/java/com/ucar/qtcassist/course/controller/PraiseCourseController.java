@@ -16,31 +16,55 @@ public class PraiseCourseController implements PraiseCourseApi {
     private PraiseCourseService praiseCourseService;
 
     /**
-     * 删除点赞课程记录
-     * @param praiseCourseId 点赞课程记录id
-     * @return
+     * 添加点赞课程记录
      */
     @Override
-    public Result deletePraiseCourse(@PathVariable("praiseCourseId") Long praiseCourseId) {
-        int count = praiseCourseService.deleteByPrimaryKey(praiseCourseId);
-        if(count != 0) {
-            return Result.getSuccessResult("删除点赞课程信息成功");
+    public Result addPraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
+        PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
+        if(praiseCourse != null) {
+            if(praiseCourse.getDelFlag() == 1){
+                return Result.getSuccessResult("已点赞课程");
+            } else {
+                praiseCourse.setPublishDate(new Date());
+                praiseCourse.setDelFlag(new Byte("1"));
+                praiseCourseService.updateByPrimaryKeySelective(praiseCourse);
+                return Result.getSuccessResult("添加点赞课程成功");
+            }
         } else {
-            return Result.getBusinessException("删除点赞课程信息失败", "-2");
+            praiseCourse = new PraiseCourseDO();
+            praiseCourse.setUserId(userId);
+            praiseCourse.setCourseId(courseId);
+            praiseCourse.setPublishDate(new Date());
+            praiseCourse.setDelFlag(new Byte("1"));
+            int count = praiseCourseService.insert(praiseCourse);
+            if (count > 0) {
+                return Result.getSuccessResult("添加点赞课程成功");
+            } else {
+                return Result.getBusinessException("添加点赞课程失败", "-2");
+            }
         }
     }
 
     /**
-     * 添加点赞课程记录
+     * 删除点赞课程记录
+     * @param userId 用户id
+     * @parm courseId 课程id
+     * @return
      */
     @Override
-    public Result addPraiseCourse(@RequestBody PraiseCourseDO praiseCourse) {
-        praiseCourse.setPublishDate(new Date());
-        int count = praiseCourseService.insert(praiseCourse);
-        if(count != 0) {
-            return Result.getSuccessResult("添加点赞课程成功");
+    public Result deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
+        PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
+        if(praiseCourse == null) {
+            return Result.getSuccessResult("没有点选该课程");
         } else {
-            return Result.getBusinessException("添加点赞课程失败", "-2");
+            int count = praiseCourseService.deleteByPrimaryKey(praiseCourse.getId());
+            if(count != 0) {
+                return Result.getSuccessResult("删除点赞课程信息成功");
+            } else {
+                return Result.getBusinessException("删除点赞课程信息失败", "-2");
+            }
         }
     }
+
+
 }

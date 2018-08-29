@@ -30,7 +30,7 @@ public class UserCourseController implements UserCourseApi {
 
     /**
      * 根据课程名字或发布时间区间获取发布的课程分页列表
-     * @param query (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
+     * @param query (long userId, String courseName, Date startDate, Date endDate, int currentPage, int pageSize)
      * @return
      */
     @Override
@@ -43,31 +43,29 @@ public class UserCourseController implements UserCourseApi {
         List<CourseDO> courseDOList = null;
         List<Long> courseIdList = null;
         Integer total = null;
-        if(query.getCourseName() != null) {
-            courseIdList = userCourseService.selectCourseIdListByUserId(userId);
+        if((query.getCourseName() == null || query.getCourseName().equals("")) && query.getStartDate() == null) {
+            courseIdList = userCourseService.selectCourseIdList(userId, null, null);
+            courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
+            total = courseService.getTotalById(courseIdList);
+        } else if ((query.getCourseName() != null && !query.getCourseName().equals("")) && query.getStartDate() != null) {
+            String courseName = query.getCourseName();
+            Date startDate = query.getStartDate();
+            Date endDate = query.getEndDate();
+            courseIdList = userCourseService.selectCourseIdList(userId, startDate, endDate);
+            courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
+            total = courseService.getTotalByCourseName(courseIdList, courseName);
+        } else if(query.getCourseName() != null && !query.getCourseName().equals("")) {
+            courseIdList = userCourseService.selectCourseIdList(userId, null, null);
             String courseName = query.getCourseName();
             courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
             total = courseService.getTotalByCourseName(courseIdList, courseName);
         } else {
-            Date startTime = query.getStartTime();
-            Date endTime = query.getEndTime();
-            courseIdList = userCourseService.selectCourseIdListByDate(userId, startTime, endTime);
+            Date startDate = query.getStartDate();
+            Date endDate = query.getEndDate();
+            courseIdList = userCourseService.selectCourseIdList(userId, startDate, endDate);
             courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
             total = courseService.getTotalById(courseIdList);
         }
-        return PageResult.getSuccessResult(courseDOList, total);
-    }
-
-    /**
-     * 查看某个用户已经发布的所有的课程
-     * @param userId 用户id
-     * @return
-     */
-    @Override
-    public Result<Page<CourseDO>> getAllUserCourseList(Long userId) {
-        List<Long> courseIdList = userCourseService.selectCourseIdListByUserId(userId);
-        List<CourseDO> courseDOList = courseService.selectListById(courseIdList, null, null);
-        Integer total = courseService.getTotalById(courseIdList);
         return PageResult.getSuccessResult(courseDOList, total);
     }
 
@@ -93,11 +91,11 @@ public class UserCourseController implements UserCourseApi {
      * @return
      */
     @Override
-    public Result deleteUserCourse(@RequestBody Query query) {
+    public Result deleteUserCourseList(@RequestBody Query query) {
         Long userId = query.getUserId();
         Long[] courseIds = query.getCourseIds();
 
-        int count = userCourseService.deleteListById(userId, courseIds);
+        int count = userCourseService.deleteListByIdList(userId, courseIds);
         if(count > 0) {
             logger.info("批量删除发布的课程信息成功");
             return Result.getSuccessResult("批量删除发布的课程信息成功");
