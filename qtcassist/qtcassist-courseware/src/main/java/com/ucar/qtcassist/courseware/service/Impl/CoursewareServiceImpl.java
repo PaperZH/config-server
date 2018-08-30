@@ -1,12 +1,12 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
+import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
-import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,18 +52,23 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public List<CoursewareDTO> selectCoursewareList(List<Long> list) {
-        List<CoursewareDO> coursewareDOList =coursewareMapper.selectByListKey(list);
-        List<CoursewareDTO> coursewareDTOList =new ArrayList<>();
-        for(int i=0;i<coursewareDOList.size();i++){
-            BaseCoursewareDO baseCoursewareDO =baseCoursewareMapper.selectByPrimaryKey(coursewareDOList.get(i).getBaseCoursewareId());
-            CoursewareDTO coursewareDTO=new CoursewareDTO();
-            coursewareDTO.setName(coursewareDOList.get(i).getCoursewareName());
-            coursewareDTO.setDescription(coursewareDOList.get(i).getCoursewareDescription());
-            coursewareDTO.setId(coursewareDOList.get(i).getId());
-            coursewareDTO.setPublishTime(coursewareDOList.get(i).getPublishTime());
-            coursewareDTO.setSourceUrl(baseCoursewareDO.getSourceUrl());
-            coursewareDTOList.add(coursewareDTO);
+        List<CoursewareDO> coursewareDOList = coursewareMapper.selectByListKey(list);
+        List<CoursewareDTO> coursewareDTOList = new ArrayList<>();
+        if(list != null && list.size() > 0) {
+            for(int i = 0; i < coursewareDOList.size(); i++) {
+                BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(coursewareDOList.get(i).getBaseCoursewareId());
+                CoursewareDTO coursewareDTO = new CoursewareDTO();
+                coursewareDTO.setName(coursewareDOList.get(i).getCoursewareName());
+                coursewareDTO.setDescription(coursewareDOList.get(i).getCoursewareDescription());
+                coursewareDTO.setId(coursewareDOList.get(i).getId());
+                coursewareDTO.setPublishTime(coursewareDOList.get(i).getPublishTime());
+                coursewareDTO.setSourceUrl(baseCoursewareDO.getSourceUrl());
+                coursewareDTOList.add(coursewareDTO);
+            }
+            return coursewareDTOList;
+        } else {
+            return null;
         }
-        return coursewareDTOList;
+
     }
 }
