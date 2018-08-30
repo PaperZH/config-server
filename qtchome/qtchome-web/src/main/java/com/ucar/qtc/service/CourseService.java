@@ -84,6 +84,8 @@ public interface CourseService {
     @RequestMapping("/course/addCourse")
     public ResponseResult addCourse(Map<String,Object> course);
 
+    @RequestMapping
+    public ResponseResult getPlanList(String planName);
     /**
      * 更新课程
      * @param course ((long userId , Course course))

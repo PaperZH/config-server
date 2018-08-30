@@ -18,7 +18,7 @@ public class PlanController {
      * @param techerId
      * @return
      */
-    @GetMapping("/getStudents")
+    @RequestMapping("/getStudents")
     public ResponseResult getStudents(long techerId) {
         System.out.println(techerId);
         ArrayList<Map> list = new ArrayList<>();
@@ -39,18 +39,17 @@ public class PlanController {
      * @param params
      * @return
      */
-    @GetMapping("/getTeacherPlan")
+    @RequestMapping("/getTeacherPlan")
     public ResponseResult getTeacherPlanList(@RequestParam Map<String, Object> params) {
         System.out.println(params);
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 8; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("planId",i);
-            hashMap.put("studentName", "张三" + i);
+            hashMap.put("planContent", "培训内容"+i );
+            hashMap.put("planDestination", "培训目的"+i);
+            hashMap.put("planScore", 10);
             hashMap.put("planTitle", "计划名称" + i);
-            hashMap.put("startDate", "2018-8-20");
-            hashMap.put("endDate", "2018-8-30");
-            hashMap.put("courseName", "课程名称" + i);
             hashMap.put("studentGetScore", i);
             hashMap.put("planStudentScore", 10);
             if (i % 2 == 0) {
@@ -61,9 +60,31 @@ public class PlanController {
 
             list.add(hashMap);
         }
-        return ResponseResult.ok().put("data", list).put("total", 20).put("students", getStudents(100).get("data"));
+        return ResponseResult.ok().put("data", list).put("total", 20);
     }
 
+    /**
+     * 根据计划名称模糊查询制定的计划列表
+     * @param planName
+     * @return
+     */
+    @GetMapping("/getPlanListByName")
+    public ResponseResult getPlanByName(@RequestParam String planName){
+        ArrayList<Map> list = new ArrayList();
+        for (int i = 0; i < 8; i++) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("planId",i);
+            hashMap.put("planTitle", "计划名称" + i);
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
+    }
+
+    /**
+     * 分页获取发布的计划列表
+     * @param params
+     * @return
+     */
     @GetMapping("/getPublishedPlan")
     public ResponseResult getPublishedPlan(@RequestParam Map<String,Object> params){
         System.out.println(params);
@@ -85,11 +106,11 @@ public class PlanController {
 
             list.add(hashMap);
         }
-        return ResponseResult.data(list);
+        return ResponseResult.data(list).put("students",this.getStudents(1).get("data")).put("total",10);
     }
 
     /**
-     * 获取学生计划列表
+     * 分页获取学生计划列表
      *
      * @param params
      * @return
@@ -116,26 +137,67 @@ public class PlanController {
         return ResponseResult.ok().put("data", list).put("total", 20);
     }
 
+    @RequestMapping("/getCourseByPlanId")
+    public ResponseResult getCourseByPlanId(@RequestParam long planId){
+        ArrayList<Map> list = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("courseId", i);
+            hashMap.put("courseName", "课程名字"+i);
+            hashMap.put("courseDescription", "课程描述"+i);
+            list.add(hashMap);
+    }
+    return ResponseResult.data(list);
+    }
+    /**
+     * 增加制定计划
+     * @param params
+     * @return
+     */
     @RequestMapping("/addPlan")
     public ResponseResult addPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        ArrayList<Date> date= (ArrayList<Date>) params.get("data");
-        Date startDate = date.get(0);
-        Date endDate = date.get(1);
-        params.remove("date");
-        params.put("startDate",startDate);
-        params.put("endDate", endDate);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 增加发布计划
+     * @param params
+     * @return
+     */
+    @RequestMapping("/addPublishedPlan")
+    public ResponseResult addPublishedPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        System.out.println(date.get(0));
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 增加发布计划课程
+     * @param params
+     * @return
+     */
+    @RequestMapping("/addPublishedCourse")
+    public ResponseResult addPublishedCourse(@RequestBody Map<String,Object> params){
+        System.out.println(params);
         return ResponseResult.ok();
     }
     /**
-     * 删除计划
+     * 删除制定的计划
      * @param planId
      * @return
      */
     @GetMapping("/deletePlan")
     public ResponseResult deletePlan(@RequestParam long planId){
+        System.out.println(planId);
+        return ResponseResult.ok("删除成功");
+    }
+    /**
+     * 删除发布的计划
+     * @param planId
+     * @return
+     */
+    @GetMapping("/deletePublishedPlan")
+    public ResponseResult deletePublishedPlan(@RequestParam long planId){
         System.out.println(planId);
         return ResponseResult.ok("删除成功");
     }

@@ -84,8 +84,9 @@ public class CourseController {
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseName","课程名称"+i);
+            hashMap.put("courseName","课程名称"+10*i);
             hashMap.put("courseId",20*i);
+            hashMap.put("courseDescription","课程描述"+10*i);
             list.add(hashMap);
         }
         return ResponseResult.data(list);
