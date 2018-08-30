@@ -9,6 +9,8 @@ import java.util.Date;
  * @since 2018年08月21日
  */
 public class BaseCoursewareDTO {
+    private Long typeId;
+
     private String type;
 
     private String coursewareName;
@@ -22,6 +24,14 @@ public class BaseCoursewareDTO {
     private String previewUrl;
 
     private String sourceUrl;
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
 
     public String getType() {
         return type;

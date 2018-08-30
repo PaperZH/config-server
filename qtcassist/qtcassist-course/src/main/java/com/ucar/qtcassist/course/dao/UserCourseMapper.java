@@ -23,11 +23,9 @@ public interface UserCourseMapper {
 
     UserCourseDO selectByCourseId(Long courseId);
 
-    List<Long> selectCourseIdListByUserId(Long userId);
+    List<Long> selectCourseIdList(@Param("userId") Long userId,
+                                  @Param("startDate") Date startDate,
+                                  @Param("endDate") Date endDate);
 
-    List<Long> selectCourseIdListByDate(@Param("userId") Long userId,
-                                        @Param("startTime") Date startTime,
-                                        @Param("endTime") Date endTime);
-
-    int deleteListById(@Param("userId") Long userId, @Param("courseIds") Long[] courseIds);
+    int deleteListByIdList(@Param("userId") Long userId, @Param("courseIds") Long[] courseIds);
 }

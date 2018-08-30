@@ -20,27 +20,27 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handSearch" size="small">查询</el-button>
-          <el-button  type="danger" @click="handleDel" size="small">删除</el-button>
+          <el-button  type="danger" @click="handDelete" size="small">删除</el-button>
         </el-form-item>
       </el-form>
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
-      <el-col :span="8" v-for="(o, index) in tableData" :key="o.courseId" style="margin-top: 20px;">
+      <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
           <div style="position: absolute; color: #172dff">
-            <el-checkbox  :label="o.courseId">&nbsp</el-checkbox>
+            <el-checkbox  :label="item.courseId">&nbsp</el-checkbox>
           </div>
-          <img v-bind:src="o.courseCover"  class="image">
+          <img v-bind:src="item.courseCover"  class="image">
           <div style="padding: 7px;">
-            <span class="time">{{o.courseName}}</span>
+            <span class="time">{{item.courseName}}</span>
             <div class="bottom clearfix" style="margin-top: 6px;">
-              <span class="time">{{o.type_name}}</span>
-              <span class="time" style="    margin-left: 1%" >
-                 <i class="fa fa-thumbs-o-up" >{{o.praiseNum}}</i>
+              <span class="time">{{item.typeName}}</span>
+              <span class="time" style="margin-left: 1%" >
+                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
             </div>
-            <time class="time">{{o.publishTime}}</time>
+            <time class="time">{{item.publishTime}}</time>
           </div>
         </el-card>
       </el-col>
@@ -48,13 +48,13 @@
     </el-row>
       <div class="block" style="text-align: right">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          :size-change="handleSizeChange"
+          :current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
           layout="total, prev, pager, next, jumper"
-          :total="400">
+          :total=total>
         </el-pagination>
       </div>
   </div>
@@ -66,6 +66,7 @@
       data () {
         return {
           currentPage: 1,
+          total: 0,
           checked: false,
           checkList: [],
           formInline: {
@@ -75,9 +76,9 @@
           tableData: {},
           queryParams: {
             userId: this.$store.getters.userId,
-            courseName: '',
-            startDate: '',
-            endDate: '',
+            courseName: null,
+            startDate: null,
+            endDate: null,
             currentPage: 1,
             pageSize: 9
           }
@@ -95,25 +96,33 @@
         getHtml (val) {
 
         },
-        handleDel (val) {
-          console.log(this.checkList)
-          // let data = { courseId: [{'name': 'zhu', 'age': 10}, {'name': 'gou', 'age': 12}] }
-          let data = {'userId': this.queryParams.userId, 'courseId': [1, 2, 3, 4]}
+        handDelete (val) {
+          let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
           this.$store.dispatch('Post', {'url': '/api-home/course/deleteFavoriteCourse', 'data': data}).then(res => {
-            console.log(res.data)
+            this.getFavoriteCourse()
           })
         },
         handSearch () {
-          this.queryParams.courseName = this.formInline.name
-          this.queryParams.startDate = this.formInline.date[0]
-          this.queryParams.endDate = this.formInline.date[1]
+          if (this.formInline.name.trim().length == 0) {
+            this.queryParams.courseName = null
+          } else {
+            this.queryParams.courseName = this.formInline.name
+          }
+          if (this.formInline.date == null) {
+            this.queryParams.startDate = null
+            this.queryParams.endDate = null
+          } else {
+            this.queryParams.startDate = this.formInline.date[0]
+            this.queryParams.endDate = this.formInline.date[1]
+          }
           this.queryParams.currentPage = 1
           this.getFavoriteCourse()
         },
         getFavoriteCourse () {
           console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/course/getFavoriteCourse', 'data': this.queryParams}).then(res => {
-            this.tableData = res.data.data
+            this.total = res.data.re.total
+            this.tableData = res.data.re.rows
           })
         }
       },

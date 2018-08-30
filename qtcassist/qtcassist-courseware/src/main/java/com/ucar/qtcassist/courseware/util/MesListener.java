@@ -67,13 +67,13 @@ public class MesListener implements MessageListener {
                     dir.mkdirs();
                 }
                 remoteFileService.fileConvert(fPPT, fPDF);
-                LOGGER.error("conver successfully");
+                LOGGER.info("conver successfully");
             }
             InputStream in = null;
             try {
                 in = new FileInputStream(fPDF);
                 preUrl = remoteFileService.uploadFile(in, Name + "." + FileType.PDF);
-                LOGGER.error("upload successfully[preUrl]" + preUrl);
+                LOGGER.info("upload successfully[preUrl]" + preUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }

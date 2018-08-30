@@ -18,11 +18,9 @@ public interface CollectCourseService {
 
     int updateByPrimaryKey(CollectCourseDO record);
 
-    List<Long> selectCourseIdListByUserId(Long userId);
+    List<Long> selectCourseIdList(Long userId, Date startDate, Date endDate);
 
-    List<Long> selectCourseIdListByDate(Long userId,
-                                        Date startTime,
-                                        Date endTime);
+    int deleteListByIdList(Long userId, Long[] courseIds);
 
-    int deleteListById(Long userId, Long[] courseIds);
+    CollectCourseDO getByUserIdAndCourseId(Long userId, Long courseId);
 }

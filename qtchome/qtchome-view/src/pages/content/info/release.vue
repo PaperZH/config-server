@@ -4,12 +4,12 @@
       <el-row>
         <el-col >
           <el-form-item label="课程名称:">
-            <el-input v-model="form.courseName" placeholder="请输入课程名称" ></el-input>
+            <el-input v-model="form.course.courseName" placeholder="请输入课程名称" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :span="12" label="课程分类:">
-            <el-select v-model="form.typeId" placeholder="请选择分类" >
+            <el-select v-model="form.course.typeId" placeholder="请选择分类" >
               <div  v-for="(o, index) in courseType" :key="o.typeId">
               <el-option :label="o.typeName" :value="o.typeId"></el-option>
                 </div>
@@ -30,21 +30,21 @@
               :on-success="handleAvatarSuccess"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
               :before-upload="beforeAvatarUpload">
-              <img v-if="form.courseCover" :src="form.courseCover" class="avatar1">
+              <img v-if="form.course.courseCover" :src="form.course.courseCover" class="avatar1">
               <i v-else class="el-icon-plus avatar-uploader-icon1"></i>
             </el-upload>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="课程有效期:">
-            <el-input :span="8" v-model="form.validDays" placeholder="输入天数" >
+            <el-input :span="8" v-model="form.course.validDays" placeholder="输入天数" >
               <template slot="append">天</template>
             </el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="课程介绍:">
-        <el-input v-model="form.courseDescription" placeholder="请输入课程描述" type="textarea"
+        <el-input v-model="form.course.courseDescription" placeholder="请输入课程描述" type="textarea"
                   :rows="5"></el-input>
       </el-form-item>
       <el-form-item style="text-align: right;">
@@ -59,25 +59,16 @@
     data () {
       return {
         activeName: 'first',
-        courseType: [
-          {
-            typeId: 1,
-            typeName: 'Spring'
-          },
-          { typeId: 2,
-            typeName: 'Java'
-          },
-          { typeId: 3,
-            typeName: 'MySQL'
-          }
-        ],
+        courseType: {},
         form: {
-          courseName: '',
-          courseCover: '',
-          validDays: '',
-          courseDescription: '默认描述',
-          courseWare: [],
+          course: {},
+          // courseName: '',
+          // courseCover: '',
+          // validDays: '',
+          // courseDescription: '默认描述',
+          coursewares: {},
           teacher: {username: '张三丰'}
+          // teacher: {}
         },
         imageUrl: ''
 
@@ -85,13 +76,16 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        this.$store.dispatch('Get', {'url': '/api-home/course/getCourseType'}).then(res => {
-          this.courseType = res.data.courseType
+        this.$store.dispatch('Get', {'url': '/api-home/course/getCourseTypeList'}).then(res => {
+          this.courseType = res.data.re
         })
         let courseId = this.$router.currentRoute.params.courseId
+        alert(courseId)
         if (courseId != null) {
-          this.$store.dispatch('Get', {'url': `/api-home/course/getDetails/${courseId}`}).then(res => {
-            this.form = res.data.data
+          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
+            // this.form = res.data.re
+            this.form.course = res.data.re.course
+            this.coursewares = res.data.re.coursewares
           })
         } else {
           console.log('创建新的course')

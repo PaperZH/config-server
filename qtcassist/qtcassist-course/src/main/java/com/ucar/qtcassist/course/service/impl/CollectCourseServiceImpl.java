@@ -46,18 +46,18 @@ public class CollectCourseServiceImpl implements CollectCourseService {
     }
 
     @Override
-    public List<Long> selectCourseIdListByUserId(Long userId) {
-        return collectCourseMapper.selectCourseIdListByUserId(userId);
+    public List<Long> selectCourseIdList(Long userId, Date startDate, Date endDate) {
+        return collectCourseMapper.selectCourseIdList(userId, startDate, endDate);
     }
 
     @Override
-    public List<Long> selectCourseIdListByDate(Long userId, Date startTime, Date endTime) {
-        return collectCourseMapper.selectCourseIdListByDate(userId, startTime, endTime);
+    public int deleteListByIdList(Long userId, Long[] courseIds) {
+        return collectCourseMapper.deleteListByIdList(userId, courseIds);
     }
 
     @Override
-    public int deleteListById(Long userId, Long[] courseIds) {
-        return collectCourseMapper.deleteListById(userId, courseIds);
+    public CollectCourseDO getByUserIdAndCourseId(Long userId, Long courseId) {
+        return collectCourseMapper.getByUserIdAndCourseId(userId, courseId);
     }
 
 }

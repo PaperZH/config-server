@@ -60,7 +60,7 @@ public class EvaluateCourseController implements EvaluateCourseApi {
     }
 
     @Override
-    public Result<Page<EvaluateCourseDO>> getEvaluateCourseList(Long courseId) {
+    public Result<Page<EvaluateCourseDO>> getEvaluateCourseList(@PathVariable("courseId") Long courseId) {
         List<EvaluateCourseDO> evaluateCourseDOList = evaluateCourseService.getListByCourseId(courseId);
         Integer total = evaluateCourseService.getTotalByCourseId(courseId);
         return PageResult.getSuccessResult(evaluateCourseDOList, total);
