@@ -42,7 +42,7 @@
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="onAddPlan">总结</el-button>
+          <el-button type="text" size="small" @click="onAddPlan(scope.row.planId)">总结</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,37 +78,7 @@
           message: {},
           value5: 3.7,
           currentPage4: 4,
-          dataPlan: [{
-            name: 'XXXXX培训计划',
-            startDate: '2018-07-23',
-            endDate: '2018-07-27',
-            state: '未完成',
-            score: 3.7,
-            summary: '啊大苏打大苏打大苏打大撒',
-            planTime: '1.部署开发环境；\n' +
-            '2.尝试完成一个简单的web，要求实现用户与角色的管理；\n' +
-            '3.熟悉idea、git、maven的使用；',
-            planContent: '了解企业文化，学习公司开发规范\n' +
-            '\n' +
-            '2、熟悉面向对象编程思想，熟悉封装、继承、多态特性\n' +
-            '\n' +
-            '3、熟练掌握JavaSE的核心语法，'
-          }, {
-            name: 'XXXXX培训计划',
-            startDate: '2018-07-23',
-            endDate: '2018-07-27',
-            state: '未完成',
-            score: 3.7,
-            summary: '啊大苏打大苏打大苏打大撒',
-            planTime: '1.部署开发环境；\n' +
-            '2.尝试完成一个简单的web，要求实现用户与角色的管理；\n' +
-            '3.熟悉idea、git、maven的使用；',
-            planContent: '了解企业文化，学习公司开发规范\n' +
-            '\n' +
-            '2、熟悉面向对象编程思想，熟悉封装、继承、多态特性\n' +
-            '\n' +
-            '3、熟练掌握JavaSE的核心语法，'
-          }],
+          dataPlan: [],
           queryParams: {
             userId: this.$store.getters.userId,
             planName: '',
@@ -135,8 +105,13 @@
         getHtml (val) {
 
         },
-        onAddPlan () {
-          this.show = true
+        onAddPlan (val) {
+          console.log(val)
+          this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
+            console.log(res)
+            this.message = res.data.data
+            this.show = true
+          })
         },
         tableRowClassName ({row, rowIndex}) {
           if (rowIndex === 1) {
