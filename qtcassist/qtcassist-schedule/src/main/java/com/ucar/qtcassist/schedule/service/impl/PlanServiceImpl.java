@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.schedule.service.impl;
 
 import com.ucar.qtcassist.schedule.dao.PlanMapper;
-import com.ucar.qtcassist.schedule.model.PlanDO;
+import com.ucar.qtcassist.api.model.DO.PlanDO;
 import com.ucar.qtcassist.schedule.service.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.ucar.qtcassist.schedule.service.impl;
 
 
 import com.ucar.qtcassist.schedule.dao.CoursePlanMapper;
-import com.ucar.qtcassist.schedule.model.CoursePlanDO;
+import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

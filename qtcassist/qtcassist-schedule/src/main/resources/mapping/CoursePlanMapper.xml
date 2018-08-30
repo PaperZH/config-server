@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ucar.qtcassist.schedule.dao.CoursePlanMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.schedule.model.CoursePlanDO" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.api.model.DO.CoursePlanDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="plan_id" property="planId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
@@ -19,11 +19,11 @@
     delete from assist_course_plan
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course_plan (plan_id, course_id)
     values (#{planId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course_plan
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="planId != null" >
@@ -42,7 +42,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.schedule.model.CoursePlanDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" >
     update assist_course_plan
     <set >
       <if test="planId != null" >
@@ -54,7 +54,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.schedule.model.CoursePlanDO" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" >
     update assist_course_plan
     set plan_id = #{planId,jdbcType=BIGINT},
       course_id = #{courseId,jdbcType=BIGINT}

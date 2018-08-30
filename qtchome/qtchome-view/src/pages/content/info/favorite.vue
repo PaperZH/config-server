@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handSearch" size="small">查询</el-button>
-          <el-button  type="danger" @click="handleDel" size="small">删除</el-button>
+          <el-button  type="danger" @click="handDelete" size="small">删除</el-button>
         </el-form-item>
       </el-form>
 
@@ -36,7 +36,7 @@
             <span class="time">{{item.courseName}}</span>
             <div class="bottom clearfix" style="margin-top: 6px;">
               <span class="time">{{item.typeName}}</span>
-              <span class="time" style="    margin-left: 1%" >
+              <span class="time" style="margin-left: 1%" >
                  <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
             </div>
@@ -48,8 +48,8 @@
     </el-row>
       <div class="block" style="text-align: right">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          :size-change="handleSizeChange"
+          :current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
@@ -66,7 +66,7 @@
       data () {
         return {
           currentPage: 1,
-          total:0,
+          total: 0,
           checked: false,
           checkList: [],
           formInline: {
@@ -76,9 +76,9 @@
           tableData: {},
           queryParams: {
             userId: this.$store.getters.userId,
-            courseName: '',
-            startDate: '',
-            endDate: '',
+            courseName: null,
+            startDate: null,
+            endDate: null,
             currentPage: 1,
             pageSize: 9
           }
@@ -96,18 +96,25 @@
         getHtml (val) {
 
         },
-        handleDel (val) {
-          console.log(this.checkList)
-          // let data = { courseId: [{'name': 'zhu', 'age': 10}, {'name': 'gou', 'age': 12}] }
-          let data = {'userId': this.queryParams.userId, 'courseId': [1, 2, 3, 4]}
+        handDelete (val) {
+          let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
           this.$store.dispatch('Post', {'url': '/api-home/course/deleteFavoriteCourse', 'data': data}).then(res => {
-            console.log(res.data)
+            this.getFavoriteCourse()
           })
         },
         handSearch () {
-          this.queryParams.courseName = this.formInline.name
-          this.queryParams.startDate = this.formInline.date[0]
-          this.queryParams.endDate = this.formInline.date[1]
+          if (this.formInline.name.trim().length == 0) {
+            this.queryParams.courseName = null
+          } else {
+            this.queryParams.courseName = this.formInline.name
+          }
+          if (this.formInline.date == null) {
+            this.queryParams.startDate = null
+            this.queryParams.endDate = null
+          } else {
+            this.queryParams.startDate = this.formInline.date[0]
+            this.queryParams.endDate = this.formInline.date[1]
+          }
           this.queryParams.currentPage = 1
           this.getFavoriteCourse()
         },

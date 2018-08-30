@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ucar.qtcassist.schedule.dao.PlanMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.schedule.model.PlanDO" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.api.model.DO.PlanDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="plan_title" property="planTitle" jdbcType="VARCHAR" />
     <result column="plan_content" property="planContent" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.PlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_plan (plan_title, plan_content,
       plan_destination, plan_score, builder_id
       )
@@ -32,7 +32,7 @@
       #{planDestination,jdbcType=VARCHAR}, #{planScore,jdbcType=REAL}, #{builderId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.PlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_plan
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="planTitle != null" >
@@ -75,7 +75,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.schedule.model.PlanDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" >
     update assist_plan
     <set >
       <if test="planTitle != null" >
@@ -99,7 +99,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.schedule.model.PlanDO" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" >
     update assist_plan
     set plan_title = #{planTitle,jdbcType=VARCHAR},
       plan_content = #{planContent,jdbcType=VARCHAR},

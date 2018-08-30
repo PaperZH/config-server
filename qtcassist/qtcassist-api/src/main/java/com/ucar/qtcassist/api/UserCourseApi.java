@@ -1,8 +1,7 @@
 package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.common.Page;
-import com.ucar.qtcassist.api.model.DO.CourseDO;
-import com.ucar.qtcassist.api.model.DO.UserCourseDO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.Query;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,7 @@ public interface UserCourseApi {
      * @return
      */
     @PostMapping("/getUserCourseList")
-    Result<Page<CourseDO>> getUserCourseList(@RequestBody Query query);
+    Result<Page<CourseVO>> getUserCourseList(@RequestBody Query query);
 
     @GetMapping("/addUserCourse/{userId}/{courseId}")
     Result addUserCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
