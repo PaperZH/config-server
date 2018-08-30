@@ -17,21 +17,20 @@ import java.util.Map;
 @RequestMapping("/pages")
 public class FrontPageController {
 
-    int limit = 6;
-    int offset = 0;
-    int page = 1;
+
     @Autowired
     private BannerService bannerService;
 
-    @Autowired
-    private FileService fileService;
 
     @GetMapping("banner/list")
     public ResponseResult bannerList() {
+        int limit = 6;
+        int offset = 0;
+        int page = 1;
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("limit",limit);
         params.put("offset",offset);
-        params.put("page",1);
+        params.put("page",page);
         Query query = new Query(params);
         List<BannerDO> bannerList = bannerService.list(query);
         int total = bannerService.count(query);
