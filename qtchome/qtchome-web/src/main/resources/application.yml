@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.103.14.221:8001/eureka/
+      defaultZone: http://localhost:8001/eureka/
   instance:
     prefer-ip-address: true
 security:
@@ -14,3 +14,6 @@ logging:
 spring:
   application:
     name: api-home
+ribbon:
+   ReadTimeout: 60000
+   ConnectTimeout: 30000
