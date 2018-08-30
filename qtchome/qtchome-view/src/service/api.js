@@ -18,7 +18,7 @@ export function logout (userId) {
     }
   })
 }
-const base = 'http://10.103.14.221:8002'
+const base = 'http://localhost:8002'
 export function get (url, data) {
   url = base + url
   return request({
