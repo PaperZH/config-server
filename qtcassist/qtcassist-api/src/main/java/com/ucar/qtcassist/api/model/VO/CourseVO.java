@@ -1,7 +1,5 @@
 package com.ucar.qtcassist.api.model.VO;
 
-import java.util.Date;
-
 public class CourseVO {
     private Long courseId;
 
@@ -10,12 +8,14 @@ public class CourseVO {
     private String courseName;
 
     private String courseCover;
-
+    //详情才有
     private String courseDescription;
 
     private Integer praiseNum;
+    //详情才有
+    private String invalidDate;
 
-    private Date publishTime;
+    private String publishTime;
 
     public Long getCourseId() {
         return courseId;
@@ -65,11 +65,19 @@ public class CourseVO {
         this.praiseNum = praiseNum;
     }
 
-    public Date getPublishTime() {
+    public String getInvalidDate() {
+        return invalidDate;
+    }
+
+    public void setInvalidDate(String invalidDate) {
+        this.invalidDate = invalidDate;
+    }
+
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 }

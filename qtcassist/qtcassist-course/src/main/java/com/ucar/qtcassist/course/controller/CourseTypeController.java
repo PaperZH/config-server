@@ -49,12 +49,12 @@ public class CourseTypeController implements CourseTypeApi {
 
     /**
      * 根据课程类型id得到课程类型对象
-     * @param id 课程类型id
+     * @param courseTypeId 课程类型id
      * @return
      */
     @Override
-    public Result<CourseTypeDO> getCourseType(@PathVariable("id") Long id) {
-        CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(id);
+    public Result<CourseTypeDO> getCourseType(@PathVariable("courseTypeId") Long courseTypeId) {
+        CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseTypeId);
         if(courseType != null) {
             return Result.getSuccessResult(courseType);
         } else {

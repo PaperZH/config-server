@@ -11,9 +11,9 @@ public class Query {
 
     private String type;
 
-    private Date startTime;
+    private Date startDate;
 
-    private Date endTime;
+    private Date endDate;
 
     private Integer currentPage;
 
@@ -51,20 +51,20 @@ public class Query {
         this.type = type;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Integer getCurrentPage() {

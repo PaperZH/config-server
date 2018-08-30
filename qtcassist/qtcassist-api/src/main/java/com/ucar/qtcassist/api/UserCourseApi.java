@@ -14,20 +14,11 @@ public interface UserCourseApi {
 
     /**
      * 根据课程名字或发布时间区间获取发布的课程分页列表
-     * @param query (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
+     * @param query (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize)
      * @return
      */
     @PostMapping("/getUserCourseList")
     Result<Page<CourseDO>> getUserCourseList(@RequestBody Query query);
-
-    /**
-     * 查看某个用户已经发布的所有的课程
-     * @param userId 用户id
-     * @return
-     */
-    @GetMapping("/getAllUserCourseList/{userId}")
-    Result<Page<CourseDO>> getAllUserCourseList(@PathVariable Long userId);
-
 
     @GetMapping("/addUserCourse/{userId}/{courseId}")
     Result addUserCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
@@ -37,6 +28,6 @@ public interface UserCourseApi {
      * @param query (long userId, long[] courseId)
      * @return
      */
-    @PostMapping("/deleteUserCourse")
-    Result deleteUserCourse(@RequestBody Query query);
+    @PostMapping("/deleteUserCourseList")
+    Result deleteUserCourseList(@RequestBody Query query);
 }

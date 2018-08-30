@@ -55,8 +55,8 @@ public class CourseController {
      */
     @RequestMapping(value = "/getList" ,method = RequestMethod.GET)
     public ResponseResult getCoursesList(@RequestParam Map<String,Object> query){
-        System.out.println(query);
-        System.out.println(courseService.getCoursesList(query));
+//        System.out.println(query);
+//        System.out.println(courseService.getCoursesList(query));
 //        ArrayList<Map> list = new ArrayList<>();
 //        for (int i = 0; i < 8; i++) {
 //            HashMap<String,Object> hashMap = new HashMap<>();
@@ -99,38 +99,40 @@ public class CourseController {
      */
     @RequestMapping(value = "/getDetails/{id}", method = RequestMethod.GET)
     public ResponseResult getCourseDetails(@PathVariable long id){
-        System.out.println(id);
-        HashMap<String,Object> course = new HashMap<>();
-        //课程基本信息
-        course.put("courseId",100);
-        course.put("courseCover","static/image/2.jpg");
-        course.put("courseName","课程名称");
-        course.put("typeId",2);
-        course.put("courseDescription","课程描述说明");
-        course.put("courseScore",4.5);
-        course.put("readNum",100);
-        course.put("praiseNum",100);
-        course.put("publishTime","2018-8-15");
-        course.put("updateTime","2018-8-15");
-        course.put("invalidDate", "2018-8-15");
-        //课程相关教师基本信息
-        HashMap<String,Object> teacher = new HashMap<>();
-        teacher.put("username", "教师名称");
-        teacher.put("email","教师邮箱");
-        teacher.put("avatar","static/to.jpg");
-        //课程相关课件信息
-        ArrayList<Map> courseWarelist = new ArrayList<>();
-        for (int i = 0; i <5 ; i++) {
-            HashMap<String,Object> courseWare = new HashMap<>();
-            courseWare.put("name","课件名称"+i);
-            courseWare.put("description","课件描述"+i);
-            courseWare.put("publishTime","2018-8-15");
-            courseWare.put("sourceUrl","static/source.pdf");
-            courseWarelist.add(courseWare);
-        }
-        course.put("teacher",teacher);
-        course.put("courseWare",courseWarelist);
-        return ResponseResult.data(course);
+//        System.out.println(id);
+//        HashMap<String,Object> course = new HashMap<>();
+//        //课程基本信息
+//        course.put("courseId",100);
+//        course.put("courseCover","static/image/2.jpg");
+//        course.put("courseName","课程名称");
+//        course.put("typeId",2);
+//        course.put("courseDescription","课程描述说明");
+//        course.put("courseScore",4.5);
+//        course.put("readNum",100);
+//        course.put("praiseNum",100);
+//        course.put("publishTime","2018-8-15");
+//        course.put("updateTime","2018-8-15");
+//        course.put("invalidDate", "2018-8-15");
+//        //课程相关教师基本信息
+//        HashMap<String,Object> teacher = new HashMap<>();
+//        teacher.put("username", "教师名称");
+//        teacher.put("email","教师邮箱");
+//        teacher.put("avatar","static/to.jpg");
+//        //课程相关课件信息
+//        ArrayList<Map> courseWarelist = new ArrayList<>();
+//        for (int i = 0; i <5 ; i++) {
+//            HashMap<String,Object> courseWare = new HashMap<>();
+//            courseWare.put("name","课件名称"+i);
+//            courseWare.put("description","课件描述"+i);
+//            courseWare.put("publishTime","2018-8-15");
+//            courseWare.put("sourceUrl","static/source.pdf");
+//            courseWarelist.add(courseWare);
+//        }
+//        course.put("teacher",teacher);
+//        course.put("courseWare",courseWarelist);
+//        return ResponseResult.data(course);
+//        System.out.println(courseService.getCourseDetail(id));
+        return courseService.getCourseDetail(id);
     }
 
     /**
@@ -140,33 +142,37 @@ public class CourseController {
     @RequestMapping(value = "/getFavoriteCourse",method = RequestMethod.GET)
     ResponseResult getFavoriteCourse(@RequestParam Map<String,Object> params){
         System.out.println(params);
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseId",i);
-            hashMap.put("courseCover","static/image/4.jpg");
-            hashMap.put("courseName","课程名称"+i);
-            hashMap.put("type_name","课程类型"+i);
-            hashMap.put("courseDescription","课程描述说明");
-            hashMap.put("courseScore",i);
-            hashMap.put("readNum",10*i);
-            hashMap.put("praiseNum",i+10);
-            hashMap.put("publishTime","2018-8-15");
-            hashMap.put("updateTime","2018-8-15");
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
+//        ArrayList<Map> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            HashMap<String,Object> hashMap = new HashMap<>();
+//            hashMap.put("courseId",i);
+//            hashMap.put("courseCover","static/image/4.jpg");
+//            hashMap.put("courseName","课程名称"+i);
+//            hashMap.put("type_name","课程类型"+i);
+//            hashMap.put("courseDescription","课程描述说明");
+//            hashMap.put("courseScore",i);
+//            hashMap.put("readNum",10*i);
+//            hashMap.put("praiseNum",i+10);
+//            hashMap.put("publishTime","2018-8-15");
+//            hashMap.put("updateTime","2018-8-15");
+//            list.add(hashMap);
+//        }
+//        return ResponseResult.data(list);
+        System.out.println(courseService.queryFavoriteCourse(params));
+        return courseService.queryFavoriteCourse(params);
     }
 
     /**
      * 根据用户ID和课程ID来收藏课程
-     * @param params
+     * @param
      * @return
      */
-    @RequestMapping(value = "/addFavoriteCourse")
-    ResponseResult addFavoriteCourse(@RequestBody Map<String,Object> params){
-        System.out.println(params);
-        return ResponseResult.ok("收藏成功");
+    @RequestMapping(value = "/addFavoriteCourse/{userId}/{courseId}")
+    ResponseResult addFavoriteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        System.out.println(userId);
+        System.out.println(courseId);
+        System.out.println(courseService.addFavoriteCourse(userId, courseId));
+        return courseService.addFavoriteCourse(userId, courseId);
     }
     /**
      * 根据条件批量删除收藏的课程

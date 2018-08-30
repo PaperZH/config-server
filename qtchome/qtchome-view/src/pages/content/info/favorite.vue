@@ -26,21 +26,21 @@
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
-      <el-col :span="8" v-for="(o, index) in tableData" :key="o.courseId" style="margin-top: 20px;">
+      <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
           <div style="position: absolute; color: #172dff">
-            <el-checkbox  :label="o.courseId">&nbsp</el-checkbox>
+            <el-checkbox  :label="item.courseId">&nbsp</el-checkbox>
           </div>
-          <img v-bind:src="o.courseCover"  class="image">
+          <img v-bind:src="item.courseCover"  class="image">
           <div style="padding: 7px;">
-            <span class="time">{{o.courseName}}</span>
+            <span class="time">{{item.courseName}}</span>
             <div class="bottom clearfix" style="margin-top: 6px;">
-              <span class="time">{{o.type_name}}</span>
+              <span class="time">{{item.typeName}}</span>
               <span class="time" style="    margin-left: 1%" >
-                 <i class="fa fa-thumbs-o-up" >{{o.praiseNum}}</i>
+                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
             </div>
-            <time class="time">{{o.publishTime}}</time>
+            <time class="time">{{item.publishTime}}</time>
           </div>
         </el-card>
       </el-col>
@@ -54,7 +54,7 @@
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
           layout="total, prev, pager, next, jumper"
-          :total="400">
+          :total=total>
         </el-pagination>
       </div>
   </div>
@@ -66,6 +66,7 @@
       data () {
         return {
           currentPage: 1,
+          total:0,
           checked: false,
           checkList: [],
           formInline: {
@@ -113,7 +114,8 @@
         getFavoriteCourse () {
           console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/course/getFavoriteCourse', 'data': this.queryParams}).then(res => {
-            this.tableData = res.data.data
+            this.total = res.data.re.total
+            this.tableData = res.data.re.rows
           })
         }
       },

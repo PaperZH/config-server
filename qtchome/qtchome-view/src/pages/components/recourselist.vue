@@ -9,7 +9,7 @@
           <div style="padding: 9px;">
             <span >{{item.courseName}}</span>
             <div class="bottom clearfix">
-              <span class="time">{{item.type_name}}</span>
+              <span class="time">{{item.typeName}}</span>
               <span class="time" >
                  <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>

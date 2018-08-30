@@ -2,6 +2,7 @@ package com.ucar.qtc.service;
 
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
@@ -31,9 +32,8 @@ public interface CourseService {
      * @param courseId
      * @return
      */
-    @RequestMapping(value = "/course/getCourseDetails")
-    public ResponseResult getCourseDetails(long courseId);
-
+    @RequestMapping(value = "/course/getCourseDetail/{courseId}")
+    public ResponseResult getCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
      * 根据课程名字或发布时间区间获取收藏的课程分页列表
@@ -48,8 +48,8 @@ public interface CourseService {
      * @param
      * @return
      */
-    @RequestMapping(value = "/collectCourse/addCollectCourse")
-    public ResponseResult addFavoriteCourse(Map<String,Object> params);
+    @RequestMapping(value = "/collectCourse/addCollectCourse/{userId}/{courseId}")
+    public ResponseResult addFavoriteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
      * 根据用户ID和课程ID批量删除收藏的课程

@@ -3,18 +3,23 @@ package com.ucar.qtcassist.course.controller;
 import com.ucar.qtcassist.api.CollectCourseApi;
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.common.PageResult;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CollectCourseDO;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.course.service.CollectCourseService;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.api.model.VO.Query;
+import com.ucar.qtcassist.course.service.CourseTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,13 +35,16 @@ public class CollectCourseController implements CollectCourseApi {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private CourseTypeService courseTypeService;
+
     /**
-     * 根据课程名字或发布时间区间获取收藏的课程分页列表
-     * @param  query (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
+     * 查询某个用户收藏的课程
+     * @param  query (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize)
      * @return
      */
     @Override
-    public Result<Page<CourseDO>> getCollectCourseList(@RequestBody Query query) {
+    public Result<Page<CourseVO>> getCollectCourseList(@RequestBody Query query) {
         Long userId = query.getUserId();
         Integer currentPage = query.getCurrentPage();
         Integer pageSize = query.getPageSize();
@@ -45,32 +53,65 @@ public class CollectCourseController implements CollectCourseApi {
         List<CourseDO> courseDOList = null;
         List<Long> courseIdList = null;
         Integer total = null;
-        if(query.getCourseName() != null) {
-            courseIdList = collectCourseService.selectCourseIdListByUserId(userId);
+        if((query.getCourseName() == null || query.getCourseName().equals("")) && query.getStartDate() == null) {
+            courseIdList = collectCourseService.selectCourseIdList(userId, null, null);
+            if(courseIdList.size() > 0) {
+                courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
+                total = courseService.getTotalById(courseIdList);
+            } else {
+                courseDOList = null;
+                total = 0;
+            }
+        } else if ((query.getCourseName() != null && !query.getCourseName().equals("")) && query.getStartDate() != null) {
             String courseName = query.getCourseName();
-            courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
-            total = courseService.getTotalByCourseName(courseIdList, courseName);
+            Date startTime = query.getStartDate();
+            Date endTime = query.getEndDate();
+            courseIdList = collectCourseService.selectCourseIdList(userId, startTime, endTime);
+            if(courseIdList.size() > 0) {
+                courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
+                total = courseService.getTotalByCourseName(courseIdList, courseName);
+            } else {
+                courseDOList = null;
+                total = 0;
+            }
+        } else if(query.getCourseName() != null && !query.getCourseName().equals("")) {
+            courseIdList = collectCourseService.selectCourseIdList(userId, null, null);
+            if(courseIdList.size() > 0) {
+                String courseName = query.getCourseName();
+                courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
+                total = courseService.getTotalByCourseName(courseIdList, courseName);
+            } else {
+                courseDOList = null;
+                total = 0;
+            }
         } else {
-            Date startTime = query.getStartTime();
-            Date endTime = query.getEndTime();
-            courseIdList = collectCourseService.selectCourseIdListByDate(userId, startTime, endTime);
-            courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
-            total = courseService.getTotalById(courseIdList);
+            Date startDate = query.getStartDate();
+            Date endDate = query.getEndDate();
+            courseIdList = collectCourseService.selectCourseIdList(userId, startDate, endDate);
+            if(courseIdList.size() > 0) {
+                courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
+                total = courseService.getTotalById(courseIdList);
+            } else {
+                courseDOList = null;
+                total = 0;
+            }
         }
-        return PageResult.getSuccessResult(courseDOList, total);
-    }
-
-    /**
-     * 查询收藏的所有的课程
-     * @param  userId 用户Id
-     * @return
-     */
-    @Override
-    public Result<Page<CourseDO>> getAllCollectCourseList(Long userId) {
-        List<Long> courseIdList = collectCourseService.selectCourseIdListByUserId(userId);
-        List<CourseDO> courseDOList = courseService.selectListById(courseIdList, null, null);
-        Integer total = courseService.getTotalById(courseIdList);
-        return PageResult.getSuccessResult(courseDOList, total);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
+        if(courseDOList != null) {
+            for (CourseDO courseDO : courseDOList) {
+                CourseVO courseVO = new CourseVO();
+                courseVO.setCourseId(courseDO.getId());
+                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                courseVO.setTypeName(courseType.getTypeName());
+                courseVO.setCourseName(courseDO.getCourseName());
+                courseVO.setCourseCover(courseDO.getCourseCover());
+                courseVO.setPraiseNum(courseDO.getPraiseNum());
+                courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                courseVOList.add(courseVO);
+            }
+        }
+        return PageResult.getSuccessResult(courseVOList, total);
     }
 
     /**
@@ -81,31 +122,42 @@ public class CollectCourseController implements CollectCourseApi {
      */
     @Override
     public Result addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
-        CollectCourseDO collectCourse = new CollectCourseDO();
-        collectCourse.setUserId(userId);
-        collectCourse.setCourseId(courseId);
-        collectCourse.setPublishDate(new Date());
-        int count = collectCourseService.insertSelective(collectCourse);
-        if(count > 0) {
-            logger.info("添加收藏课程信息成功");
-            return Result.getSuccessResult("添加收藏课程信息成功");
+        CollectCourseDO collectCourse = collectCourseService.getByUserIdAndCourseId(userId, courseId);
+        if(collectCourse != null) {
+            if(collectCourse.getDelFlag() == 1){
+                return Result.getSuccessResult("已收藏该课程");
+            } else {
+                collectCourse.setPublishDate(new Date());
+                collectCourse.setDelFlag(new Byte("1"));
+                collectCourseService.updateByPrimaryKeySelective(collectCourse);
+                return Result.getSuccessResult("收藏课程成功");
+            }
         } else {
-            logger.info("添加收藏课程信息失败");
-            return Result.getBusinessException("添加收藏课程信息失败","");
+            collectCourse = new CollectCourseDO();
+            collectCourse.setUserId(userId);
+            collectCourse.setCourseId(courseId);
+            collectCourse.setPublishDate(new Date());
+            collectCourse.setDelFlag(new Byte("1"));
+            int count = collectCourseService.insert(collectCourse);
+            if (count > 0) {
+                return Result.getSuccessResult("收藏课程成功");
+            } else {
+                return Result.getBusinessException("收藏课程失败", "-2");
+            }
         }
     }
 
     /**
      * 根据用户ID和课程ID批量删除收藏的课程
-     * @param //params (long userId, long[] courseId)
+     * @param query (long userId, long[] courseId)
      * @return
      */
     @Override
-    public Result deleteCollectCourse(@RequestBody Query query) {
+    public Result deleteCollectCourseList(@RequestBody Query query) {
         Long userId = query.getUserId();
         Long[] courseIds = query.getCourseIds();
 
-        int count = collectCourseService.deleteListById(userId, courseIds);
+        int count = collectCourseService.deleteListByIdList(userId, courseIds);
         if(count > 0) {
             logger.info("批量删除收藏课程信息成功");
             return Result.getSuccessResult("批量删除收藏课程信息成功");

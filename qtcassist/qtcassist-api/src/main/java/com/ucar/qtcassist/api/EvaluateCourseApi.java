@@ -14,7 +14,7 @@ public interface EvaluateCourseApi {
      * 添加评价课程记录
      */
     @PostMapping("/addEvaluateCourse")
-    public Result addEvaluateCourse(@RequestBody EvaluateCourseDO evaluateCourse);
+    Result addEvaluateCourse(@RequestBody EvaluateCourseDO evaluateCourse);
 
     /**
      * 查询评价课程记录
@@ -22,15 +22,15 @@ public interface EvaluateCourseApi {
      * @return
      */
     @GetMapping("/getEvaluateCourse/{evaluateCourseId}")
-    public Result<EvaluateCourseDO> getEvaluateCourse(@PathVariable("evaluateCourseId") Long evaluateCourseId);
+    Result<EvaluateCourseDO> getEvaluateCourse(@PathVariable("evaluateCourseId") Long evaluateCourseId);
 
     /**
      * 查询某门课程的所有评价记录
      * @param courseId 课程id
      * @return
      */
-    @GetMapping("/getEvaluateCourse/{courseId}")
-    public Result<Page<EvaluateCourseDO>> getEvaluateCourseList(@PathVariable("courseId") Long courseId);
+    @GetMapping("/getEvaluateCourseList/{courseId}")
+    Result<Page<EvaluateCourseDO>> getEvaluateCourseList(@PathVariable("courseId") Long courseId);
 
     /**
      * 更新评价课程记录
@@ -38,7 +38,7 @@ public interface EvaluateCourseApi {
      * @return
      */
     @PostMapping("/updateEvaluateCourse")
-    public Result updateEvaluateCourse(@RequestBody EvaluateCourseDO evaluateCourse);
+    Result updateEvaluateCourse(@RequestBody EvaluateCourseDO evaluateCourse);
 
     /**
      * 删除评价课程记录
@@ -46,5 +46,5 @@ public interface EvaluateCourseApi {
      * @return
      */
     @GetMapping("/deleteEvaluateCourse/{evaluateCourseId}")
-    public Result deleteEvaluateCourse(@PathVariable("evaluateCourseId") Long evaluateCourseId);
+    Result deleteEvaluateCourse(@PathVariable("evaluateCourseId") Long evaluateCourseId);
 }
