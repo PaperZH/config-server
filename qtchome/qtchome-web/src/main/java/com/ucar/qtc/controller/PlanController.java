@@ -121,6 +121,7 @@ public class PlanController {
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 4; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("planId",i);
             hashMap.put("planTitle", "计划名称" + i);
             hashMap.put("startDate", "2018-8-20");
             hashMap.put("endDate", "2018-8-30");
@@ -137,6 +138,11 @@ public class PlanController {
         return ResponseResult.ok().put("data", list).put("total", 20);
     }
 
+    /**
+     * 根据发布计划的Id获取课程信息
+     * @param planId
+     * @return
+     */
     @RequestMapping("/getCourseByPlanId")
     public ResponseResult getCourseByPlanId(@RequestParam long planId){
         ArrayList<Map> list = new ArrayList();
@@ -149,6 +155,32 @@ public class PlanController {
     }
     return ResponseResult.data(list);
     }
+
+    /**
+     * 根据发布计划ID获取制定计划详细信息
+     * @param planId
+     * @return
+     */
+    @RequestMapping("/getPlanDetails")
+    public ResponseResult getPlanDetailsByPlanId(@RequestParam long planId){
+        HashMap<String, Object> hash = new HashMap<>();
+        ArrayList<Map> list = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("courseId", i);
+            hashMap.put("courseName", "Spring"+i);
+            hashMap.put("courseDescription", "课程描述"+i);
+            list.add(hashMap);
+        }
+        hash.put("courses",list);
+        hash.put("teacherName","张三");
+        HashMap<String, Object> plan = new HashMap<>();
+        plan.put("planContent","计划的内容是个啥");
+        plan.put("planDestination","计划的目的又是个啥");
+        hash.put("plan",plan);
+        return ResponseResult.data(hash);
+    }
+
     /**
      * 增加制定计划
      * @param params
@@ -179,7 +211,15 @@ public class PlanController {
     @RequestMapping("/addPublishedCourse")
     public ResponseResult addPublishedCourse(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        return ResponseResult.ok();
+        ArrayList<Map> list = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("courseId", 2);
+            hashMap.put("courseName", "SpringCCC");
+            hashMap.put("courseDescription", "这是一首小情歌");
+            list.add(hashMap);
+        }
+        return ResponseResult.data(list);
     }
     /**
      * 删除制定的计划
