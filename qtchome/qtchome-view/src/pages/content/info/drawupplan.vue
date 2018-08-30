@@ -5,32 +5,11 @@
       <el-form-item label="名称">
         <el-input v-model="formInline.name" placeholder="输入计划名称" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="日期">
-        <el-date-picker size="small"
-          v-model="formInline.date"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" size="small">查询</el-button>
-        <el-button type="primary" @click="onAddPlan()" size="small" >添加</el-button>
+        <el-button type="primary" @click="onAddPlan()" size="small" >制定新计划</el-button>
       </el-form-item>
     </el-form>
-    <div style="border: 1px solid #dcdfe6;">
-      <el-row :gutter="24" style="margin-left: 88px;margin-right: 123px; margin-top: 10px;">
-        <el-col :span="4" v-for="(o, index) in indexList" :key="index" >
-          <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject" >
-            <img :src=o.studentAvatar class="image" @click="addStyleClick(o)">
-            <div style="padding: 14px;text-align: center">
-              <span>{{o.studentName}}</span>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
     <div style="margin-top: 10px">
       <el-table
         :data="tableData"
@@ -43,34 +22,18 @@
           width="250">
         </el-table-column>
         <el-table-column
-          prop="studentName"
-          label="学员"
-          width="120">
+          prop="planContent"
+          label="培训内容"
+          width="400">
         </el-table-column>
         <el-table-column
-          prop="startDate"
-          label="开始时间"
-          width="220">
+          prop="planDestination"
+          label="培训目的"
+          width="400">
         </el-table-column>
         <el-table-column
-          prop="endDate"
-          label="结束时间"
-          width="220">
-        </el-table-column>
-        <el-table-column
-          prop="courseName"
-          label="课程"
-          width="280">
-        </el-table-column>
-        <el-table-column
-          prop="studentGetScore"
-          label="评分"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="isFinished"
-         :formatter="formatterFinished"
-          label="完成状态"
+          prop="planScore"
+          label="总分"
           width="100">
         </el-table-column>
         <el-table-column label="操作">
@@ -83,7 +46,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <dialog-plan  :show.sync="show" v-bind:message="message" title="制定学习计划" v-bind:students="this.indexList"></dialog-plan>
+      <dialog-plan  :show.sync="show" v-bind:message="message" title="制定新计划" ></dialog-plan>
+      <dialog-plan  :show.sync="show" v-bind:message="message" title="分配课程" ></dialog-plan>
       <div class="block" style="text-align: right">
         <el-pagination
           @size-change="handleSizeChange"
@@ -102,7 +66,7 @@
 </template>
 
 <script>
-    import dialogplan from '@/pages/content/dialog/dialogplan'  // 添加计划弹框
+    import dialogplan from '@/pages/content/dialog/addPlan'  // 添加计划弹框
     export default {
       components: {
         'dialog-plan': dialogplan
@@ -132,8 +96,6 @@
           queryParams: {
             userId: '',
             planName: '',
-            startDate: '',
-            endDate: '',
             currentPage: 1,
             pageSize: 5
           }
@@ -143,8 +105,6 @@
         onSubmit () {
           console.log('submit!')
           this.queryParams.planName = this.formInline.name
-          this.queryParams.startDate = this.formInline.date[0]
-          this.queryParams.endDate = this.formInline.date[1]
           this.queryParams.currentPage = 1
           this.getTeacherPlan()
         },
@@ -171,14 +131,6 @@
         getMes (data) {
           console.log(data)
         },
-        addStyleClick (o) {
-          console.log(o)
-          if (o.style) {
-            o.style = false
-          } else {
-            o.style = true
-          }
-        },
         formatterFinished (row, column, cellValue, index) {
           if (cellValue === true) {
             return '已完成'
@@ -191,7 +143,6 @@
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
             console.log(res)
             this.tableData = res.data.data
-            this.indexList = res.data.students
             this.total = res.data.total
           })
         }
