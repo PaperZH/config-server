@@ -52,9 +52,9 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public List<CoursewareDTO> selectCoursewareList(List<Long> list) {
+        if(list != null && list.size() > 0) {
         List<CoursewareDO> coursewareDOList = coursewareMapper.selectByListKey(list);
         List<CoursewareDTO> coursewareDTOList = new ArrayList<>();
-        if(list != null && list.size() > 0) {
             for(int i = 0; i < coursewareDOList.size(); i++) {
                 BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(coursewareDOList.get(i).getBaseCoursewareId());
                 CoursewareDTO coursewareDTO = new CoursewareDTO();
