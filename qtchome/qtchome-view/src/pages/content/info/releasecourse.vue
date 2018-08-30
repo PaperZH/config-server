@@ -105,7 +105,7 @@
         })
       },
       handSearch () {
-        if (this.formInline.name.trim().length == 0) {
+        if (this.formInline.name.trim().length === 0) {
           this.queryParams.courseName = null
         } else {
           this.queryParams.courseName = this.formInline.name
@@ -118,6 +118,7 @@
           this.queryParams.endDate = this.formInline.date[1]
         }
         this.queryParams.currentPage = 1
+        this.checkList = []
         this.getPublishedCourse()
       },
       getPublishedCourse () {

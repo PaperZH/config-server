@@ -41,7 +41,7 @@ public interface CourseService {
      * @return
      */
     @RequestMapping(value = "/collectCourse/getCollectCourseList")
-    public ResponseResult queryFavoriteCourse(Map<String,Object> params);
+    public ResponseResult queryCollectCourse(Map<String,Object> params);
 
     /**
      * 根据用户ID和课程ID来收藏课程.
@@ -49,7 +49,7 @@ public interface CourseService {
      * @return
      */
     @RequestMapping(value = "/collectCourse/addCollectCourse/{userId}/{courseId}")
-    public ResponseResult addFavoriteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+    public ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
      * 根据用户ID和课程ID批量删除收藏的课程
@@ -57,8 +57,31 @@ public interface CourseService {
      * @return
      */
     @RequestMapping(value = "/collectCourse/deleteCollectCourseList")
-    public ResponseResult deleteFavoriteCourse(Map<String,Object> params);
+    public ResponseResult deleteCollectCourseList(Map<String,Object> params);
 
+    /**
+     * 根据用户ID和课程ID来点赞课程.
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/praiseCourse/addPraiseCourse/{userId}/{courseId}")
+    public ResponseResult addPraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+
+    /**
+     * 根据用户ID和课程ID来查看用户是否已点赞课程.
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/praiseCourse/isPraisedCourse/{userId}/{courseId}")
+    public ResponseResult isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+
+    /**
+     * 根据用户ID和课程ID来取消点赞课程.
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/praiseCourse/deletePraiseCourse/{userId}/{courseId}")
+    public ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
      * 根据课程名字或发布时间区间获取发布的课程分页列表

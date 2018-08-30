@@ -23,4 +23,13 @@ public interface PraiseCourseApi {
      */
     @GetMapping("/deletePraiseCourse/{userId}/{courseId}")
     Result deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+
+    /**
+     * 查看用户是否已点赞该课程
+     * @param userId 用户id
+     * @param courseId 课程id
+     * @return
+     */
+    @GetMapping("/isPraisedCourse/{userId}/{courseId}")
+    Result<Boolean> isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 }
