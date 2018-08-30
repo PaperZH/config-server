@@ -28,10 +28,7 @@ public class AuthConfig extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/login**");
         addInterceptor.excludePathPatterns("/homeLogin**");
         addInterceptor.excludePathPatterns("/test**");
-        addInterceptor.excludePathPatterns("/currentUser");
-        addInterceptor.excludePathPatterns("/user/currentUser");
-        addInterceptor.excludePathPatterns("/user");
-
+        addInterceptor.excludePathPatterns("/pages/**");
 
         // 拦截配置
         addInterceptor.addPathPatterns("/**");

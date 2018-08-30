@@ -11,9 +11,10 @@ spring:
   application:
     name: api-admin
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qtccloud?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://10.104.102.225:3306/qtccloud?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: admin@123
+
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
@@ -27,4 +28,5 @@ logging:
 file:
   filePath: e:/file/uploaded_files/
   pre: /files
-  server: http://10.103.13.242:8005
+  server: http://10.103.13.210:8005
+  #10.103.13.210
