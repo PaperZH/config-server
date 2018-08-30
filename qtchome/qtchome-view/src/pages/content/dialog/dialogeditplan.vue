@@ -15,7 +15,7 @@
           placement="right"
           width="400"
           trigger="click">
-          <el-table :data="courseData">
+          <el-table :data="message.courses">
             <el-table-column width="150" property="courseName" label="课程名称"></el-table-column>
             <el-table-column width="100" property="courseDescription" label="课程描述"></el-table-column>
           </el-table>
@@ -23,14 +23,14 @@
         </el-popover>
         <el-col >
           <el-form-item label="培训内容" >
-            <el-input v-model="message.planContent" type="textarea"resize="none" readonly
+            <el-input v-model="message.plan.planContent" type="textarea"resize="none" readonly
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col >
           <el-form-item label="培训目的">
-            <el-input v-model="message.planDestination"  type="textarea" resize="none"  readonly
+            <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  readonly
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-form-item>
         </el-col>
@@ -71,9 +71,6 @@
     data () {
       return {
         visible: this.show,
-        courseData: [],
-        value6: '',
-        value8: '',
         options: [{
           value: '选项1',
           label: 'java 虚拟机'
