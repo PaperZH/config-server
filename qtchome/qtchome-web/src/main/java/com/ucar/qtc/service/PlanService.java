@@ -14,11 +14,18 @@ public interface PlanService {
     public ResponseResult getTeacherPlanList(Map<String,Object> params);
 
     /**
-     * 根据计划ID获取课程基本信息
+     * 根据发布计划ID获取课程基本信息
      * @param planId
      * @return
      */
     public ResponseResult getCourseByPlanId(long planId);
+
+    /**
+     * 根据发布计划ID获取详细信息（包括教师信息，课程信息，制定计划基本信息，发布计划的基本信息）
+     * @param planId
+     * @return
+     */
+    public ResponseResult getPlanDetailsByPlanId(long planId);
 
     /**
      * 分页获取发布的计划列表
