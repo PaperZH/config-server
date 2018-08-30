@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.schedule.dao;
 
-import com.ucar.qtcassist.schedule.model.PlanDO;
+import com.ucar.qtcassist.api.model.DO.PlanDO;
 import org.springframework.stereotype.Component;
 
 @Component

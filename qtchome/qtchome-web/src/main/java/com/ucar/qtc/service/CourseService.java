@@ -96,7 +96,7 @@ public interface CourseService {
      * 获取课程类型列表
      * @return
      */
-    @RequestMapping(value = "/course/getCourseType")
-    public ResponseResult getCourseType();
+    @RequestMapping(value = "/courseType/getCourseTypeList")
+    public ResponseResult getCourseTypeList();
 
 }

@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.schedule.controller;
 
 import com.ucar.qtcassist.api.model.Result;
-import com.ucar.qtcassist.schedule.model.UserPlanDO;
+import com.ucar.qtcassist.api.model.DO.UserPlanDO;
 import com.ucar.qtcassist.schedule.service.UserPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

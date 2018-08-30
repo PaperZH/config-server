@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.schedule.service;
 
-import com.ucar.qtcassist.schedule.model.CoursePlanDO;
+import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 
 public interface CoursePlanService {
     int deleteByPrimaryKey(Long id);
