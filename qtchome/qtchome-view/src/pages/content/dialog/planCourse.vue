@@ -91,7 +91,10 @@
           console.log(data)
           this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedCourse', 'data': data}).then(res => {
             console.log(res)
-            this.$emit('handleCourse', this.planId)
+            let course = res.data.data
+            for (let i = 0; i < course.length; i++) {
+              this.courseData.unshift(course[i])
+            }
           }).catch(_ => {
             this.$message({
               showClose: true,
