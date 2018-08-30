@@ -1,46 +1,37 @@
 package com.ucar.qtc.admin.controller;
 
 import com.ucar.qtc.admin.domain.BannerDO;
-import com.ucar.qtc.admin.dto.BannerDTO;
-import com.ucar.qtc.admin.dto.do2dto.BannerConvert;
+import com.ucar.qtc.admin.service.BannerService;
 import com.ucar.qtc.admin.service.FileService;
-import com.ucar.qtc.admin.service.impl.BannerServiceImpl;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
 import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/pages")
 public class FrontPageController {
-    @Value("${file.filePath}")
-    String filePath;
 
-    @Value("${file.pre}")
-    String filePre;
-
-    @Value("${file.server}")
-    String fileServer;
-
+    int limit = 6;
+    int offset = 0;
+    int page = 1;
     @Autowired
-    private BannerServiceImpl bannerService;
+    private BannerService bannerService;
 
     @Autowired
     private FileService fileService;
 
-    @GetMapping("{id}")
-    public ResponseResult get(@PathVariable Long id) {
-        BannerDTO bannerDTO = BannerConvert.MAPPER.do2dto(bannerService.get(id));
-        return ResponseResult.data(bannerDTO);
-    }
-
-    @GetMapping("list")
-    public ResponseResult list(@RequestParam Map<String, Object> params) {
+    @GetMapping("banner/list")
+    public ResponseResult bannerList() {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("limit",limit);
+        params.put("offset",offset);
+        params.put("page",1);
         Query query = new Query(params);
         List<BannerDO> bannerList = bannerService.list(query);
         int total = bannerService.count(query);

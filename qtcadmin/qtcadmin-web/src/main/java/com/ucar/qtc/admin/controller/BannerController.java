@@ -4,7 +4,7 @@ package com.ucar.qtc.admin.controller;
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.dto.BannerDTO;
 import com.ucar.qtc.admin.dto.do2dto.BannerConvert;
-import com.ucar.qtc.admin.service.impl.BannerServiceImpl;
+import com.ucar.qtc.admin.service.BannerService;
 import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class BannerController {
     String fileServer;
 
     @Autowired
-    private BannerServiceImpl bannerService;
+    private BannerService bannerService;
 
     @GetMapping("{id}")
     public ResponseResult get(@PathVariable Long id) {
