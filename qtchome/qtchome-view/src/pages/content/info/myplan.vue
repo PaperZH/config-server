@@ -4,15 +4,6 @@
     <el-form-item label="名称">
       <el-input v-model="formInline.name" placeholder="输入计划名称" size="small"></el-input>
     </el-form-item>
-    <el-form-item label="日期">
-      <el-date-picker size="small"
-        v-model="formInline.date"
-        type="daterange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期">
-      </el-date-picker>
-    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit" size="small">查询</el-button>
     </el-form-item>
@@ -121,8 +112,6 @@
           queryParams: {
             userId: this.$store.getters.userId,
             planName: '',
-            startDate: '',
-            endDate: '',
             currentPage: 1,
             pageSize: 5
           }
@@ -132,8 +121,6 @@
         onSubmit () {
           console.log('submit!')
           this.queryParams.planName = this.formInline.name
-          this.queryParams.startDate = this.formInline.date[0]
-          this.queryParams.endDate = this.formInline.date[1]
           this.queryParams.currentPage = 1
           this.getStudentPlan()
         },
