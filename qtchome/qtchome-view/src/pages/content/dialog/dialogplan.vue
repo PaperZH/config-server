@@ -1,41 +1,10 @@
 <template>
   <el-dialog  :title="title" :visible.sync="visible" @close="$emit('update:show', false)" :show="show" style="width: 60% ;margin-left:350px ">
-    <!--<el-dialog-->
-      <!--width="30%"-->
-      <!--title="分配课程"-->
-      <!--:visible.sync="innerVisible"-->
-      <!--append-to-body>-->
-      <!--<el-form>-->
-        <!--<el-row  v-for="(o, index) in coursess" :key="o.$index">-->
-        <!--<el-col >-->
-          <!--<el-form-item :label=o.studentName >-->
-            <!--<el-select-->
-              <!--v-model="o.course"-->
-              <!--multiple-->
-              <!--filterable-->
-              <!--remote-->
-              <!--reserve-keyword-->
-              <!--placeholder="请输入课程关键词"-->
-              <!--:remote-method="remoteMethod"-->
-              <!--:loading="loading">-->
-              <!--<el-option-->
-                <!--v-for="item in options4"-->
-                <!--:key="item.courseId"-->
-                <!--:label="item.courseName"-->
-                <!--:value="item.courseId">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
-          <!--</el-row>-->
-        <!--<el-button type="primary" @click="print()">保存</el-button>-->
-      <!--</el-form>-->
-    <!--</el-dialog>-->
-    <el-form ref="message" :model="message" label-width="80px">
+    <el-form ref="message" :model="message" label-width="80px"  :rules="rules">
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
-          <el-form-item label="学员" :span="11">
+          <el-form-item label="学员" :span="11" prop="studentIds">
             <el-select
-              v-model="studentIds"
+              v-model="message.studentIds"
               multiple
                style="width: 50%;"
               placeholder="请选择学员">
@@ -47,7 +16,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="培训日期">
+          <el-form-item label="培训日期" prop="date">
             <el-date-picker  style="width: 50%;"
               v-model="message.date"
               type="datetimerange"
@@ -56,9 +25,9 @@
               >
             </el-date-picker>
           </el-form-item>
-            <el-form-item label="计划名称">
+            <el-form-item label="计划名称" prop="planId">
               <el-select  style="width: 50%"
-                v-model="message.planTitle"
+                v-model="message.planId"
                 filterable
                 remote
                 reserve-keyword
@@ -72,9 +41,7 @@
                   :value="item.planId">
                 </el-option>
               </el-select>
-
             </el-form-item>
-        <dialog-plan  show.sync="true" v-bind:message="message" title="发布计划" students="students"></dialog-plan>
         <el-col>
           <el-form-item style="text-align: left">
             <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -88,11 +55,7 @@
 </template>
 
 <script>
-  import dialogplan from '@/pages/content/dialog/addPublishedplan'  // 添加计划弹框
   export default {
-    components: {
-      'dialog-plan': dialogplan
-    },
     props: {
       title: {
         type: String,
@@ -117,20 +80,26 @@
         loading: false,
         options4: [],
         list: [],
-        state4: [
-          {'courseId': 1, 'courseName': 'Java'},
-          {'courseId': 2, 'courseName': 'Spring'},
-          {'courseId': 3, 'courseName': 'CSS'}],
-        coursess: [
-          {'planId': '1', 'studentName': '张三'},
-          {'planId': '2', 'studentName': '李四'},
-          {'planId': '3', 'studentName': '王五'}
-        ],
-        value6: '',
-        value8: '',
         courses: [],
-        studentIds: [],
-        plans: []
+        plans: [],
+        rules: {
+          planId: [
+            {required: true, message: '请输入计划名称', trigger: 'blur'}
+          ],
+          studentIds: [
+            {type: 'array', required: true, message: '请选择学员', trigger: 'blur'}
+          ],
+          date: [
+            {type: 'array', required: true, message: '请选择日期', trigger: 'blur'}
+          ]
+        },
+        params: {
+          'userId': this.$store.getters.userId,
+          'startDate': null,
+          'endDate': null,
+          'studentIds': null,
+          'planId': null
+        }
       }
     },
     watch: {
@@ -140,30 +109,40 @@
     },
     methods: {
       onSubmit () {
-        this.message.userId = this.$store.getters.userId
-        console.log(this.message)
-        this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.message}).then(res => {
-          console.log(res)
-          this.visible = false
+        console.log(this.message.date)
+        this.$refs['message'].validate((valid) => {
+          if (valid) {
+            if (this.message.date.length <= 1) {
+              this.$message.error('请输入日期')
+              return
+            }
+            this.params.startDate = this.message.date[0]
+            this.params.endDate = this.message.date[1]
+            this.params.studentIds = this.message.studentIds
+            this.params.planId = this.message.planId
+            this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.params}).then(res => {
+              console.log(res)
+              this.$refs['message'].resetFields()
+              this.visible = false
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
         })
-      },
-      print () {
-        console.log('asdsad')
-        this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedCourse', 'data': {'data': this.coursess}}).then(res => {
-          console.log(res)
-        })
-        console.log(this.coursess)
       },
       remoteMethod (query) {
         if (query !== '') {
           this.loading = true
           setTimeout(() => {
-            this.loading = false
-            this.list = this.state4
-            this.options4 = this.list
+            this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanListByName', 'data': {'planName': query}}).then(res => {
+              console.log(res)
+              this.plans = res.data.data
+              this.loading = false
+            })
           }, 400)
         } else {
-          this.courses = []
+          this.plans = []
         }
       },
       onCan () {
