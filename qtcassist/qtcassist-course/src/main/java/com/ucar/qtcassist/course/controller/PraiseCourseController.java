@@ -66,5 +66,15 @@ public class PraiseCourseController implements PraiseCourseApi {
         }
     }
 
+    @Override
+    public Result<Boolean> isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
+        PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
+        if(praiseCourse != null) {
+            return Result.getSuccessResult(true);
+        } else {
+            return Result.getSuccessResult(false);
+        }
+    }
+
 
 }

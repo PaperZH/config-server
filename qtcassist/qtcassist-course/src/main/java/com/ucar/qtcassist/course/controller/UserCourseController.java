@@ -51,16 +51,13 @@ public class UserCourseController implements UserCourseApi {
         Integer startIndex = (currentPage - 1) * pageSize;
         List<CourseDO> courseDOList = null;
         List<Long> courseIdList = null;
-        Integer total = null;
+        Integer total = 0;
 
         if(query.getCourseName() == null&& query.getStartDate() == null) {
             courseIdList = userCourseService.selectCourseIdList(userId, null, null);
             if(courseIdList.size() > 0) {
                 courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
                 total = courseService.getTotalById(courseIdList);
-            } else {
-                courseDOList = null;
-                total = 0;
             }
         } else if (query.getCourseName() != null && query.getStartDate() != null) {
             String courseName = query.getCourseName();
@@ -70,9 +67,6 @@ public class UserCourseController implements UserCourseApi {
             if(courseIdList.size() > 0) {
                 courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
                 total = courseService.getTotalByCourseName(courseIdList, courseName);
-            } else {
-                courseDOList = null;
-                total = 0;
             }
         } else if(query.getCourseName() != null) {
             courseIdList = userCourseService.selectCourseIdList(userId, null, null);
@@ -80,9 +74,6 @@ public class UserCourseController implements UserCourseApi {
                 String courseName = query.getCourseName();
                 courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
                 total = courseService.getTotalByCourseName(courseIdList, courseName);
-            } else {
-                courseDOList = null;
-                total = 0;
             }
         } else {
             Date startDate = query.getStartDate();
@@ -91,9 +82,6 @@ public class UserCourseController implements UserCourseApi {
             if(courseIdList.size() > 0) {
                 courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
                 total = courseService.getTotalById(courseIdList);
-            } else {
-                courseDOList = null;
-                total = 0;
             }
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

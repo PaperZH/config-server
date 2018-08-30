@@ -80,7 +80,6 @@
           this.courseType = res.data.re
         })
         let courseId = this.$router.currentRoute.params.courseId
-        alert(courseId)
         if (courseId != null) {
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
             // this.form = res.data.re

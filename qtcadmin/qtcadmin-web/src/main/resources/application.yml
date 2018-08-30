@@ -1,32 +1,5 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8001/eureka/
-security:
-  basic:
-    enabled: false
-server:
-  port: 8005
+## dev | prod | test
+
 spring:
-  application:
-    name: api-admin
-  datasource:
-    url: jdbc:mysql://10.104.102.225:3306/qtccloud?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: admin@123
-
-  jackson:
-    date-format: yyyy-MM-dd
-    time-zone: GMT+8
-mybatis:
-  mapper-locations: mapper/**Mapper.xml
-  configuration:
-      map-underscore-to-camel-case: true
-logging:
-  level: debug
-
-file:
-  filePath: e:/file/uploaded_files/
-  pre: /files
-  server: http://10.103.13.210:8005
-  #10.103.13.210
+  profiles:
+    active: @environment@

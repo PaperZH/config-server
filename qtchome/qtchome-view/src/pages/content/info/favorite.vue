@@ -33,14 +33,19 @@
           </div>
           <img v-bind:src="item.courseCover"  class="image">
           <div style="padding: 7px;">
-            <span class="time">{{item.courseName}}</span>
+            <div  class="time" style="position: relative">
+              <span style="display: block;float: left">{{item.courseName}}</span>
+              <span style="float: right"><a v-on:click="handleRelease(item.courseId)" href="#">详情</a></span>
+            </div>
             <div class="bottom clearfix" style="margin-top: 6px;">
               <span class="time">{{item.typeName}}</span>
               <span class="time" style="margin-left: 1%" >
                  <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
+              <div>
+                <time class="time">{{item.publishTime}}</time>
+              </div>
             </div>
-            <time class="time">{{item.publishTime}}</time>
           </div>
         </el-card>
       </el-col>
@@ -90,20 +95,24 @@
         },
         handleCurrentChange (val) {
           this.queryParams.currentPage = val
-          this.getFavoriteCourse()
+          this.getCollectCourse()
           console.log(`当前页: ${val}`)
         },
         getHtml (val) {
 
         },
+        handleRelease (val) {
+          let courseId = val
+          this.$router.push({name: 'details', params: courseId})
+        },
         handDelete (val) {
           let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
-          this.$store.dispatch('Post', {'url': '/api-home/course/deleteFavoriteCourse', 'data': data}).then(res => {
-            this.getFavoriteCourse()
+          this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
+            this.getCollectCourse()
           })
         },
         handSearch () {
-          if (this.formInline.name.trim().length == 0) {
+          if (this.formInline.name.trim().length === 0) {
             this.queryParams.courseName = null
           } else {
             this.queryParams.courseName = this.formInline.name
@@ -116,18 +125,19 @@
             this.queryParams.endDate = this.formInline.date[1]
           }
           this.queryParams.currentPage = 1
-          this.getFavoriteCourse()
+          this.checkList = []
+          this.getCollectCourse()
         },
-        getFavoriteCourse () {
+        getCollectCourse () {
           console.log(this.queryParams)
-          this.$store.dispatch('Get', {'url': '/api-home/course/getFavoriteCourse', 'data': this.queryParams}).then(res => {
+          this.$store.dispatch('Get', {'url': '/api-home/course/getCollectCourse', 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
           })
         }
       },
       mounted () {
-        this.getFavoriteCourse()
+        this.getCollectCourse()
       }
     }
 </script>

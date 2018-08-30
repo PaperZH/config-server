@@ -14,3 +14,6 @@ logging:
 spring:
   application:
     name: api-home
+ribbon:
+   ReadTimeout: 60000
+   ConnectTimeout: 30000
