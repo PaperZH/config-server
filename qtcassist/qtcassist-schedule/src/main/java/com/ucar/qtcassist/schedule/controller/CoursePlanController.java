@@ -3,7 +3,7 @@ package com.ucar.qtcassist.schedule.controller;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
-import com.ucar.qtcassist.schedule.model.CoursePlanDO;
+import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

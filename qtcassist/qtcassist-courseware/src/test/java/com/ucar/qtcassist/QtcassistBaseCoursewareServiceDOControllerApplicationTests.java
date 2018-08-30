@@ -1,7 +1,9 @@
 package com.ucar.qtcassist;
 
+import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
+import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -24,6 +26,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -114,6 +118,19 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getList(){
+        List<Long> temList=new ArrayList<>();
+        temList.add(1l);
+        temList.add(2l);
+        temList.add(3l);
+        temList.add(4l);
+        List<CoursewareDTO>list=coursewareService.selectCoursewareList(temList);
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i).getSourceUrl());
         }
     }
 

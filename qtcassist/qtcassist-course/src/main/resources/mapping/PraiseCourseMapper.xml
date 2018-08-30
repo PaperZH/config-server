@@ -82,4 +82,10 @@
       publish_date = #{publishDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="getByUserIdAndCourseId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from assist_praise_course
+    where user_id = #{userId, jdbcType=BIGINT} and course_id = #{courseId, jdbcType=BIGINT}
+  </select>
 </mapper>

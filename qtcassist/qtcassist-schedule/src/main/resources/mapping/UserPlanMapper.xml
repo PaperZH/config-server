@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ucar.qtcassist.schedule.dao.UserPlanMapper">
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.schedule.model.UserPlanDO">
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.api.model.DO.UserPlanDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
     <result column="student_id" jdbcType="BIGINT" property="studentId" />
@@ -30,7 +30,7 @@
     set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_user_plan (teacher_id, student_id,
       plan_id, student_evaluate_content, student_get_score, 
       student_summary, teacher_evaluate_content, 
@@ -42,7 +42,7 @@
       #{planStudentScore,jdbcType=REAL}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.UserPlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_user_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="teacherId != null">
@@ -115,7 +115,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.UserPlanDO">
     update assist_user_plan
     <set>
       <if test="teacherId != null">
@@ -154,7 +154,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.schedule.model.UserPlanDO">
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.UserPlanDO">
     update assist_user_plan
     set teacher_id = #{teacherId,jdbcType=BIGINT},
       student_id = #{studentId,jdbcType=BIGINT},

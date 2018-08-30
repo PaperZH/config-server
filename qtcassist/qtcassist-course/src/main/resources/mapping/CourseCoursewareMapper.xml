@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ucar.qtcassist.course.dao.CourseCoursewareMapper" >
-  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+  <resultMap id="BaseResultMap" type="com.ucar.qtcassist.api.model.DO.CourseCoursewareDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
     <result column="courseware_id" property="coursewareId" jdbcType="BIGINT" />
@@ -19,11 +19,11 @@
     delete from assist_course_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.CourseCoursewareDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course_courseware (course_id, courseware_id)
     values (#{courseId,jdbcType=BIGINT}, #{coursewareId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.CourseCoursewareDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course_courseware
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="courseId != null" >
@@ -42,7 +42,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.CourseCoursewareDO" >
     update assist_course_courseware
     <set >
       <if test="courseId != null" >
@@ -54,10 +54,20 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.course.model.CourseCoursewareDO" >
+  <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.CourseCoursewareDO" >
     update assist_course_courseware
     set course_id = #{courseId,jdbcType=BIGINT},
       courseware_id = #{coursewareId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="getCoursewareIdListByCourseId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select courseware_id
+    from assist_course_courseware
+    where course_id = #{courseId, jdbcType=BIGINT}
+  </select>
+  <select id="getIdByCourseIdAndCoursewareId" resultType="java.lang.Long">
+    select id
+    from assist_course_courseware
+    where course_id = #{courseId, jdbcType=BIGINT} and courseware_id = #{coursewareId, jdbcType=BIGINT}
+  </select>
 </mapper>

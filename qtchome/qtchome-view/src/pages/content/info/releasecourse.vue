@@ -15,31 +15,31 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onsubmit" size="small">查询</el-button>
-        <el-button  type="danger" @click="handledelete"size="small" >删除</el-button>
+        <el-button type="primary" @click="handSearch" size="small">查询</el-button>
+        <el-button  type="danger" @click="handDelete"size="small" >删除</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
-      <el-col :span="8" v-for="(o, index) in course" :key="o.courseId" style="margin-top: 20px;">
+      <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
           <div style="position: absolute; color: #172dff;">
-            <el-checkbox :label="o.courseId">&nbsp</el-checkbox>
+            <el-checkbox :label="item.courseId">&nbsp</el-checkbox>
           </div>
-          <img v-bind:src="o.courseCover"  class="image">
+          <img v-bind:src="item.courseCover"  class="image">
           <div style="padding: 7px;">
             <div  class="time" style="position: relative">
-              <span style="display: block;float: left">{{o.courseName}}</span>
-              <span style="float: right"><a v-on:click="handleRelease(o)" href="#">编辑</a></span>
+              <span style="display: block;float: left">{{item.courseName}}</span>
+              <span style="float: right"><a v-on:click="handleRelease(item)" href="#">编辑</a></span>
             </div>
             <div class="bottom clearfix;"  style=" margin-top:  26px;">
-              <span class="time">{{o.type_name}}</span>
+              <span class="time">{{item.typeName}}</span>
               <span class="time" style="margin-left: 1%">
-                 <i class="fa fa-thumbs-o-up" >0</i>
+                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
               <div>
-              <time class="time">2018-07-25 13:36</time>
+              <time class="time">{{item.publishTime}}</time>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@
         :page-sizes="[100, 200, 300, 400]"
         :page-size="5"
         layout="total, prev, pager, next, jumper"
-        :total="400">
+        :total=total>
       </el-pagination>
     </div>
   </div>
@@ -67,75 +67,22 @@
     data () {
       return {
         currentPage4: 1,
+        total: 0,
         checked: false,
+        checkList: [],
         formInline: {
           name: '',
           date: ''
         },
+        tableData: {},
         queryParams: {
           userId: this.$store.getters.userId,
-          courseName: '',
-          startDate: '',
-          endDate: '',
-          currentPage: 1
-        },
-        checkList: [],
-        course: [{
-          courseId: 1,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 2,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 3,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 4,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 5,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 6,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 7,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 8,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
-        }, {
-          courseId: 9,
-          courseName: 'Spring+Java',
-          courseType: 'shanghai',
-          courseCover: 'static/image/5.jpg',
-          courseDescription: '这是个测试说明'
+          courseName: null,
+          startDate: null,
+          endDate: null,
+          currentPage: 1,
+          pageSize: 9
         }
-        ]
       }
     },
     methods: {
@@ -148,23 +95,36 @@
       getHtml (val) {
 
       },
-      handleRelease (o) {
-        this.$router.push({name: 'release', params: o})
+      handleRelease (item) {
+        this.$router.push({name: 'release', params: item})
       },
-      handledelete (val) {
-        console.log(this.checkList)
+      handDelete (val) {
+        let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
+        this.$store.dispatch('Post', {'url': '/api-home/course/deletePublishedCourse', 'data': data}).then(res => {
+          this.getPublishedCourse()
+        })
       },
-      onsubmit () {
-        this.queryParams.courseName = this.formInline.name
-        this.queryParams.startDate = this.formInline.date[0]
-        this.queryParams.endDate = this.formInline.date[1]
+      handSearch () {
+        if (this.formInline.name.trim().length == 0) {
+          this.queryParams.courseName = null
+        } else {
+          this.queryParams.courseName = this.formInline.name
+        }
+        if (this.formInline.date == null) {
+          this.queryParams.startDate = null
+          this.queryParams.endDate = null
+        } else {
+          this.queryParams.startDate = this.formInline.date[0]
+          this.queryParams.endDate = this.formInline.date[1]
+        }
         this.queryParams.currentPage = 1
         this.getPublishedCourse()
       },
       getPublishedCourse () {
         console.log(this.queryParams)
         this.$store.dispatch('Get', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
-          this.course = res.data.data
+          this.total = res.data.re.total
+          this.tableData = res.data.re.rows
         })
       }
     },

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ucar.qtc.admin.dao.BannerDao">
+    <!--结果集封装-->
+    <resultMap id="BaseResultMap" type="com.ucar.qtc.admin.domain.BannerDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="banner_title" property="bannerTitle" jdbcType="VARCHAR"/>
+        <result column="banner_description" property="bannerDescription" jdbcType="VARCHAR"/>
+        <result column="banner_url" property="bannerUrl" jdbcType="VARCHAR"/>
+        <result column="banner_img" property="bannerImg" jdbcType="VARCHAR"/>
+        <result column="publish_time" property="publishTime" jdbcType="DATE"/>
+        <result column="update_time" property="updateTime" jdbcType="DATE"/>
+        <result column="del_flag" property="delFlag" jdbcType="INTEGER"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,banner_title,banner_description,banner_url,banner_img,publish_time,update_time,del_flag
+    </sql>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        *
+        FROM sys_banner
+        WHERE id = #{value}
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_banner b
+        <where>
+            b.del_flag = 1
+            <if test="id!=null and id!=''">AND id = #{id}</if>
+            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title = #{bannerTitle}</if>
+            <if test="publishTime!=null and publishTime!=''">AND publish_time = #{publishTime}</if>
+            <if test="updateTime!=null and updateTime!=''">AND update_time = #{updateTime}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim()!= ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY order_num DESC
+            </otherwise>
+        </choose>
+        <if test="offset!=null and limit!=null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <select id="count" >
+        SELECT
+        COUNT(*)
+        <where>
+            b.del_flag = 1
+            <if test="id!=null and id!=''">AND id = #{id}</if>
+            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title = #{bannerTitle}</if>
+            <if test="publishTime!=null and publishTime!=''">AND publish_time = #{publishTime}</if>
+            <if test="updateTime!=null and updateTime!=''">AND update_time = #{updateTime}</if>
+        </where>
+    </select>
+    <insert id="save" parameterType="com.ucar.qtc.admin.domain.BannerDO">
+        INSERT INTO sys_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bannerTitle!=null">banner_title,</if>
+            <if test="bannerDescription!=null">banner_description,</if>
+            <if test="bannerUrl!=null">banner_url</if>
+            <if test="bannerImg!=null">banner_img</if>
+            <if test="orderNum!=null">order_num</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bannerTitle!=null">#{bannerTitle,jdbcType=VARCHAR},</if>
+            <if test="bannerDescription!=null">#{bannerDescription,jdbcType=VARCHAR},</if>
+            <if test="bannerUrl!=null">#{bannerUrl,jdbcType=VARCHAR}</if>
+            <if test="bannerImg!=null">#{bannerImg,jdbcType=VARCHAR}</if>
+            <if test="orderNum!=null">#{orderNum,jdbcType=INT}</if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.ucar.qtc.admin.domain.BannerDO">
+        UPDATE sys_banner
+        <set>
+            <if test="id!=null"> id = #{id,jdbcType=BIGINT},</if>
+            <if test="bannerTitle!=null">banner_title = #{bannerTitle,jdbcType=VARCHAR},</if>
+            <if test="bannerDescription!=null">banner_description = #{bannerDescription,jdbcType=VARCHAR},</if>
+            <if test="bannerUrl!=null">banner_url = #{bannerUrl,jdbcType=VARCHAR}</if>
+            <if test="bannerImg!=null">banner_img = #{bannerImg,jdbcType=VARCHAR}</if>
+            <if test="orderNum!=null">order_num = #{orderNum,jdbcType=INT}</if>
+        </set>
+    </update>
+
+    <update id="remove">
+        UPDATE sys_banner set del_flag = 0 WHERE id = #{value}
+    </update>
+
+    <update id="batchRemove">
+        UPDATE sys_banner set del_flag = 0
+        WHERE id IN
+        <foreach collection="array" item = "id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

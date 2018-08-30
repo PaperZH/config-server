@@ -1,6 +1,9 @@
 package com.ucar.qtcassist.course.service;
 
-import com.ucar.qtcassist.course.model.CourseCoursewareDO;
+import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
+import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
+
+import java.util.List;
 
 public interface CourseCoursewareService {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,8 @@ public interface CourseCoursewareService {
     int updateByPrimaryKeySelective(CourseCoursewareDO record);
 
     int updateByPrimaryKey(CourseCoursewareDO record);
+
+    List<Long> getCoursewareIdListByCourseId(Long courseId);
+
+    Long getIdByCourseIdAndCoursewareId(Long courseId, Long coursewareId);
 }

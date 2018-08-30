@@ -88,23 +88,20 @@
     from assist_user_course
     where course_id = #{courseId,jdbcType=BIGINT}
   </select>
-  <select id="selectCourseIdListByUserId" resultType="java.lang.Long">
-    select DISTINCT course_id
-    from assist_user_course
-    where user_id = #{userId, jdbcType=BIGINT} and del_flag = 1
-  </select>
-  <select id="selectCourseIdListByDate" resultType="java.lang.Long">
+  <select id="selectCourseIdList" resultType="java.lang.Long">
     select DISTINCT course_id
     from assist_user_course
     where user_id = #{userId, jdbcType=BIGINT}
-    and publish_date between #{startTime, jdbcType=TIMESTAMP} and #{endTime, jdbcType=TIMESTAMP}
+    <if test="startDate != null">
+      and publish_date between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}
+    </if>
     and del_flag = 1
   </select>
-  <update id="deleteListById">
+  <update id="deleteListByIdList">
     update assist_user_course
     set del_flag = 0
-    where user_id = #{userId, jdbcType=BIGINT} and course_id in
-    <foreach item="courseId" collection="courseIds" open="(" separator="," close=")">
+    where user_id = #{userId, jdbcType=BIGINT}
+    <foreach item="courseId" collection="courseIds" open="and course_id in (" separator="," close=")">
       #{courseId}
     </foreach>
   </update>

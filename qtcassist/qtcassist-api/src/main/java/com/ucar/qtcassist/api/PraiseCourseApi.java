@@ -12,14 +12,15 @@ public interface PraiseCourseApi {
     /**
      * 添加点赞课程记录
      */
-    @PostMapping("/addPraiseCourse")
-    public Result addPraiseCourse(@RequestBody PraiseCourseDO praiseCourse);
+    @GetMapping("/addPraiseCourse/{userId}/{courseId}")
+    Result addPraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
      * 删除点赞课程记录
-     * @param praiseCourseId 点赞课程记录id
+     * @param userId 用户id
+     * @param courseId 课程id
      * @return
      */
-    @GetMapping("/deletePraiseCourse/{praiseCourseId}")
-    public Result deletePraiseCourse(@PathVariable("praiseCourseId") Long praiseCourseId);
+    @GetMapping("/deletePraiseCourse/{userId}/{courseId}")
+    Result deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 }

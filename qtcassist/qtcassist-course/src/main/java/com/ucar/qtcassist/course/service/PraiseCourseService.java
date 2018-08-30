@@ -14,4 +14,6 @@ public interface PraiseCourseService {
     int updateByPrimaryKeySelective(PraiseCourseDO record);
 
     int updateByPrimaryKey(PraiseCourseDO record);
+
+    PraiseCourseDO getByUserIdAndCourseId(Long userId, Long courseId);
 }

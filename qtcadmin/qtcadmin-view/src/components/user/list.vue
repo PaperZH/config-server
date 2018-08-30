@@ -59,8 +59,8 @@
       <!--工具条-->
       <el-col :span="24" class="toolbar" >
         <el-pagination layout="total,sizes, prev,pager, next,jumper" background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              @size-change="handleSizeChange"  
+              @current-change="handleCurrentChange" 
               :page-size="limit"
               :total="total"
               :page-sizes="[10, 20, 30]">
@@ -197,373 +197,377 @@
 </template>
 
 <script>
-import API from '../../api/api_user'
-import ROLE_API from '../../api/api_role'
-import DEPT_API from '../../api/api_dept'
-import FILE_API from '../../api/api_file'
+  import API from "../../api/api_user";
+  import ROLE_API from "../../api/api_role";
+  import DEPT_API from "../../api/api_dept";
+  import FILE_API from '../../api/api_file';
 
-export default {
-  data () {
-    return {
-      filters: {
-        name: ''
-      },
-      loading: false,
-      users: [],
-      roles: [],
-      roleIds: [],
-      total: 0,
-      page: 1,
-      limit: 10,
-
-      addImageUrl: '',
-      editCheckId: '',
-      depts: [],
-      deptId: '',
-      treeProps: {
-        children: 'children',
-        label: 'text'
-      },
-      editFormVisible: false,
-      editFormRules: {
-        username: [
-          {required: true, message: '请输入用户名', trigger: 'blur'}
-        ],
-        password: [{required: true, message: '请输入作者', trigger: 'blur'}],
-        nickname: [
-          {required: true, message: '请输入用户昵称', trigger: 'blur'}
-        ],
-        name: [{required: true, message: '请输入姓名', trigger: 'blur'}]
-      },
-      editForm: {
-        username: '',
-        password: '',
-        name: '',
-        nickname: '',
-        email: '',
-        roleIds: []
-      },
-      // 新增相关数据
-      addFormVisible: false, // 新增界面是否显示
-      addLoading: false,
-      addFormRules: {
-        username: [
-          {required: true, message: '请输入用户名', trigger: 'blur'}
-        ],
-        password: [{required: true, message: '请输入作者', trigger: 'blur'}],
-        name: [{required: true, message: '请输入姓名', trigger: 'blur'}]
-      },
-      addForm: {
-        username: '',
-        password: '',
-        name: '',
-        nickname: '',
-        email: '',
-        roleIds: []
-      }
-    }
-  },
-  methods: {
-    // 性别显示转换
-    formatSex: function (row, column) {
-      return row.sex === 1 ? '男' : row.sex === 0 ? '女' : '未知'
-    },
-    handleSizeChange (val) {
-      this.limit = val
-      this.search()
-    },
-    handleCurrentChange (val) {
-      this.page = val
-      this.search()
-    },
-    handleSearch () {
-      this.total = 0
-      this.page = 1
-      this.search()
-    },
-    // 获取用户列表
-    search: function () {
-      let that = this
-      let params = {
-        page: that.page,
+  export default {
+    data() {
+      return {
+        filters: {
+          name: ""
+        },
+        loading: false,
+        users: [],
+        roles: [],
+        roleIds: [],
+        total: 0,
+        page: 1,
         limit: 10,
-        name: that.filters.name
-      }
 
-      that.loading = true
-      API.findList(params)
-        .then(
-          function (result) {
-            that.loading = false
-            if (result && result.page.rows) {
-              that.total = result.page.total
-              that.users = result.page.rows
+        addImageUrl: '',
+        editCheckId:'',
+        depts: [],
+        deptId: "",
+        treeProps: {
+          children: 'children',
+          label: 'text'
+        },
+        loading: false,
+        addFormVisible: false,
+        editFormVisible: false,
+        editFormRules: {
+          username: [
+            {required: true, message: "请输入用户名", trigger: "blur"}
+          ],
+          password: [{required: true, message: "请输入作者", trigger: "blur"}],
+          nickname: [
+            {required: true, message: "请输入用户昵称", trigger: "blur"}
+          ],
+          name: [{required: true, message: "请输入姓名", trigger: "blur"}]
+        },
+        editForm: {
+          username: "",
+          password: "",
+          name: "",
+          nickname:"",
+          email: "",
+          roleIds: []
+        },
+        //新增相关数据
+        addFormVisible: false, //新增界面是否显示
+        addLoading: false,
+        addFormRules: {
+          username: [
+            {required: true, message: "请输入用户名", trigger: "blur"}
+          ],
+          password: [{required: true, message: "请输入作者", trigger: "blur"}],
+          name: [{required: true, message: "请输入姓名", trigger: "blur"}]
+        },
+        addForm: {
+          username: "",
+          password: "",
+          name: "",
+          nickname:"",
+          email: "",
+          roleIds: []
+        }
+      };
+    },
+    methods: {
+      //性别显示转换
+      formatSex: function (row, column) {
+        return row.sex == 1 ? "男" : row.sex == 0 ? "女" : "未知";
+      },
+      handleSizeChange(val) {
+        this.limit = val;
+        this.search();
+      },
+      handleCurrentChange(val) {
+        this.page = val;
+        this.search();
+      },
+      handleSearch() {
+        this.total = 0;
+        this.page = 1;
+        this.search();
+      },
+      //获取用户列表
+      search: function () {
+        let that = this;
+        let params = {
+          page: that.page,
+          limit: 10,
+          name: that.filters.name
+        };
+
+        that.loading = true;
+        API.findList(params)
+          .then(
+            function (result) {
+              that.loading = false;
+              if (result && result.page.rows) {
+                that.total = result.page.total;
+                that.users = result.page.rows;
+              }
+            },
+            function (err) {
+              that.loading = false;
+              that.$message.error({
+                showClose: true,
+                message: err.toString(),
+                duration: 2000
+              });
             }
-          },
-          function (err) {
-            that.loading = false
+          )
+          .catch(function (error) {
+            that.loading = false;
+            console.log(error);
             that.$message.error({
               showClose: true,
-              message: err.toString(),
+              message: "请求出现异常",
               duration: 2000
-            })
-          }
-        )
-        .catch(function (error) {
-          that.loading = false
-          console.log(error)
-          that.$message.error({
-            showClose: true,
-            message: '请求出现异常',
-            duration: 2000
-          })
+            });
+          });
+      },
+      showAddDialog: function () {
+        let that = this;
+        this.addFormVisible = true;
+        that.roleIds = [];
+        ROLE_API.findList('').then(function (result) {
+          that.roles = result.rows;
         })
-    },
-    showAddDialog: function () {
-      let that = this
-      this.addFormVisible = true
-      that.roleIds = []
-      ROLE_API.findList('').then(function (result) {
-        that.roles = result.rows
-      })
-      DEPT_API.depts('').then(function (result) {
-        if (!result.code) {
-          that.depts = result
-        }
-      })
-    },
-    showEditDialog: function (index, row) {
-      let that = this
-      that.roleIds = []
-      that.depts = []
-      let keys = [row.deptId]
-      this.editFormVisible = true
-      this.editForm = Object.assign({}, row)
-      ROLE_API.findList('').then(function (result) {
-        that.roles = result.rows
-      })
-      ROLE_API.findById(row.userId).then(function (result) {
-        if (!result.code) {
-          that.roleIds = result
-        }
-      })
-      DEPT_API.depts('').then(function (result) {
-        if (!result.code) {
-          that.depts = result
-        }
-      })
-      that.$nextTick(function () {
-        that.setTreeDeptId(keys)
-      })
-    },
-    addSubmit: function () {
-      let that = this
-      this.$refs.addForm.validate(valid => {
-        if (valid) {
-          that.loading = true
-          let params = Object.assign({}, this.addForm)
-          params.roleIds = that.roleIds
-          params.deptId = that.editCheckId
-          API.addUser(params).then(function (result) {
-            if (result.code === 0) {
-              that.loading = false
-              that.$message.success({
-                showClose: true,
-                message: '新增成功',
-                duration: 2000
-              })
-              that.$refs['addForm'].resetFields()
-              that.addFormVisible = false
-              that.search()
-            } else {
-              that.$message.error({
-                showClose: true,
-                message: '修改失败',
-                duration: 2000
-              })
-            }
-          })
-        }
-      })
-    },
-    editSubmit: function () {
-      let that = this
-      this.$refs.editForm.validate(valid => {
-        if (valid) {
-          that.loading = true
-          let params = Object.assign({}, that.editForm)
-          params.roleIds = that.roleIds
-          params.deptId = that.editCheckId
-          API.editUser(params).then(function (result) {
-            if (result.code === 0) {
-              that.$message.success({
-                showClose: true,
-                message: '修改成功',
-                duration: 2000
-              })
-              that.$refs['editForm'].resetFields()
-              that.editFormVisible = false
-              that.search()
-            } else {
-              that.$message.error({
-                showClose: true,
-                message: '修改失败',
-                duration: 2000
-              })
-            }
-          })
-        }
-      })
-    },
-    removeUser: function (index, row) {
-      let that = this
-      this.$confirm('确认删除该记录吗?', '提示', {type: 'warning'})
-        .then(() => {
-          that.loading = true
-          API.removeUser({id: row.userId})
-            .then(
-              function (result) {
-                that.loading = false
-                if (result && parseInt(result.code) === 0) {
-                  that.$message.success({
-                    showClose: true,
-                    message: '删除成功',
-                    duration: 1500
-                  })
-                  that.search()
-                }
-              },
-              function (err) {
-                that.loading = false
+        DEPT_API.depts('').then(function (result) {
+          if (!result.code) {
+            that.depts = result
+          }
+        })
+      },
+      showEditDialog: function (index, row) {
+        let that = this;
+        that.roleIds = []
+        that.depts = []
+        let keys = [row.deptId]
+        this.editFormVisible = true;
+        this.editForm = Object.assign({}, row);
+        ROLE_API.findList('').then(function (result) {
+          that.roles = result.rows;
+        })
+        ROLE_API.findById(row.userId).then(function (result) {
+          if (!result.code) {
+            that.roleIds = result;
+          }
+        })
+        DEPT_API.depts('').then(function (result) {
+          if (!result.code) {
+            that.depts = result
+          }
+        })
+        that.$nextTick(function () {
+          that.setTreeDeptId(keys)
+        })
+      },
+      addSubmit: function () {
+        let that = this;
+        this.$refs.addForm.validate(valid => {
+          if (valid) {
+            that.loading = true;
+            let params = Object.assign({}, this.addForm);
+            params.roleIds = that.roleIds
+            params.deptId = that.editCheckId;
+            API.addUser(params).then(function (result) {
+              if (0 === result.code) {
+                that.loading = false;
+                that.$message;
+                that.$message.success({
+                  showClose: true,
+                  message: "新增成功",
+                  duration: 2000
+                });
+                that.$refs["addForm"].resetFields();
+                that.addFormVisible = false;
+                that.search();
+              } else {
                 that.$message.error({
                   showClose: true,
-                  message: err.toString(),
+                  message: "修改失败",
                   duration: 2000
-                })
+                });
               }
-            )
-            .catch(function (error) {
-              that.loading = false
-              console.log(error)
-              that.$message.error({
-                showClose: true,
-                message: '请求出现异常',
-                duration: 2000
-              })
-            })
-        })
-        .catch(() => {
-        })
-    },
-
-    handleAddNodeClick (item, node, self) {
-      this.editCheckId = item.id
-      this.$refs.deptAddTree.setCheckedKeys([item.id])
-    },
-
-    addCheckChange (item, node, self) {
-      if (node === true) {
-        this.editCheckId = item.id
-        this.$refs.deptAddTree.setCheckedKeys([item.id])
-      } else {
-        if (this.editCheckId === item.id) {
-          this.$refs.deptAddTree.setCheckedKeys([item.id])
-        }
-      }
-    },
-    setTreeDeptId (keys) {
-      this.$refs.deptAddTree.setCheckedKeys(keys, true)
-    },
-
-    beforeAvatarUpload (file) {
-      let that = this
-      const extension = file.name.split('.')[1] === 'jpg'
-      const extension2 = file.name.split('.')[1] === 'jpeg'
-      const extension3 = file.name.split('.')[1] === 'png'
-      const extension4 = file.name.split('.')[1] === 'gif'
-
-      const isLt2M = file.size / 1024 / 1024 < 5
-
-      if (!extension && !extension2 && !extension3 && !extension4) {
-        console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-        return false
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 5MB!')
-        return false
-      }
-
-      let fd = new FormData()
-      fd.append('file', file)
-      FILE_API.uploadFile(fd).then(function (result) {
-        if (result && parseInt(result.code) === 0) {
-          that.addImageUrl = result.fileUrl
-          that.addForm.avatar = that.addImageUrl
-          that.$message.success({
-            showClose: true,
-            message: '上传成功',
-            duration: 2000
+            });
+          }
+        });
+      },
+      editSubmit: function () {
+        let that = this;
+        this.$refs.editForm.validate(valid => {
+          if (valid) {
+            that.loading = true;
+            let params = Object.assign({}, that.editForm);
+            params.roleIds = that.roleIds
+            params.deptId = that.editCheckId;
+            API.editUser(params).then(function (result) {
+              if (0 === result.code) {
+                that.$message.success({
+                  showClose: true,
+                  message: "修改成功",
+                  duration: 2000
+                });
+                that.$refs["editForm"].resetFields();
+                that.editFormVisible = false;
+                that.search();
+              } else {
+                that.$message.error({
+                  showClose: true,
+                  message: "修改失败",
+                  duration: 2000
+                });
+              }
+            });
+          }
+        });
+      },
+      removeUser: function (index, row) {
+        let that = this;
+        this.$confirm("确认删除该记录吗?", "提示", {type: "warning"})
+          .then(() => {
+            that.loading = true;
+            API.removeUser({id: row.userId})
+              .then(
+                function (result) {
+                  that.loading = false;
+                  if (result && parseInt(result.code) === 0) {
+                    that.$message.success({
+                      showClose: true,
+                      message: "删除成功",
+                      duration: 1500
+                    });
+                    that.search();
+                  }
+                },
+                function (err) {
+                  that.loading = false;
+                  that.$message.error({
+                    showClose: true,
+                    message: err.toString(),
+                    duration: 2000
+                  });
+                }
+              )
+              .catch(function (error) {
+                that.loading = false;
+                console.log(error);
+                that.$message.error({
+                  showClose: true,
+                  message: "请求出现异常",
+                  duration: 2000
+                });
+              });
           })
+          .catch(() => {
+          });
+      },
+
+      handleAddNodeClick(item,node,self) {
+        this.editCheckId = item.id;
+        this.$refs.deptAddTree.setCheckedKeys([item.id]);
+      },
+
+      addCheckChange (item, node, self) {
+        if (node == true) {
+          this.editCheckId = item.id;
+          this.$refs.deptAddTree.setCheckedKeys([item.id]);
         } else {
-          that.$message.error({
-            showClose: true,
-            message: '上传失败',
-            duration: 2000
-          })
+          if (this.editCheckId == item.id) {
+            this.$refs.deptAddTree.setCheckedKeys([item.id]);
+          }
         }
-      })
-      return false
-    },
+      },  
 
-    handleAvatarSuccess (res, file) {
-      console.log(res)
-    },
-    editBeforeAvatarUpload (file) {
-      let that = this
-      const extension = file.name.split('.')[1] === 'jpg'
-      const extension2 = file.name.split('.')[1] === 'jpeg'
-      const extension3 = file.name.split('.')[1] === 'png'
-      const extension4 = file.name.split('.')[1] === 'gif'
-      const isLt2M = file.size / 1024 / 1024 < 5
+      setTreeDeptId (keys) {
+        this.$refs.deptAddTree.setCheckedKeys(keys, true)
+      },
 
-      if (!extension && !extension2 && !extension3 && !extension4) {
-        console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-        return false
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 5MB!')
-        return false
-      }
+      beforeAvatarUpload(file) {
+        let that = this
+        const extension = file.name.split('.')[1] === 'jpg'
+        const extension2 = file.name.split('.')[1] === 'jpeg'
+        const extension3 = file.name.split('.')[1] === 'png'
+        const extension4 = file.name.split('.')[1] === 'gif'
 
-      let fd = new FormData()
-      fd.append('file', file)
-      FILE_API.uploadFile(fd).then(function (result) {
-        if (result && parseInt(result.code) === 0) {
-          that.editForm.avatar = result.fileUrl
-          that.$message.success({
-            showClose: true,
-            message: '上传成功',
-            duration: 2000
-          })
-        } else {
-          that.$message.error({
-            showClose: true,
-            message: '上传失败',
-            duration: 2000
-          })
+        const isLt2M = file.size / 1024 / 1024 < 5;
+
+        if (!extension && !extension2 && !extension3 && !extension4) {
+          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+          return false
         }
-      })
-      return false
-    },
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 5MB!');
+          return false;
+        }
 
-    editHandleAvatarSuccess (res, file) {
-      console.log(res)
+        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
+        fd.append('file', file);
+        FILE_API.uploadFile(fd).then(function (result) {
+          if (result && parseInt(result.code) === 0) {
+            that.addImageUrl = result.fileUrl
+            that.addForm.avatar = that.addImageUrl
+            that.$message.success({
+              showClose: true,
+              message: "上传成功",
+              duration: 2000
+            });
+          } else {
+            that.$message.error({
+              showClose: true,
+              message: "上传失败",
+              duration: 2000
+            });
+          }
+        });
+        return false;
+      },
+
+      handleAvatarSuccess(res, file) {
+          console.log(res);
+      },
+      editBeforeAvatarUpload(file) {
+        let that = this
+        const extension = file.name.split('.')[1] === 'jpg'
+        const extension2 = file.name.split('.')[1] === 'jpeg'
+        const extension3 = file.name.split('.')[1] === 'png'
+        const extension4 = file.name.split('.')[1] === 'gif'
+        const isLt2M = file.size / 1024 / 1024 < 5;
+
+        if (!extension && !extension2 && !extension3 && !extension4) {
+          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
+          return false
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 5MB!');
+          return false;
+        }
+
+        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
+        fd.append('file', file);
+        FILE_API.uploadFile(fd).then(function (result) {
+          if (result && parseInt(result.code) === 0) {
+            that.editForm.avatar = result.fileUrl
+            that.$message.success({
+              showClose: true,
+              message: "上传成功",
+              duration: 2000
+            });
+          } else {
+            that.$message.error({
+              showClose: true,
+              message: "上传失败",
+              duration: 2000
+            });
+          }
+        });
+        return false;
+      },
+
+      editHandleAvatarSuccess(res, file) {
+          console.log(res);
+      }
+    },
+    mounted() {
+      this.handleSearch();
     }
-  },
-  mounted () {
-    this.handleSearch()
-  }
-}
+  };
 </script>
 
 <style scoped>

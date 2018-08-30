@@ -1,17 +1,18 @@
 package com.ucar.qtcassist.api.model.VO;
 
-import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.CoursewareDTO;
+import java.util.List;
 
 public class CourseDetailVO {
-    private CourseDO course;
+    private CourseVO course;
     private TeacherVO teacher;
-//    private List<CoursewareDO> coursewares;
+    private List<CoursewareDTO> coursewares;
 
-    public CourseDO getCourse() {
+    public CourseVO getCourse() {
         return course;
     }
 
-    public void setCourse(CourseDO course) {
+    public void setCourse(CourseVO course) {
         this.course = course;
     }
 
@@ -23,11 +24,11 @@ public class CourseDetailVO {
         this.teacher = teacher;
     }
 
-//    public List<CoursewareDO> getCoursewares() {
-//        return coursewares;
-//    }
-//
-//    public void setCoursewares(List<CoursewareDO> coursewares) {
-//        this.coursewares = coursewares;
-//    }
+    public List<CoursewareDTO> getCoursewares() {
+        return coursewares;
+    }
+
+    public void setCoursewares(List<CoursewareDTO> coursewares) {
+        this.coursewares = coursewares;
+    }
 }

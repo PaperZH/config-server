@@ -41,4 +41,9 @@ public class PraiseCourseServiceImpl implements PraiseCourseService {
     public int updateByPrimaryKey(PraiseCourseDO record) {
         return praiseCourseMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public PraiseCourseDO getByUserIdAndCourseId(Long userId, Long courseId) {
+        return praiseCourseMapper.getByUserIdAndCourseId(userId, courseId);
+    }
 }

@@ -3,12 +3,13 @@
 </template>
 
 <script>
-const EUREKA_SERVER = process.env.EUREKA_SERVER
-export default {
-  data () {
-    return {
-      url: EUREKA_SERVER
+  const EUREKA_SERVER = process.env.EUREKA_SERVER
+  export default {
+    data(){
+        return {
+          url: EUREKA_SERVER
+        }
     }
-  }
 }
 </script>
+

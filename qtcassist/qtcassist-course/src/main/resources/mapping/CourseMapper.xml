@@ -197,11 +197,10 @@
   <select id="selectListById" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
-    from assist_course where id in
-    <foreach item="id" collection="ids" index="index" open="(" separator="," close=")">
+    from assist_course where del_flag = 1
+    <foreach item="id" collection="ids" index="index" open="and id in (" separator="," close=")">
       #{id}
     </foreach>
-    and del_flag = 1
     <if test="startIndex != null">
       limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
@@ -209,29 +208,29 @@
   <select id="selectListByCourseName" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
-    from assist_course where id in
-    <foreach item="id" collection="ids"  index="index" open="(" separator="," close=")">
+    from assist_course where id in (
+    <foreach item="id" collection="ids" index="index" separator=",">
       #{id}
     </foreach>
-    and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%') and del_flag = 1
+    ) and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+    and del_flag = 1
     <if test="startIndex != null">
       limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
   </select>
-  <select id="getTotalByCourseName" resultMap="java.lang.Integer" >
+  <select id="getTotalByCourseName" resultType="java.lang.Integer" >
     select count(id)
-    from assist_course where id in
-    <foreach item="id" collection="ids"  index="index" open="(" separator="," close=")">
+    from assist_course where del_flag = 1
+    <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
       #{id}
     </foreach>
-    and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%') and del_flag = 1
+    and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
   </select>
-  <select id="getTotalById" resultMap="BaseResultMap" >
+  <select id="getTotalById" resultType="java.lang.Integer" >
     select count(id)
-    from assist_course where id in
-    <foreach item="id" collection="ids" index="index" open="(" separator="," close=")">
+    from assist_course where del_flag = 1
+    <foreach item="id" collection="ids" index="index" open=" and id in (" separator="," close=")">
       #{id}
     </foreach>
-    and del_flag = 1
   </select>
 </mapper>

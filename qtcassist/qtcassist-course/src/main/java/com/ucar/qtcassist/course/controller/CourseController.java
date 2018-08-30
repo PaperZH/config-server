@@ -7,13 +7,9 @@ import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.DO.UserCourseDO;
-import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
-import com.ucar.qtcassist.api.model.VO.Query;
-import com.ucar.qtcassist.api.model.VO.CourseUserVO;
+import com.ucar.qtcassist.api.model.VO.*;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
-import com.ucar.qtcassist.api.model.VO.CourseVO;
-import com.ucar.qtcassist.api.model.VO.TeacherVO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.slf4j.Logger;
@@ -21,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -34,6 +31,9 @@ public class CourseController implements CourseApi {
 
     @Autowired
     private CourseTypeService courseTypeService;
+
+    @Autowired
+    private CourseCoursewareService courseCoursewareService;
 
     @Autowired
     private CoursewareService coursewareService;
@@ -69,6 +69,7 @@ public class CourseController implements CourseApi {
             return PageResult.getBusinessException("","");
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<CourseVO> courseVOList = new ArrayList<CourseVO>();
         for(int i = 0; i < courseDOList.size() && i < pageSize; i++) {
             CourseDO courseDO = courseDOList.get(i);
@@ -78,9 +79,8 @@ public class CourseController implements CourseApi {
             courseVO.setTypeName(courseType.getTypeName());
             courseVO.setCourseName(courseDO.getCourseName());
             courseVO.setCourseCover(courseDO.getCourseCover());
-            courseVO.setCourseDescription(courseDO.getCourseDescription());
             courseVO.setPraiseNum(courseDO.getPraiseNum());
-            courseVO.setPublishTime(courseDO.getPublishTime());
+            courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
             courseVOList.add(courseVO);
         }
         return PageResult.getSuccessResult(courseVOList, total);
@@ -96,21 +96,33 @@ public class CourseController implements CourseApi {
         Map<String, Object> data = new HashMap<String, Object>();
         CourseDetailVO courseDetail = new CourseDetailVO();
 
-        CourseDO course = courseService.selectByPrimaryKey(courseId);
+        CourseDO courseDO = courseService.selectByPrimaryKey(courseId);
+        CourseVO course = new CourseVO();
+        course.setCourseId(courseDO.getId());
+        CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+        course.setTypeName(courseType.getTypeName());
+        course.setCourseName(courseDO.getCourseName());
+        course.setCourseCover(courseDO.getCourseCover());
+        course.setCourseDescription(courseDO.getCourseDescription());
+        course.setPraiseNum(courseDO.getPraiseNum());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        course.setInvalidDate(sdf.format(courseDO.getInvalidDate()));
+        course.setPublishTime(sdf.format(courseDO.getPublishTime()));
         courseDetail.setCourse(course);
 
-        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
-        //调用远程的用户服务查询User， 参数为userCourse.getUserId();
-        Result result = userFeginClient.getUserById(userCourse.getUserId());
-        UserDO user = (UserDO) result.getRe();
-        TeacherVO teacher = new TeacherVO();
-        teacher.setUserId(user.getUserId());
-        teacher.setUserName(user.getName());
-        courseDetail.setTeacher(teacher);
+//        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
+//        //调用远程的用户服务查询User， 参数为userCourse.getUserId();
+//        Result result = userFeginClient.getUserById(userCourse.getUserId());
+//        UserDO user = (UserDO) result.getRe();
+//        TeacherVO teacher = new TeacherVO();
+//        teacher.setUserId(user.getUserId());
+//        teacher.setUserName(user.getName());
+//        courseDetail.setTeacher(teacher);
+        courseDetail.setTeacher(null);
 
-//        List<CoursewareDO> coursewareList = coursewareService.getAllCoursewareByCourseId(courseId);
-//        调用课件接口服务查询课程内容列表，参数为course.getId()
-//        courseDetail.setCoursewares(coursewareList);
+        List<Long> coursewareIdList = courseCoursewareService.getCoursewareIdListByCourseId(courseId);
+        List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
+        courseDetail.setCoursewares(coursewareDTOList);
 
         return Result.getSuccessResult(courseDetail);
     }
@@ -186,7 +198,7 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable Long courseId) {
+    public Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
         UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
         if(userId.equals(userCourse.getUserId())) {
             int count = courseService.deleteByPrimaryKey(courseId);
@@ -214,8 +226,8 @@ public class CourseController implements CourseApi {
      * @param id 课程ID
      * @return 课件列表
      */
-    @GetMapping("/listCourseware/{courseId}")
-    public Result<List<CoursewareDO>> listCourseware(@PathVariable("courseId") String id) {
+    @GetMapping("/getCoursewareList/{courseId}")
+    public Result<List<CoursewareDO>> getCoursewareList(@PathVariable("courseId") Long id) {
         List<CoursewareDO> coursewareList = null;
 
         //调用课件服务接口，参数为id

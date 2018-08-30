@@ -9,7 +9,7 @@
             <div style=" border-bottom: 1px solid #52464621;">
               <div><h2>{{items.courseName}}</h2></div>
               <div>
-                <span>技术课程</span>
+                <span>课程类型:{{items.typeName}}</span>
                 <span >上架时间:{{items.publishTime}}</span>
                 <i class="fa fa-thumbs-o-up">{{items.praiseNum}}</i>
               </div>
@@ -21,7 +21,7 @@
                 <div style="width: 60%;float: left"><span>{{teacher.username}}</span><br/><br/><br/><span>{{teacher.email}}</span></div>
               </div>
               <div>
-                <div style=""><span>课时数：5</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
+                <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
                 <div style="text-align: center; margin-top: 20%;"><el-button type="danger" round @click="addFavoriteCourse(items.courseId)">收藏</el-button></div>
               </div>
             </div>
@@ -38,7 +38,7 @@
           <el-tabs type="border-card" style="height: 320px;">
             <el-tab-pane label="课程介绍">
               <div>
-                   {{items.courseDescription}} 一支如此彪悍、如此具有超强执行力的队伍是如何塑造出来的？他们强大的销售能力来自何处？他们铁一般的团队凝聚力来自何处？马云如何培养和带领这支队伍？阿里价值观和六脉神剑，如何在这支队伍中运用并强化…本书深度采访了众多阿里和铁军的重要人物，从马云，到一线的员工，从阿里内部，到离开铁军如今在互联网呼风唤雨的其他人物，并依据大量全新的一手资料，展现阿里铁军的人事物及其演变，展示他们如何用阿里的价值观和铁的纪律打造一个互联网地堆天团，成为日后马云口中的中国电商“黄埔军校”，让阿里铁军的文化和执行力进化、裂变与复制…
+                {{items.courseDescription}}
               </div>
             </el-tab-pane>
             <el-tab-pane label="课程目录"  ><div>
@@ -152,18 +152,30 @@
             this.$notify.warning({'title': '收藏失败', 'message': '请先登陆'})
           } else {
             let data = {'userId': userId, 'courseId': val}
-            this.$store.dispatch('Post', {'url': '/api-home/course/addFavoriteCourse', 'data': data}).then(res => {
-              this.$notify.success(res.data.msg)
+            this.$store.dispatch('Post', {'url': '/api-home/course/addFavoriteCourse/'+userId+'/'+val}).then(res => {
+              if(res.data.success==true){
+                this.$notify.success("收藏成功")
+              }
             })
           }
         },
         getCourseDetails (val) {
-          this.$store.dispatch('Get', {'url': `/api-home/course/getDetails/${val}`}).then(res => {
-            this.items = res.data.data
-            this.tableData = this.items.courseWare
-            this.teacher = this.items.teacher
+          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/'+val}).then(res => {
+            console.log(res)
+            this.items = res.data.re.course
+            this.tableData = res.data.re.coursewares
+            this.teacher = this.teacher
           })
         }
+        // getCourseList () {
+        //   const url = '/api-home/course/getList'
+        //   const data = {'type': this.type, 'currentPage': this.currentPage, 'pageSize': 8}
+        //   this.$store.dispatch('Get', {'url': url, 'data': data}).then(res => {
+        //     console.log(res)
+        //     this.total = res.data.re.total
+        //     this.tableData = res.data.re.rows
+        //   })
+        // }
       }
     }
 </script>

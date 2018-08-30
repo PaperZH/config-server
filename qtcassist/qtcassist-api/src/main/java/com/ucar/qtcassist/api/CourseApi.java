@@ -48,6 +48,6 @@ public interface CourseApi {
      * @return
      */
     @GetMapping("/deleteCourse/{userId}/{courseId}")
-    Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable Long courseId);
+    Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
 }
