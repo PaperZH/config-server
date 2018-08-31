@@ -1,12 +1,20 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.104.102.225:8001/eureka/
+      defaultZone: http://localhost:8001/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
 security:
   basic:
     enabled: false
+
 server:
   port: 8004
+
 spring:
   application:
     name: api-admin
@@ -23,6 +31,10 @@ mybatis:
       map-underscore-to-camel-case: true
 logging:
   level: debug
+
+ribbon:
+  eureka:
+    enable: true
 
 file:
   filePath: e:/file/uploaded_files/
