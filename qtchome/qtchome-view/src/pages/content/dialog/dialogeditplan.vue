@@ -3,7 +3,7 @@
     <el-form ref="message" :model="message" label-width="80px"  >
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="11">
-          <el-form-item label="教师" :span="11">
+          <el-form-item label="导师" :span="11" style="margin-left: -30px">
             <el-input
               placeholder="教师姓名"
               v-model="message.teacherName"
@@ -21,24 +21,25 @@
           </el-table>
           <el-button slot="reference">查看课程信息</el-button>
         </el-popover>
-        <el-col >
-          <el-form-item label="培训内容" >
-            <el-input v-model="message.plan.planContent" type="textarea"resize="none" readonly
+        <el-col>
+        <el-collapse v-model="activeName" accordion>
+          <el-collapse-item title="培训内容" name="1">
+              <el-input v-model="message.plan.planContent" type="textarea"resize="none"  disabled
+                        :autosize="{ minRows: 8, maxRows: 12}"></el-input>
+          </el-collapse-item>
+          <el-collapse-item title="培训目的" name="2">
+            <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  disabled
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col >
-          <el-form-item label="培训目的">
-            <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  readonly
+          </el-collapse-item>
+          <el-collapse-item title="计划评价" name="3">
+            <el-input v-model="message.studentEvaluateContent"  type="textarea" resize="none" placeholder="输入学习内容"
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col >
-          <el-form-item label="总结">
-            <el-input v-model="message.studentSummary"  type="textarea" resize="none"
+          </el-collapse-item>
+          <el-collapse-item title="学习总结" name="4">
+            <el-input v-model="message.studentSummary"  type="textarea" resize="none" placeholder="输入学习总结"
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
-          </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
         </el-col>
         <el-col>
           <el-form-item style="text-align: right">
@@ -71,23 +72,8 @@
     data () {
       return {
         visible: this.show,
-        options: [{
-          value: '选项1',
-          label: 'java 虚拟机'
-        }, {
-          value: '选项2',
-          label: 'Springvc'
-        }],
-        options5: [{
-          value: 'HTML',
-          label: '张三'
-        }, {
-          value: 'CSS',
-          label: '李斯'
-        }, {
-          value: 'JavaScript',
-          label: '隔壁老王'
-        }],
+        activeName: '4',
+        plan: this.message.plan,
         value10: []
       }
     },
@@ -98,11 +84,15 @@
     },
     methods: {
       onSubmit () {
-        console.log(this)
-        this.$emit('transferUser', this.message)
-        this.visible = false
+        let data = {'studentEvaluateContent': this.message.studentEvaluateContent, 'studentSummary': this.message.studentSummary, 'planId': this.message.planId}
+        console.log(data)
+        this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
+          console.log(res)
+          this.visible = false
+        })
       },
       onCan () {
+        this.activeName = '4'
         this.visible = false
       }
     }
