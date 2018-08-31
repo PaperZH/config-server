@@ -63,11 +63,25 @@ public interface PlanService {
     public ResponseResult addPlan (Map<String,Object> params);
 
     /**
+     * 更新制定计划
+     * @param params
+     * @return
+     */
+    public ResponseResult updatePlan(Map<String,Object> params);
+
+    /**
      * 增加发布的计划
      * @param params
      * @return
      */
     public ResponseResult addPublishedPlan (Map<String,Object> params);
+
+    /**
+     * 更新发布的计划
+     * @param params
+     * @return
+     */
+    public ResponseResult updatePublishedPlan(Map<String,Object> params);
 
     /**
      * 删除制定的计划
