@@ -38,16 +38,12 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-              @click="handleClick(scope.row,scope.$index)"
-              size="mini"
-              type="danger"
-              >删除</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
+            <el-button type="primary" icon="el-icon-delete"  @click="handleClick(scope.row,scope.$index)"></el-button>
           </template>
         </el-table-column>
       </el-table>
-      <dialog-plan  :show.sync="show" v-bind:message="message" title="制定新计划" ></dialog-plan>
-      <dialog-plan  :show.sync="show" v-bind:message="message" title="分配课程" ></dialog-plan>
+      <dialog-plan  :show.sync="show" v-bind:message="message" :title="title"  @EditClick="getTeacherPlan"></dialog-plan>
       <div class="block" style="text-align: right">
         <el-pagination
           @size-change="handleSizeChange"
@@ -84,6 +80,7 @@
           styleObject: {
             border: '1px solid #409EFF'
           },
+          title: '',
           message: {},
           formInline: {
             name: '',
@@ -109,16 +106,34 @@
           this.getTeacherPlan()
         },
         onAddPlan () {
+          this.message = {}
+          this.title = '制定新计划'
           this.show = true
         },
         handleClick (row, index) {
           console.log('delete')
-          console.log(row)
-          console.log(index)
-          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.planId}}).then(res => {
-            this.tableData.splice(index, 1)
-            console.log(res)
+          this.$confirm('是否要删除该记录?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.planId}}).then(res => {
+              this.tableData.splice(index, 1)
+              this.$message.success('删除成功')
+              console.log(res)
+            }).catch(_ => {
+              this.$message({
+                type: 'info',
+                message: '删除失败'
+              })
+            })
           })
+        },
+        handleEdit (val) {
+          this.title = '编辑计划'
+          this.show = true
+          let data = val
+          this.message = data
         },
         handleSizeChange (val) {
           console.log(`每页 ${val} 条`)
