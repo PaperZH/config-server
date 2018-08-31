@@ -35,6 +35,15 @@
         </el-table-column>
         <el-table-column property="courseName" label="课程名" width="150"></el-table-column>
         <el-table-column property="courseDescription" label="课程描述" width="200"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              @click="handleDelete(scope.row,scope.$index)"
+              size="mini"
+              type="danger"
+            >删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
 </template>
@@ -78,6 +87,24 @@
         console.log(this.courseData)
         console.log(this.planId)
         this.innerVisible = true
+      },
+      handleDelete (row, index) {
+        this.$confirm('是否要删除该记录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlanCourse', 'data': {'id': row.id}}).then(res => {
+            this.courseData.splice(index, 1)
+            this.$message.success('删除成功')
+            console.log(res)
+          }).catch(_ => {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          })
+        })
       },
       addCourse () {
         console.log(this.courseIds)
