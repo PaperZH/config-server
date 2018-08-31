@@ -22,12 +22,13 @@
               </div>
               <div>
                 <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
-                <div style="text-align: center; margin-top: 20%;"><el-button type="danger" round @click="addFavoriteCourse(items.courseId)">收藏</el-button></div>
+                <div style="text-align: center; margin-top: 20%;">
+                  <el-button type="danger" round @click="handPraiseCourse(items.courseId)" >{{praise.praiseText}}</el-button>
+                  <el-button type="danger" round @click="addCollectCourse(items.courseId)">收藏</el-button>
+                </div>
               </div>
             </div>
-
           </div>
-
         </div>
         </el-col>
       </el-row>
@@ -109,10 +110,14 @@
       },
       data () {
         return {
+          praise: {
+            isPraised: null,
+            praiseText: ''
+          },
           items: {},
           currentPage4: 5,
           teacher: { },
-          tableData: [ {
+          tableData: [{
             date: '2016-05-04 01:00:0',
             name: 'Java基础运算',
             address: '上海市普陀区金沙江路 1517 弄'
@@ -146,36 +151,68 @@
             console.log(res)
           })
         },
-        addFavoriteCourse (val) {
+        handPraiseCourse (val) {
+          let userId = this.$store.getters.userId
+          if (userId == null || userId === '') {
+            this.$notify.warning({'title': '点赞失败', 'message': '请先登陆'})
+          } else {
+            if (this.praise.isPraised === true) {
+              this.$store.dispatch('Post', {'url': '/api-home/course/deletePraiseCourse/' + userId + '/' + val}).then(res => {
+                if (res.data.success === true) {
+                  this.praise.isPraised = false
+                  this.praise.praiseText = '点赞'
+                }
+              })
+            } else {
+              this.$store.dispatch('Post', {'url': '/api-home/course/addPraiseCourse/' + userId + '/' + val}).then(res => {
+                if (res.data.success === true) {
+                  this.praise.isPraised = true
+                  this.praise.praiseText = '已赞'
+                }
+              })
+            }
+          }
+        },
+        addCollectCourse (val) {
           let userId = this.$store.getters.userId
           if (userId == null || userId === '') {
             this.$notify.warning({'title': '收藏失败', 'message': '请先登陆'})
           } else {
-            let data = {'userId': userId, 'courseId': val}
-            this.$store.dispatch('Post', {'url': '/api-home/course/addFavoriteCourse/'+userId+'/'+val}).then(res => {
-              if(res.data.success==true){
-                this.$notify.success("收藏成功")
+            this.$store.dispatch('Post', {'url': '/api-home/course/addCollectCourse/' + userId + '/' + val}).then(res => {
+              if (res.data.success === true) {
+                this.$notify.success('收藏成功')
               }
             })
           }
         },
         getCourseDetails (val) {
-          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/'+val}).then(res => {
-            console.log(res)
-            this.items = res.data.re.course
-            this.tableData = res.data.re.coursewares
-            this.teacher = this.teacher
-          })
+          let userId = this.$store.getters.userId
+          if (userId == null || userId === '') {
+            this.$notify.warning({'title': '查看失败', 'message': '请先登陆'})
+          } else {
+            this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + val}).then(res => {
+              console.log(res)
+              this.items = res.data.re.course
+              if (res.data.re.coursewares != null) {
+                this.tableData = res.data.re.coursewares
+              } else {
+                this.tableData = []
+              }
+              this.teacher = this.teacher
+            })
+            this.$store.dispatch('Post', {'url': '/api-home/course/isPraisedCourse/' + userId + '/' + val}).then(res => {
+              if (res.data.success === true) {
+                if (res.data.re === true) {
+                  this.praise.isPraised = true
+                  this.praise.praiseText = '已赞'
+                } else {
+                  this.praise.isPraised = false
+                  this.praise.praiseText = '点赞'
+                }
+              }
+            })
+          }
         }
-        // getCourseList () {
-        //   const url = '/api-home/course/getList'
-        //   const data = {'type': this.type, 'currentPage': this.currentPage, 'pageSize': 8}
-        //   this.$store.dispatch('Get', {'url': url, 'data': data}).then(res => {
-        //     console.log(res)
-        //     this.total = res.data.re.total
-        //     this.tableData = res.data.re.rows
-        //   })
-        // }
       }
     }
 </script>

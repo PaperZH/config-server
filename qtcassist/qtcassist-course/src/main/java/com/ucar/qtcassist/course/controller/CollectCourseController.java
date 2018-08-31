@@ -52,7 +52,7 @@ public class CollectCourseController implements CollectCourseApi {
         Integer startIndex = (currentPage - 1) * pageSize;
         List<CourseDO> courseDOList = null;
         List<Long> courseIdList = null;
-        Integer total = null;
+        Integer total = 0;
         if(query.getCourseName() == null && query.getStartDate() == null) {
             courseIdList = collectCourseService.selectCourseIdList(userId, null, null);
             if(courseIdList.size() > 0) {

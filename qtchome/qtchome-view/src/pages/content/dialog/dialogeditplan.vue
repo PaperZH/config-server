@@ -1,81 +1,42 @@
 <template>
   <el-dialog  :title="title" :visible.sync="visible" @close="$emit('update:show', false)" :show="show" >
-
-    <el-form ref="message" :model="message" label-width="80px">
+    <el-form ref="message" :model="message" label-width="80px"  >
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="11">
-          <el-form-item label="学员" :span="11">
-            <el-select
-              v-model="value10"
-              multiple
-              style="width: 90%;"
-              placeholder="请选择学员">
-              <el-option
-                v-for="item in options5"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-        </el-col>
-        <el-col :span="11">
-          <el-form-item label="培训日期">
-            <el-date-picker style="width: 110%;"
-              v-model="value6"
-              type="datetimerange"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            >
-            </el-date-picker>
-          </el-form-item>
-
-        </el-col>
-        <el-col :span="11">
-          <el-form-item label="课程名称">
-            <el-select  multiple v-model="value8"  filterable placeholder="请选择课程" style="width: 90%;">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+          <el-form-item label="教师" :span="11">
+            <el-input
+              placeholder="教师姓名"
+              v-model="message.teacherName"
+              readonly>
+            </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
-          <el-form-item label="计划名称">
-            <el-input v-model="message.name"><label>历史计划</label></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="3">
-          <el-popover
-            placement="top"
-            width="400"
-            trigger="click">
-            <el-input placeholder="请输入历史计划名称"></el-input>
-            <el-button slot="reference" size="small"style="margin-top: 8px;">历史计划</el-button>
-          </el-popover>
-        </el-col>
-
-
+        <el-popover
+          placement="right"
+          width="400"
+          trigger="click">
+          <el-table :data="message.courses">
+            <el-table-column width="150" property="courseName" label="课程名称"></el-table-column>
+            <el-table-column width="100" property="courseDescription" label="课程描述"></el-table-column>
+          </el-table>
+          <el-button slot="reference">查看课程信息</el-button>
+        </el-popover>
         <el-col >
-          <el-form-item label="培训内容">
-            <el-input v-model="message.city" type="textarea"resize="none"
+          <el-form-item label="培训内容" >
+            <el-input v-model="message.plan.planContent" type="textarea"resize="none" readonly
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col >
           <el-form-item label="培训目的">
-            <el-input v-model="message.address"  type="textarea" resize="none"
+            <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  readonly
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-form-item>
         </el-col>
         <el-col >
           <el-form-item label="总结">
-            <el-input v-model="message.address"  type="textarea" resize="none"
+            <el-input v-model="message.studentSummary"  type="textarea" resize="none"
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-form-item>
         </el-col>
@@ -88,7 +49,6 @@
 
       </el-row>
     </el-form>
-
   </el-dialog>
 </template>
 
@@ -111,8 +71,6 @@
     data () {
       return {
         visible: this.show,
-        value6: '',
-        value8: '',
         options: [{
           value: '选项1',
           label: 'java 虚拟机'

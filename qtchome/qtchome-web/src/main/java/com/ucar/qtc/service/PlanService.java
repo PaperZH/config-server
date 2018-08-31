@@ -8,10 +8,24 @@ public interface PlanService {
 
     /**
      * 分页获取教师制定计划列表
-     * @param params    (long teacherId, String planTitle,Date startTime, Date endTime,int currentPage, int pageSize)
+     * @param params    (long teacherId, String planTitle,int currentPage, int pageSize)
      * @return
      */
     public ResponseResult getTeacherPlanList(Map<String,Object> params);
+
+    /**
+     * 根据发布计划ID获取课程基本信息
+     * @param planId
+     * @return
+     */
+    public ResponseResult getCourseByPlanId(long planId);
+
+    /**
+     * 根据发布计划ID获取详细信息（包括教师信息，课程信息，制定计划基本信息，发布计划的基本信息）
+     * @param planId
+     * @return
+     */
+    public ResponseResult getPlanDetailsByPlanId(long planId);
 
     /**
      * 分页获取发布的计划列表
@@ -21,8 +35,15 @@ public interface PlanService {
     public ResponseResult getPublishedPlanList(Map<String,Object> params);
 
     /**
+     * 模糊查询制定的计划列表
+     * @param planName
+     * @return
+     */
+    public ResponseResult getPlanList(String planName);
+
+    /**
      * 分页获取学员计划列表
-     * @param params    (long studentId, String planTitle,Date startTime, Date endTime,int currentPage, int pageSize)
+     * @param params    (long studentId, String planTitle,int currentPage, int pageSize)
      * @return
      */
     public ResponseResult getStudentPlanList(Map<String,Object> params);
@@ -35,18 +56,31 @@ public interface PlanService {
     public ResponseResult getStudents(long techerId);
 
     /**
-     * 增加计划
+     * 增加制定计划
      * @param params
      * @return
      */
-
     public ResponseResult addPlan (Map<String,Object> params);
+
     /**
-     * 删除制定的计划表
+     * 增加发布的计划
+     * @param params
+     * @return
+     */
+    public ResponseResult addPublishedPlan (Map<String,Object> params);
+
+    /**
+     * 删除制定的计划
      * @param
      * @return
      */
     public ResponseResult deletePlan(long planId);
 
+    /**
+     * 删除发布的计划
+     * @param planId
+     * @return
+     */
+    public ResponseResult deletePublished(long planId);
 
 }

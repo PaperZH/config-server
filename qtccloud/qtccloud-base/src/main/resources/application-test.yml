@@ -2,6 +2,15 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://10.104.102.225:8001/eureka/
+      healthcheck:
+        enabled: true
+    instance:
+      lease-renewal-interval-in-seconds: 10
+      lease-expiration-duration-in-seconds: 20
+
+security:
+  basic:
+    enabled: false
 
 server:
   port: 8003
@@ -17,3 +26,7 @@ mybatis:
   mapper-locations: mapper/**Mapper.xml
   configuration:
       map-underscore-to-camel-case: true
+
+ribbon:
+  eureka:
+    enable: true

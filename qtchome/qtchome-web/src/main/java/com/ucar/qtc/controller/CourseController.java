@@ -70,8 +70,9 @@ public class CourseController {
         ArrayList<Map> list = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseName","课程名称"+i);
+            hashMap.put("courseName","课程名称"+10*i);
             hashMap.put("courseId",20*i);
+            hashMap.put("courseDescription","课程描述"+10*i);
             list.add(hashMap);
         }
         return ResponseResult.data(list);
@@ -85,7 +86,7 @@ public class CourseController {
      */
     @RequestMapping(value = "/getDetails/{id}", method = RequestMethod.GET)
     public ResponseResult getCourseDetails(@PathVariable long id){
-//        System.out.println(id);
+        System.out.println(id);
 //        HashMap<String,Object> course = new HashMap<>();
 //        //课程基本信息
 //        course.put("courseId",100);
@@ -125,10 +126,10 @@ public class CourseController {
      * 根据查询条件来获取收藏的课程
      * @return
      */
-    @RequestMapping(value = "/getFavoriteCourse",method = RequestMethod.GET)
-    ResponseResult getFavoriteCourse(@RequestParam Map<String,Object> params){
+    @RequestMapping(value = "/getCollectCourse",method = RequestMethod.GET)
+    ResponseResult getCollectCourse(@RequestParam Map<String,Object> params){
         System.out.println(params);
-        return courseService.queryFavoriteCourse(params);
+        return courseService.queryCollectCourse(params);
     }
 
     /**
@@ -136,18 +137,48 @@ public class CourseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/addFavoriteCourse/{userId}/{courseId}")
-    ResponseResult addFavoriteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
-        return courseService.addFavoriteCourse(userId, courseId);
+    @RequestMapping(value = "/addCollectCourse/{userId}/{courseId}")
+    ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.addCollectCourse(userId, courseId);
     }
     /**
      * 根据条件批量删除收藏的课程
      * @return
      */
-    @RequestMapping(value = "/deleteFavoriteCourse")
-    ResponseResult deleteFavoriteCourse(@RequestBody Map<String,Object> params){
+    @RequestMapping(value = "/deleteCollectCourseList")
+    ResponseResult deleteCollectCourseList(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        return courseService.deleteFavoriteCourse(params);
+        return courseService.deleteCollectCourseList(params);
+    }
+
+    /**
+     * 根据用户ID和课程ID来点赞课程
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/addPraiseCourse/{userId}/{courseId}")
+    ResponseResult addPraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.addPraiseCourse(userId, courseId);
+    }
+
+    /**
+     * 根据用户ID和课程ID来点赞课程
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/isPraisedCourse/{userId}/{courseId}")
+    ResponseResult isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.isPraisedCourse(userId, courseId);
+    }
+
+    /**
+     * 根据用户ID和课程ID来点赞课程
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/deletePraiseCourse/{userId}/{courseId}")
+    ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.deletePraiseCourse(userId, courseId);
     }
 
     /**
