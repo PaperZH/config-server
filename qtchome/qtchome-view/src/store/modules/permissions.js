@@ -1,12 +1,13 @@
 import { login, logout, get, post, remove, put } from '@/service/api'
 export const user = {
+  
   state: {
     token: '',
     userId: 100,
     name: '',
     avatar: '',
-    roles: [],
-    addRouters: []
+    addRouters: [],
+    perms:[]
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -21,11 +22,12 @@ export const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    },
     SET_MENU: (state, routers) => {
       state.addRouters = routers
+     //  state.routers = constantRouterMap.concat(routers)
+    },
+    SET_PERMS: (state, routers) => {
+      state.perms = routers
      //  state.routers = constantRouterMap.concat(routers)
     }
   },
@@ -33,14 +35,8 @@ export const user = {
     Login: function ({commit}, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.token)
-          commit('SET_ROLES', data.user.roles)
-          commit('SET_USERID', data.user.userId)
-          commit('SET_NAME', data.user.username)
-          commit('SET_AVATAR', data.user.avatar)
-          resolve(data)
+        login(username, userInfo.password).then(result => {
+           resolve(result)
         }).catch(error => {
           reject(error)
         })
@@ -102,11 +98,11 @@ export const user = {
 }
 
 export const getters = {
-  token: state => state.user.token,
-  avatar: state => state.user.avatar,
-  userId: state => state.user.userId,
-  name: state => state.user.name,
-  roles: state => state.user.roles,
-  addRouters: state => state.user.addRouters,
-  routers: state => state.user.routers
+  token: state => state.token,
+  avatar: state => state.avatar,
+  userId: state => state.userId,
+  name: state => state.name,
+  menu: state => state.menu,
+  addRouters: state => state.addRouters,
+  perms: state => state.perms
 }

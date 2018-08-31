@@ -66,10 +66,11 @@ public class LoginController {
         }
         //首先清除用户缓存权限
         menuService.clearCache(userDO.getUserId());
+
         return ResponseResult.ok("登录成功")
                 .put("token", token).put("user", userDO)
-                .put("perms", menuService.PermsByUserId(userDO.getUserId()))
-                .put("router", menuService.RouterDTOsByUserId(userDO.getUserId()));
+                .put("perms", menuService.BackPermsByUserId(userDO.getUserId()))
+                .put("router", menuService.BackRouterDTOsByUserId(userDO.getUserId()));
     }
 
     /**
@@ -101,9 +102,10 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //首先清除用户缓存权限
         return ResponseResult.ok("登录成功")
-                .put("token", token).put("user", userDO);
+                .put("token", token).put("user", userDO)
+                .put("perms", menuService.FrontPermsByUserId(userDO.getUserId()))
+                .put("router", menuService.FrontRouterDTOsByUserId(userDO.getUserId()));
     }
 
 

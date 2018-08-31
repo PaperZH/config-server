@@ -86,6 +86,7 @@
       name: 'addCourse',
       data () {
         return {
+          restaurants:[],
           isShow: false,
           state4: '',
           course: {

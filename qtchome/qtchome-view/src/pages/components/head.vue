@@ -25,10 +25,10 @@
             <div style="float: right;color: #f7f6f6;">
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">
-              <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
+              <img style="width: 40px;height: 40px ;border-radius:20px" src="static/timg.jpg"/>&nbsp&nbsp
               <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link" style="color: #faf7f7;">
-                 {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                 {{userInfo.nic}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="user">个人中心</el-dropdown-item>
@@ -85,6 +85,8 @@
           nickName:'',
           avatar:''
         },
+        data:[],
+        router:[],
         dialogFormVisible: false,
         formLabelWidth: '120px',
         isShow: true,
@@ -101,17 +103,26 @@
       },
       login: function () {
         let that = this;
-        
-        this.$store.dispatch('Login', this.form).then(res => {
-          console.log(res)  
-          that.dialogFormVisible = false
-          that.userInfo.nickName=res.user.nickname
-          that.userInfo.avatar=res.user.avatar
-          that.isShow = false
-          that.isUser = true
-        }).catch(() => {
-          this.loading = false
-        })
+        that.dialogFormVisible = false
+        that.isShow = false
+         that.isUser = true
+        // this.$store.dispatch('Login', this.form).then(result => {
+        //   that.res = result;
+           
+        //  that.router = that.res.data.router;
+        //  console.log(that.router)
+         
+        //   localStorage.setItem("access-menus", JSON.stringify(that.router));
+          
+        //   that.dialogFormVisible = false
+        //   that.isShow = false
+        //   that.isUser = true
+        //   that.userInfo.nickName=data.user.nickname
+        //   that.userInfo.avatar=data.user.avatar
+         
+        // }).catch(() => {
+        //   this.loading = false
+        // })
       },
       handleCommand (val) {
         if (val === 'quit') {

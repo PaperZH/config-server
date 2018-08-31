@@ -29,7 +29,7 @@ public interface RoleMenuDao {
 	int batchRemove(Long[] ids);
 	
 	List<Long> listMenuIdByRoleId(Long roleId);
-	
+
 	int removeByRoleId(Long roleId);
 
 	int removeByMenuId(Long menuId);

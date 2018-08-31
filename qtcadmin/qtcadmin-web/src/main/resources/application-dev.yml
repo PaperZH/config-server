@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.104.102.225:8001/eureka/
+      defaultZone: http://localhost:8001/eureka/
 security:
   basic:
     enabled: false
@@ -11,9 +11,9 @@ spring:
   application:
     name: api-admin
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qtccloud?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://10.104.102.225:3306/qtccloud?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: admin@123
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8

@@ -29,11 +29,9 @@
         <include refid="Base_Column_List"/>
         FROM sys_banner b
         <where>
+
             b.del_flag = 1
-            <if test="id!=null and id!=''">AND id = #{id}</if>
-            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title = #{bannerTitle}</if>
-            <if test="publishTime!=null and publishTime!=''">AND publish_time = #{publishTime}</if>
-            <if test="updateTime!=null and updateTime!=''">AND update_time = #{updateTime}</if>
+            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title LIKE concat('%',#{bannerTitle},'%')</if>
         </where>
         <choose>
             <when test="sort != null and sort.trim()!= ''">
@@ -53,10 +51,7 @@
         COUNT(*)
         <where>
             b.del_flag = 1
-            <if test="id!=null and id!=''">AND id = #{id}</if>
             <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title = #{bannerTitle}</if>
-            <if test="publishTime!=null and publishTime!=''">AND publish_time = #{publishTime}</if>
-            <if test="updateTime!=null and updateTime!=''">AND update_time = #{updateTime}</if>
         </where>
     </select>
     <insert id="save" parameterType="com.ucar.qtc.admin.domain.BannerDO">

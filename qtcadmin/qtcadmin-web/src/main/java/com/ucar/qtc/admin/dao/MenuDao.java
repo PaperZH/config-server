@@ -18,6 +18,10 @@ public interface MenuDao {
 	
 	List<MenuDO> list(Map<String, Object> map);
 
+	List<MenuDO> listFront(Map<String, Object> map);
+
+	List<MenuDO> listBack(Map<String, Object> map);
+
 	int count(Map<String, Object> map);
 	
 	int save(MenuDO menu);
@@ -29,6 +33,11 @@ public interface MenuDao {
 	int batchRemove(Long[] menuIds);
 	
 	List<MenuDO> listMenuByUserId(Long id);
+
+	List<MenuDO> listFrontMenuByUserId(Long id);
+
+	List<MenuDO> listBackMenuByUserId(Long id);
+
 	
 	List<String> listUserPerms(Long id);
 }

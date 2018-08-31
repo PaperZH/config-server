@@ -35,6 +35,62 @@
 		</if>
 	</select>
 
+	<select id="listFront" resultType="com.ucar.qtc.admin.domain.MenuDO">
+		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
+		from sys_menu a
+		<where>
+			a.del_flag = 1
+			AND a.menu_type = 0
+			<if test="menuId != null and menuId != ''"> and menu_id = #{menuId} </if>
+			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId} </if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''"> and type = #{type} </if>
+			<if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by menu_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="listBack" resultType="com.ucar.qtc.admin.domain.MenuDO">
+		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
+		from sys_menu a
+		<where>
+			a.del_flag = 1
+			AND a.menu_type = 1
+			<if test="menuId != null and menuId != ''"> and menu_id = #{menuId} </if>
+			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId} </if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''"> and type = #{type} </if>
+			<if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by menu_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
 	<select id="count" resultType="int">
 		select count(*) from sys_menu a
 		<where>
@@ -116,11 +172,40 @@
 		m.order_num
 	</select>
 
-	<select id="listUserPerms" resultType="string">
+	<select id="listBackMenuByUserId" resultType="com.ucar.qtc.admin.domain.MenuDO">
+		select distinct
+		m.menu_id , parent_id, `name`, url,
+		perms,`type`,icon,order_num,create_time, update_time,del_flag from sys_menu m
+		left join sys_role_menu rm on m.menu_id = rm.menu_id
+		left join sys_user_role ur on rm.role_id =ur.role_id
+		where ur.user_id = #{id} and
+		m.type in(0,1,2) and
+		m.del_flag = 1	and
+		m.menu_type = 1
+		order by
+		m.order_num
+	</select>
+
+	<select id="listFrontMenuByUserId" resultType="com.ucar.qtc.admin.domain.MenuDO">
+		select distinct
+		m.menu_id , parent_id, `name`, url,
+		perms,`type`,icon,order_num,create_time, update_time,del_flag,redirect from sys_menu m
+		left join sys_role_menu rm on m.menu_id = rm.menu_id
+		left join sys_user_role ur on rm.role_id =ur.role_id
+		where ur.user_id = #{id} and
+		m.type in(0,1,2) and
+		m.del_flag = 1 and
+		m.menu_type = 0
+		order by
+		m.order_num
+	</select>
+
+	<select id="listBackUserPerms" resultType="string">
 		select distinct m.perms from sys_menu m
 		left join sys_role_menu rm on m.menu_id = rm.menu_id
 		left join sys_user_role ur on rm.role_id = ur.role_id
 		where ur.user_id = #{id} and
-		m.del_flag = 1
+		m.del_flag = 1 and
+		m.menu_type = 1
 	</select>
 </mapper>
