@@ -9,7 +9,7 @@
             <div style="padding: 9px;">
               <span >{{item.courseName}}</span>
               <div class="bottom clearfix">
-                <span class="time">{{item.type_name}}</span>
+                <span class="time">{{item.typeName}}</span>
                 <span class="time" >
                  <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
               </span>
@@ -20,19 +20,35 @@
         </el-card>
       </div>
     </el-row>
-    <div class="block" v-show="isShow" style="text-align: right; margin-top: 2%;">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="8"
-        layout="total, prev, pager, next, jumper"
-        :total=total>
-      </el-pagination>
-    </div>
-  </div>
+    <el-row :gutter="20">
+      <el-col :span="16">
+        <div>
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item label="课程名">
+              <el-input  v-model="queryParams.courseName" placeholder="输入课程名称" size="small"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="handleSearch" size="small">查询</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="block" v-show="isShow" style="display: inline; text-align: right; margin-top: 2%;">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryParams.currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="8"
+            layout="total, prev, pager, next, jumper"
+            :total=total>
+          </el-pagination>
+        </div>
+      </el-col>
+    </el-row>
 
+  </div>
 
 </template>
 
@@ -50,8 +66,15 @@
       },
       data () {
         return {
-          currentPage: 1,
+          // courseName: '',
+          // currentPage: 1,
           total: 0,
+          queryParams: {
+            type: this.type,
+            currentPage: 1,
+            pageSize: 8,
+            courseName: null
+          },
           tableData: [{
             id: '1',
             date: '2017-06-02 14:45:00',
@@ -117,7 +140,7 @@
         },
         handleCurrentChange (val) {
           console.log(`当前页: ${val}`)
-          this.currentPage = val
+          this.queryParams.currentPage = val
           this.getCourseList()
         },
         handleDetails (val) {
@@ -125,12 +148,17 @@
         },
         getCourseList () {
           const url = '/api-home/course/getList'
-          const data = {'type': this.type, 'currentPage': this.currentPage, 'pageSize': 8}
-          this.$store.dispatch('Get', {'url': url, 'data': data}).then(res => {
+          this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
             console.log(res)
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
           })
+        },
+        handleSearch () {
+          if (this.queryParams.courseName === null || this.queryParams.courseName.length === 0) {
+            this.queryParams.courseName = null
+          }
+          this.getCourseList()
         }
       },
       mounted () {

@@ -6,10 +6,12 @@ import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.api.model.VO.*;
 import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
+import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.slf4j.Logger;
@@ -46,44 +48,36 @@ public class CourseController implements CourseApi {
 
     /**
      * 根据类型获取分页后的课程列表
-     * @param query (int currentPage, int pageSize, String type)
+     * @param queryVO (String courseName, int currentPage, int pageSize, String type)
      * @return
      */
     @Override
-    public Result<Page<CourseVO>> getCourseList(@RequestBody Query query) {
-        Integer currentPage = query.getCurrentPage();
-        Integer pageSize = query.getPageSize();
-        String type = query.getType();
-
-        Integer startIndex = (currentPage - 1) * pageSize;
-
-        List<CourseDO> courseDOList = null;
-        Integer total = courseService.getTotal();
-        if(type.equals("default")) {
-            courseDOList = courseService.getList(startIndex, pageSize);
-        } else if (type.equals("time")) {
-            courseDOList = courseService.getListByTime(startIndex, pageSize);
-        } else if(type.equals("hot")) {
-            courseDOList = courseService.getListByPraiseNum(startIndex, pageSize);
+    public Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
+        Integer total = courseService.getTotalByIdListAndCourseName(null, queryDO.getCourseName());
+        if(total == 0) {
+            return PageResult.getSuccessResult(null, total);
         } else {
-            return PageResult.getBusinessException("","");
-        }
+            List<CourseDO> courseDOList = null;
+            // 根据courseName, startIndex, pageSize, orderType等条件查询课程页列表
+            courseDOList = courseService.getList(queryDO);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-        for(int i = 0; i < courseDOList.size() && i < pageSize; i++) {
-            CourseDO courseDO = courseDOList.get(i);
-            CourseVO courseVO = new CourseVO();
-            courseVO.setCourseId(courseDO.getId());
-            CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-            courseVO.setTypeName(courseType.getTypeName());
-            courseVO.setCourseName(courseDO.getCourseName());
-            courseVO.setCourseCover(courseDO.getCourseCover());
-            courseVO.setPraiseNum(courseDO.getPraiseNum());
-            courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
-            courseVOList.add(courseVO);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            List<CourseVO> courseVOList = new ArrayList<CourseVO>();
+            for (int i = 0; i < courseDOList.size(); i++) {
+                CourseDO courseDO = courseDOList.get(i);
+                CourseVO courseVO = new CourseVO();
+                courseVO.setCourseId(courseDO.getId());
+                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                courseVO.setTypeName(courseType.getTypeName());
+                courseVO.setCourseName(courseDO.getCourseName());
+                courseVO.setCourseCover(courseDO.getCourseCover());
+                courseVO.setPraiseNum(courseDO.getPraiseNum());
+                courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                courseVOList.add(courseVO);
+            }
+            return PageResult.getSuccessResult(courseVOList, total);
         }
-        return PageResult.getSuccessResult(courseVOList, total);
     }
 
     /**
@@ -121,9 +115,12 @@ public class CourseController implements CourseApi {
         courseDetail.setTeacher(null);
 
         List<Long> coursewareIdList = courseCoursewareService.getCoursewareIdListByCourseId(courseId);
-        List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
-        courseDetail.setCoursewares(coursewareDTOList);
-
+        if(coursewareIdList == null || coursewareIdList.size() == 0) {
+            courseDetail.setCoursewares(null);
+        } else {
+            List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
+            courseDetail.setCoursewares(coursewareDTOList);
+        }
         return Result.getSuccessResult(courseDetail);
     }
 

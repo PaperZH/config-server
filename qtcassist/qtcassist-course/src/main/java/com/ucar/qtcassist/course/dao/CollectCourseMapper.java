@@ -21,9 +21,7 @@ public interface CollectCourseMapper {
 
     int updateByPrimaryKey(CollectCourseDO record);
 
-    List<Long> selectCourseIdList(@Param("userId") Long userId,
-                                  @Param("startDate") Date startDate,
-                                  @Param("endDate") Date endDate);
+    List<Long> selectCourseIdList(@Param("userId") Long userId);
 
     int deleteListByIdList(@Param("userId") Long userId, @Param("courseIds") Long[] courseIds);
 

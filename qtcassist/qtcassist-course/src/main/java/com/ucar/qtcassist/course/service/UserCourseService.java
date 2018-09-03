@@ -20,7 +20,7 @@ public interface UserCourseService {
 
     UserCourseDO selectByCourseId(Long courseId);
 
-    List<Long> selectCourseIdList(Long userId, Date startDate, Date endDate);
+    List<Long> selectCourseIdList(Long userId);
 
     int deleteListByIdList(Long userId, Long[] courseIds);
 }

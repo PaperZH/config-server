@@ -81,12 +81,12 @@
     },
     data () {
       return {
-        userInfo:{
-          nickName:'',
-          avatar:''
+        userInfo: {
+          nickName: '',
+          avatar: ''
         },
-        data:[],
-        router:[],
+        data: [],
+        router: [],
         dialogFormVisible: false,
         formLabelWidth: '120px',
         isShow: true,
@@ -102,24 +102,24 @@
         this.$emit('getActiveIndex', key)
       },
       login: function () {
-        let that = this;
+        let that = this
         that.dialogFormVisible = false
         that.isShow = false
-         that.isUser = true
+        that.isUser = true
         // this.$store.dispatch('Login', this.form).then(result => {
         //   that.res = result;
-           
+
         //  that.router = that.res.data.router;
         //  console.log(that.router)
-         
+
         //   localStorage.setItem("access-menus", JSON.stringify(that.router));
-          
+
         //   that.dialogFormVisible = false
         //   that.isShow = false
         //   that.isUser = true
         //   that.userInfo.nickName=data.user.nickname
         //   that.userInfo.avatar=data.user.avatar
-         
+
         // }).catch(() => {
         //   this.loading = false
         // })

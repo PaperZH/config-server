@@ -4,14 +4,16 @@ import com.ucar.qtcassist.api.CollectCourseApi;
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CollectCourseDO;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.course.service.CollectCourseService;
 import com.ucar.qtcassist.course.service.CourseService;
-import com.ucar.qtcassist.api.model.VO.Query;
+import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.course.service.CourseTypeService;
+import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,64 +42,45 @@ public class CollectCourseController implements CollectCourseApi {
 
     /**
      * 查询某个用户收藏的课程
-     * @param  query (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize)
+     * @param  queryVO (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize)
      * @return
      */
     @Override
-    public Result<Page<CourseVO>> getCollectCourseList(@RequestBody Query query) {
-        Long userId = query.getUserId();
-        Integer currentPage = query.getCurrentPage();
-        Integer pageSize = query.getPageSize();
-
-        Integer startIndex = (currentPage - 1) * pageSize;
-        List<CourseDO> courseDOList = null;
+    public Result<Page<CourseVO>> getCollectCourseList(@RequestBody QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
         List<Long> courseIdList = null;
+        List<CourseDO> courseDOList = null;
+        List<CourseVO> courseVOList =null;
         Integer total = 0;
-        if(query.getCourseName() == null && query.getStartDate() == null) {
-            courseIdList = collectCourseService.selectCourseIdList(userId, null, null);
-            if(courseIdList.size() > 0) {
-                courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
-                total = courseService.getTotalById(courseIdList);
-            }
-        } else if (query.getCourseName() != null && query.getStartDate() != null) {
-            String courseName = query.getCourseName();
-            Date startTime = query.getStartDate();
-            Date endTime = query.getEndDate();
-            courseIdList = collectCourseService.selectCourseIdList(userId, startTime, endTime);
-            if(courseIdList.size() > 0) {
-                courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
-                total = courseService.getTotalByCourseName(courseIdList, courseName);
-            }
-        } else if(query.getCourseName() != null) {
-            courseIdList = collectCourseService.selectCourseIdList(userId, null, null);
-            if(courseIdList.size() > 0) {
-                String courseName = query.getCourseName();
-                courseDOList = courseService.selectListByCourseName(courseIdList, courseName, startIndex, pageSize);
-                total = courseService.getTotalByCourseName(courseIdList, courseName);
+
+        courseIdList = collectCourseService.selectCourseIdList(queryDO.getUserId());
+        if(courseIdList != null && courseIdList.size() > 0) {
+            total = courseService.getTotalByIdListAndCourseName(courseIdList, queryDO.getCourseName());
+            if(total == 0) {
+                courseVOList = null;
+            } else {
+                queryDO.setCourseIdsFromList(courseIdList);
+                // 根据courseIdList, courseName, startDate, endDate, startIndex, pageSize等条件查询用户收藏的课程列表
+                courseDOList = courseService.getListByCondition(queryDO);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                courseVOList = new ArrayList<CourseVO>();
+                if(courseDOList != null) {
+                    for (CourseDO courseDO : courseDOList) {
+                        CourseVO courseVO = new CourseVO();
+                        courseVO.setCourseId(courseDO.getId());
+                        CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                        courseVO.setTypeName(courseType.getTypeName());
+                        courseVO.setCourseName(courseDO.getCourseName());
+                        courseVO.setCourseCover(courseDO.getCourseCover());
+                        courseVO.setPraiseNum(courseDO.getPraiseNum());
+                        courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                        courseVOList.add(courseVO);
+                    }
+                }
             }
         } else {
-            Date startDate = query.getStartDate();
-            Date endDate = query.getEndDate();
-            courseIdList = collectCourseService.selectCourseIdList(userId, startDate, endDate);
-            if(courseIdList.size() > 0) {
-                courseDOList = courseService.selectListById(courseIdList, startIndex, pageSize);
-                total = courseService.getTotalById(courseIdList);
-            }
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-        if(courseDOList != null) {
-            for (CourseDO courseDO : courseDOList) {
-                CourseVO courseVO = new CourseVO();
-                courseVO.setCourseId(courseDO.getId());
-                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-                courseVO.setTypeName(courseType.getTypeName());
-                courseVO.setCourseName(courseDO.getCourseName());
-                courseVO.setCourseCover(courseDO.getCourseCover());
-                courseVO.setPraiseNum(courseDO.getPraiseNum());
-                courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
-                courseVOList.add(courseVO);
-            }
+            total = 0;
+            courseVOList = null;
         }
         return PageResult.getSuccessResult(courseVOList, total);
     }
@@ -137,13 +120,13 @@ public class CollectCourseController implements CollectCourseApi {
 
     /**
      * 根据用户ID和课程ID批量删除收藏的课程
-     * @param query (long userId, long[] courseId)
+     * @param queryVO (long userId, long[] courseId)
      * @return
      */
     @Override
-    public Result deleteCollectCourseList(@RequestBody Query query) {
-        Long userId = query.getUserId();
-        Long[] courseIds = query.getCourseIds();
+    public Result deleteCollectCourseList(@RequestBody QueryVO queryVO) {
+        Long userId = queryVO.getUserId();
+        Long[] courseIds = queryVO.getCourseIds();
 
         int count = collectCourseService.deleteListByIdList(userId, courseIds);
         if(count > 0) {
