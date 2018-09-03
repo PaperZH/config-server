@@ -46,8 +46,8 @@ public class CollectCourseServiceImpl implements CollectCourseService {
     }
 
     @Override
-    public List<Long> selectCourseIdList(Long userId, Date startDate, Date endDate) {
-        return collectCourseMapper.selectCourseIdList(userId, startDate, endDate);
+    public List<Long> selectCourseIdList(Long userId) {
+        return collectCourseMapper.selectCourseIdList(userId);
     }
 
     @Override

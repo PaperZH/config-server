@@ -2,7 +2,7 @@ package com.ucar.qtcassist.api.model.VO;
 
 import java.util.Date;
 
-public class Query {
+public class QueryVO {
     private Long userId;
 
     private Long[] courseIds;

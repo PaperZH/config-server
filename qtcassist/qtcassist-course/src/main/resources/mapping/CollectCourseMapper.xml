@@ -85,11 +85,7 @@
   <select id="selectCourseIdList" resultType="java.lang.Long">
     select DISTINCT course_id
     from assist_collect_course
-    where user_id = #{userId, jdbcType=BIGINT}
-    <if test="startDate != null">
-      and publish_date between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}
-    </if>
-    and del_flag = 1
+    where user_id = #{userId, jdbcType=BIGINT} and del_flag = 1
   </select>
   <update id="deleteListByIdList">
     update assist_collect_course
