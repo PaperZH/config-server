@@ -9,7 +9,7 @@
           v-for="(item,index) in menus"
           :key="item.name"
           :label="item.name"
-          :name="item.redirect"
+          :name="item.path"
         >
         </el-tab-pane>
         <!-- <el-tab-pane label="基本设置" name="userInfo" ></el-tab-pane>
