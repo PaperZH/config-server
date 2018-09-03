@@ -1,11 +1,13 @@
 package com.ucar.qtcassist.course.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface CourseService {
     int deleteByPrimaryKey(Long id);
@@ -23,6 +25,8 @@ public interface CourseService {
     Integer getTotalByIdListAndCourseName(List<Long> ids, String courseName);
 
     List<CourseDO> getList(QueryDO queryDO);
+
+    List<CourseDO> getListByIds(Long[] ids);
 
 //    List<CourseDO> getList(String courseName, Integer startIndex, Integer pageSize, String orderType);
 //

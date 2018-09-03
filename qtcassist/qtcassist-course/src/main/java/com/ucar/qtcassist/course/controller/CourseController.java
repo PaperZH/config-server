@@ -9,7 +9,6 @@ import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.api.model.VO.*;
-import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
@@ -78,6 +77,20 @@ public class CourseController implements CourseApi {
             }
             return PageResult.getSuccessResult(courseVOList, total);
         }
+    }
+
+    @Override
+    public List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params) {
+        Object obj = params.get("id");
+        if(obj == null)
+            return courseService.getListByIds(null);
+        List<Integer> list= (List<Integer>) obj;
+        Long[] idForLong = new Long[list.size()];
+        System.out.println(list.toString());
+        for(int i = 0 ;i < list.size();i++ ){
+            idForLong[i] = Long.valueOf(list.get(i));
+        }
+        return courseService.getListByIds(idForLong);
     }
 
     /**

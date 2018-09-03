@@ -5,7 +5,6 @@
        <div class="block">
        <el-carousel trigger="click" :height="height">
          <el-carousel-item v-for="(img,index) in images" :key="index" >
-           <h3>{{img.bannerTitle}}</h3>
            <img style="width: 100%;height: 430px;display: block; " @click="handleDetails(img.id)"  v-bind:src="img.bannerImg">
          </el-carousel-item>
        </el-carousel>
@@ -35,30 +34,14 @@
       data () {
         return {
           height: '380px',
-          images: [{
-            id: 1,
-            src: 'static/image/1.jpg'
-          }, {
-            id: 2,
-            src: 'static/image/2.jpg'
-          }, {
-            id: 3,
-            src: 'static/image/3.jpg'
-          }, {
-            id: 4,
-            src: 'static/image/4.jpg'
-          }, {
-            id: 5,
-            src: 'static/image/5.jpg'
-          }, {
-            id: 6,
-            src: 'static/image/1.jpg'}]
+          images: [],
+          bannerRes:[]
         }
       },
       created: function () {
         this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
           console.log(res)
-          this.images = res.data.data
+          this.images = res.data.page.rows;
         })
       },
       methods: {

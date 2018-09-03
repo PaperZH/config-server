@@ -40,6 +40,15 @@ public interface CourseMapper {
     List<CourseDO> getList(QueryDO queryDO);
 
     /**
+     * build: guodong.zhang
+     * 通过课程id查询课程
+     * @param ids
+     * @return所有课程
+     */
+
+    List<CourseDO> getListByIds(Long[] ids);
+
+    /**
      * 根据多条件查询用户收藏课程和发布的课程列表
      * @param queryDO(courseIds, courseName, startDate, endDate, startIndex, pageSize)
      * Long[] courseIds 要匹配的所有课程的id数组

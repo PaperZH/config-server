@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.course.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.course.dao.CourseMapper;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
@@ -7,8 +8,8 @@ import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -59,6 +60,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDO> getList(QueryDO queryDO){
         return courseMapper.getList(queryDO);
+    }
+
+    @Override
+    public List<CourseDO> getListByIds(Long[] ids) {
+
+        return courseMapper.getListByIds(ids);
     }
 
     @Override

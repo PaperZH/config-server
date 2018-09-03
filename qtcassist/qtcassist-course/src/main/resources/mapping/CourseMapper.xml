@@ -210,6 +210,22 @@
     limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
   </select>
 
+  <select id="getListByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from assist_course
+    <where>
+      del_flag = 1
+      <if test="array!=null">
+        AND id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+
   <!--<select id="getList" resultMap="BaseResultMap">-->
     <!--select-->
     <!--<include refid="Base_Column_List" />-->
