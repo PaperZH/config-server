@@ -16,7 +16,7 @@ import java.util.Set;
  * @date: 2018/8/7 10:19
  */
 @Service
-public interface  MenuService {
+public interface MenuService {
 	Tree<MenuDO> getSysMenuTree(Long id);
 
 	/**
