@@ -15,10 +15,8 @@
       :row-class-name="tableRowClassName">
       <el-table-column
         label="计划名称"
-        width="180">
-        <template slot-scope="scope">
-          <a href="#">{{scope.row.planTitle}}</a>
-        </template>
+        width="180"
+      prop="planTitle">
       </el-table-column>
       <el-table-column
         prop="startDate"
@@ -29,12 +27,8 @@
         label="结束时间">
       </el-table-column>
       <el-table-column
-        :formatter="formatterFinished"
-        prop="state"
-        label="完成状态">
-      </el-table-column>
-      <el-table-column
         prop="studentGetScore"
+        :formatter="formatterFinished"
         label="评分">
       </el-table-column>
       <el-table-column
@@ -75,7 +69,7 @@
             date: ''
           },
           total: 0,
-          message: {},
+          message: {'plan': {}},
           value5: 3.7,
           currentPage4: 4,
           dataPlan: [],
@@ -129,10 +123,10 @@
           })
         },
         formatterFinished (row, column, cellValue, index) {
-          if (cellValue === true) {
-            return '已完成'
+          if (cellValue === undefined) {
+            return '暂未评分'
           } else {
-            return '未完成'
+            return cellValue
           }
         }
       },
