@@ -14,8 +14,6 @@ public class RouterDTO implements Serializable {
     private String component;
     private Long id;
     private String name;
-
-    private String redirect;
     /**
      * 是否为叶子节点
      */
@@ -55,14 +53,6 @@ public class RouterDTO implements Serializable {
 
     public void setComponent(String component) {
         this.component = component;
-    }
-
-    public String getRedirect() {
-        return redirect;
-    }
-
-    public void setRedirect(String redirect) {
-        this.redirect = redirect;
     }
 
     public boolean getLeaf() {
