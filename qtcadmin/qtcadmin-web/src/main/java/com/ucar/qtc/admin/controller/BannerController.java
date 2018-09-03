@@ -68,7 +68,7 @@ public class BannerController {
      * @return
      */
     @Log("获取banner文件列表")
-    @GetMapping("list")
+    @GetMapping
     public ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
         List<BannerDO> bannerList = bannerService.list(query);
