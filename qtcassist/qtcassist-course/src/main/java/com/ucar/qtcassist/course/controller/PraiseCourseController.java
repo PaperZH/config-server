@@ -1,8 +1,10 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.api.PraiseCourseApi;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.PraiseCourseDO;
+import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.PraiseCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.Date;
 public class PraiseCourseController implements PraiseCourseApi {
     @Autowired
     private PraiseCourseService praiseCourseService;
+
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 添加点赞课程记录
@@ -28,7 +33,11 @@ public class PraiseCourseController implements PraiseCourseApi {
                 praiseCourse.setPublishDate(new Date());
                 praiseCourse.setDelFlag(new Byte("1"));
                 praiseCourseService.updateByPrimaryKeySelective(praiseCourse);
+
+                courseService.updatePraiseNum(courseId, +1);
+
                 return Result.getSuccessResult("添加点赞课程成功");
+                //更新course
             }
         } else {
             praiseCourse = new PraiseCourseDO();
@@ -37,6 +46,7 @@ public class PraiseCourseController implements PraiseCourseApi {
             praiseCourse.setPublishDate(new Date());
             praiseCourse.setDelFlag(new Byte("1"));
             int count = praiseCourseService.insert(praiseCourse);
+            //更新course
             if (count > 0) {
                 return Result.getSuccessResult("添加点赞课程成功");
             } else {
@@ -55,10 +65,11 @@ public class PraiseCourseController implements PraiseCourseApi {
     public Result deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
         PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
         if(praiseCourse == null) {
-            return Result.getSuccessResult("没有点选该课程");
+            return Result.getSuccessResult("没有点赞该课程");
         } else {
             int count = praiseCourseService.deleteByPrimaryKey(praiseCourse.getId());
-            if(count != 0) {
+            if(count > 0) {
+                courseService.updatePraiseNum(courseId, -1);
                 return Result.getSuccessResult("删除点赞课程信息成功");
             } else {
                 return Result.getBusinessException("删除点赞课程信息失败", "-2");
@@ -69,7 +80,7 @@ public class PraiseCourseController implements PraiseCourseApi {
     @Override
     public Result<Boolean> isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
         PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
-        if(praiseCourse != null) {
+        if(praiseCourse != null && praiseCourse.getDelFlag() == 1) {
             return Result.getSuccessResult(true);
         } else {
             return Result.getSuccessResult(false);

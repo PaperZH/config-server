@@ -350,7 +350,6 @@ public class MenuServiceImpl implements MenuService {
             routerDTO.setComponent(menuDO.getComponent());
             routerDTO.setName(menuDO.getName());
             routerDTO.setIconCls(menuDO.getIcon());
-            routerDTO.setRedirect(menuDO.getRedirect());
             routerDTO.setMenuShow(true);
             routerDTO.setChildren(new ArrayList<>());
             routerDTO.setLeaf(null!=menuDO.getType()&&menuDO.getType()==1);

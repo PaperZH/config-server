@@ -51,8 +51,8 @@ public class UserCourseServiceImpl implements UserCourseService {
     }
 
     @Override
-    public List<Long> selectCourseIdList(Long userId, Date startDate, Date endDate) {
-        return userCourseMapper.selectCourseIdList(userId, startDate, endDate);
+    public List<Long> selectCourseIdList(Long userId) {
+        return userCourseMapper.selectCourseIdList(userId);
     }
 
     @Override

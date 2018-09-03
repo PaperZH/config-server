@@ -30,8 +30,6 @@ public class MenuDO implements Serializable {
 	private String icon;
 	//排序
 	private Integer orderNum;
-
-	private String redirect;
 	//创建时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
@@ -170,14 +168,6 @@ public class MenuDO implements Serializable {
 
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
-	}
-
-	public String getRedirect() {
-		return redirect;
-	}
-
-	public void setRedirect(String redirect) {
-		this.redirect = redirect;
 	}
 
 	public Integer getMenu_type() {

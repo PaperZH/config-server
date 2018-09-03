@@ -1,13 +1,12 @@
 import { login, logout, get, post, remove, put } from '@/service/api'
 export const user = {
-  
   state: {
     token: '',
     userId: 100,
     name: '',
     avatar: '',
     addRouters: [],
-    perms:[]
+    perms: []
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -36,7 +35,7 @@ export const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(result => {
-           resolve(result)
+          resolve(result)
         }).catch(error => {
           reject(error)
         })

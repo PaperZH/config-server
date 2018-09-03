@@ -14,7 +14,7 @@
         <result column="order_num" property="orderNum" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,banner_title,banner_description,banner_url,banner_img,publish_time,update_time,del_flag
+        id,banner_title,banner_description,banner_url,banner_img,publish_time,update_time,del_flag,order_num
     </sql>
 
     <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -29,7 +29,6 @@
         <include refid="Base_Column_List"/>
         FROM sys_banner b
         <where>
-
             b.del_flag = 1
             <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title LIKE concat('%',#{bannerTitle},'%')</if>
         </where>
@@ -46,30 +45,50 @@
         </if>
     </select>
 
-    <select id="count" >
+    <select id="count" resultType="java.lang.Integer">
         SELECT
         COUNT(*)
+        from sys_banner b
         <where>
             b.del_flag = 1
-            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title = #{bannerTitle}</if>
+            <if test="bannerTitle!=null and bannerTitle!=''">AND banner_title LIKE concat('%',#{bannerTitle},'%')</if>
         </where>
     </select>
     <insert id="save" parameterType="com.ucar.qtc.admin.domain.BannerDO">
         INSERT INTO sys_banner
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="bannerTitle!=null">banner_title,</if>
-            <if test="bannerDescription!=null">banner_description,</if>
-            <if test="bannerUrl!=null">banner_url</if>
-            <if test="bannerImg!=null">banner_img</if>
-            <if test="orderNum!=null">order_num</if>
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="bannerTitle != null" >
+                banner_title,
+            </if>
+            <if test="bannerDescription != null" >
+                banner_description,
+            </if>
+            <if test="bannerUrl != null" >
+                banner_url,
+            </if>
+            <if test="bannerImg != null" >
+                banner_img,
+            </if>
+            <if test="orderNum != null" >
+                order_num,
+            </if>
         </trim>
-        VALUES
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="bannerTitle!=null">#{bannerTitle,jdbcType=VARCHAR},</if>
-            <if test="bannerDescription!=null">#{bannerDescription,jdbcType=VARCHAR},</if>
-            <if test="bannerUrl!=null">#{bannerUrl,jdbcType=VARCHAR}</if>
-            <if test="bannerImg!=null">#{bannerImg,jdbcType=VARCHAR}</if>
-            <if test="orderNum!=null">#{orderNum,jdbcType=INT}</if>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="bannerTitle != null" >
+                #{bannerTitle},
+            </if>
+            <if test="bannerDescription != null" >
+                #{bannerDescription},
+            </if>
+            <if test="bannerUrl != null" >
+                #{bannerUrl},
+            </if>
+            <if test="bannerImg != null" >
+                #{bannerImg},
+            </if>
+            <if test="orderNum != null" >
+                #{orderNum},
+            </if>
         </trim>
     </insert>
     <update id="update" parameterType="com.ucar.qtc.admin.domain.BannerDO">
@@ -78,10 +97,11 @@
             <if test="id!=null"> id = #{id,jdbcType=BIGINT},</if>
             <if test="bannerTitle!=null">banner_title = #{bannerTitle,jdbcType=VARCHAR},</if>
             <if test="bannerDescription!=null">banner_description = #{bannerDescription,jdbcType=VARCHAR},</if>
-            <if test="bannerUrl!=null">banner_url = #{bannerUrl,jdbcType=VARCHAR}</if>
-            <if test="bannerImg!=null">banner_img = #{bannerImg,jdbcType=VARCHAR}</if>
-            <if test="orderNum!=null">order_num = #{orderNum,jdbcType=INT}</if>
+            <if test="bannerUrl!=null">banner_url = #{bannerUrl,jdbcType=VARCHAR},</if>
+            <if test="bannerImg!=null">banner_img = #{bannerImg,jdbcType=VARCHAR},</if>
+            <if test="orderNum!=null">order_num = #{orderNum,jdbcType=INTEGER}</if>
         </set>
+        WHERE id = #{id}
     </update>
 
     <update id="remove">
