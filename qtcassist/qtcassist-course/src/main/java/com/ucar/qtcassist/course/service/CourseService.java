@@ -2,9 +2,6 @@ package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.Date;
 import java.util.List;
 
 public interface CourseService {
@@ -20,13 +17,10 @@ public interface CourseService {
 
     int updateByPrimaryKey(CourseDO record);
 
-    Integer getTotalByIdListAndCourseName(List<Long> ids, String courseName);
+    Integer getTotalByIdListAndCondition(List<Long> ids, QueryDO queryDO);
 
     List<CourseDO> getList(QueryDO queryDO);
 
-//    List<CourseDO> getList(String courseName, Integer startIndex, Integer pageSize, String orderType);
-//
-//    List<CourseDO> getListByIdListAndCourseName(List<Long> ids, String courseName, Date startDate, Date endDate, Integer startIndex, Integer pageSize);
     List<CourseDO> getListByCondition(QueryDO queryDO);
 
     Integer updatePraiseNum(Long courseId, int change);

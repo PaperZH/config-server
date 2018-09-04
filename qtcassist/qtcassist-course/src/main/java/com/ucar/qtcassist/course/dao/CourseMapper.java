@@ -21,12 +21,15 @@ public interface CourseMapper {
     int updateByPrimaryKey(CourseDO record);
 
     /**
-     * 统计指定id集合的课程中课程名包含courseName字符串的课程的数量
+     * 统计指定id集合的课程中符合指定条件的课程的数量
      * @param ids 要考虑的课程集合的id
-     * @param courseName 课程名称模糊匹配字符串
+     * @param queryDO (courseName, startDate, endDate)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
+     * Date startDate 课程发布的起始时间（可以为null，表示不考虑课程的发布时间）
+     * Date endDate 课程发布的截止时间（可以为null，表示不考虑课程的发布时间）
      * @return
      */
-    Integer getTotalByIdListAndCourseName(@Param("ids") List<Long> ids, @Param("courseName") String courseName);
+    Integer getTotalByIdListAndCondition(@Param("ids") List<Long> ids, @Param("condition") QueryDO queryDO);
 
     /**
      * 查询课程页课程列表

@@ -13,11 +13,11 @@ public interface CourseService {
 
     /**
      * 根据类型获取分页后的课程列表
-     * @param params (int currentPage, int pageSize, String type)
+     * @param params (String courseName, int currentPage, int pageSize, String type)
      * @return
      */
     @RequestMapping(value = "/course/getCourseList")
-    public ResponseResult getCoursesList(Map<String,Object> params);
+    public ResponseResult getCourseList(Map<String,Object> params);
 
     /**
      * 模糊查询课程列表
@@ -101,11 +101,19 @@ public interface CourseService {
 
     /**
      * 增加课程
-     * @param course (long userId , Course course)
+     * @param course (CourseDetail courseDetail)
      * @return
      */
-    @RequestMapping("/course/addCourse")
-    public ResponseResult addCourse(Map<String,Object> course);
+    @RequestMapping("/course/addCourseWithOldCourseware")
+    public ResponseResult addCourseWithOldCourseware(Map<String,Object> course);
+
+    /**
+     * 增加课程
+     * @param course (CourseDetail courseDetail)
+     * @return
+     */
+    @RequestMapping("/course/addCourseWithNewCourseware")
+    public ResponseResult addCourseWithNewCourseware(Map<String,Object> course);
 
     @RequestMapping
     public ResponseResult getPlanList(String planName);

@@ -1,15 +1,19 @@
 package com.ucar.qtcassist.api.model.VO;
 
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+
 public class CourseVO {
     private Long courseId;
 
-    private String typeName;
+    private CourseTypeDO courseType;
 
     private String courseName;
 
     private String courseCover;
     //详情才有
     private String courseDescription;
+
+    private Float courseScore;
 
     private Integer praiseNum;
     //详情才有
@@ -25,20 +29,20 @@ public class CourseVO {
         this.courseId = courseId;
     }
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
     public String getCourseName() {
         return courseName;
     }
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public CourseTypeDO getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(CourseTypeDO courseType) {
+        this.courseType = courseType;
     }
 
     public String getCourseCover() {
@@ -55,6 +59,14 @@ public class CourseVO {
 
     public void setCourseDescription(String courseDescription) {
         this.courseDescription = courseDescription;
+    }
+
+    public Float getCourseScore() {
+        return courseScore;
+    }
+
+    public void setCourseScore(Float courseScore) {
+        this.courseScore = courseScore;
     }
 
     public Integer getPraiseNum() {

@@ -6,8 +6,6 @@ import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,14 +45,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Integer getTotalByIdListAndCourseName(List<Long> ids, String courseName) {
-        return courseMapper.getTotalByIdListAndCourseName(ids, courseName);
+    public Integer getTotalByIdListAndCondition(List<Long> ids, QueryDO queryDO) {
+        return courseMapper.getTotalByIdListAndCondition(ids, queryDO);
     }
-
-//    @Override
-//    public List<CourseDO> getList(String courseName, Integer startIndex, Integer pageSize, String orderType){
-//        return courseMapper.getList(courseName, startIndex, pageSize, orderType);
-//    }
 
     @Override
     public List<CourseDO> getList(QueryDO queryDO){
@@ -65,12 +58,6 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseDO> getListByCondition(QueryDO queryDO) {
         return courseMapper.getListByCondition(queryDO);
     }
-
-//    @Override
-//    public List<CourseDO> getListByIdListAndCourseName(List<Long> ids, String courseName, Date startDate, Date endDate, Integer startIndex, Integer pageSize) {
-//        return courseMapper.getListByIdListAndCourseName(ids, courseName, startDate, endDate, startIndex, pageSize);
-//    }
-
 
     @Override
     public Integer updatePraiseNum(Long courseId, int change) {

@@ -2,20 +2,15 @@
   <div>
   <el-card class="box-card" shadow="never">
     <div slot="header" >
-      <span>添加课件</span>
-      <el-button style="float: right; padding: 3px 0" type="text" @click="onAddCourseWare">添加</el-button>
+      <span>使用已有课件</span>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="onAddOldCourseware">添加</el-button>
     </div>
     <div  class="text item">
-      <el-form ref="form" :model="form" label-width="100px"  >
+      <el-form ref="oldCourseware" :model="oldCourseware" label-width="100px" >
         <el-row>
           <el-col :span="12">
-            <el-form-item :span="10" label="课时:" prop="hour">
-              <el-input v-model="form.hour" placeholder=""></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item :span="12" label="课件名称:" prop="name">
-              <el-input v-model="form.name" placeholder="" ></el-input>
+              <el-input v-model="oldCourseware.coursewareName" placeholder="" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -29,39 +24,69 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :span="8" label="上传文件:" prop="fileUrl">
-              <el-upload ref="upload"
-                action="http://127.0.0.1:8006/file/upload"
-                :on-remove="handleRemove"
-                :auto-upload="false"
-                :limit="1"
-                :on-exceed="handleExceed"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
-                :before-remove="beforeRemove">
-                <el-input   style="width: 100%;" readonly><el-button slot="append" icon="el-icon-upload"></el-button></el-input>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="分类:">
-              <el-select v-model="form.typeName" placeholder="请选择分类" prop="typeName">
-                <el-option label="MySql" value="shanghai"></el-option>
-                <el-option label="Java" value="beijing"></el-option>
-                <el-option label="Spring" value="beijing"></el-option>
+            <el-form-item :span="8" label="分类:">
+              <el-select v-model="oldCourseware.typeId" placeholder="请选择分类" >
+                <div  v-for="(item, index) in coursewareTypeList" :key="item.id">
+                  <el-option :label="item.typeName" :value="item.id"></el-option>
+                </div>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="课件描述:" prop="describe">
-          <el-input v-model="form.describe" placeholder="请输入课程描述" type="textarea"
+          <el-input v-model="oldCourseware.coursewareDescription" placeholder="请输入课程描述" type="textarea"
                     :rows="3"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-  </el-card>
-    <el-card class="box-card" shadow="never" style="margin-top: 3px" v-show="isShow" v-for="(item,index) in course.courseWare "  :key="index">
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-card>
+    <el-card class="box-card" shadow="never">
+      <div slot="header" >
+        <span>添加新的课件</span>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="onAddNewCourseWare">添加</el-button>
+      </div>
+      <div  class="text item">
+        <el-form ref="newCourseware" :model="newCourseware" label-width="100px"  >
+          <el-row>
+            <el-col :span="12">
+              <el-form-item :span="12" label="课件名称:">
+                <el-input v-model="newCourseware.coursewareName" placeholder="" ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item :span="8" label="上传文件:" prop="fileUrl">
+                <el-upload ref="upload"
+                           action="http://127.0.0.1:8006/file/upload"
+                           :on-remove="handleRemove"
+                           :auto-upload="false"
+                           :limit="1"
+                           :on-exceed="handleExceed"
+                           :on-success="handleAvatarSuccess"
+                           :before-upload="beforeAvatarUpload"
+                           :before-remove="beforeRemove">
+                  <el-input   style="width: 100%;" readonly><el-button slot="append" icon="el-icon-upload"></el-button></el-input>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item :span="8" label="分类:">
+                <el-select v-model="newCourseware.typeId" placeholder="请选择分类" >
+                  <div  v-for="(item, index) in coursewareTypeList" :key="item.id">
+                    <el-option :label="item.typeName" :value="item.id"></el-option>
+                  </div>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="课件描述:" prop="describe">
+            <el-input v-model="newCourseware.coursewareDescription" placeholder="请输入课程描述" type="textarea"
+                      :rows="3"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-card>
+    <el-card class="box-card" shadow="never" style="margin-top: 3px" v-show="isShow" v-for="(item,index) in coursewareList "  :key="index">
       <el-row >
         <el-col :span="3"><div class="grid-content bg-purple" style="text-align: center">
           <div style="border:1px solid #ebeef5;"><span>第{{index+1}}课</span></div>
@@ -89,46 +114,88 @@
           restaurants: [],
           isShow: false,
           state4: '',
-          course: {
-            courseWare: []
+          coursewareTypeList: [
+            {
+              id: 1,
+              typeName: 'java'
+            }, {
+              id: 2,
+              typeName: 'c'
+            }, {
+              id: 3,
+              typeName: 'spring'
+            }
+          ],
+          courseDetailForm: null,
+          coursewareList: {},
+          oldCourseware: {
+            typeId: 1,
+            baseCoursewareId: 2,
+            coursewareName: '',
+            coursewareDescription: ''
           },
-          form: {
-            name: '',
-            hour: '',
-            describe: '',
-            typeName: '技术类',
+          newCourseware: {
+            typeId: 2,
+            coursewareName: '',
+            coursewareDescription: '',
             fileUrl: ''
           }
+          // form: {
+          //   name: '',
+          //   hour: '',
+          //   describe: '',
+          //   typeName: '技术类',
+          //   fileUrl: ''
+          // }
         }
       },
       mounted: function () {
         this.$nextTick(function () {
-          this.course = this.$router.currentRoute.params
-          this.courseWareList = this.course.courseWare
-          if (this.courseWareList.length) {
+          this.courseDetailForm = this.$router.currentRoute.params
+          this.coursewareList = this.courseDetailForm.coursewares
+          if (this.coursewareList.length) {
             this.isShow = true
           }
           this.restaurants = this.loadAll()
         })
       },
       methods: {
-        onSubmit () {
-          this.course.courseWare.push(this.form)
-          this.$store.dispatch('Post', {'url': `/api-home/course/addCourse`, 'data': this.course}).then(res => {
-            this.course = res.data.data
-            console.log(this.course)
+        // onSubmit () {
+        //   this.course.courseWare.push(this.form)
+        //   this.$store.dispatch('Post', {'url': `/api-home/course/addCourse`, 'data': this.course}).then(res => {
+        //     this.course = res.data.data
+        //     console.log(this.course)
+        //   })
+        // },
+        onAddOldCourseware () {
+          this.courseDetailForm.coursewares.push(this.oldCourseware)
+          this.isShow = true
+          // this.$refs.form.resetFields()
+          console.log(this.courseDetailForm)
+          this.$store.dispatch('Post', {'url': '/api-home/course/addCourseWithOldCourseware', 'data': this.courseDetailForm}).then(res => {
+            console.log('添加完成')
           })
         },
-        onAddCourseWare () {
-          console.log(this.$refs.upload)
+        onAddNewCourseWare () {
           this.$refs.upload.submit()
-          let data = this.form
-          this.course.courseWare.push({'name': data.name, 'describe': data.describe, 'typeName': data.typeName, 'fileUrl': data.fileUrl})
-          // this.dataList.push(this.form)
+          this.courseDetailForm.coursewares.push(this.newCourseware)
           this.isShow = true
-          this.$refs.form.resetFields()
-          console.log(this.form)
+          // this.$refs.form.resetFields()
+          console.log(this.courseDetailForm)
+          this.$store.dispatch('Post', {'url': '/api-home/course/addCourseWithNewCourseware', 'data': this.courseDetailForm}).then(res => {
+            console.log('添加完成')
+          })
         },
+        // onAddCourseWare () {
+        //   console.log(this.$refs.upload)
+        //   this.$refs.upload.submit()
+        //   let data = this.form
+        //   this.course.courseWare.push({'name': data.name, 'describe': data.describe, 'typeName': data.typeName, 'fileUrl': data.fileUrl})
+        //   // this.dataList.push(this.form)
+        //   this.isShow = true
+        //   this.$refs.form.resetFields()
+        //   console.log(this.form)
+        // },
         handleRemove (file) {
           console.log(file)
         },
@@ -140,7 +207,7 @@
         },
         handleAvatarSuccess (res, file) {
           console.log(file)
-          this.form.fileUrl = res.fileUrl
+          this.newCourseware.fileUrl = res.fileUrl
         },
         handleExceed (files, fileList) {
           this.$message.warning(`已经选择上传文件`)

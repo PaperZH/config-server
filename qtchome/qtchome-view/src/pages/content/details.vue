@@ -4,14 +4,14 @@
     <div>
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="20" :offset="2"><div class="grid-content bg-purple" style="max-height:600px;">
-          <img style="max-width: 65%; display: block; float: left;" v-bind:src="items.courseCover"/>
+          <img style="max-width: 65%; display: block; float: left;" v-bind:src="course.courseCover"/>
           <div style="float: right;min-width: 30%;" >
             <div style=" border-bottom: 1px solid #52464621;">
-              <div><h2>{{items.courseName}}</h2></div>
+              <div><h2>{{course.courseName}}</h2></div>
               <div>
-                <span>课程类型:{{items.typeName}}</span>
-                <span >上架时间:{{items.publishTime}}</span>
-                <i class="fa fa-thumbs-o-up">{{items.praiseNum}}</i>
+                <span>课程类型:{{course.courseType.typeName}}</span>
+                <span >上架时间:{{course.publishTime}}</span>
+                <i class="fa fa-thumbs-o-up">{{course.praiseNum}}</i>
               </div>
             </div>
             <div>
@@ -21,10 +21,10 @@
                 <div style="width: 60%;float: left"><span>{{teacher.username}}</span><br/><br/><br/><span>{{teacher.email}}</span></div>
               </div>
               <div>
-                <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
+                <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{course.invalidDate}}</span></div>
                 <div style="text-align: center; margin-top: 20%;">
-                  <el-button type="danger" round @click="handlePraiseCourse(items.courseId)" >{{praise.praiseText}}</el-button>
-                  <el-button type="danger" round @click="addCollectCourse(items.courseId)">收藏</el-button>
+                  <el-button type="danger" round @click="handlePraiseCourse(course.courseId)" >{{praise.praiseText}}</el-button>
+                  <el-button type="danger" round @click="addCollectCourse(course.courseId)">收藏</el-button>
                 </div>
               </div>
             </div>
@@ -39,7 +39,7 @@
           <el-tabs type="border-card" style="height: 320px;">
             <el-tab-pane label="课程介绍">
               <div>
-                {{items.courseDescription}}
+                {{course.courseDescription}}
               </div>
             </el-tab-pane>
             <el-tab-pane label="课程目录"  ><div>
@@ -82,17 +82,6 @@
                 </el-table-column>
               </el-table>
             </div>
-                <!--<div class="block" style="text-align: center">-->
-              <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="currentPage4"-->
-                <!--:page-sizes="[100, 200, 300, 400]"-->
-                <!--:page-size="100"-->
-                <!--layout="total, sizes, prev, pager, next, jumper"-->
-                <!--:total="400">-->
-              <!--</el-pagination>-->
-            <!--</div>-->
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -112,24 +101,21 @@
         return {
           praise: {
             isPraised: null,
-            praiseText: ''
+            praiseText: '点赞'
           },
-          items: {},
-          currentPage4: 5,
+          course: {
+            courseId: null,
+            courseName: null,
+            courseCover: null,
+            praiseNum: null,
+            publishTime: null,
+            courseType: {
+              id: null,
+              typeName: null
+            }
+          },
           teacher: { },
-          tableData: [{
-            date: '2016-05-04 01:00:0',
-            name: 'Java基础运算',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01 01:00:0',
-            name: 'Java集合框架',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03 01:00:0',
-            name: 'Java多线程',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
+          tableData: []
         }
       },
       mounted: function () {
@@ -194,8 +180,7 @@
           //   this.$notify.warning({'title': '查看失败', 'message': '请先登陆'})
           // } else {
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + val}).then(res => {
-            console.log(res)
-            this.items = res.data.re.course
+            this.course = res.data.re.course
             if (res.data.re.coursewares != null) {
               this.tableData = res.data.re.coursewares
             } else {
