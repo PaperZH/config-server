@@ -206,8 +206,11 @@
       <if test="orderType == 'hot'">
         order by praise_num desc
       </if>
+      <if test="startIndex!=null and pageSize!=null">
+        limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+      </if>
     </trim>
-    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+
   </select>
 
   <select id="getListByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">

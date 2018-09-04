@@ -3,6 +3,7 @@ package com.ucar.qtcassist.api;
 import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
@@ -24,6 +25,9 @@ public interface CourseApi {
     @PostMapping("/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
+    @PostMapping("/getRecCourseList")
+    List<CourseDO> getCourseList(@RequestBody QueryDO query);
+
     /**
      * 根据课程Id来查询课程列表
      * @param params
@@ -39,6 +43,14 @@ public interface CourseApi {
      */
     @GetMapping("/getCourseDetail/{courseId}")
     Result<CourseDetailVO> getCourseDetail(@PathVariable("courseId") Long courseId);
+
+    /**
+     * 根据课程ID获取课程详细信息
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/getRecCourseDetail/{courseId}")
+    CourseDO getRecCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
      * 增加课程

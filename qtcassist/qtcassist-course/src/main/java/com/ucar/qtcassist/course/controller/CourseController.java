@@ -79,6 +79,10 @@ public class CourseController implements CourseApi {
         }
     }
 
+    public List<CourseDO> getCourseList(@RequestBody QueryDO query) {
+        return courseService.getList(query);
+    }
+
     @Override
     public List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params) {
         Object obj = params.get("id");
@@ -135,6 +139,11 @@ public class CourseController implements CourseApi {
             courseDetail.setCoursewares(coursewareDTOList);
         }
         return Result.getSuccessResult(courseDetail);
+    }
+
+    @Override
+    public CourseDO getRecCourseDetail(Long courseId) {
+        return courseService.selectByPrimaryKey(courseId);
     }
 
     /**
