@@ -1,14 +1,10 @@
 package com.ucar.qtc.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtc.service.CourseService;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,23 +25,6 @@ public class CourseController {
      */
     @RequestMapping(value = "/getRecCourseList" , method = RequestMethod.GET)
     public ResponseResult getRecCourseList(@RequestParam Map<String,Object> params){
-//        ArrayList<Map> list = new ArrayList<>();
-//        for (int i = 0; i < 8; i++) {
-//            HashMap<String,Object> hashMap = new HashMap<>();
-//            hashMap.put("courseId",Integer.toString(i));
-//            hashMap.put("courseCover","static/image/2.jpg");
-//            hashMap.put("courseName","课程名称"+i);
-//            hashMap.put("type_name","课程类型"+i);
-//            hashMap.put("courseDescription","课程描述说明");
-//            hashMap.put("courseScore",Integer.toString(i));
-//            hashMap.put("readNum",Integer.toString(10*i));
-//            hashMap.put("praiseNum",Integer.toString(i+10));
-//            hashMap.put("publishTime","2018-8-15");
-//            hashMap.put("updateTime","2018-8-15");
-//            hashMap.put("totalDataNum",100);
-//            list.add(hashMap);
-//        }
-//        return ResponseResult.data(list);
         return  courseService.getRecCourseList(params);
     }
 
@@ -54,30 +33,10 @@ public class CourseController {
      * @param params (pageSize,currentPage,type)
      * @return
      */
-    @RequestMapping(value = "/getList" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/getCourseList" ,method = RequestMethod.GET)
     public ResponseResult getCourseList(@RequestParam Map<String,Object> params){
         return  courseService.getCourseList(params);
     }
-
-    /**
-     * 模糊查询课程列表
-     * @param courseName
-     * @return
-     */
-    @RequestMapping("/getCourseListByName")
-    public ResponseResult getCourseListByName(@RequestParam  String courseName){
-        System.out.println(courseName);
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseName","课程名称"+10*i);
-            hashMap.put("courseId",20*i);
-            hashMap.put("courseDescription","课程描述"+10*i);
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
-    }
-
 
     /**
      * 根据课程ID来查询课程详细信息，包含课程基本信息+课件信息+Teacher信息
@@ -164,14 +123,14 @@ public class CourseController {
         return courseService.queryPublishedCourse(params);
     }
 
-    /**
-     * 添加课程
-     * @return
-     */
-    @RequestMapping(value = "/addCourseWithOldCourseware",method = RequestMethod.POST)
-    public ResponseResult addCourseWithOldCourseware(@RequestBody Map<String,Object> params){
-        System.out.println(params);
-        return courseService.addCourseWithOldCourseware(params);
+//    /**
+//     * 添加课程
+//     * @return
+//     */
+//    @RequestMapping(value = "/addCourseWithOldCourseware",method = RequestMethod.POST)
+//    public ResponseResult addCourseWithOldCourseware(@RequestBody Map<String,Object> params){
+//        System.out.println(params);
+//        return courseService.addCourseWithOldCourseware(params);
 
 //        System.out.println(JSON.toJSONString(map));
 //        System.out.println(map.get("courseWare"));
@@ -204,17 +163,17 @@ public class CourseController {
 //        course.put("teacher",teacher);
 //        course.put("courseWare",courseWarelist);
 //        return  ResponseResult.data(course);
-    }
+//    }
 
-    /**
-     * 添加课程
-     * @return
-     */
-    @RequestMapping(value = "/addCourseWithNewCourseware",method = RequestMethod.POST)
-    public ResponseResult addCourseWithNewCourseware(@RequestBody Map<String,Object> params) {
-        System.out.println(params);
-        return courseService.addCourseWithNewCourseware(params);
-    }
+//    /**
+//     * 添加课程
+//     * @return
+//     */
+//    @RequestMapping(value = "/addCourseWithNewCourseware",method = RequestMethod.POST)
+//    public ResponseResult addCourseWithNewCourseware(@RequestBody Map<String,Object> params) {
+//        System.out.println(params);
+//        return courseService.addCourseWithNewCourseware(params);
+//    }
 
     /**
      * 根据条件批量删除发布的课程

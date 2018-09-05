@@ -1,5 +1,9 @@
 package com.ucar.qtc.common.dto.config;
 
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.cloud.netflix.feign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -16,11 +20,11 @@ import feign.form.spring.SpringFormEncoder;
 @Configuration
 public class FeignMultipartSupportConfig {
 
+    @Autowired
+    private ObjectFactory<HttpMessageConverters> messageConverters;
     @Bean
-    @Primary
-    @Scope("prototype")
-    public Encoder multipartFormEncoder() {
-        return new SpringFormEncoder();
+    public Encoder feignFormEncoder() {
+        return new SpringFormEncoder(new SpringEncoder(messageConverters));
     }
 
     @Bean

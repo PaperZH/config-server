@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
-@FeignClient(value = "qtcassist" )
+@FeignClient(value = "qtcassist")
 public interface CourseService {
 
     /**
@@ -25,14 +25,6 @@ public interface CourseService {
      */
     @RequestMapping(value = "/course/getCourseList")
     public ResponseResult getCourseList(Map<String,Object> params);
-
-    /**
-     * 模糊查询课程列表
-     * @param courseName
-     * @return
-     */
-    @RequestMapping(value = "/course/getCourseListByName")
-    public ResponseResult getCourseListByName(String courseName);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
@@ -106,21 +98,21 @@ public interface CourseService {
     @RequestMapping(value = "/userCourse/deleteUserCourseList")
     public ResponseResult deletePublishedCourse(Map<String,Object> params);
 
-    /**
-     * 增加课程
-     * @param course (CourseDetail courseDetail)
-     * @return
-     */
-    @RequestMapping("/course/addCourseWithOldCourseware")
-    public ResponseResult addCourseWithOldCourseware(Map<String,Object> course);
-
-    /**
-     * 增加课程
-     * @param course (CourseDetail courseDetail)
-     * @return
-     */
-    @RequestMapping("/course/addCourseWithNewCourseware")
-    public ResponseResult addCourseWithNewCourseware(Map<String,Object> course);
+//    /**
+//     * 增加课程
+//     * @param course (CourseDetail courseDetail)
+//     * @return
+//     */
+//    @RequestMapping("/course/addCourseWithOldCourseware")
+//    public ResponseResult addCourseWithOldCourseware(Map<String,Object> course);
+//
+//    /**
+//     * 增加课程
+//     * @param course (CourseDetail courseDetail)
+//     * @return
+//     */
+//    @RequestMapping("/course/addCourseWithNewCourseware")
+//    public ResponseResult addCourseWithNewCourseware(Map<String,Object> course);
 
     @RequestMapping
     public ResponseResult getPlanList(String planName);

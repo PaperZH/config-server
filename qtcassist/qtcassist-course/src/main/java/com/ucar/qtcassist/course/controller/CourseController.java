@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -102,21 +101,6 @@ public class CourseController implements CourseApi {
         return Result.getSuccessResult(courseVOList);
     }
 
-//    @Override
-//    public List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params) {
-//        Object obj = params.get("id");
-//        if(obj == null) {
-//            return courseService.getListByIds(null);
-//        }
-//        List<Integer> list= (List<Integer>) obj;
-//        Long[] idForLong = new Long[list.size()];
-//        System.out.println(list.toString());
-//        for(int i = 0 ;i < list.size();i++ ){
-//            idForLong[i] = Long.valueOf(list.get(i));
-//        }
-//        return courseService.getListByIds(idForLong);
-//    }
-
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
      * @param courseId 要查询的课程的id
@@ -131,7 +115,6 @@ public class CourseController implements CourseApi {
         CourseTypeDO courseTypeDO = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
         CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
 
-//        courseVO.setTypeName(courseTypeDO.getTypeName());
         courseVO.setCourseType(courseTypeDO);
         courseVO.setCourseDescription(courseDO.getCourseDescription());
         //查询收藏数

@@ -93,7 +93,7 @@
           this.$router.push({name: 'details', params: val})
         },
         getCourseList () {
-          const url = '/api-home/course/getList'
+          const url = '/api-home/course/getCourseList'
           this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
