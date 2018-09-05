@@ -23,7 +23,7 @@
               <div>
                 <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{items.invalidDate}}</span></div>
                 <div style="text-align: center; margin-top: 20%;">
-                  <el-button type="danger" round @click="handPraiseCourse(items.courseId)" >{{praise.praiseText}}</el-button>
+                  <el-button type="danger" round @click="handlePraiseCourse(items.courseId)" >{{praise.praiseText}}</el-button>
                   <el-button type="danger" round @click="addCollectCourse(items.courseId)">收藏</el-button>
                 </div>
               </div>
@@ -151,8 +151,9 @@
             console.log(res)
           })
         },
-        handPraiseCourse (val) {
-          let userId = this.$store.getters.userId
+        handlePraiseCourse (val) {
+          // let userId = this.$store.getters.userId
+          let userId = 100
           if (userId == null || userId === '') {
             this.$notify.warning({'title': '点赞失败', 'message': '请先登陆'})
           } else {
@@ -174,7 +175,8 @@
           }
         },
         addCollectCourse (val) {
-          let userId = this.$store.getters.userId
+          // let userId = this.$store.getters.userId
+          let userId = 100
           if (userId == null || userId === '') {
             this.$notify.warning({'title': '收藏失败', 'message': '请先登陆'})
           } else {
@@ -186,32 +188,33 @@
           }
         },
         getCourseDetails (val) {
-          let userId = this.$store.getters.userId
-          if (userId == null || userId === '') {
-            this.$notify.warning({'title': '查看失败', 'message': '请先登陆'})
-          } else {
-            this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + val}).then(res => {
-              console.log(res)
-              this.items = res.data.re.course
-              if (res.data.re.coursewares != null) {
-                this.tableData = res.data.re.coursewares
+          // let userId = this.$store.getters.userId
+          let userId = 100
+          // if (userId == null || userId === '') {
+          //   this.$notify.warning({'title': '查看失败', 'message': '请先登陆'})
+          // } else {
+          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + val}).then(res => {
+            console.log(res)
+            this.items = res.data.re.course
+            if (res.data.re.coursewares != null) {
+              this.tableData = res.data.re.coursewares
+            } else {
+              this.tableData = []
+            }
+            this.teacher = this.teacher
+          })
+          this.$store.dispatch('Post', {'url': '/api-home/course/isPraisedCourse/' + userId + '/' + val}).then(res => {
+            if (res.data.success === true) {
+              if (res.data.re === true) {
+                this.praise.isPraised = true
+                this.praise.praiseText = '已赞'
               } else {
-                this.tableData = []
+                this.praise.isPraised = false
+                this.praise.praiseText = '点赞'
               }
-              this.teacher = this.teacher
-            })
-            this.$store.dispatch('Post', {'url': '/api-home/course/isPraisedCourse/' + userId + '/' + val}).then(res => {
-              if (res.data.success === true) {
-                if (res.data.re === true) {
-                  this.praise.isPraised = true
-                  this.praise.praiseText = '已赞'
-                } else {
-                  this.praise.isPraised = false
-                  this.praise.praiseText = '点赞'
-                }
-              }
-            })
-          }
+            }
+          })
+          // }
         }
       }
     }

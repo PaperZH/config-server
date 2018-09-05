@@ -38,6 +38,8 @@ public class MenuDO implements Serializable {
 	private Date updateTime;
 	//
 	private Integer delFlag;
+	//菜单类别（默认为1即后端）
+	private Integer menu_type;
 
 	/**
 	 * 设置：
@@ -166,5 +168,13 @@ public class MenuDO implements Serializable {
 
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	public Integer getMenu_type() {
+		return menu_type;
+	}
+
+	public void setMenu_type(Integer menu_type) {
+		this.menu_type = menu_type;
 	}
 }

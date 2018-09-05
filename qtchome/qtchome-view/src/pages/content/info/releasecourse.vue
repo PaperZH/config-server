@@ -15,8 +15,8 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handSearch" size="small">查询</el-button>
-        <el-button  type="danger" @click="handDelete"size="small" >删除</el-button>
+        <el-button type="primary" @click="handleSearch" size="small">查询</el-button>
+        <el-button  type="danger" @click="handleDelete"size="small" >删除</el-button>
       </el-form-item>
     </el-form>
 
@@ -76,7 +76,8 @@
         },
         tableData: {},
         queryParams: {
-          userId: this.$store.getters.userId,
+          // userId: this.$store.getters.userId,
+          userId: 100,
           courseName: null,
           startDate: null,
           endDate: null,
@@ -98,13 +99,13 @@
       handleRelease (item) {
         this.$router.push({name: 'release', params: item})
       },
-      handDelete (val) {
+      handleDelete (val) {
         let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
         this.$store.dispatch('Post', {'url': '/api-home/course/deletePublishedCourse', 'data': data}).then(res => {
           this.getPublishedCourse()
         })
       },
-      handSearch () {
+      handleSearch () {
         if (this.formInline.name.trim().length === 0) {
           this.queryParams.courseName = null
         } else {

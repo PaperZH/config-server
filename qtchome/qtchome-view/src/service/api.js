@@ -18,7 +18,7 @@ export function logout (userId) {
     }
   })
 }
-const base = 'http://localhost:8002'
+const base = process.env.API_ROOT
 export function get (url, data) {
   url = base + url
   return request({

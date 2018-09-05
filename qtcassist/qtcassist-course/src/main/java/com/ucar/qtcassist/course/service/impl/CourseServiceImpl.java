@@ -1,5 +1,7 @@
 package com.ucar.qtcassist.course.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.course.dao.CourseMapper;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -45,43 +48,40 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Integer getTotal() {
-        return courseMapper.getTotal();
+    public Integer getTotalByIdListAndCourseName(List<Long> ids, String courseName) {
+        return courseMapper.getTotalByIdListAndCourseName(ids, courseName);
+    }
+
+//    @Override
+//    public List<CourseDO> getList(String courseName, Integer startIndex, Integer pageSize, String orderType){
+//        return courseMapper.getList(courseName, startIndex, pageSize, orderType);
+//    }
+
+    @Override
+    public List<CourseDO> getList(QueryDO queryDO){
+        return courseMapper.getList(queryDO);
     }
 
     @Override
-    public Integer getTotalById(List<Long> ids) {
-        return courseMapper.getTotalById(ids);
+    public List<CourseDO> getListByIds(Long[] ids) {
+
+        return courseMapper.getListByIds(ids);
     }
 
     @Override
-    public Integer getTotalByCourseName(List<Long> ids, String courseName) {
-        return courseMapper.getTotalByCourseName(ids, courseName);
+    public List<CourseDO> getListByCondition(QueryDO queryDO) {
+        return courseMapper.getListByCondition(queryDO);
     }
 
-    @Override
-    public List<CourseDO> getList(Integer firstIndex, Integer pageSize) {
-        return courseMapper.getList(firstIndex, pageSize);
-    }
+//    @Override
+//    public List<CourseDO> getListByIdListAndCourseName(List<Long> ids, String courseName, Date startDate, Date endDate, Integer startIndex, Integer pageSize) {
+//        return courseMapper.getListByIdListAndCourseName(ids, courseName, startDate, endDate, startIndex, pageSize);
+//    }
+
 
     @Override
-    public List<CourseDO> getListByTime(Integer startIndex, Integer pageSize) {
-        return courseMapper.getListByTime(startIndex, pageSize);
-    }
-
-    @Override
-    public List<CourseDO> getListByPraiseNum(Integer startIndex, Integer pageSize) {
-        return courseMapper.getListByPraiseNum(startIndex, pageSize);
-    }
-
-    @Override
-    public List<CourseDO> selectListById(List<Long> ids, Integer startIndex, Integer pageSize) {
-        return courseMapper.selectListById(ids, startIndex, pageSize);
-    }
-
-    @Override
-    public List<CourseDO> selectListByCourseName(List<Long> ids, String courseName, Integer startIndex, Integer pageSize) {
-        return courseMapper.selectListByCourseName(ids, courseName, startIndex, pageSize);
+    public Integer updatePraiseNum(Long courseId, int change) {
+        return courseMapper.updatePraiseNum(courseId, change);
     }
 
 }

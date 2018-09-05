@@ -1,21 +1,40 @@
 package com.ucar.qtcassist.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.common.Page;
-import com.ucar.qtcassist.api.model.VO.Query;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
+import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
+import com.ucar.qtcassist.api.model.VO.QueryVO;
+import netscape.javascript.JSObject;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 public interface CourseApi {
     /**
      * 根据类型获取分页后的课程列表
-     * @param query (int currentPage, int pageSize, String type)
+     * @param queryVO (int currentPage, int pageSize, String type)
      * @return
      */
     @PostMapping("/getCourseList")
-    Result<Page<CourseVO>> getCourseList(@RequestBody Query query);
+    Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
+
+    @PostMapping("/getRecCourseList")
+    List<CourseDO> getCourseList(@RequestBody QueryDO query);
+
+    /**
+     * 根据课程Id来查询课程列表
+     * @param params
+     * @return
+     */
+    @PostMapping("/getCourseListByIds")
+    List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
@@ -24,6 +43,14 @@ public interface CourseApi {
      */
     @GetMapping("/getCourseDetail/{courseId}")
     Result<CourseDetailVO> getCourseDetail(@PathVariable("courseId") Long courseId);
+
+    /**
+     * 根据课程ID获取课程详细信息
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/getRecCourseDetail/{courseId}")
+    CourseDO getRecCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
      * 增加课程

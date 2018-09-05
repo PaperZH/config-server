@@ -1,21 +1,24 @@
-package com.ucar.qtcassist.api.model.VO;
+package com.ucar.qtc.common.dto;
 
 import java.util.Date;
+import java.util.List;
 
-public class Query {
+public class QueryDO {
     private Long userId;
+
+    private Long courseId;
 
     private Long[] courseIds;
 
     private String courseName;
 
-    private String type;
+    private String orderType;
 
     private Date startDate;
 
     private Date endDate;
 
-    private Integer currentPage;
+    private Integer startIndex;
 
     private Integer pageSize;
 
@@ -25,6 +28,14 @@ public class Query {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public Long[] getCourseIds() {
@@ -43,12 +54,12 @@ public class Query {
         this.courseName = courseName;
     }
 
-    public String getType() {
-        return type;
+    public String getOrderType() {
+        return orderType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public Date getStartDate() {
@@ -67,12 +78,12 @@ public class Query {
         this.endDate = endDate;
     }
 
-    public Integer getCurrentPage() {
-        return currentPage;
+    public Integer getStartIndex() {
+        return startIndex;
     }
 
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
+    public void setStartIndex(Integer startIndex) {
+        this.startIndex = startIndex;
     }
 
     public Integer getPageSize() {
@@ -81,5 +92,10 @@ public class Query {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public void setCourseIdsFromList(List<Long> courseIdList) {
+        this.courseIds = new Long[courseIdList.size()];
+        courseIdList.toArray(this.courseIds);
     }
 }

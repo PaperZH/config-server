@@ -18,6 +18,8 @@ import DeptList from '../components/dept/list'
 
 import EurekaList from '../components/monitor/eureka/list'
 
+import BannerList from '../components/recommand/bannerRecommand'
+
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/components/Login'], resolve)
 
@@ -106,18 +108,7 @@ let router = new Router({
       leaf: true,
       iconCls: 'fa fa-group',
       children: [
-        {path: '/base/log', component: LogList, name: '日志管理', menuShow: true},
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '示例管理',
-      menuShow: true,
-      leaf: true,
-      iconCls: 'fa fa-group',
-      children: [
-        {path: '/admin/demo', component: LogList, name: '示例管理', menuShow: true},
+        {path: '/base/log', component: LogList, name: '日志管理', menuShow: true}
       ]
     },
 
@@ -140,6 +131,16 @@ let router = new Router({
       iconCls: 'iconfont icon-setting1',
       children: [
         {path: '/monitor/eureka',component: EurekaList, name: '服务监控', menuShow: true},
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: '推荐管理',
+      menuShow: true,
+      iconCls: 'iconfont icon-setting1',
+      children: [
+        {path: '/admin/banner',component: BannerList, name: 'banner推荐', menuShow: true},
       ]
     },
   ]

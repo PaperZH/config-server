@@ -19,8 +19,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handSearch" size="small">查询</el-button>
-          <el-button  type="danger" @click="handDelete" size="small">删除</el-button>
+          <el-button type="primary" @click="handleSearch" size="small">查询</el-button>
+          <el-button  type="danger" @click="handleDelete" size="small">删除</el-button>
         </el-form-item>
       </el-form>
 
@@ -35,7 +35,7 @@
           <div style="padding: 7px;">
             <div  class="time" style="position: relative">
               <span style="display: block;float: left">{{item.courseName}}</span>
-              <span style="float: right"><a v-on:click="handleRelease(item.courseId)" href="#">详情</a></span>
+              <span style="float: right"><a v-on:click="handleDetail(item.courseId)" href="#">详情</a></span>
             </div>
             <div class="bottom clearfix" style="margin-top: 6px;">
               <span class="time">{{item.typeName}}</span>
@@ -80,7 +80,8 @@
           },
           tableData: {},
           queryParams: {
-            userId: this.$store.getters.userId,
+            // userId: this.$store.getters.userId,
+            userId: 100,
             courseName: null,
             startDate: null,
             endDate: null,
@@ -101,17 +102,17 @@
         getHtml (val) {
 
         },
-        handleRelease (val) {
-          let courseId = val
-          this.$router.push({name: 'details', params: courseId})
+        handleDetail (val) {
+          let data = {'userId': this.queryParams.userId, 'courseId': val}
+          this.$router.push({name: 'details', params: data})
         },
-        handDelete (val) {
+        handleDelete (val) {
           let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
           this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
             this.getCollectCourse()
           })
         },
-        handSearch () {
+        handleSearch () {
           if (this.formInline.name.trim().length === 0) {
             this.queryParams.courseName = null
           } else {

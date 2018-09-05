@@ -50,14 +50,6 @@ public class PlanController {
             hashMap.put("planDestination", "培训目的"+i);
             hashMap.put("planScore", 10);
             hashMap.put("planTitle", "计划名称" + i);
-            hashMap.put("studentGetScore", i);
-            hashMap.put("planStudentScore", 10);
-            if (i % 2 == 0) {
-                hashMap.put("isFinished", true);
-            } else {
-                hashMap.put("isFinished", false);
-            }
-
             list.add(hashMap);
         }
         return ResponseResult.ok().put("data", list).put("total", 20);
@@ -96,7 +88,8 @@ public class PlanController {
             hashMap.put("planTitle", "计划名称" + i);
             hashMap.put("startDate", "2018-8-20");
             hashMap.put("endDate", "2018-8-30");
-            hashMap.put("studentGetScore", i);
+            if(i%2==0){
+            hashMap.put("studentGetScore", i);}
             hashMap.put("planStudentScore", 10);
             if (i % 2 == 0) {
                 hashMap.put("isFinished", true);
@@ -125,7 +118,8 @@ public class PlanController {
             hashMap.put("planTitle", "计划名称" + i);
             hashMap.put("startDate", "2018-8-20");
             hashMap.put("endDate", "2018-8-30");
-            hashMap.put("studentGetScore", i);
+            if(i%2==0){
+            hashMap.put("studentGetScore", i);}
             hashMap.put("planStudentScore", 10);
             if (i % 2 == 0) {
                 hashMap.put("isFinished", true);
@@ -139,7 +133,7 @@ public class PlanController {
     }
 
     /**
-     * 根据发布计划的Id获取课程信息
+     * 根据发布计划的Id获取课程信息+计划中间表ID
      * @param planId
      * @return
      */
@@ -148,6 +142,7 @@ public class PlanController {
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 4; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("id",i);
             hashMap.put("courseId", i);
             hashMap.put("courseName", "课程名字"+i);
             hashMap.put("courseDescription", "课程描述"+i);
@@ -177,29 +172,44 @@ public class PlanController {
         HashMap<String, Object> plan = new HashMap<>();
         plan.put("planContent","计划的内容是个啥");
         plan.put("planDestination","计划的目的又是个啥");
+        hash.put("planId",100);
+        hash.put("studentSummary","学生总结");
+        hash.put("studentEvaluateContent","学生学习内容");
         hash.put("plan",plan);
         return ResponseResult.data(hash);
     }
 
     /**
-     * 增加制定计划
+     * 增加制定计划....包含更新操作
      * @param params
      * @return
      */
     @RequestMapping("/addPlan")
     public ResponseResult addPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
+        if(params.get("planId")==null){
+            System.out.println("执行增加操作");
+        }
+        else{
+            System.out.println("执行更新操作");
+        }
         return ResponseResult.ok();
     }
 
     /**
-     * 增加发布计划
+     * 增加发布计划。。。包含更新操作
      * @param params
      * @return
      */
     @RequestMapping("/addPublishedPlan")
     public ResponseResult addPublishedPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
+        if(params.get("planId")==null){
+            System.out.println("执行增加操作");
+        }
+        else{
+            System.out.println("执行更新操作");
+        }
         return ResponseResult.ok();
     }
 
@@ -214,6 +224,7 @@ public class PlanController {
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 3; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("id",i);
             hashMap.put("courseId", 2);
             hashMap.put("courseName", "SpringCCC");
             hashMap.put("courseDescription", "这是一首小情歌");
@@ -239,6 +250,17 @@ public class PlanController {
     @GetMapping("/deletePublishedPlan")
     public ResponseResult deletePublishedPlan(@RequestParam long planId){
         System.out.println(planId);
+        return ResponseResult.ok("删除成功");
+    }
+
+    /**
+     * 删除发布计划课程
+     * @param id
+     * @return
+     */
+    @GetMapping("/deletePlanCourse")
+    public ResponseResult deletePlanCourse(@RequestParam long id){
+        System.out.println(id);
         return ResponseResult.ok("删除成功");
     }
 }

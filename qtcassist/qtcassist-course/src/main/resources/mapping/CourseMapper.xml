@@ -15,21 +15,25 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
   </resultMap>
+
   <sql id="Base_Column_List" >
     id, type_id, course_name, course_cover, course_description, course_score, read_num, 
     praise_num, invalid_date, publish_time, update_time, del_flag
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from assist_course
     where id = #{id,jdbcType=BIGINT}
   </select>
+
   <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     update assist_course
     set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course (type_id, course_name,
       course_cover, course_description, course_score, 
@@ -42,6 +46,7 @@
       #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
+
   <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -115,6 +120,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" >
     update assist_course
     <set >
@@ -154,6 +160,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" >
     update assist_course
     set type_id = #{typeId,jdbcType=BIGINT},
@@ -168,69 +175,121 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="getTotal" resultType="java.lang.Integer">
-    select count(id) from assist_course where del_flag = 1
+
+  <select id="getTotalByIdListAndCourseName" resultType="java.lang.Integer" >
+    select count(id)
+    from assist_course where del_flag = 1
+    <if test="ids != null">
+      <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
+        #{id}
+      </foreach>
+    </if>
+    <if test="courseName != null and courseName != ''">
+      and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+    </if>
   </select>
-  <select id="getList" resultMap="BaseResultMap">
+
+  <select id="getList" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from assist_course
-    where del_flag = 1
-    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+    <where>
+      del_flag = 1
+      <if test="courseName != null">
+        and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    <trim>
+      <if test="orderType == 'time'">
+        order by publish_time desc
+      </if>
+      <if test="orderType == 'hot'">
+        order by praise_num desc
+      </if>
+      <if test="startIndex!=null and pageSize!=null">
+        limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+      </if>
+    </trim>
+
   </select>
-  <select id="getListByTime" resultMap="BaseResultMap">
+
+  <select id="getListByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from assist_course
-    where del_flag = 1
-    order by publish_time desc
-    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+    <where>
+      del_flag = 1
+      <if test="array!=null">
+        AND id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
   </select>
-  <select id="getListByPraiseNum" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from assist_course
-    where del_flag = 1
-    order by praise_num desc
-    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
-  </select>
-  <select id="selectListById" resultMap="BaseResultMap" >
+
+
+  <!--<select id="getList" resultMap="BaseResultMap">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from assist_course-->
+    <!--<where>-->
+      <!--del_flag = 1-->
+      <!--<if test="courseName != null">-->
+        <!--and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')-->
+      <!--</if>-->
+    <!--</where>-->
+    <!--<trim>-->
+      <!--<if test="orderType == 'time'">-->
+        <!--order by publish_time desc-->
+      <!--</if>-->
+      <!--<if test="orderType == 'hot'">-->
+        <!--order by praise_num desc-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}-->
+  <!--</select>-->
+
+  <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
     from assist_course where del_flag = 1
-    <foreach item="id" collection="ids" index="index" open="and id in (" separator="," close=")">
+    <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
       #{id}
     </foreach>
+    <if test="courseName != null and courseName != ''">
+      and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+    </if>
+    <if test="startDate != null">
+      and publish_time between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}
+    </if>
     <if test="startIndex != null">
       limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
   </select>
-  <select id="selectListByCourseName" resultMap="BaseResultMap" >
-    select
-    <include refid="Base_Column_List"/>
-    from assist_course where id in (
-    <foreach item="id" collection="ids" index="index" separator=",">
-      #{id}
-    </foreach>
-    ) and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-    and del_flag = 1
-    <if test="startIndex != null">
-      limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
-    </if>
-  </select>
-  <select id="getTotalByCourseName" resultType="java.lang.Integer" >
-    select count(id)
-    from assist_course where del_flag = 1
-    <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
-      #{id}
-    </foreach>
-    and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-  </select>
-  <select id="getTotalById" resultType="java.lang.Integer" >
-    select count(id)
-    from assist_course where del_flag = 1
-    <foreach item="id" collection="ids" index="index" open=" and id in (" separator="," close=")">
-      #{id}
-    </foreach>
-  </select>
+
+  <!--<select id="getListByIdListAndCourseName" resultMap="BaseResultMap" >-->
+    <!--select-->
+    <!--<include refid="Base_Column_List"/>-->
+    <!--from assist_course where del_flag = 1-->
+    <!--<foreach item="id" collection="ids" index="index" open="and id in (" separator="," close=")">-->
+      <!--#{id}-->
+    <!--</foreach>-->
+    <!--<if test="courseName != null and courseName != ''">-->
+      <!--and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')-->
+    <!--</if>-->
+    <!--<if test="startDate != null">-->
+      <!--and publish_time between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}-->
+    <!--</if>-->
+    <!--<if test="startIndex != null">-->
+      <!--limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}-->
+    <!--</if>-->
+  <!--</select>-->
+
+  <update id="updatePraiseNum">
+    update assist_course
+    set praise_num = praise_num + #{change}
+    where id = #{courseId, jdbcType=BIGINT}
+  </update>
+
 </mapper>

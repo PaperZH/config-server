@@ -65,6 +65,18 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.listMenuByUserId(userId);
     }
 
+    @Override
+    public List<MenuDO> frontUserMenus(Long userId) {
+        return menuMapper.listFrontMenuByUserId(userId);
+    }
+
+    @Override
+    public List<MenuDO> backUserMenus(Long userId) {
+        return menuMapper.listBackMenuByUserId(userId);
+    }
+
+
+
     /**
      * 清除用户权限
      * @param userId
@@ -194,6 +206,72 @@ public class MenuServiceImpl implements MenuService {
         return t;
     }
 
+    @Override
+    public Tree<MenuDO> getFrontTree(Long id) {
+        // 根据roleId查询权限
+        List<MenuDO> menus = menuMapper.listFront(new HashMap<String, Object>(16));
+        List<Long> menuIds = roleMenuMapper.listMenuIdByRoleId(id);
+        List<Long> temp = menuIds;
+        for (MenuDO menu : menus) {
+            if (temp.contains(menu.getParentId())) {
+                menuIds.remove(menu.getParentId());
+            }
+        }
+        List<Tree<MenuDO>> trees = new ArrayList<Tree<MenuDO>>();
+        List<MenuDO> menuDOs = menuMapper.listFront(new HashMap<String, Object>(16));
+        for (MenuDO menuDO : menuDOs) {
+            Tree<MenuDO> tree = new Tree<MenuDO>();
+            tree.setId(menuDO.getMenuId().toString());
+            tree.setParentId(menuDO.getParentId().toString());
+            tree.setText(menuDO.getName());
+            Map<String, Object> state = new HashMap<>(16);
+            Long menuId = menuDO.getMenuId();
+            if (menuIds.contains(menuId)) {
+                state.put("selected", true);
+            } else {
+                state.put("selected", false);
+            }
+            tree.setState(state);
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        Tree<MenuDO> t = BuildTree.build(trees);
+        return t;
+    }
+
+    @Override
+    public Tree<MenuDO> getBackTree(Long id) {
+        // 根据roleId查询权限
+        List<MenuDO> menus = menuMapper.listBack(new HashMap<String, Object>(16));
+        List<Long> menuIds = roleMenuMapper.listMenuIdByRoleId(id);
+        List<Long> temp = menuIds;
+        for (MenuDO menu : menus) {
+            if (temp.contains(menu.getParentId())) {
+                menuIds.remove(menu.getParentId());
+            }
+        }
+        List<Tree<MenuDO>> trees = new ArrayList<Tree<MenuDO>>();
+        List<MenuDO> menuDOs = menuMapper.listBack(new HashMap<String, Object>(16));
+        for (MenuDO menuDO : menuDOs) {
+            Tree<MenuDO> tree = new Tree<MenuDO>();
+            tree.setId(menuDO.getMenuId().toString());
+            tree.setParentId(menuDO.getParentId().toString());
+            tree.setText(menuDO.getName());
+            Map<String, Object> state = new HashMap<>(16);
+            Long menuId = menuDO.getMenuId();
+            if (menuIds.contains(menuId)) {
+                state.put("selected", true);
+            } else {
+                state.put("selected", false);
+            }
+            tree.setState(state);
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        Tree<MenuDO> t = BuildTree.build(trees);
+        return t;
+    }
+
     /**
      * 用户权限
      * @param userId
@@ -243,6 +321,51 @@ public class MenuServiceImpl implements MenuService {
             RouterDTO routerDTO = new RouterDTO();
             routerDTO.setId(menuDO.getMenuId());
             routerDTO.setParentId(menuDO.getParentId());
+            routerDTO.setComponent(menuDO.getComponent());
+            routerDTO.setPath(menuDO.getUrl());
+            routerDTO.setName(menuDO.getName());
+            routerDTO.setIconCls(menuDO.getIcon());
+            routerDTO.setMenuShow(true);
+            routerDTO.setChildren(new ArrayList<>());
+            routerDTO.setLeaf(null!=menuDO.getType()&&menuDO.getType()==1);
+            routerDTOs.add(routerDTO);
+        }
+        return RouterDTO.buildList(routerDTOs, 0L);
+    }
+
+    /**
+     * 用户的路由
+     *
+     * @return
+     */
+    @Override
+    public List<RouterDTO> FrontRouterDTOsByUserId(Long userId) {
+        List<MenuDO> menuDOs = frontUserMenus(userId);
+        List<RouterDTO> routerDTOs = new ArrayList<>();
+        for (MenuDO menuDO : menuDOs) {
+            RouterDTO routerDTO = new RouterDTO();
+            routerDTO.setId(menuDO.getMenuId());
+            routerDTO.setParentId(menuDO.getParentId());
+            routerDTO.setPath(menuDO.getUrl());
+            routerDTO.setComponent(menuDO.getComponent());
+            routerDTO.setName(menuDO.getName());
+            routerDTO.setIconCls(menuDO.getIcon());
+            routerDTO.setMenuShow(true);
+            routerDTO.setChildren(new ArrayList<>());
+            routerDTO.setLeaf(null!=menuDO.getType()&&menuDO.getType()==1);
+            routerDTOs.add(routerDTO);
+        }
+        return RouterDTO.buildList(routerDTOs, 0L);
+    }
+
+    @Override
+    public List<RouterDTO> BackRouterDTOsByUserId(Long userId) {
+        List<MenuDO> menuDOs = backUserMenus(userId);
+        List<RouterDTO> routerDTOs = new ArrayList<>();
+        for (MenuDO menuDO : menuDOs) {
+            RouterDTO routerDTO = new RouterDTO();
+            routerDTO.setId(menuDO.getMenuId());
+            routerDTO.setParentId(menuDO.getParentId());
             routerDTO.setPath(menuDO.getUrl());
             routerDTO.setComponent(menuDO.getComponent());
             routerDTO.setName(menuDO.getName());
@@ -259,6 +382,30 @@ public class MenuServiceImpl implements MenuService {
     public List<String> PermsByUserId(Long userId) {
         List<String> permsList = new ArrayList<>();
         List<MenuDO> menuDOs = userMenus(userId);
+        for (MenuDO menuDO:menuDOs){
+            if(menuDO.getPerms()!=null && ""!=menuDO.getPerms()){
+                permsList.add(menuDO.getPerms());
+            }
+        }
+        return permsList;
+    }
+
+    @Override
+    public List<String> FrontPermsByUserId(Long userId) {
+        List<String> permsList = new ArrayList<>();
+        List<MenuDO> menuDOs = frontUserMenus(userId);
+        for (MenuDO menuDO:menuDOs){
+            if(menuDO.getPerms()!=null && ""!=menuDO.getPerms()){
+                permsList.add(menuDO.getPerms());
+            }
+        }
+        return permsList;
+    }
+
+    @Override
+    public List<String> BackPermsByUserId(Long userId) {
+        List<String> permsList = new ArrayList<>();
+        List<MenuDO> menuDOs = backUserMenus(userId);
         for (MenuDO menuDO:menuDOs){
             if(menuDO.getPerms()!=null && ""!=menuDO.getPerms()){
                 permsList.add(menuDO.getPerms());

@@ -52,12 +52,12 @@
             prop="studentGetScore"
             label="评分"
             width="100">
-          </el-table-column>
-          <el-table-column
-            prop="isFinished"
-            :formatter="formatterFinished"
-            label="完成状态"
-            width="100">
+            <template slot-scope="scope">
+              <p v-if="scope.row.studentGetScore!=null">
+                {{scope.row.studentGetScore}}
+              </p>
+              <p v-else>暂未评分</p>
+            </template>
           </el-table-column>
           <el-table-column
             label="课程"
@@ -72,8 +72,13 @@
             >查看课程</el-button>
           </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="200px">
             <template slot-scope="scope">
+              <el-button
+                @click="handleEdit(scope.row.planId)"
+                size="mini"
+                type="info"
+              >评价</el-button>
               <el-button
                 @click="handleClick(scope.row,scope.$index)"
                 size="mini"
@@ -84,6 +89,7 @@
         </el-table>
         <plan-course  :courseopen.sync="courseopen" v-bind:courseData="courseData" title="计划课程信息" v-bind:planId="planId"></plan-course>
         <dialog-plan  :show.sync="show" v-bind:message="message" title="发布计划" v-bind:students="this.indexList"></dialog-plan>
+        <edit-plan  :show.sync="edit" v-bind:message="planDetails" title="计划评价" @getTeacherPlan="getTeacherPlan"></edit-plan>
         <div class="block" style="text-align: right">
           <el-pagination
             @size-change="handleSizeChange"
@@ -104,15 +110,18 @@
 <script>
   import dialogplan from '@/pages/content/dialog/dialogplan'  // 发布计划弹框
   import planCourse from '@/pages/content/dialog/planCourse'  // 计划课程弹框
+  import editPlan from '@/pages/content/dialog/addPublishedplan'  // 编辑计划课程弹框
   export default {
     components: {
       'dialog-plan': dialogplan,
-      'plan-course': planCourse
+      'plan-course': planCourse,
+      'edit-plan': editPlan
     },
     data () {
       return {
         show: false,
         courseopen: false,
+        edit: false,
         courseData: [ ],
         planId: 0,
         indexList: [{
@@ -126,6 +135,7 @@
           border: '1px solid #409EFF'
         },
         message: {},
+        planDetails: {'plan': { }},
         formInline: {
           name: '',
           date: ''
@@ -161,13 +171,31 @@
           this.planId = planId
         })
       },
+      handleEdit (val) {
+        console.log(val)
+        this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
+          console.log(res)
+          this.planDetails = res.data.data
+          this.edit = true
+        })
+      },
       handleClick (row, index) {
         console.log('delete')
-        console.log(row)
-        console.log(index)
-        this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.planId}}).then(res => {
-          this.tableData.splice(index, 1)
-          console.log(res)
+        this.$confirm('是否要删除该记录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.planId}}).then(res => {
+            this.tableData.splice(index, 1)
+            this.$message.success('删除成功')
+            console.log(res)
+          }).catch(_ => {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          })
         })
       },
       handleSizeChange (val) {
@@ -189,17 +217,8 @@
           o.style = true
         }
       },
-      formatterFinished (row, column, cellValue, index) {
-        if (cellValue === true) {
-          return '已完成'
-        } else {
-          return '未完成'
-        }
-      },
       getTeacherPlan () {
-        console.log(this.queryParams)
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
-          console.log(res)
           this.tableData = res.data.data
           this.indexList = res.data.students
           this.total = res.data.total

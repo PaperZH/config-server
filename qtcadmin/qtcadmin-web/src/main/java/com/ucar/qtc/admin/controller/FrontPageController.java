@@ -22,7 +22,7 @@ public class FrontPageController {
     private BannerService bannerService;
 
 
-    @GetMapping("banner/list")
+    @GetMapping("getRecBanner")
     public ResponseResult bannerList() {
         int limit = 6;
         int offset = 0;

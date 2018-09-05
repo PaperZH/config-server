@@ -27,11 +27,19 @@ public interface MenuService {
 	 */
 	List<MenuDO> userMenus(Long userId);
 
+	List<MenuDO> frontUserMenus(Long userId);
+
+	List<MenuDO> backUserMenus(Long userId);
+
 	List<Tree<MenuDO>> listMenuTree(Long id);
 
 	Tree<MenuDO> getTree();
 
 	Tree<MenuDO> getTree(Long id);
+
+	Tree<MenuDO> getFrontTree(Long id);
+
+	Tree<MenuDO> getBackTree(Long id);
 
 	@CacheEvict(value = "permission",key = "#userId")
 	boolean clearCache(Long userId);
@@ -60,8 +68,24 @@ public interface MenuService {
 	 * @return
 	 */
 	List<RouterDTO> RouterDTOsByUserId(Long userId);
+
+	/**
+	 * 用户的路由
+	 * @return
+	 */
+	List<RouterDTO> FrontRouterDTOsByUserId(Long userId);
+
+	/**
+	 * 用户的路由
+	 * @return
+	 */
+	List<RouterDTO> BackRouterDTOsByUserId(Long userId);
 	/**
 	 * 用户权限
 	 */
 	List<String> PermsByUserId(Long userId);
+
+	List<String> FrontPermsByUserId(Long userId);
+
+	List<String> BackPermsByUserId(Long userId);
 }
