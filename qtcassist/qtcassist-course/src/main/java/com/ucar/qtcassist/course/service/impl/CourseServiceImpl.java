@@ -45,6 +45,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Long> selectRecCourseIdList() {
+        return courseMapper.selectRecCourseIdList();
+    }
+
+    @Override
     public Integer getTotalByIdListAndCondition(List<Long> ids, QueryDO queryDO) {
         return courseMapper.getTotalByIdListAndCondition(ids, queryDO);
     }

@@ -7,14 +7,18 @@
           <div v-on:click="handleDetails(item)">
             <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
             <div style="padding: 9px;">
+
               <span >{{item.courseName}}</span>
               <div class="bottom clearfix">
                 <span class="time">{{item.typeName}}</span>
-                <span class="time" >
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <span class="time">
+                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
               </span>
-                <time class="button">{{item.publishTime}}</time>
               </div>
+              <span >{{item.publishTime}}</span>
+              <!--<time class="button">{{item.publishTime}}</time>-->
             </div>
           </div>
         </el-card>

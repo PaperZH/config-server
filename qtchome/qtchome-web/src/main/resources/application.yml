@@ -4,8 +4,6 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8001/eureka/
-  instance:
-    prefer-ip-address: true
 security:
   basic:
     enabled: false

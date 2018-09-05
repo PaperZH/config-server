@@ -27,25 +27,26 @@ public class CourseController {
      * 获取要推荐的课程列表,返回课程基本信息
      * @return
      */
-    @RequestMapping(value = "/getRecCourse" , method = RequestMethod.GET)
-    public ResponseResult getRecCourses(){
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("courseId",Integer.toString(i));
-            hashMap.put("courseCover","static/image/2.jpg");
-            hashMap.put("courseName","课程名称"+i);
-            hashMap.put("type_name","课程类型"+i);
-            hashMap.put("courseDescription","课程描述说明");
-            hashMap.put("courseScore",Integer.toString(i));
-            hashMap.put("readNum",Integer.toString(10*i));
-            hashMap.put("praiseNum",Integer.toString(i+10));
-            hashMap.put("publishTime","2018-8-15");
-            hashMap.put("updateTime","2018-8-15");
-            hashMap.put("totalDataNum",100);
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
+    @RequestMapping(value = "/getRecCourseList" , method = RequestMethod.GET)
+    public ResponseResult getRecCourseList(@RequestParam Map<String,Object> params){
+//        ArrayList<Map> list = new ArrayList<>();
+//        for (int i = 0; i < 8; i++) {
+//            HashMap<String,Object> hashMap = new HashMap<>();
+//            hashMap.put("courseId",Integer.toString(i));
+//            hashMap.put("courseCover","static/image/2.jpg");
+//            hashMap.put("courseName","课程名称"+i);
+//            hashMap.put("type_name","课程类型"+i);
+//            hashMap.put("courseDescription","课程描述说明");
+//            hashMap.put("courseScore",Integer.toString(i));
+//            hashMap.put("readNum",Integer.toString(10*i));
+//            hashMap.put("praiseNum",Integer.toString(i+10));
+//            hashMap.put("publishTime","2018-8-15");
+//            hashMap.put("updateTime","2018-8-15");
+//            hashMap.put("totalDataNum",100);
+//            list.add(hashMap);
+//        }
+//        return ResponseResult.data(list);
+        return  courseService.getRecCourseList(params);
     }
 
     /**

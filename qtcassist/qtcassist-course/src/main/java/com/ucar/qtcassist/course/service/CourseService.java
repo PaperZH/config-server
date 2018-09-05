@@ -1,8 +1,10 @@
 package com.ucar.qtcassist.course.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import java.util.List;
+import java.util.Map;
 
 public interface CourseService {
     int deleteByPrimaryKey(Long id);
@@ -16,6 +18,8 @@ public interface CourseService {
     int updateByPrimaryKeySelective(CourseDO record);
 
     int updateByPrimaryKey(CourseDO record);
+
+    List<Long> selectRecCourseIdList();
 
     Integer getTotalByIdListAndCondition(List<Long> ids, QueryDO queryDO);
 

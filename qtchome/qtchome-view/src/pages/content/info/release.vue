@@ -73,6 +73,7 @@
         courseDetailForm: {
           course: {
             courseId: null,
+            typeName: null,
             courseType: null,
             courseName: null,
             courseCover: null,
@@ -126,7 +127,7 @@
             this.$router.push({name: 'addCourse', params: this.courseDetailForm})
           })
         }
-        // this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+        this.$router.push({name: 'addCourse', params: this.courseDetailForm})
       },
       handleAvatarSuccess (res, file) {
         console.log(file)

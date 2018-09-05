@@ -10,6 +10,13 @@ import java.util.Map;
 @FeignClient(value = "qtcassist" )
 public interface CourseService {
 
+    /**
+     * 获取推荐课程列表
+     * @param params (String courseName)
+     * @return
+     */
+    @RequestMapping(value = "/course/getRecCourseList")
+    public ResponseResult getRecCourseList(Map<String,Object> params);
 
     /**
      * 根据类型获取分页后的课程列表

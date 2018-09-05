@@ -5,13 +5,13 @@ import com.ucar.qtcassist.api.model.CoursewareDTO;
 //import com.ucar.qtcassist.api.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 //import com.ucar.qtcassist.api.model.DO.CoursewareDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +28,17 @@ public interface CourseApi {
     @PostMapping("/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
+    @PostMapping("/getRecCourseList")
+    Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
+
+//    /**
+//     * 根据课程Id来查询课程列表
+//     * @param params
+//     * @return
+//     */
+//    @PostMapping("/getCourseListByIds")
+//    List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params);
+
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
      * @param courseId 要查询的课程的id
@@ -43,7 +54,7 @@ public interface CourseApi {
 //     */
 //    @PostMapping("/addCourseWithOldCourseware")
 //    Result addCourseWithOldCourseware(@RequestBody CourseDetailVO<BaseCoursewareDO> courseDetailVO);
-//
+
 //    /**
 //     * 增加课程,并使用新的课件
 //     * @param courseDetailVO
@@ -51,6 +62,14 @@ public interface CourseApi {
 //     */
 //    @PostMapping("/addCourseWithNewCourseware")
 //    Result addCourseWithNewCourseware(@RequestBody CourseDetailVO<CoursewareDO> courseDetailVO);
+
+    /**
+     * 增加课程
+     * @param courseUser (long userId , Course course)
+     * @return
+     */
+    @PostMapping("/addCourse")
+    Result addCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 更新课程

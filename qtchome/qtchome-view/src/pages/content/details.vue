@@ -11,7 +11,11 @@
               <div>
                 <span>课程类型:{{course.courseType.typeName}}</span>
                 <span >上架时间:{{course.publishTime}}</span>
+              </div>
+              <div>
                 <i class="fa fa-thumbs-o-up">{{course.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{course.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{course.readNum}}</i>
               </div>
             </div>
             <div>

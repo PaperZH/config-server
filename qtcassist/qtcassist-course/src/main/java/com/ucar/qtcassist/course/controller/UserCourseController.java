@@ -13,6 +13,7 @@ import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.CourseTypeService;
 import com.ucar.qtcassist.course.service.UserCourseService;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
+import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,14 +67,13 @@ public class UserCourseController implements UserCourseApi {
                 courseVOList = new ArrayList<CourseVO>();
                 if(courseDOList != null) {
                     for (CourseDO courseDO : courseDOList) {
-                        CourseVO courseVO = new CourseVO();
-                        courseVO.setCourseId(courseDO.getId());
                         CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-                        courseVO.setCourseType(courseType);
-                        courseVO.setCourseName(courseDO.getCourseName());
-                        courseVO.setCourseCover(courseDO.getCourseCover());
-                        courseVO.setPraiseNum(courseDO.getPraiseNum());
-                        courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                        CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
+                        courseVO.setTypeName(courseType.getTypeName());
+                        //查询收藏数
+                        courseVO.setCollectNum(10);
+
                         courseVOList.add(courseVO);
                     }
                 }

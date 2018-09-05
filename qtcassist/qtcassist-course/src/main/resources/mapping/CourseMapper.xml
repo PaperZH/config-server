@@ -176,6 +176,15 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectRecCourseIdList" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO"  resultType="java.lang.Long">
+    select DISTINCT course_id
+    from sys_recommand_course
+    where del_flag = 1
+    <if test="courseName != null">
+      and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
   <select id="getTotalByIdListAndCondition" resultType="java.lang.Integer" >
     select count(id)
     from assist_course where del_flag = 1
@@ -192,7 +201,7 @@
     </if>
   </select>
 
-  <select id="getList" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" resultMap="BaseResultMap">
+  <select id="getList" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from assist_course
@@ -209,11 +218,29 @@
       <if test="orderType == 'hot'">
         order by praise_num desc
       </if>
+      <if test="startIndex!=null and pageSize!=null">
+        limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+      </if>
     </trim>
-    limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+
   </select>
 
-  <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" resultMap="BaseResultMap" >
+  <select id="getListByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from assist_course
+    <where>
+      del_flag = 1
+      <if test="array!=null">
+        AND id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
     from assist_course where del_flag = 1

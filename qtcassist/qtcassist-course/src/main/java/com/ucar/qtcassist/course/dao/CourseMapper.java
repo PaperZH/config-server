@@ -20,6 +20,8 @@ public interface CourseMapper {
 
     int updateByPrimaryKey(CourseDO record);
 
+    List<Long> selectRecCourseIdList();
+
     /**
      * 统计指定id集合的课程中符合指定条件的课程的数量
      * @param ids 要考虑的课程集合的id

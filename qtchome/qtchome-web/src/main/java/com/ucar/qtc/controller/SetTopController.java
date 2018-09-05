@@ -19,21 +19,13 @@ import java.util.Map;
 @RequestMapping("/setTop")
 public class SetTopController {
     @Autowired
-//    private SetTopService setTopService;
+    private SetTopService setTopService;
     /**
      * 首页轮播图
      */
       @RequestMapping(value = "/getBanner",method = RequestMethod.GET)
       public ResponseResult getBanner(){
-          System.out.println("......");
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("id",Integer.toString(i));
-            hashMap.put("src","static/image/1.jpg");
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
+        return setTopService.getBanner();
       }
 
     /**

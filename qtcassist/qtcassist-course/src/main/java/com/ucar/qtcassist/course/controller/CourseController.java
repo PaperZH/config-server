@@ -6,7 +6,6 @@ import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.api.model.DO.*;
 import com.ucar.qtcassist.api.model.VO.*;
-import com.ucar.qtcassist.course.model.*;
 import com.ucar.qtcassist.course.service.*;
 import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
@@ -15,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -65,23 +62,60 @@ public class CourseController implements CourseApi {
             // 根据courseName, startIndex, pageSize, orderType等条件查询课程页列表
             courseDOList = courseService.getList(queryDO);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-            for (int i = 0; i < courseDOList.size(); i++) {
-                CourseDO courseDO = courseDOList.get(i);
-                CourseVO courseVO = new CourseVO();
-                courseVO.setCourseId(courseDO.getId());
+            for (CourseDO courseDO : courseDOList) {
                 CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-                courseVO.setCourseType(courseType);
-                courseVO.setCourseName(courseDO.getCourseName());
-                courseVO.setCourseCover(courseDO.getCourseCover());
-                courseVO.setPraiseNum(courseDO.getPraiseNum());
-                courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
+                courseVO.setTypeName(courseType.getTypeName());
+                //查询收藏数
+                courseVO.setCollectNum(10);
+
                 courseVOList.add(courseVO);
             }
             return PageResult.getSuccessResult(courseVOList, total);
         }
     }
+
+    @Override
+    public Result<List<CourseVO>> getRecCourseList(QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
+        List<CourseVO> courseVOList = null;
+
+        List<Long> courseIdList = courseService.selectRecCourseIdList();
+        if(courseIdList != null && courseIdList.size() > 0) {
+            queryDO.setCourseIdsFromList(courseIdList);
+            // 根据courseIdList, courseName, startDate, endDate, startIndex, pageSize等条件查询用户收藏的课程列表
+            List<CourseDO> courseDOList = courseService.getListByCondition(queryDO);
+            courseVOList = new ArrayList<CourseVO>();
+            for (CourseDO courseDO : courseDOList) {
+                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
+                courseVO.setTypeName(courseType.getTypeName());
+                //查询收藏数
+                courseVO.setCollectNum(10);
+
+                courseVOList.add(courseVO);
+            }
+        }
+        return Result.getSuccessResult(courseVOList);
+    }
+
+//    @Override
+//    public List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params) {
+//        Object obj = params.get("id");
+//        if(obj == null) {
+//            return courseService.getListByIds(null);
+//        }
+//        List<Integer> list= (List<Integer>) obj;
+//        Long[] idForLong = new Long[list.size()];
+//        System.out.println(list.toString());
+//        for(int i = 0 ;i < list.size();i++ ){
+//            idForLong[i] = Long.valueOf(list.get(i));
+//        }
+//        return courseService.getListByIds(idForLong);
+//    }
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
@@ -95,7 +129,14 @@ public class CourseController implements CourseApi {
 
         CourseDO courseDO = courseService.selectByPrimaryKey(courseId);
         CourseTypeDO courseTypeDO = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-        CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO, courseTypeDO);
+        CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
+//        courseVO.setTypeName(courseTypeDO.getTypeName());
+        courseVO.setCourseType(courseTypeDO);
+        courseVO.setCourseDescription(courseDO.getCourseDescription());
+        //查询收藏数
+        courseVO.setCollectNum(10);
+
         courseDetail.setCourse(courseVO);
 
 //        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
@@ -128,8 +169,7 @@ public class CourseController implements CourseApi {
 //        System.out.println(courseDetailVO);
 //        CourseVO courseVO = courseDetailVO.getCourse();
 //        Long userId = courseDetailVO.getTeacher().getUserId();
-
-
+//
 //        Long userId = courseDetailVO.getUserId();
 //        CourseDO course = courseDetailVO.getCourse();
 //
@@ -174,6 +214,45 @@ public class CourseController implements CourseApi {
 //        Long userId = courseDetailVO.getTeacher().getUserId();
 //        return Result.getSuccessResult("添加成功");
 //    }
+
+
+    /**
+     * 增加课程
+     * @param courseUser (long userId , Course course)
+     * @return
+     */
+    @Override
+    public Result addCourse(@RequestBody CourseUserVO courseUser) {
+        Long userId = courseUser.getUserId();
+        CourseVO courseVO = courseUser.getCourse();
+        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+
+        Date date = new Date();
+        courseDO.setPublishTime(date);
+        courseDO.setUpdateTime(date);
+        courseDO.setReadNum(0);
+        courseDO.setPraiseNum(0);
+
+        int count = courseService.insertSelective(courseDO);
+        if(count > 0) {
+            Long courseId = courseDO.getId();
+            UserCourseDO userCourse = new UserCourseDO();
+            userCourse.setUserId(userId);
+            userCourse.setCourseId(courseId);
+            userCourse.setPublishDate(date);
+            int count2 = userCourseService.insertSelective(userCourse);
+            if(count2 >= 0) {
+                logger.info("添加课程信息成功");
+                return Result.getSuccessResult("添加课程信息成功");
+            } else {
+                logger.info("添加课程信息失败");
+                return Result.getBusinessException("添加课程信息失败","");
+            }
+        } else {
+            logger.info("添加课程信息失败");
+            return Result.getBusinessException("添加课程信息失败","");
+        }
+    }
 
     /**
      * 更新课程

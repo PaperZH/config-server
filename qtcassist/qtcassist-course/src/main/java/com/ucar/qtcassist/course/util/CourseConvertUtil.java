@@ -30,15 +30,15 @@ public class CourseConvertUtil {
         return courseDO;
     }
 
-    public static CourseVO convertToCourseVO(CourseDO courseDO, CourseTypeDO courseTypeDO) {
+    public static CourseVO convertToCourseVO(CourseDO courseDO) {
         CourseVO courseVO = new CourseVO();
         courseVO.setCourseId(courseDO.getId());
-        courseVO.setCourseType(courseTypeDO);
         courseVO.setCourseName(courseDO.getCourseName());
         courseVO.setCourseCover(courseDO.getCourseCover());
-        courseVO.setCourseDescription(courseDO.getCourseDescription());
-        courseVO.setCourseScore(courseDO.getCourseScore());
+//        courseVO.setCourseDescription(courseDO.getCourseDescription());
+//        courseVO.setCourseScore(courseDO.getCourseScore());
         courseVO.setPraiseNum(courseDO.getPraiseNum());
+        courseVO.setReadNum(courseDO.getReadNum());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         courseVO.setInvalidDate(sdf.format(courseDO.getInvalidDate()));
         courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));

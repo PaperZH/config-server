@@ -3,15 +3,15 @@
   <el-row :gutter="20" style="margin-top: 50px;margin-left: 0px; margin-right: 0px;">
     <el-col :span="3" :offset="2"><div class="grid-content bg-purple">
       <el-tabs :tab-position="tabPosition" style="max-height: 700px;" @tab-click="handleSelect">
+        
 
-
-        <el-tab-pane
+        <!-- <el-tab-pane
           v-for="(item,index) in menus"
           :key="item.name"
           :label="item.name"
           :name="item.path"
         >
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="基本设置" name="userInfo" ></el-tab-pane>
         <el-tab-pane label="我的收藏" name="favorite"></el-tab-pane>
         <el-tab-pane label="我发布的课程" name="releasecourse"></el-tab-pane>
@@ -30,19 +30,21 @@
 </template>
 
 <script>
+
     export default {
       data () {
         return {
           tabPosition: 'left',
-          menus: []
+          menus:[]
         }
       },
       mounted: function () {
-        this.menus = JSON.parse(localStorage.getItem('access-menus'))
-        console.log('menu' + this.menus)
-        if (this.menus != null) {
-          this.$router.push(this.menus[0].redirect)
+        this.menus = JSON.parse(localStorage.getItem("access-menus"));
+        console.log("menu"+this.menus)
+        if(this.menus!=null){
+          this.$router.push(this.menus[0].redirect);
         }
+       
       },
       methods: {
         handleSelect (data) {

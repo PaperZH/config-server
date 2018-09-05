@@ -34,13 +34,15 @@
               <span style="float: right"><a v-on:click="handleRelease(item)" href="#">编辑</a></span>
             </div>
             <div class="bottom clearfix" style="margin-top: 26px;">
-              <span class="time">{{item.courseType.typeName}}</span>
-              <span class="time" style="margin-left: 1%">
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+              <span class="time">{{item.typeName}}</span>
+              <span class="time">
+                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
               </span>
-              <div>
-                <time class="time">{{item.publishTime}}</time>
-              </div>
+            </div>
+            <div>
+              <span class="time">{{item.publishTime}}</span>
             </div>
           </div>
         </el-card>

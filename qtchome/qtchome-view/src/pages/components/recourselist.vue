@@ -10,11 +10,14 @@
             <span >{{item.courseName}}</span>
             <div class="bottom clearfix">
               <span class="time">{{item.typeName}}</span>
-              <span class="time" >
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+              <span class="time">
+                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
               </span>
-              <time class="button">{{item.publishTime}}</time>
             </div>
+            <span >{{item.publishTime}}</span>
+            <!--<time class="button">{{item.publishTime}}</time>-->
           </div>
           </div>
         </el-card>
@@ -29,7 +32,10 @@
   export default {
     data () {
       return {
-        tableData: []
+        tableData: [],
+        queryParams: {
+          courseName: null
+        }
       }
     },
     methods: {
@@ -38,8 +44,8 @@
       }
     },
     created () {
-      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourse'}).then(res => {
-        this.tableData = res.data.data
+      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList', 'data': this.queryParams}).then(res => {
+        this.tableData = res.data.re
       })
     }
 
