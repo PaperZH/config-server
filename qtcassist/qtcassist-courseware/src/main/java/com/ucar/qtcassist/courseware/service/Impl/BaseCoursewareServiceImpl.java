@@ -44,11 +44,8 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
             baseCoursewareListDTO.setTypeId(baseCoursewareDO.getTypeId());
 
             String typeName = coursewareTypeService.getType(baseCoursewareDO.getTypeId());
-            if(!typeName.equals("") && typeName != null) {
+
                 baseCoursewareListDTO.setTypeName(typeName);
-            } else {
-                baseCoursewareListDTO.setTypeName("未定义类型");
-            }
 
             listDTO.add(baseCoursewareListDTO);
         }

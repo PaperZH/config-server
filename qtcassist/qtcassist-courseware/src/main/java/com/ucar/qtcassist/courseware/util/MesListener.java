@@ -2,9 +2,8 @@ package com.ucar.qtcassist.courseware.util;
 
 import com.taobao.metamorphosis.Message;
 import com.taobao.metamorphosis.client.consumer.MessageListener;
-import com.ucar.qtcassist.courseware.constant.FileType;
+import com.ucar.qtcassist.courseware.constant.FileConstant;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
-import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.FileService;
 import com.ucar.qtcassist.courseware.service.Impl.BaseCoursewareServiceImpl;
@@ -15,11 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.concurrent.Executor;
 
 /**
@@ -46,23 +43,23 @@ public class MesListener implements MessageListener {
 
         String location = fileDTO.getLocation() + "convert/";
         LOGGER.warn("location:" + location);
-        File file = fileDTO.getFile();
+        java.io.File file = fileDTO.getFile();
         String coursewareName = fileDTO.getOriginalFilename();
         String preUrl = null;
         LOGGER.error("MqListener:" + coursewareName);
 
         int point = coursewareName.lastIndexOf(".");
         String Name = coursewareName.substring(0, point);
-        File fPPT = file;
-        File fPDF = null;
+        java.io.File fPPT = file;
+        java.io.File fPDF = null;
         if(obj instanceof FileDTO) {
             //判断是否为需要转化的文件类型
             if(fileService.typeCheck(coursewareName)) {
 
-                String pdfLocation = location + Name + "." + FileType.PDF;
+                String pdfLocation = location + Name + "." + FileConstant.PDF;
                 //LOGGER.error("pdfLocation:" + pdfLocation);
-                fPDF = new File(pdfLocation);
-                File dir = new File(location);
+                fPDF = new java.io.File(pdfLocation);
+                java.io.File dir = new java.io.File(location);
                 if(!dir.exists()) {
                     dir.mkdirs();
                 }
@@ -72,13 +69,13 @@ public class MesListener implements MessageListener {
             InputStream in = null;
             try {
                 in = new FileInputStream(fPDF);
-                preUrl = remoteFileService.uploadFile(in, Name + "." + FileType.PDF);
+                preUrl = remoteFileService.uploadFile(in, Name + "." + FileConstant.PDF);
                 LOGGER.info("upload successfully[preUrl]" + preUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //查BaseCourseware表，将preUrl放入表中
-            BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
+            /*BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
             if(baseCoursewareDO != null) {
                 baseCoursewareDO.setPreviewUrl(preUrl);
                 baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
@@ -89,7 +86,7 @@ public class MesListener implements MessageListener {
                 } else {
                     LOGGER.info("add basecourseware failed");
                 }
-            }
+            }*/
         }
     }
 
