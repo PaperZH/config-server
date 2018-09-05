@@ -1,9 +1,9 @@
 package com.ucar.qtcassist;
 
 import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.courseware.constant.FileConstant;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
-import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,16 +123,29 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     }
 
     @Test
-    public void getList(){
-        List<Long> temList=new ArrayList<>();
-        temList.add(1l);
-        temList.add(2l);
-        temList.add(3l);
-        temList.add(4l);
-        List<CoursewareDTO>list=coursewareService.selectCoursewareList(temList);
-        for(int i=0;i<list.size();i++){
-            System.out.println(list.get(i).getSourceUrl());
+    public void getList() {
+        List<Long> temList = new ArrayList<>();
+//        temList.add(1l);
+//        temList.add(2l);
+//        temList.add(3l);
+//        temList.add(4l);
+        List<CoursewareDTO> list = coursewareService.selectCoursewareList(temList);
+        if(list != null) {
+            for(int i = 0; i < list.size(); i++) {
+                System.out.println(list.get(i).getSourceUrl());
+            }
+        } else {
+            System.out.println("```````````````");
         }
+    }
+
+    @Test
+    public void fiel(){
+        File dir=new File("test.txt");
+        if(!dir.exists()) {
+            dir.mkdirs();
+        }
+        System.out.println(dir.getPath());
     }
 
     @Before

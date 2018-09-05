@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.sql.Date;
+import java.util.UUID;
 
 /**
  * 请填写类注释
@@ -80,5 +82,14 @@ public class RemoteFileServiceImpl implements RemoteFileService {
             }
 
         }
+    }
+
+    @Override
+    public String saveTemFile(String name) {
+        int point = name.lastIndexOf(".");
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        String suffix = name.substring(point + 1, name.length());
+        String r=uuid+"."+suffix;
+        return r;
     }
 }

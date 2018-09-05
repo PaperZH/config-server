@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
 
   }
-  next()                                                                    // 如果匹配到正确跳转
+  next()    // 如果匹配到正确跳转
 })
 
 export default router

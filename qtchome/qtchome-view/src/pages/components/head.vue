@@ -96,24 +96,28 @@
       }
     },
     methods: {
-      handleSelect (key, keyPath) {
+      handleSelect(key, keyPath) {
         this.$emit('getActiveIndex', key)
       },
       login: function () {
         let that = this;
-        
-        this.$store.dispatch('Login', this.form).then(res => {
-          console.log(res)  
-          that.dialogFormVisible = false
-          that.userInfo.nickName=res.user.nickname
-          that.userInfo.avatar=res.user.avatar
-          that.isShow = false
-          that.isUser = true
-        }).catch(() => {
-          this.loading = false
-        })
+
+        that.dialogFormVisible = false
+        that.isShow = false
+        that.isUser = true
+
+        // this.$store.dispatch('Login', this.form).then(res => {
+        //   console.log(res)
+        //   that.dialogFormVisible = false
+        //   //that.userInfo.nickName = res.user.nickname
+        //   //that.userInfo.avatar = res.user.avatar
+        //   that.isShow = false
+        //   that.isUser = true
+        // }).catch(() => {
+        //   this.loading = false
+        // })
       },
-      handleCommand (val) {
+      handleCommand(val) {
         if (val === 'quit') {
           this.$confirm('确认退出？').then(_ => {
             this.isShow = true
@@ -130,10 +134,11 @@
   }
 </script>
 <style>
- .topInput{
-   float: right;
-   width: 30%;
-   margin-top: 0.5%;
-   margin-right: 10%;outline: none;
- }
+  .topInput {
+    float: right;
+    width: 30%;
+    margin-top: 0.5%;
+    margin-right: 10%;
+    outline: none;
+  }
 </style>

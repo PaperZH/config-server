@@ -26,4 +26,14 @@ public interface RemoteFileService {
      * @return
      */
     void fileConvert(File inputFile, File outputFile);
+
+    /**
+     * 保存临时文件在本地
+     *
+     *
+     * */
+    String saveTemFile(String name);
+
+
+
 }
