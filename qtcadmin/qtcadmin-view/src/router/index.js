@@ -108,18 +108,7 @@ let router = new Router({
       leaf: true,
       iconCls: 'fa fa-group',
       children: [
-        {path: '/base/log', component: LogList, name: '日志管理', menuShow: true},
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '示例管理',
-      menuShow: true,
-      leaf: true,
-      iconCls: 'fa fa-group',
-      children: [
-        {path: '/admin/demo', component: LogList, name: '示例管理', menuShow: true},
+        {path: '/base/log', component: LogList, name: '日志管理', menuShow: true}
       ]
     },
 
