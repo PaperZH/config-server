@@ -37,8 +37,3 @@ logging:
 ribbon:
   eureka:
     enable: true
-
-file:
-  filePath: /file/uploaded_files/
-  pre: /files
-  server: http://10.104.108.177:8004
