@@ -15,6 +15,9 @@ spring:
       max-file-size: 100Mb
       max-request-size: 100Mb
 
+zuul:
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+
 ribbon:
   ReadTimeout: 10000
   ConnectTimeout: 10000
