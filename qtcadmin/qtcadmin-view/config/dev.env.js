@@ -5,6 +5,6 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   // API_ROOT: '"http://10.103.13.242:8002"',
   // EUREKA_SERVER: '"http://10.103.13.242:8001"',
-  API_ROOT: '"http://10.104.102.225:8002"',
-  EUREKA_SERVER: '"http://10.104.102.225:8001"',
+  API_ROOT: '"http://10.103.13.210:8002"',
+  EUREKA_SERVER: '"http://10.103.13.210:8001"',
 })
