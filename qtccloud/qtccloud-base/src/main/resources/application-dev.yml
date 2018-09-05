@@ -19,7 +19,7 @@ spring:
   application:
     name: api-base
   datasource:
-    url: jdbc:mysql://10.104.20.123/qtccloud
+    url: jdbc:mysql://10.104.20.123:3306/qtccloud?useUnicode=true&characterEncoding=utf8
     username: developer
     password: developer1015
 mybatis:

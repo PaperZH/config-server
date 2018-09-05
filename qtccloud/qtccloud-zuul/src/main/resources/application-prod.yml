@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.104.102.225:8001/eureka/
+      defaultZone: http://10.104.108.177:8001/eureka/
 
 server:
   port: 8002

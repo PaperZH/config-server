@@ -32,7 +32,10 @@ export function post (url, data) {
   return request({
     url: url,
     method: 'post',
-    data: data
+    data: data,
+    headers:{
+      'Content-Type':'application/json'
+    }
   })
 }
 

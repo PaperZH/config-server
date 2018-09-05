@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
 import com.ucar.qtcassist.base.common.exception.BusinessRuntimeException;
-import com.ucar.qtcassist.courseware.constant.FileType;
+import com.ucar.qtcassist.courseware.constant.FileConstant;
 import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.service.FileService;
 import org.slf4j.Logger;
@@ -29,10 +29,10 @@ public class FileServiceImpl implements FileService {
         String suffix = coursewareName.substring(point + 1, coursewareName.length());
         LOGGER.error(suffix);
         //根据文件名后缀判断文件类型
-        if(suffix.equals(FileType.DOC) || suffix.equals(FileType.DOCX) || suffix.equals(FileType.PPT) || suffix.equals(FileType.PPTX)) {
+        if(suffix.equals(FileConstant.DOC) || suffix.equals(FileConstant.DOCX) || suffix.equals(FileConstant.PPT) || suffix.equals(FileConstant.PPTX)) {
             return true;
         } else {
-            throw new BusinessRuntimeException("Invalid File");
+            throw new BusinessRuntimeException("Invalid FileConstant");
         }
     }
 }
