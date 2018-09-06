@@ -4,6 +4,7 @@ package com.ucar.qtc.admin.controller;
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.dto.BannerDTO;
 import com.ucar.qtc.admin.dto.do2dto.BannerConvert;
+import com.ucar.qtc.admin.rpc.FileUploadService;
 import com.ucar.qtc.admin.service.BannerService;
 import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.utils.*;
@@ -22,17 +23,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/banner")
 public class BannerController {
-    @Value("${file.filePath}")
-    String filePath;
-
-    @Value("${file.pre}")
-    String filePre;
-
-    @Value("${file.server}")
-    String fileServer;
 
     @Autowired
     private BannerService bannerService;
+
+    @Autowired
+    private FileUploadService fileUploadServie;
 
     @GetMapping("{id}")
     public ResponseResult get(@PathVariable Long id) {
@@ -49,17 +45,8 @@ public class BannerController {
     @Log("上传banner文件")
     @PostMapping("upload")
     public ResponseResult upload(MultipartFile file, String key) {
-        try {
-            if (StringUtils.isBlank(key)) {
-                key = StringUtils.generateUUID();
-            }
-            final String resPath = FileUtils.saveFile(file,file.getBytes(),filePath,key);
-            final String url = fileServer + filePre + "/"+resPath;
-            return ResponseResult.ok().put("fileUrl", url);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseResult.error("文件上传失败");
-        }
+        ResponseResult result = fileUploadServie.upload(file, key);
+        return result;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.ucar.qtc.admin.config;
+package com.ucar.qtc.base.config;
 
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;

@@ -1,5 +1,5 @@
 /**
- * 文件相关的api
+ * 鏂囦欢鐩稿叧鐨刟pi
  */
 import * as API from './'
 
