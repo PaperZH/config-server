@@ -143,7 +143,7 @@ let router = new Router({
       iconCls: 'iconfont icon-setting1',
       children: [
         {path: '/admin/banner',component: BannerList, name: 'banner推荐', menuShow: true},
-        {path: '/admin/recCourse',component: RecCourseList, name: 'banner推荐', menuShow: true}
+        {path: '/admin/recCourse',component: RecCourseList, name: '课程推荐', menuShow: true}
       ]
     },
   ]
