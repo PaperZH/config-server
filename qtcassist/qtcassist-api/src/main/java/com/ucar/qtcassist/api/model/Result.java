@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Result<T> implements Serializable {
 
-//    private static final Logger logger = LoggerFactory.getLogger(Result.class);
+    private static final long serialVersionUID = -2936996526897422943L;
 
     /**
      * 成功
