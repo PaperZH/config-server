@@ -1,5 +1,5 @@
 /**
- * 日志相关的api
+ * 鏃ュ織鐩稿叧鐨刟pi
  */
 import * as API from './'
 

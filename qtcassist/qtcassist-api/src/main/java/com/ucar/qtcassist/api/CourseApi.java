@@ -2,9 +2,7 @@ package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
-//import com.ucar.qtcassist.api.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
-//import com.ucar.qtcassist.api.model.DO.CoursewareDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
@@ -13,6 +11,7 @@ import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 public interface CourseApi {
     /**
@@ -27,8 +26,28 @@ public interface CourseApi {
     @PostMapping("/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
+    /**
+     * 获取推荐课程列表
+     * @param queryVO(courseIds, courseName, currentPage, pageSize)
+     * Long[] courseIds 要匹配的所有课程的id数组
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
     @PostMapping("/getRecCourseList")
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
+
+    /**
+     * 获取所有课程的id和courseName
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
+    @PostMapping("/getCourseIdAndCourseName")
+    Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
@@ -37,22 +56,6 @@ public interface CourseApi {
      */
     @GetMapping("/getCourseDetail/{courseId}")
     Result<CourseDetailVO<CoursewareDTO>> getCourseDetail(@PathVariable("courseId") Long courseId);
-
-//    /**
-//     * 增加课程,并使用课件库中原有的课件
-//     * @param courseDetailVO
-//     * @return
-//     */
-//    @PostMapping("/addCourseWithOldCourseware")
-//    Result addCourseWithOldCourseware(@RequestBody CourseDetailVO<BaseCoursewareDO> courseDetailVO);
-
-//    /**
-//     * 增加课程,并使用新的课件
-//     * @param courseDetailVO
-//     * @return
-//     */
-//    @PostMapping("/addCourseWithNewCourseware")
-//    Result addCourseWithNewCourseware(@RequestBody CourseDetailVO<CoursewareDO> courseDetailVO);
 
     /**
      * 增加课程

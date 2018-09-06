@@ -7,6 +7,7 @@ import com.ucar.qtcassist.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -45,8 +46,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Long> selectRecCourseIdList() {
-        return courseMapper.selectRecCourseIdList();
+    public List<CourseDO> getCourseIdAndCourseName(QueryDO queryDO) {
+        return courseMapper.getCourseIdAndCourseName(queryDO);
     }
 
     @Override
