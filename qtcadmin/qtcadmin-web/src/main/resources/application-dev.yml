@@ -20,13 +20,29 @@ security:
 spring:
   application:
     name: api-admin
-  datasource:
-    url: jdbc:mysql://10.104.20.123:3306/qtccloud?useUnicode=true&characterEncoding=utf8
-    username: developer
-    password: developer1015
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
+
+jdbc:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.104.20.123:3306/qtccloud?useUnicode=true&characterEncoding=utf8
+    username: developer
+    password: developer1015
+    initialSize: 5
+    minIdle: 5
+    maxActive: 100
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 100
+    filters: stat,wall,slf4j
+
 mybatis:
   mapper-locations: mapper/**Mapper.xml
   configuration:
