@@ -176,12 +176,15 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectRecCourseIdList" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO"  resultType="java.lang.Long">
-    select DISTINCT course_id
-    from sys_recommand_course
+  <select id="getCourseIdAndCourseName" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
+    select id, course_name
+    from assist_course
     where del_flag = 1
     <if test="courseName != null">
       and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+    </if>
+    <if test="startIndex!=null and pageSize!=null">
+      limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
   </select>
 
@@ -223,21 +226,6 @@
       </if>
     </trim>
 
-  </select>
-
-  <select id="getListByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from assist_course
-    <where>
-      del_flag = 1
-      <if test="array!=null">
-        AND id in
-        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
-          #{item}
-        </foreach>
-      </if>
-    </where>
   </select>
 
   <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap" >

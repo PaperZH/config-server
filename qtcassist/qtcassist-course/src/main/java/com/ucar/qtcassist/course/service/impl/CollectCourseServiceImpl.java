@@ -60,4 +60,9 @@ public class CollectCourseServiceImpl implements CollectCourseService {
         return collectCourseMapper.getByUserIdAndCourseId(userId, courseId);
     }
 
+    @Override
+    public Integer getTotalByCourseId(Long courseId) {
+        return collectCourseMapper.getTotalByCourseId(courseId);
+    }
+
 }

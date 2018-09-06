@@ -101,4 +101,10 @@
     from assist_collect_course
     where user_id = #{userId, jdbcType=BIGINT} and course_id = #{courseId, jdbcType=BIGINT}
   </select>
+
+  <select id="getTotalByCourseId" resultType="java.lang.Integer">
+    select count(user_id)
+    from assist_collect_course
+    where course_id = #{courseId, jdbcType=BIGINT} and del_flag = 1
+  </select>
 </mapper>

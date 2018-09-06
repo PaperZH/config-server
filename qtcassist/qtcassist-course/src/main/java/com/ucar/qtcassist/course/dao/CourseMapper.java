@@ -5,6 +5,7 @@ import com.ucar.qtcassist.api.model.DO.QueryDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface CourseMapper {
@@ -20,7 +21,15 @@ public interface CourseMapper {
 
     int updateByPrimaryKey(CourseDO record);
 
-    List<Long> selectRecCourseIdList();
+    /**
+     * 获取所有课程的id和courseName
+     * @param queryDO (String courseName, Integer startIndex, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer startIndex 分页查询的起始索引
+     * Integer pageSize 分布查询的每页的记录数目
+     * @return
+     */
+    List<CourseDO> getCourseIdAndCourseName(QueryDO queryDO);
 
     /**
      * 统计指定id集合的课程中符合指定条件的课程的数量
