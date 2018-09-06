@@ -19,7 +19,7 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
-@FeignClient(name = "qtcassist",path = "/course",configuration = FeignMultipartSupportConfig.class)
+@FeignClient(name = "qtcassist",path = "/course")
 public interface HCoursewareService  {
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
@@ -28,7 +28,6 @@ public interface HCoursewareService  {
 
     @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    //@ResponseBody
     Result uploadCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
 
     @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
