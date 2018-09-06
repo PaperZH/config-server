@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.base.common.constants;
+package com.ucar.qtcassist.base.common.constant;
 
 /**
  * @author: cong.zhou01

@@ -1,6 +1,6 @@
 package com.ucar.qtcassist.base.common.intercepter;
 
-import com.ucar.qtcassist.base.common.constants.CommonConstants;
+import com.ucar.qtcassist.base.common.constant.CommonConstants;
 import com.ucar.qtcassist.base.common.context.FilterContextHandler;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
