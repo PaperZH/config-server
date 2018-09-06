@@ -4,14 +4,14 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8001/eureka/
+      defaultZone: http://${spring.cloud.client.ipAddress}:8001/eureka/
       healthcheck:
         enabled: true
-    instance:
-      lease-renewal-interval-in-seconds: 10
-      lease-expiration-duration-in-seconds: 20
-      prefer-ip-address: true
-      instance-id: 127.0.0.1:${server.port}
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 security:
   basic:
@@ -36,4 +36,4 @@ ribbon:
 file:
   filePath: e:/file/uploaded_files/
   pre: /files
-  server: http://127.0.0.1:8003
+  server: http://${spring.cloud.client.ipAddress}:${server.port}
