@@ -36,7 +36,6 @@ public class FrontPageController {
     private CourseServiceRpc courseService;
 
     @Autowired
-
     private UserService userService;
 
     @GetMapping("getRecBanner")
