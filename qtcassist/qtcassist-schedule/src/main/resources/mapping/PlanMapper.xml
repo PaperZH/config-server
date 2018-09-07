@@ -13,26 +13,55 @@
   <sql id="Base_Column_List" >
     id, plan_title, plan_content, plan_destination, plan_score, builder_id, del_flag
   </sql>
+
+  <sql id="Base_Condition">
+    where del_flag = 0
+    <if test="planTitle != null and planTitle != ''">
+      and plan_title like  concat('%', #{planTitle}, '%')
+    </if>
+    <if test="userId !=null ">
+      and builder_id = #{userId}
+    </if>
+  </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from assist_plan
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="queryPlan" resultMap="BaseResultMap" parameterType="com.ucar.qtcassist.schedule.dto.QueryPlanDTO">
+    select
+    <include refid="Base_Column_List"/>
+    from assist_plan
+    <include refid="Base_Condition"/>
+    ORDER BY id desc
+    <if test="offset !=null">
+      limit #{offset},#{pageSize}
+    </if>
+  </select>
+
+  <select id="queryTotal" resultType="java.lang.Integer" parameterType="com.ucar.qtcassist.schedule.dto.QueryPlanDTO">
+    select count(1) from assist_plan
+    <include refid="Base_Condition"/>
+  </select>
+
   <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     update assist_plan
-    set del_flag = 0
+    set del_flag = 1
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" useGeneratedKeys="true" keyProperty="id">
+
+  <insert id="insert" parameterType="com.ucar.qtcassist.schedule.dto.PlanDTO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_plan (plan_title, plan_content,
-      plan_destination, plan_score, builder_id
+      plan_destination, plan_score, builder_id,del_flag
       )
     values (#{planTitle,jdbcType=VARCHAR}, #{planContent,jdbcType=VARCHAR},
-      #{planDestination,jdbcType=VARCHAR}, #{planScore,jdbcType=REAL}, #{builderId,jdbcType=BIGINT}
+      #{planDestination,jdbcType=VARCHAR}, #{planScore,jdbcType=REAL}, #{userId,jdbcType=BIGINT},0
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.dto.PlanDTO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_plan
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="planTitle != null" >
@@ -75,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.PlanDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.schedule.dto.PlanDTO" >
     update assist_plan
     <set >
       <if test="planTitle != null" >
@@ -89,12 +118,6 @@
       </if>
       <if test="planScore != null" >
         plan_score = #{planScore,jdbcType=REAL},
-      </if>
-      <if test="builderId != null" >
-        builder_id = #{builderId,jdbcType=BIGINT},
-      </if>
-      <if test="delFlag != null" >
-        del_flag = #{delFlag,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
