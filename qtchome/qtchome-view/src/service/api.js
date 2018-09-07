@@ -19,6 +19,7 @@ export function logout (userId) {
   })
 }
 const base = process.env.API_ROOT
+// const base ="http://localhost:8002"
 export function get (url, data) {
   url = base + url
   return request({

@@ -13,6 +13,8 @@ public class CoursewareDO {
 
     private String coursewareDescription;
 
+    private Long coursewareNum;
+
     private Date publishTime;
 
     private Date updateTime;
@@ -24,6 +26,14 @@ public class CoursewareDO {
 //    public void setId(Long id) {
 //        this.id = id;
 //    }
+
+    public Long getCoursewareNum() {
+        return coursewareNum;
+    }
+
+    public void setCoursewareNum(Long coursewareNum) {
+        this.coursewareNum = coursewareNum;
+    }
 
     public Long getTypeId() {
         return typeId;

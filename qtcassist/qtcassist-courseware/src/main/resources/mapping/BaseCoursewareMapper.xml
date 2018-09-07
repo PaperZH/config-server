@@ -29,16 +29,13 @@
     delete from assist_base_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
         insert into assist_base_courseware (id, type_id, courseware_name,
         courseware_description, publish_time, update_time,
         preview_url, source_url)
         values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{coursewareName,jdbcType=VARCHAR},
         #{coursewareDescription,jdbcType=VARCHAR}, #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
         #{previewUrl,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR})
-        <selectKey resultType="java.lang.Long" keyProperty="id">
-            SELECT @@IDENTITY AS id
-        </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO">
         insert into assist_base_courseware

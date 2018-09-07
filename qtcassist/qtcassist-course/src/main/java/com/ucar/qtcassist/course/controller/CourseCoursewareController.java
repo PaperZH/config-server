@@ -49,8 +49,9 @@ public class CourseCoursewareController implements CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
-    @Override
-    public Result addCourseCourseware(@PathVariable Long courseId, @PathVariable Long coursewareId) {
+    @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
+    public Result addCourseCourseware(@RequestParam("courseId") Long courseId,
+                               @RequestParam("coursewareId") Long coursewareId) {
         CourseCoursewareDO courseCourseware = new CourseCoursewareDO();
         courseCourseware.setCourseId(courseId);
         courseCourseware.setCoursewareId(coursewareId);

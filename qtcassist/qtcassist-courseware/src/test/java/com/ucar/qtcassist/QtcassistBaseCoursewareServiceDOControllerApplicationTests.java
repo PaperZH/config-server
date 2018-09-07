@@ -1,9 +1,11 @@
 package com.ucar.qtcassist;
 
 import com.ucar.qtcassist.api.model.CoursewareDTO;
-import com.ucar.qtcassist.courseware.constant.FileConstant;
+import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
+import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -15,6 +17,7 @@ import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
 import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
 import com.zuche.framework.udfs.client.upload.UDFSUploadVO;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +148,21 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
             dir.mkdirs();
         }
         System.out.println(dir.getPath());
+    }
+
+    @Test
+    public void addCourseware(){
+        CoursewareDO coursewareDO=new CoursewareDO();
+        coursewareDO.setTypeId(1l);
+        coursewareDO.setCoursewareName("testc");
+        coursewareDO.setCoursewareDescription("testDs");
+        coursewareDO.setBaseCoursewareId(1l);
+        coursewareDO.setCoursewareNum(3l);
+        coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+        coursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+        CoursewareController coursewareController =new CoursewareController();
+
+//        coursewareService.addCourseware(coursewareDO);
     }
 
     @Before
