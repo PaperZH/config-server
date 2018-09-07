@@ -1,7 +1,7 @@
 package com.ucar.qtcassist.base.common.context;
 
 
-import com.ucar.qtcassist.base.common.constants.CommonConstants;
+import com.ucar.qtcassist.base.common.constant.CommonConstants;
 
 import java.util.HashMap;
 import java.util.Map;
