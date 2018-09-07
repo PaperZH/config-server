@@ -2,6 +2,7 @@ package com.ucar.qtc.service;
 
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,21 +18,23 @@ public interface PlanService {
      */
     @PostMapping("/plan/getPlan")
     public ResponseResult getTeacherPlanList(Map<String,Object> params);
-//
-//    /**
-//     * 根据发布计划ID获取课程基本信息
-//     * @param planId
-//     * @return
-//     */
-//    public ResponseResult getCourseByPlanId(long planId);
-//
-//    /**
-//     * 根据发布计划ID获取详细信息（包括教师信息，课程信息，制定计划基本信息，发布计划的基本信息）
-//     * @param planId
-//     * @return
-//     */
-//    public ResponseResult getPlanDetailsByPlanId(long planId);
-//
+
+    /**
+     * 根据发布计划ID获取课程基本信息
+     * @param planId
+     * @return
+     */
+    @RequestMapping("/coursePlan/get/{planId}")
+    public ResponseResult getCourseByPlanId(@PathVariable("planId") long planId);
+
+    /**
+     * 根据发布计划ID获取详细信息（包括教师信息，课程信息，制定计划基本信息，发布计划的基本信息）
+     * @param planId
+     * @return
+     */
+    @RequestMapping("/userPlan/getDetails/{planId}")
+    public ResponseResult getPlanDetailsByPlanId(@PathVariable("planId") long planId);
+
     /**
      * 分页获取发布的计划列表
      * @param params
@@ -39,6 +42,12 @@ public interface PlanService {
      */
     @RequestMapping("/userPlan/getPlan")
     public ResponseResult getPublishedPlanList(Map<String,Object> params);
+
+    /**
+     * 模糊查询课程
+     */
+    @GetMapping("/coursePlan/getCourseList")
+    public ResponseResult getCourseList(String courseName);
 //
 //    /**
 //     * 模糊查询制定的计划列表
@@ -108,5 +117,21 @@ public interface PlanService {
      */
     @RequestMapping("/userPlan/delete/{planId}")
     public ResponseResult deletePublished(@PathVariable("planId") long planId);
+
+    /**
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping("/coursePlan/add")
+    public ResponseResult addCoursePlan(Map<String,Object> params);
+
+    /**
+     * 删除计划课程
+     * @param id
+     * @return
+     */
+    @RequestMapping("/coursePlan/delete/{id}")
+    public ResponseResult deleteCoursePlan(@PathVariable("id") long id);
 
 }
