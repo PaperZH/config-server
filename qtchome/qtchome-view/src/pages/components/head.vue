@@ -105,21 +105,22 @@ export default {
       let that = this
       this.$store.dispatch('Login', this.form).then(result => {
         if (result && result.data.code === 0) {
-        that.$message.success('登录成功');
-        that.res = result
-        that.router = that.res.data.router
-        localStorage.setItem('access-menus', JSON.stringify(that.router))
-        that.dialogFormVisible = false
-        that.isShow = false
-        that.isUser = true
-        that.userInfo.nickName = that.res.data.user.nickname
-        that.userInfo.avatar = that.res.data.user.avatar
+          that.$message.success('登录成功')
+          that.res = result
+          that.router = that.res.data.router
+          localStorage.setItem('access-menus', JSON.stringify(that.router))
+          that.dialogFormVisible = false
+          that.isShow = false
+          that.isUser = true
+          that.userInfo.nickName = that.res.data.user.nickname
+          that.userInfo.avatar = that.res.data.user.avatar
         } else {
-          that.$message.error('用户名或密码错误');
-          dialogFormVisible = false
-        }        
-      }).catch(() => {that.loading = false
-      that.dialogFormVisible = false
+          that.$message.error('用户名或密码错误')
+          that.dialogFormVisible = false
+        }
+      }).catch(() => {
+        that.loading = false
+        that.dialogFormVisible = false
       })
     },
     handleCommand (val) {
