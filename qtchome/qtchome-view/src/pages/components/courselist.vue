@@ -7,14 +7,18 @@
           <div v-on:click="handleDetails(item)">
             <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
             <div style="padding: 9px;">
+
               <span >{{item.courseName}}</span>
               <div class="bottom clearfix">
                 <span class="time">{{item.typeName}}</span>
-                <span class="time" >
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <span class="time">
+                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
               </span>
-                <time class="button">{{item.publishTime}}</time>
               </div>
+              <span >{{item.publishTime}}</span>
+              <!--<time class="button">{{item.publishTime}}</time>-->
             </div>
           </div>
         </el-card>
@@ -66,8 +70,6 @@
       },
       data () {
         return {
-          // courseName: '',
-          // currentPage: 1,
           total: 0,
           queryParams: {
             type: this.type,
@@ -75,63 +77,7 @@
             pageSize: 8,
             courseName: null
           },
-          tableData: [{
-            id: '1',
-            date: '2017-06-02 14:45:00',
-            tilt: 'Java 编程思想',
-            number: 15,
-            type: '技术类',
-            img: 'static/image/1.jpg'
-          }, {
-            id: '2',
-            date: '2018-07-04 14:45:00',
-            tilt: 'spring入门精通',
-            number: 6,
-            type: '技术类',
-            img: 'static/image/2.jpg'
-          }, {
-            id: '3',
-            date: '2019-08-11 14:45:00',
-            tilt: 'Mybatis入门精通',
-            number: 9,
-            type: '技术类',
-            img: 'static/image/3.jpg'
-          }, {
-            id: '4',
-            date: '2017-05-03 14:45:00',
-            tilt: 'Kafka使用',
-            number: 0,
-            type: '技术类',
-            img: 'static/image/4.jpg'
-          }, {
-            id: '1',
-            date: '2017-06-02 14:45:00',
-            tilt: 'Java 编程思想',
-            number: 15,
-            type: '技术类',
-            img: 'static/image/1.jpg'
-          }, {
-            id: '2',
-            date: '2018-07-04 14:45:00',
-            tilt: 'spring入门精通',
-            number: 6,
-            type: '技术类',
-            img: 'static/image/2.jpg'
-          }, {
-            id: '3',
-            date: '2019-08-11 14:45:00',
-            tilt: 'Mybatis入门精通',
-            number: 9,
-            type: '技术类',
-            img: 'static/image/3.jpg'
-          }, {
-            id: '4',
-            date: '2017-05-03 14:45:00',
-            tilt: 'Kafka使用',
-            number: 0,
-            type: '技术类',
-            img: 'static/image/4.jpg'
-          }]
+          tableData: []
         }
       },
       methods: {
@@ -147,9 +93,8 @@
           this.$router.push({name: 'details', params: val})
         },
         getCourseList () {
-          const url = '/api-home/course/getList'
+          const url = '/api-home/course/getCourseList'
           this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
-            console.log(res)
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
           })

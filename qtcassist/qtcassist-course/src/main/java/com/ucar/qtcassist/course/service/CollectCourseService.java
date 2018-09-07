@@ -23,4 +23,6 @@ public interface CollectCourseService {
     int deleteListByIdList(Long userId, Long[] courseIds);
 
     CollectCourseDO getByUserIdAndCourseId(Long userId, Long courseId);
+
+    Integer getTotalByCourseId(Long courseId);
 }

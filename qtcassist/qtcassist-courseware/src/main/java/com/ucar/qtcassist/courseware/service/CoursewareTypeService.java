@@ -1,5 +1,9 @@
 package com.ucar.qtcassist.courseware.service;
 
+import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
+
+import java.util.List;
+
 /**
  * 请填写类注释
  *
@@ -8,4 +12,6 @@ package com.ucar.qtcassist.courseware.service;
  */
 public interface CoursewareTypeService {
     String getType(Long tId);
+
+    List<CoursewareTypeDO> getAllType();
 }

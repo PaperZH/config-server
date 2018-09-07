@@ -7,25 +7,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
-@FeignClient(value = "qtcassist" )
+@FeignClient(value = "qtcassist")
 public interface CourseService {
 
+    /**
+     * 获取推荐课程列表
+     * @param params (String courseName)
+     * @return
+     */
+    @RequestMapping(value = "/course/getRecCourseList")
+    public ResponseResult getRecCourseList(Map<String,Object> params);
 
     /**
      * 根据类型获取分页后的课程列表
-     * @param params (int currentPage, int pageSize, String type)
+     * @param params (String courseName, int currentPage, int pageSize, String type)
      * @return
      */
     @RequestMapping(value = "/course/getCourseList")
-    public ResponseResult getCoursesList(Map<String,Object> params);
-
-    /**
-     * 模糊查询课程列表
-     * @param courseName
-     * @return
-     */
-    @RequestMapping(value = "/course/getCourseListByName")
-    public ResponseResult getCourseListByName(String courseName);
+    public ResponseResult getCourseList(Map<String,Object> params);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
@@ -99,13 +98,21 @@ public interface CourseService {
     @RequestMapping(value = "/userCourse/deleteUserCourseList")
     public ResponseResult deletePublishedCourse(Map<String,Object> params);
 
-    /**
-     * 增加课程
-     * @param course (long userId , Course course)
-     * @return
-     */
-    @RequestMapping("/course/addCourse")
-    public ResponseResult addCourse(Map<String,Object> course);
+//    /**
+//     * 增加课程
+//     * @param course (CourseDetail courseDetail)
+//     * @return
+//     */
+//    @RequestMapping("/course/addCourseWithOldCourseware")
+//    public ResponseResult addCourseWithOldCourseware(Map<String,Object> course);
+//
+//    /**
+//     * 增加课程
+//     * @param course (CourseDetail courseDetail)
+//     * @return
+//     */
+//    @RequestMapping("/course/addCourseWithNewCourseware")
+//    public ResponseResult addCourseWithNewCourseware(Map<String,Object> course);
 
     @RequestMapping
     public ResponseResult getPlanList(String planName);

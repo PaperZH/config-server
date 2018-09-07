@@ -39,10 +39,10 @@
         }
       },
       created: function () {
-        this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
-          console.log(res)
-          this.images = res.data.page.rows;
-        })
+        // this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
+        //   console.log(res)
+        //   this.images = res.data.page.rows;
+        // })
       },
       methods: {
         handleDetails (val) {

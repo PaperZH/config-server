@@ -1,4 +1,4 @@
-package com.ucar.qtc.admin.service.rpc;
+package com.ucar.qtc.admin.rpc;
 
 import com.ucar.qtc.admin.domain.CourseDO;
 import com.ucar.qtc.admin.vo.CourseDetailVO;

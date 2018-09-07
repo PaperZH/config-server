@@ -33,14 +33,16 @@
               <span style="display: block;float: left">{{item.courseName}}</span>
               <span style="float: right"><a v-on:click="handleRelease(item)" href="#">编辑</a></span>
             </div>
-            <div class="bottom clearfix;"  style=" margin-top:  26px;">
+            <div class="bottom clearfix" style="margin-top: 26px;">
               <span class="time">{{item.typeName}}</span>
-              <span class="time" style="margin-left: 1%">
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+              <span class="time">
+                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
+                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
               </span>
-              <div>
-              <time class="time">{{item.publishTime}}</time>
-              </div>
+            </div>
+            <div>
+              <span class="time">{{item.publishTime}}</span>
             </div>
           </div>
         </el-card>
@@ -51,7 +53,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="queryParams.currentPage"
         :page-sizes="[100, 200, 300, 400]"
         :page-size="5"
         layout="total, prev, pager, next, jumper"
@@ -66,9 +68,9 @@
     name: 'favorite',
     data () {
       return {
-        currentPage4: 1,
+        // currentPage4: 1,
         total: 0,
-        checked: false,
+        // checked: false,
         checkList: [],
         formInline: {
           name: '',

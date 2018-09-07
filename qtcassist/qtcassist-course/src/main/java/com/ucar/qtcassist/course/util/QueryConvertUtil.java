@@ -10,15 +10,31 @@ public class QueryConvertUtil {
 
     public static QueryDO convertToQueryDO(QueryVO queryVO) {
         QueryDO queryDO = new QueryDO();
-        queryDO.setUserId(queryVO.getUserId());
+        if(queryVO.getUserId() != null) {
+            queryDO.setUserId(queryVO.getUserId());
+        }
 //        queryDO.setCourseId();
-        queryDO.setCourseIds(queryVO.getCourseIds());
-        queryDO.setCourseName(queryVO.getCourseName());
-        queryDO.setOrderType(queryVO.getType());
-        queryDO.setStartDate(queryVO.getStartDate());
-        queryDO.setEndDate(queryVO.getEndDate());
-        queryDO.setStartIndex((queryVO.getCurrentPage() - 1) * queryVO.getPageSize());
-        queryDO.setPageSize(queryVO.getPageSize());
+        if(queryVO.getCourseIds() != null) {
+            queryDO.setCourseIds(queryVO.getCourseIds());
+        }
+        if(queryVO.getCourseName() != null) {
+            queryDO.setCourseName(queryVO.getCourseName());
+        }
+        if(queryVO.getType() != null) {
+            queryDO.setOrderType(queryVO.getType());
+        }
+        if(queryVO.getStartDate() != null) {
+            queryDO.setStartDate(queryVO.getStartDate());
+        }
+        if(queryVO.getEndDate() != null) {
+            queryDO.setEndDate(queryVO.getEndDate());
+        }
+        if(queryVO.getCurrentPage() != null && queryVO.getPageSize() != null) {
+            queryDO.setStartIndex((queryVO.getCurrentPage() - 1) * queryVO.getPageSize());
+        }
+        if(queryVO.getPageSize() != null) {
+            queryDO.setPageSize(queryVO.getPageSize());
+        }
         return queryDO;
     }
 }

@@ -3,6 +3,7 @@ package com.ucar.qtc.admin.controller;
 import com.ucar.qtc.admin.domain.FileDO;
 import com.ucar.qtc.admin.dto.FileDTO;
 import com.ucar.qtc.admin.dto.do2dto.FileConvert;
+import com.ucar.qtc.admin.rpc.FileUploadService;
 import com.ucar.qtc.admin.service.FileService;
 import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
@@ -26,17 +27,11 @@ import java.util.Map;
 @RequestMapping("/file")
 public class FileController {
 
-    @Value("${file.filePath}")
-    String filePath;
-
-    @Value("${file.pre}")
-    String filePre;
-
-    @Value("${file.server}")
-    String fileServer;
-
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private FileUploadService fileUploadServie;
 
     /**
      * 获取文件
@@ -56,25 +51,16 @@ public class FileController {
     }
 
     /**
-     * 上传文件
+     * 上传banner
      * @param file
      * @param key
      * @return
      */
-    @Log("上传文件")
+    @Log("上传banner文件")
     @PostMapping("upload")
     public ResponseResult upload(MultipartFile file, String key) {
-        try {
-            if (StringUtils.isBlank(key)) {
-                key = StringUtils.generateUUID();
-            }
-            final String resPath = FileUtils.saveFile(file,file.getBytes(),filePath,key);
-            final String url = fileServer + filePre + "/"+resPath;
-            return ResponseResult.ok().put("fileUrl", url);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseResult.error("文件上传失败");
-        }
+        ResponseResult result = fileUploadServie.upload(file, key);
+        return result;
     }
 
     /**

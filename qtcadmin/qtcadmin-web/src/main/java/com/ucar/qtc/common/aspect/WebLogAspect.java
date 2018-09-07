@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class WebLogAspect {
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution( * com.bootdo..controller.*.*(..))")//两个..代表所有子目录，最后括号里的两个..代表所有参数
+    @Pointcut("execution( * com.ucar..controller.*.*(..))")//两个..代表所有子目录，最后括号里的两个..代表所有参数
     public void logPointCut() {
     }
 

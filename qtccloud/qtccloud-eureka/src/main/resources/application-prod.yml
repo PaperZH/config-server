@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: 10.104.102.225
+    hostname: 10.104.108.177
 
   server:
       enable-self-preservation: false

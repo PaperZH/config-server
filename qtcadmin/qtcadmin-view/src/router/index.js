@@ -18,7 +18,11 @@ import DeptList from '../components/dept/list'
 
 import EurekaList from '../components/monitor/eureka/list'
 
+import DruidList from '../components/monitor/druid/list'
+
 import BannerList from '../components/recommand/bannerRecommand'
+
+import RecCourseList from '../components/recommand/courseRecommand'
 
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/components/Login'], resolve)
@@ -133,6 +137,18 @@ let router = new Router({
         {path: '/monitor/eureka',component: EurekaList, name: '服务监控', menuShow: true},
       ]
     },
+
+    {
+      path: '/',
+      component: Home,
+      name: 'SQL监控',
+      menuShow: true,
+      iconCls: 'iconfont icon-setting1',
+      children: [
+        {path: '/monitor/druid',component: DruidList, name: 'SQL监控', menuShow: true},
+      ]
+    },
+
     {
       path: '/',
       component: Home,
@@ -141,6 +157,7 @@ let router = new Router({
       iconCls: 'iconfont icon-setting1',
       children: [
         {path: '/admin/banner',component: BannerList, name: 'banner推荐', menuShow: true},
+        {path: '/admin/recCourse',component: RecCourseList, name: '课程推荐', menuShow: true}
       ]
     },
   ]

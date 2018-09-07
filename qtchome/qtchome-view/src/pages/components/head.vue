@@ -20,7 +20,7 @@
 
           <div class="topInput" style="position: relative">
             <div style="min-width: 50%;float: left;margin-left: 23px;height: 30px;margin-top: 5px">
-              <el-input  v-model="input" placeholder="请输入内容" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
+              <el-input  v-model="input" placeholder="搜索课程" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
             </div>
             <div style="float: right;color: #f7f6f6;">
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>

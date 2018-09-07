@@ -5,6 +5,7 @@ import com.ucar.qtcassist.api.model.DO.QueryDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface CourseMapper {
@@ -21,12 +22,25 @@ public interface CourseMapper {
     int updateByPrimaryKey(CourseDO record);
 
     /**
-     * 统计指定id集合的课程中课程名包含courseName字符串的课程的数量
-     * @param ids 要考虑的课程集合的id
-     * @param courseName 课程名称模糊匹配字符串
+     * 获取所有课程的id和courseName
+     * @param queryDO (String courseName, Integer startIndex, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer startIndex 分页查询的起始索引
+     * Integer pageSize 分布查询的每页的记录数目
      * @return
      */
-    Integer getTotalByIdListAndCourseName(@Param("ids") List<Long> ids, @Param("courseName") String courseName);
+    List<CourseDO> getCourseIdAndCourseName(QueryDO queryDO);
+
+    /**
+     * 统计指定id集合的课程中符合指定条件的课程的数量
+     * @param ids 要考虑的课程集合的id
+     * @param queryDO (courseName, startDate, endDate)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
+     * Date startDate 课程发布的起始时间（可以为null，表示不考虑课程的发布时间）
+     * Date endDate 课程发布的截止时间（可以为null，表示不考虑课程的发布时间）
+     * @return
+     */
+    Integer getTotalByIdListAndCondition(@Param("ids") List<Long> ids, @Param("condition") QueryDO queryDO);
 
     /**
      * 查询课程页课程列表
@@ -38,15 +52,6 @@ public interface CourseMapper {
      * @return
      */
     List<CourseDO> getList(QueryDO queryDO);
-
-    /**
-     * build: guodong.zhang
-     * 通过课程id查询课程
-     * @param ids
-     * @return所有课程
-     */
-
-    List<CourseDO> getListByIds(Long[] ids);
 
     /**
      * 根据多条件查询用户收藏课程和发布的课程列表

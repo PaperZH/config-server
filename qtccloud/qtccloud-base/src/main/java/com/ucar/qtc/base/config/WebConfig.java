@@ -1,4 +1,4 @@
-package com.ucar.qtc.admin.config;
+package com.ucar.qtc.base.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 /**
  * @author cong.zhou01
  * @name WebConfig
- * @description TODO
+ * @description 配置
  * @date 2018-08-16 11:29
  */
 @Configuration

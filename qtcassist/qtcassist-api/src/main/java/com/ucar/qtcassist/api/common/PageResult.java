@@ -15,6 +15,8 @@ import java.util.List;
 
 public class PageResult<T> extends Result<T> {
 
+    private static final long serialVersionUID = -4363454214447844618L;
+
     /**
      * 构建成功返回分页结果
      * @param list

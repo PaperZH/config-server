@@ -26,4 +26,6 @@ public interface CollectCourseMapper {
     int deleteListByIdList(@Param("userId") Long userId, @Param("courseIds") Long[] courseIds);
 
     CollectCourseDO getByUserIdAndCourseId(@Param("userId") Long userId, @Param("courseId") Long courseId);
+
+    Integer getTotalByCourseId(@Param("courseId") Long courseId);
 }
