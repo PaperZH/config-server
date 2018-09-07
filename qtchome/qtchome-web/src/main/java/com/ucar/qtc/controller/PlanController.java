@@ -218,6 +218,7 @@ public class PlanController {
         }
         else{
             System.out.println("执行更新操作");
+            System.out.println(planService.updatePublishedPlan(params));
         }
         return ResponseResult.ok();
     }

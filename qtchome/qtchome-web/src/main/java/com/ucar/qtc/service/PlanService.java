@@ -84,14 +84,15 @@ public interface PlanService {
      */
     @RequestMapping("/userPlan/add")
     public ResponseResult addPublishedPlan (Map<String,Object> params);
-//
-//    /**
-//     * 更新发布的计划
-//     * @param params
-//     * @return
-//     */
-//    public ResponseResult updatePublishedPlan(Map<String,Object> params);
-//
+
+    /**
+     * 更新发布的计划
+     * @param params
+     * @return
+     */
+    @RequestMapping("/userPlan/update")
+    public ResponseResult updatePublishedPlan(Map<String,Object> params);
+
     /**
      * 删除制定的计划
      * @param
