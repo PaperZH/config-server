@@ -16,6 +16,8 @@ public class CourseVO {
 
     private String publishTime;
 
+    private Integer orderNum;
+
     public Long getCourseId() {
         return courseId;
     }
@@ -78,5 +80,13 @@ public class CourseVO {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
     }
 }

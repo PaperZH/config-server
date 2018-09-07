@@ -22,37 +22,18 @@ import java.util.Map;
  */
 @FeignClient("qtcassist")
 @Service
-public interface ReccourceServiceRpc {
+public interface CourseServiceRpc {
 
     /**
      * build:guodong.zhang
      *
      * 功能描述：查看条件课程列表信息
-     * @param queryDO
+     * @param queryVO
      * @return
      */
-    @PostMapping("/course/getRecCourseList")
-    List<CourseDO> getCourseList(@RequestBody QueryDO queryDO);
+    @PostMapping("course/getCourseIdAndCourseName")
+    Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
 
-    /**
-     * build:guodong.zhang
-     *
-     * 功能描述：通过ID批量查询课程列表信息
-     * @param params
-     * @return
-     */
-    @PostMapping("/course/getCourseListByIds")
-    List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params);
-
-    /**
-     * build:guodong.zhang
-     *
-     * 功能描述：通过课程ID查看课程详细信息
-     * @param courseId
-     * @return
-     */
-    @GetMapping("/course/getRecCourseDetail/{courseId}")
-    CourseDO getCourseDetail(@PathVariable("courseId") Long courseId);
-
-
+    @PostMapping("course/getRecCourseList")
+    Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 }

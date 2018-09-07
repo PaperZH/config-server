@@ -29,7 +29,7 @@ public class RecommandCourseServiceImpl implements RecommandCourseService{
     }
 
     @Override
-    public List<Long> list(Map<String, Object> map) {
+    public List<RecommandCourseDO> list(Map<String, Object> map) {
         return recommandCourseDao.list(map);
     }
 

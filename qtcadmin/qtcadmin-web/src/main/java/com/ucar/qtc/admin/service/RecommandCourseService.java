@@ -13,7 +13,7 @@ public interface RecommandCourseService {
 
     RecommandCourseDO get(Long id);
 
-    List<Long> list(Map<String, Object> map);
+    List<RecommandCourseDO> list(Map<String, Object> map);
 
     int count(Map<String, Object> map);
 
