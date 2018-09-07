@@ -1,7 +1,10 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.ucar.qtc.utils.ResponseResult;
-import org.springframework.web.bind.annotation.*;
+import com.ucar.qtc.home.utils.ResponseResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,14 +18,12 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-
     /**
      * 获取用户信息
      * @return
      */
     @RequestMapping(value = "/get/{userId}")
-    public  ResponseResult getUser(@PathVariable long userId){
-        System.out.println(userId);
+    public ResponseResult getUser(@PathVariable long userId){
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("name" , "lee");
         hashMap.put("nickname","shuaige");
@@ -37,7 +38,6 @@ public class UserController {
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public ResponseResult updateUser(Map<String,Object> params){
-        System.out.println(params);
         return ResponseResult.ok();
     }
 
@@ -47,7 +47,6 @@ public class UserController {
      */
     @RequestMapping(value = "/menu/{userId}")
     public ResponseResult getMenu(@PathVariable long userId) {
-        System.out.println(userId);
         return ResponseResult.ok();
     }
 }

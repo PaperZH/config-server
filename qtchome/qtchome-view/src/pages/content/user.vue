@@ -5,20 +5,20 @@
       <el-tabs :tab-position="tabPosition" style="max-height: 700px;" @tab-click="handleSelect">
         
 
-        <!-- <el-tab-pane
+        <el-tab-pane
           v-for="(item,index) in menus"
           :key="item.name"
           :label="item.name"
           :name="item.path"
         >
-        </el-tab-pane> -->
-        <el-tab-pane label="基本设置" name="userInfo" ></el-tab-pane>
+        </el-tab-pane>
+        <!-- <el-tab-pane label="基本设置" name="userInfo" ></el-tab-pane>
         <el-tab-pane label="我的收藏" name="favorite"></el-tab-pane>
         <el-tab-pane label="我发布的课程" name="releasecourse"></el-tab-pane>
         <el-tab-pane label="发布课程" name="release"></el-tab-pane>
         <el-tab-pane label="制定计划" name="drawupplan"></el-tab-pane>
         <el-tab-pane label="发布计划" name="distributePlan"></el-tab-pane>
-        <el-tab-pane label="我的计划" name="myplan"></el-tab-pane>
+        <el-tab-pane label="我的计划" name="myplan"></el-tab-pane> -->
       </el-tabs>
     </div>
     </el-col>
@@ -30,30 +30,27 @@
 </template>
 
 <script>
-
-    export default {
-      data () {
-        return {
-          tabPosition: 'left',
-          menus:[]
-        }
-      },
-      mounted: function () {
-        this.menus = JSON.parse(localStorage.getItem("access-menus"));
-        console.log("menu"+this.menus)
-        if(this.menus!=null){
-          this.$router.push(this.menus[0].redirect);
-        }
-       
-      },
-      methods: {
-        handleSelect (data) {
-          if (data.name) {
-            this.$router.push(data.name)
-          }
-        }
+export default {
+  data () {
+    return {
+      tabPosition: 'left',
+      menus: []
+    }
+  },
+  mounted: function () {
+    this.menus = JSON.parse(localStorage.getItem('access-menus'))
+    if (this.menus != null) {
+      this.$router.push(this.menus[0].redirect)
+    }
+  },
+  methods: {
+    handleSelect (data) {
+      if (data.name) {
+        this.$router.push(data.name)
       }
     }
+  }
+}
 </script>
 
 <style >

@@ -1,6 +1,5 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
-import com.ucar.qtc.common.dto.config.FeignMultipartSupportConfig;
 import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
 import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
 import com.ucar.qtcassist.api.model.Result;
@@ -21,14 +20,14 @@ import java.util.List;
  */
 @FeignClient(name = "qtcassist",path = "/course")
 public interface HCoursewareService  {
+
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
-
-
     @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Result uploadCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result uploadCourseware(@RequestPart(value = "file") MultipartFile file) throws Exception;
 
     @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();

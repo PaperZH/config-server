@@ -1,11 +1,13 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+
 @FeignClient("qtcassist")
 public interface FileService{
+
     /**
      * 上传文件，返回url地址
      * @return

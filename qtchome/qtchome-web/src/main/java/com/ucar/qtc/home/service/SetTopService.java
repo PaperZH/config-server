@@ -1,12 +1,13 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("api-admin")
 public interface SetTopService {
+
     /**
      * 获得banner轮播图
      * @return
