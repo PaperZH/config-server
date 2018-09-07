@@ -1,14 +1,12 @@
 package com.ucar.qtc.admin.controller;
 
-import com.netflix.discovery.converters.Auto;
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.dto.UserDTO;
 import com.ucar.qtc.admin.dto.do2dto.UserConvert;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.BannerService;
-import com.ucar.qtc.admin.service.FileService;
-import com.ucar.qtc.admin.service.RecommandCourseService;
+import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
@@ -32,7 +30,7 @@ public class FrontPageController {
     private BannerService bannerService;
 
     @Autowired
-    private RecommandCourseService recommandCourseService;
+    private RecCourseService recCourseService;
 
     @Autowired
     private CourseServiceRpc courseService;
@@ -60,7 +58,7 @@ public class FrontPageController {
     @GetMapping("getRecCourse")
     public ResponseResult getRecourseList(){
 
-        List<RecommandCourseDO> recommandCourseList = recommandCourseService.list(null);
+        List<RecommandCourseDO> recommandCourseList = recCourseService.list(null);
         if(recommandCourseList.size() == 0){
             return ResponseResult.error(-1,"无推荐课程信息");
         }
@@ -68,7 +66,7 @@ public class FrontPageController {
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
         while(iterator.hasNext()){
-            listIds[index++] = ((RecommandCourseDO)iterator.next()).getId();
+            listIds[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
         }
         QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(listIds);

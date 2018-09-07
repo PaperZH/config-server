@@ -9,7 +9,7 @@ import java.util.Map;
  * 功能描述:
  *
  */
-public interface RecommandCourseService {
+public interface RecCourseService {
 
     RecommandCourseDO get(Long id);
 

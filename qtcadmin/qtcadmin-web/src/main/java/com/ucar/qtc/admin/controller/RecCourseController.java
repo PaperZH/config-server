@@ -1,7 +1,7 @@
 package com.ucar.qtc.admin.controller;
 
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
-import com.ucar.qtc.admin.service.RecommandCourseService;
+import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
@@ -25,7 +25,7 @@ public class RecCourseController {
     private CourseServiceRpc courseService;
 
     @Autowired
-    private RecommandCourseService recommandCourseService;
+    private RecCourseService recCourseService;
 
     @PostMapping("getCourse")
     public ResponseResult getCourseList(@RequestBody QueryVO queryVO){
@@ -50,7 +50,7 @@ public class RecCourseController {
             listCourseIds.add(((Integer) tempMap.get("id")).longValue());
         }
         resMap.put("ids",listCourseIds);
-        List<RecommandCourseDO> recommandCourseList = recommandCourseService.list(resMap);
+        List<RecommandCourseDO> recommandCourseList = recCourseService.list(resMap);
         if(recommandCourseList.size() == 0){
             return ResponseResult.error(-1,"无推荐课程信息");
         }
@@ -85,13 +85,13 @@ public class RecCourseController {
         if(courseDO.getCourseId() == null)
             return ResponseResult.error();
 
-        if(recommandCourseService.get(courseDO.getCourseId())!=null){
+        if(recCourseService.get(courseDO.getCourseId())!=null){
             courseDO.setDelFlag(1);
-            if(recommandCourseService.update(courseDO)>0)
+            if(recCourseService.update(courseDO)>0)
                 return ResponseResult.ok();
             else
                 return ResponseResult.error();
-        }else if(recommandCourseService.save(courseDO)>0){
+        }else if(recCourseService.save(courseDO)>0){
             return ResponseResult.ok();
         } else {
             return ResponseResult.error();
@@ -107,7 +107,7 @@ public class RecCourseController {
         for(int i = 0 ;i < list.size();i++ ){
             idForLong[i] = Long.valueOf(list.get(i));
         }
-        if(recommandCourseService.batchremove(idForLong)>0)
+        if(recCourseService.batchremove(idForLong)>0)
             return ResponseResult.ok();
         else
             return ResponseResult.error();
@@ -115,7 +115,7 @@ public class RecCourseController {
     @DeleteMapping
     public ResponseResult removeReccourse(@RequestParam(value="id",defaultValue="-1") Long  courseId){
 
-        if(recommandCourseService.remove(courseId)>0)
+        if(recCourseService.remove(courseId)>0)
             return ResponseResult.ok();
         else
             return ResponseResult.error();

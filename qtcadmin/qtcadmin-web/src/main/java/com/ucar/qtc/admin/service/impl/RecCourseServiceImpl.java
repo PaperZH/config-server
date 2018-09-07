@@ -2,7 +2,7 @@ package com.ucar.qtc.admin.service.impl;
 
 import com.ucar.qtc.admin.dao.RecommandCourseDao;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
-import com.ucar.qtc.admin.service.RecommandCourseService;
+import com.ucar.qtc.admin.service.RecCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.Map;
  * @date: $date$ $time$
  */
 @Service
-public class RecommandCourseServiceImpl implements RecommandCourseService{
+public class RecCourseServiceImpl implements RecCourseService {
 
     @Autowired
     private RecommandCourseDao recommandCourseDao;

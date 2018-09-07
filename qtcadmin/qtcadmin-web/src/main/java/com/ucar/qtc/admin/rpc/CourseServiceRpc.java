@@ -1,16 +1,10 @@
 package com.ucar.qtc.admin.rpc;
 
-import com.ucar.qtc.admin.domain.CourseDO;
-import com.ucar.qtc.admin.vo.CourseDetailVO;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
-import com.ucar.qtc.common.dto.QueryDO;
-import com.ucar.qtc.common.utils.Page;
 import com.ucar.qtc.common.utils.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
