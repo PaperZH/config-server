@@ -5,7 +5,6 @@ import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.course.service.EvaluateCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

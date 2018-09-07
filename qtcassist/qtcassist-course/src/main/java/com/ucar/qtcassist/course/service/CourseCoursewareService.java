@@ -1,7 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
-import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 
 import java.util.List;
 

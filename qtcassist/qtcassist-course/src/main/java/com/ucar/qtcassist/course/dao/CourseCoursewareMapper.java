@@ -1,7 +1,6 @@
 package com.ucar.qtcassist.course.dao;
 
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
-import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

@@ -3,15 +3,15 @@
     <el-col :span="24" class="warp-breadcrum">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }"><b>首页</b></el-breadcrumb-item>
-        <el-breadcrumb-item>文件管理</el-breadcrumb-item>
+        <el-breadcrumb-item>推荐课程管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
     <el-col :span="24" class="wrap-main" v-loading="loading" element-loading-text="拼命加载中">
        <!--工具条-->
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-        <el-form :inline="true" :model="filters">
+        <el-form :inline="true" :model="reccourse">
           <el-form-item>
-            <el-input v-model="filters.title" placeholder="标题" @keyup.enter.native="handleSearch"></el-input>
+            <el-input v-model="reccourse.courseName" placeholder="课程名" @keyup.enter.native="handleSearch"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="handleSearch">查询</el-button>
@@ -23,25 +23,22 @@
       </el-col>
 
       <!-- 列表 -->
-      <el-table :data="fileRows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column label="预览" align="center">
+      <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
+        <el-table-column label="预览" align="center" width="200">
           <template slot-scope="scope">
-            <img :src="scope.row.url" height="40">
+            <img :src="scope.row.courseCover" height="80">
           </template>
         </el-table-column>
-        <el-table-column label="类型" width="80" prop="type" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.type === 1">图片</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="标题" prop="title" width="240" align="center"></el-table-column>
-        <el-table-column label="内容" prop="content" width="420" align="center"></el-table-column>
-        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>
-        <!-- <el-table-column label="修改时间" prop="updateTime" align="center"></el-table-column> -->
-        <el-table-column label="操作" align="center">
+        <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
+        <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
+         <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
+        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>       
+        <el-table-column label="推荐信息" prop="recCourseInfo" width="220" align="center"></el-table-column>
+        <el-table-column label="课程介绍" prop="courseDescription" width="220" align="center"></el-table-column>  
+       <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeFile(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.courseId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -56,41 +53,36 @@
               :page-sizes="[10, 20, 30]">
         </el-pagination>
       </el-col>
-<!-- 
-      <el-col :span="24" class="version" style="margin-top:20px">
-        <div style="margin-left: auto; margin-right: auto;text-align: center">
-          <span>版权所有版权所有版权所有版权所有版权所有版权所有</span>
-        </div>
-        <div style="margin-left: auto; margin-right: auto;text-align: center">
-          <span>版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有</span>
-        </div>
-      </el-col> -->
-      
-
       <!--新增界面-->
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-          <el-form-item label="标题" prop="title">
-            <el-input v-model="addForm.title" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="内容" prop="content">
-            <el-input type="textarea" v-model="addForm.content" :rows="2"></el-input>
+          <el-form-item label="课程名" prop="title">
+                <el-autocomplete
+                  popper-class="my-autocomplete"
+                  v-model="courseName"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入内容"
+                  @select="handleSelect">
+                <i
+                  class="el-icon-edit el-input__icon"
+                  slot="suffix"
+                  >
+                </i>
+                <template slot-scope="{ item }">
+                  <div class="name">{{ item.courseName }}</div>
+                </template></el-autocomplete>         
+             
           </el-form-item>
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="上传图片" prop="url">
-            <el-input v-model="addForm.url" auto-complete="off" placeholder="上传模板只能是 jpg/jpeg/png/gif 格式，且不超过5MB"></el-input>
-            <div slot="tip" class="el-upload__tip"></div>
-            <el-upload
-             class="avatar-uploader"
-              action=""
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="addImageUrl" :src="addImageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+          <el-form-item label="推荐信息" prop="description" >
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="addForm.description">
+              </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -101,28 +93,17 @@
 
       <!-- 编辑界面 -->
       <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-        <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-          <el-form-item label="标题" prop="title">
-            <el-input v-model="editForm.title" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="内容" prop="content">
-            <el-input type="textarea" v-model="editForm.content" :rows="2"></el-input>
-          </el-form-item>
+        <el-form :model="editForm" label-width="80px" ref="editForm">
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="上传图片" prop="url">
-            <el-input v-model="editForm.url" auto-complete="off"></el-input>
-            <el-upload
-             class="avatar-uploader"
-              action=""
-              :show-file-list="false"
-              :on-success="editHandleAvatarSuccess"
-              :before-upload="editBeforeAvatarUpload">
-              <div slot="tip" class="el-upload__tip" >上传模板只能是 jpg/jpeg/png/gif 格式，且不超过5MB</div>
-              <img v-if="editForm.url" :src="editForm.url" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+          <el-form-item label="推荐信息" prop="orderNum">
+             <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="editForm.description">
+              </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -136,76 +117,113 @@
 </template>
 
 <script>
-  import API from '../../api/api_file'
+  import API from '../../api/api_reccourse'
 
   export default {
     name: "List",
     data() {
       return {
-        filters: {
-          title: ''
+        reccourse: {
+          courseName: ''
         },
+        sels:[],
+        courseRows:[],
+        // coursedata:[
+        //   {
+        //     "listCourse":{
+        ids:[],
+        
+        courseName:'',
         total: 0,
         page: 1,
         limit: 10,
         loading: false,
-        fileRows: [],
-        addImageUrl: '',
-        //新增相关数据
         addFormVisible: false,//新增界面是否显示
         addLoading: false,
         addFormRules: {
-          title: [
-            {required: true, message: '请输入标题', trigger: 'blur'}
+          courseName: [
+            {required: true, message: '请输入课程', trigger: 'blur'}
           ]
         },
+        //新增推荐课程 数据
         addForm: {
-          title: '',
-          content: '',
+          courseId: '',
           orderNum: '',
-          url: ''
+          description: ''
         },
+        //编辑推荐课程 数据
         editFormVisible: false,
-        editFormRules: {
-          title: [
-            {required: true, message: '请输入标题', trigger: 'blur'}
-          ]
-        },
         editForm: {
-          title: '',
-          content: '',
-          orderNum: ''
+           courseId: '',
+           orderNum: '',
+           description: ''
         },
       }
     },
     methods: {
+      //关于输入课程名称的查询方法（Element自带的方法体系）
+       querySearch(queryString, cb) {
+        this.searchCourse(queryString);
+        // 调用 callback 返回建议列表的数据
+        var data = this.ids;
+        cb(data);
+      },
+      handleSelect(item) { 
+        const data = item;
+        this.addForm.courseId = data.id;
+        this.courseName = data.courseName;
+      },
       handleSizeChange(val) {
         this.limit = val;
-        this.search();
+        this.searchRecCourse();
       },
       handleCurrentChange(val) {
         this.page = val;
-        this.search();
+        this.searchRecCourse();
       },
       handleSearch() {
         this.total = 0;
         this.page = 1;
-        this.search();
+        this.searchRecCourse();
       },
-      search: function () {
+      searchCourse: function (query) {
+        let that = this;
+        let params = {
+          courseName: query
+        }
+        that.loading = true;
+        API.getCourse(params).then(
+            function (result) {
+              that.coursedata = result;
+              that.loading = false;
+              that.ids = result.listCourse.ids;
+            }
+          )
+          .catch(function (error) {
+            that.loading = false;
+            console.log(error);
+            that.$message.error({
+              message: "请求出现异常",
+              duration: 2000
+            });
+          });
+      },
+       searchRecCourse: function () {
         let that = this;
         let params = {
           page: that.page,
           limit: that.limit,
-          title: that.filters.title
+          courseName: that.reccourse.courseName
         }
         that.loading = true;
-        API.files(params).then(
+        
+        API.getRecCourse(params).then(
             function (result) {
               that.loading = false;
-              if (result && result.page.rows) {
-                that.total = result.page.total;
-                that.fileRows = result.page.rows;
+              if (result&& result.code == 0) {
+                
+                that.courseRows = result.list;
+                that.loading=false;
               }
             },
             function (err) {
@@ -219,7 +237,6 @@
           )
           .catch(function (error) {
             that.loading = false;
-            console.log(error);
             that.$message.error({
               showClose: true,
               message: "请求出现异常",
@@ -228,14 +245,16 @@
           });
       },
 
+
       showAddDialog: function () {
         this.addFormVisible = true
-        this.addForm = {}
       },
       showEditDialog: function (index, row) {
         let that = this
         this.editFormVisible = true
-        this.editForm = Object.assign({}, row)
+        this.editForm.courseId = row.courseId
+        this.editForm.description = row.recCourseInfo
+        this.editForm.orderNum = row.orderNum
       },
 
       //新增
@@ -249,9 +268,9 @@
               that.loading = false;
               if (result && parseInt(result.code) === 0) {
                 that.$message.success({showClose: true, message: '新增成功', duration: 2000});
-                that.$refs['addForm'].resetFields();
+                // that.$refs['addForm'].resetFields();
                 that.addFormVisible = false;
-                that.search();
+                that.searchRecCourse();
               } else {
                 that.$message.error({showClose: true, message: '新增失败', duration: 2000});
               }
@@ -260,14 +279,28 @@
               that.$message.error({showClose: true, message: err.toString(), duration: 2000});
             }).catch(function (error) {
               that.loading = false;
-              console.log(error);
               that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
             });
 
           }
         });
       },
-
+      //删除
+       removeRecCourse: function (id) {
+        let that = this
+        return API.remove({id: id}).then(res => {
+          
+          if (res.code === 0) {
+            that.searchRecCourse();
+            that.$message.success(res.msg);
+            
+          }else{
+             that.$message.error(res.msg);
+          }
+        })
+      },
+      
+      //编辑
       editSubmit: function () {
         let that = this;
         this.$refs.editForm.validate(valid => {
@@ -283,117 +316,69 @@
                 });
                 that.$refs["editForm"].resetFields();
                 that.editFormVisible = false;
-                that.search();
+                that.searchRecCourse();
               } else {
                 that.$message.error({
                   showClose: true,
                   message: "修改失败",
                   duration: 2000
                 });
+                that.editFormVisible = false;
+                that.loading = false;
               }
             });
           }
         });
       },
-
-      removeFile: function (id) {
-        let that = this
-        return API.remove({id: id}).then(res => {
-          if (res.code === 0) {
-            that.$message.success(res.msg)
-            that.search(this.page);
-          }
+       handleBatchRemove: function (rows) {
+        let idsIds = [];
+        rows.forEach(element =>{
+          idsIds.push(element.id)
         })
-      },
-      beforeAvatarUpload(file) {
-        let that = this
-        const extension = file.name.split('.')[1] === 'jpg'
-        const extension2 = file.name.split('.')[1] === 'jpeg'
-        const extension3 = file.name.split('.')[1] === 'png'
-        const extension4 = file.name.split('.')[1] === 'gif'
-
-        const isLt2M = file.size / 1024 / 1024 < 5;
-
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-          return false
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-          return false;
-        }
-
-        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
-        fd.append('file', file);
-        API.uploadFile(fd).then(function (result) {
-          if (result && parseInt(result.code) === 0) {
-            that.addImageUrl = result.fileUrl
-            that.addForm.url = that.addImageUrl
-            that.$message.success({
-              showClose: true,
-              message: "上传成功",
-              duration: 2000
-            });
-          } else {
-            that.$message.error({
-              showClose: true,
-              message: "上传失败",
-              duration: 2000
-            });
-          }
-        });
-        return false;
-      },
-
-      handleAvatarSuccess(res, file) {
-          console.log(res);
-      },
-
-      editBeforeAvatarUpload(file) {
-        let that = this
-        const extension = file.name.split('.')[1] === 'jpg'
-        const extension2 = file.name.split('.')[1] === 'jpeg'
-        const extension3 = file.name.split('.')[1] === 'png'
-        const extension4 = file.name.split('.')[1] === 'gif'
-        const isLt2M = file.size / 1024 / 1024 < 5;
-
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          console.log('上传模板只能是 jpg/jpeg/png/gif 格式!')
-          return false
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-          return false;
-        }
-
-        let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
-        fd.append('file', file);
-        API.uploadFile(fd).then(function (result) {
-          if (result && parseInt(result.code) === 0) {
-            that.editForm.url = result.fileUrl
-            that.$message.success({
-              showClose: true,
-              message: "上传成功",
-              duration: 2000
-            });
-          } else {
-            that.$message.error({
-              showClose: true,
-              message: "上传失败",
-              duration: 2000
-            });
-          }
-        });
-        return false;
-      },
-
-      editHandleAvatarSuccess(res, file) {
-          console.log(res);
+        let that = this;
+        let params = Object.assign({}, {id:idsIds});
+        this.$confirm("确认删除选中记录吗?", "提示", {type: "warning"})
+          .then(() => {
+            that.loading = true;
+            API.batchRemove(params)
+              .then(
+                function (result) {
+                  that.loading = false;
+                  if (result && parseInt(result.code) === 0) {
+                    that.$message.success({
+                      showClose: true,
+                      message: "批量删除成功",
+                      duration: 1500
+                    });
+                    that.searchRecCourse();
+                  }
+                },
+                function (err) {
+                  that.loading = false;
+                  that.$message.error({
+                    showClose: true,
+                    message: err.toString(),
+                    duration: 2000
+                  });
+                }
+              )
+              .catch(function (error) {
+                that.loading = false;
+                that.$message.error({
+                  showClose: true,
+                  message: "请求出现异常",
+                  duration: 2000
+                });
+              });
+          })
+          .catch(() => {
+          });
       }
+      
     },
 
     mounted() {
-      this.search(1);
+      this.searchRecCourse();
     }
   }
 </script>
@@ -427,9 +412,5 @@
       margin-top: 15px;
       margin-bottom: 15px;
       float: right;
-      /* width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center */
     }
   </style>

@@ -1,50 +1,57 @@
 <template>
   <el-card class="box-card" shadow="never">
-    <el-form ref="form" :model="form" label-width="100px"  >
+    <el-form ref="courseDetailForm" :model="courseDetailForm" label-width="100px"  >
       <el-row>
         <el-col >
           <el-form-item label="课程名称:">
-            <el-input v-model="form.course.courseName" placeholder="请输入课程名称" ></el-input>
+            <el-input v-model="courseDetailForm.course.courseName" placeholder="请输入课程名称" ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :span="12" label="课程分类:">
-            <el-select v-model="form.course.typeId" placeholder="请选择分类" >
-              <div  v-for="(o, index) in courseType" :key="o.typeId">
-              <el-option :label="o.typeName" :value="o.typeId"></el-option>
-                </div>
+        <el-col :span="8">
+          <el-form-item :span="8" label="课程分类:">
+            <el-select v-model="courseDetailForm.course.courseType" value-key="id" placeholder="请选择分类" >
+              <div  v-for="(item, index) in courseTypeList">
+                <el-option  :key="item.id" :label="item.typeName" :value="item"></el-option>
+              </div>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :span="12" label="作者:">
-            <el-input v-model="form.teacher.username" placeholder="" readonly></el-input>
+        <el-col :span="8">
+          <el-form-item :span="8" label="总分:">
+            <el-input v-model="courseDetailForm.course.courseScore" placeholder=""></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item :span="8" label="作者:">
+            <el-input v-model="courseDetailForm.teacher.username" placeholder="" readonly></el-input>
           </el-form-item>
         </el-col>
         <el-col >
           <el-form-item label="上传课程封面:">
             <el-upload
               class="avatar-uploader1"
-              :action="action()"
+              action=""
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
               :before-upload="beforeAvatarUpload">
-              <img v-if="form.course.courseCover" :src="form.course.courseCover" class="avatar1">
+              <img v-if="courseDetailForm.course.courseCover" :src="courseDetailForm.course.courseCover" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon1"></i>
             </el-upload>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="课程有效期:">
-            <el-input :span="8" v-model="form.course.validDays" placeholder="输入天数" >
-              <template slot="append">天</template>
-            </el-input>
+            <el-date-picker
+              v-model="courseDetailForm.course.invalidDate"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="课程介绍:">
-        <el-input v-model="form.course.courseDescription" placeholder="请输入课程描述" type="textarea"
+        <el-input v-model="courseDetailForm.course.courseDescription" placeholder="请输入课程描述" type="textarea"
                   :rows="5"></el-input>
       </el-form-item>
       <el-form-item style="text-align: right;">
@@ -59,15 +66,26 @@
     data () {
       return {
         activeName: 'first',
-        courseType: {},
-        form: {
-          course: {},
-          // courseName: '',
-          // courseCover: '',
-          // validDays: '',
-          // courseDescription: '默认描述',
-          coursewares: {},
-          teacher: {username: '张三丰'}
+        courseTypeList: [{
+          id: '',
+          typeName: ''
+        }],
+        courseDetailForm: {
+          course: {
+            courseId: null,
+            typeName: null,
+            courseType: null,
+            courseName: null,
+            courseCover: null,
+            courseDescription: '暂无描述',
+            courseScore: '100',
+            invalidDate: null
+          },
+          coursewares: [],
+          teacher: {
+            userId: 100,
+            username: '张三'
+          }
           // teacher: {}
         },
         imageUrl: ''
@@ -77,14 +95,15 @@
     mounted: function () {
       this.$nextTick(function () {
         this.$store.dispatch('Get', {'url': '/api-home/course/getCourseTypeList'}).then(res => {
-          this.courseType = res.data.re
+          this.courseTypeList = res.data.re
         })
+
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
             // this.form = res.data.re
-            this.form.course = res.data.re.course
-            this.coursewares = res.data.re.coursewares
+            this.courseDetailForm.course = res.data.re.course
+            this.courseDetailForm.coursewares = res.data.re.coursewares
           })
         } else {
           console.log('创建新的course')
@@ -96,20 +115,25 @@
         console.log(tab, event)
       },
       onSubmit () {
-        console.log(this.form)
-        this.$router.push({name: 'addCourse', params: this.form})
+        // 如果courseId存在，则是修改课程信息，否则是新建课程信息
+        let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
+        if (this.courseDetailForm.course.courseId != null) {
+          this.$store.dispatch('Post', {'url': '/api-home/course/updateCourse', 'data': data}).then(res => {
+            console.log(res.data)
+            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
+          })
+        } else {
+          this.$store.dispatch('Post', {'url': '/api-home/course/addCourse', 'data': data}).then(res => {
+            console.log(res.data)
+            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
+          })
+        }
+        // this.$router.push({name: 'addCourse', params: this.courseDetailForm})
       },
       handleAvatarSuccess (res, file) {
-        console.log(file)
-        // URL.createObjectURL(file.raw)
-        this.form.courseCover = res.fileUrl
-        console.log(this.form.courseCover)
-      },
-      action () {
-        return 'http://127.0.0.1:8006/file/upload'
+        console.log(res)
       },
       beforeAvatarUpload (file) {
-        console.log(file)
         const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -119,7 +143,11 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        let fd = new FormData()
+        fd.append('file', file)
+        this.$store.dispatch('Post', {'url': '/api-home/course/file/upload', 'data': fd}).then(res => {
+          this.courseDetailForm.course.courseCover = res.data.fileUrl
+        })
       },
       handleRemove () {
 

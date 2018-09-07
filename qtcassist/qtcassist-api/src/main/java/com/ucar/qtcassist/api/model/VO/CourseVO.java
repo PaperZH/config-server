@@ -1,9 +1,13 @@
 package com.ucar.qtcassist.api.model.VO;
 
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+
 public class CourseVO {
     private Long courseId;
 
     private String typeName;
+
+    private CourseTypeDO courseType;
 
     private String courseName;
 
@@ -11,7 +15,13 @@ public class CourseVO {
     //详情才有
     private String courseDescription;
 
+    private Float courseScore;
+
     private Integer praiseNum;
+
+    private Integer readNum;
+
+    private Integer collectNum;
     //详情才有
     private String invalidDate;
 
@@ -31,6 +41,14 @@ public class CourseVO {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public CourseTypeDO getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(CourseTypeDO courseType) {
+        this.courseType = courseType;
     }
 
     public String getCourseName() {
@@ -57,12 +75,36 @@ public class CourseVO {
         this.courseDescription = courseDescription;
     }
 
+    public Float getCourseScore() {
+        return courseScore;
+    }
+
+    public void setCourseScore(Float courseScore) {
+        this.courseScore = courseScore;
+    }
+
     public Integer getPraiseNum() {
         return praiseNum;
     }
 
     public void setPraiseNum(Integer praiseNum) {
         this.praiseNum = praiseNum;
+    }
+
+    public Integer getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(Integer readNum) {
+        this.readNum = readNum;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 
     public String getInvalidDate() {

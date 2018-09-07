@@ -1,10 +1,8 @@
 package com.ucar.qtcassist.api.model.VO;
 
-import com.ucar.qtcassist.api.model.DO.CourseDO;
-
 public class CourseUserVO {
     private Long userId;
-    private CourseDO course;
+    private CourseVO course;
 
     public Long getUserId() {
         return userId;
@@ -14,11 +12,11 @@ public class CourseUserVO {
         this.userId = userId;
     }
 
-    public CourseDO getCourse() {
+    public CourseVO getCourse() {
         return course;
     }
 
-    public void setCourse(CourseDO course) {
+    public void setCourse(CourseVO course) {
         this.course = course;
     }
 }

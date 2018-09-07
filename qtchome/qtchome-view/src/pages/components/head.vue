@@ -20,15 +20,15 @@
 
           <div class="topInput" style="position: relative">
             <div style="min-width: 50%;float: left;margin-left: 23px;height: 30px;margin-top: 5px">
-              <el-input  v-model="input" placeholder="请输入内容" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
+              <el-input  v-model="input" placeholder="搜索课程" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
             </div>
             <div style="float: right;color: #f7f6f6;">
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">
-              <img style="width: 40px;height: 40px ;border-radius:20px" src="static/timg.jpg"/>&nbsp&nbsp
+              <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
               <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link" style="color: #faf7f7;">
-                 {{userInfo.nic}}<i class="el-icon-arrow-down el-icon--right"></i>
+                 {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="user">个人中心</el-dropdown-item>
@@ -42,7 +42,7 @@
       </div>
       </el-col>
     </el-row>
-    <el-dialog title="用户登录" :visible.sync="dialogFormVisible" style="width: 51%;">
+    <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="500">
       <el-form :model="form">
         <el-form-item label="用户名" :label-width="formLabelWidth">
           <el-input v-model="form.username" auto-complete="off"></el-input>
@@ -60,85 +60,84 @@
 
 </template>
 <script>
-  export default {
-    props: {
-      activeIndex: {
-        type: String,
-        default: ''
-      },
-      input: {
-        type: String,
-        default: ''
-      },
-      isMenu: {
-        type: Boolean,
-        default: true
-      },
-      isInput: {
-        type: Boolean,
-        default: true
-      }
+export default {
+  props: {
+    activeIndex: {
+      type: String,
+      default: ''
     },
-    data () {
-      return {
-        userInfo: {
-          nickName: '',
-          avatar: ''
-        },
-        data: [],
-        router: [],
-        dialogFormVisible: false,
-        formLabelWidth: '120px',
-        isShow: true,
-        isUser: false,
-        form: {
-          username: '',
-          password: ''
-        }
-      }
+    input: {
+      type: String,
+      default: ''
     },
-    methods: {
-      handleSelect (key, keyPath) {
-        this.$emit('getActiveIndex', key)
+    isMenu: {
+      type: Boolean,
+      default: true
+    },
+    isInput: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      userInfo: {
+        nickName: '',
+        avatar: ''
       },
-      login: function () {
-        let that = this
-        that.dialogFormVisible = false
-        that.isShow = false
-        that.isUser = true
-        // this.$store.dispatch('Login', this.form).then(result => {
-        //   that.res = result;
-
-        //  that.router = that.res.data.router;
-        //  console.log(that.router)
-
-        //   localStorage.setItem("access-menus", JSON.stringify(that.router));
-
-        //   that.dialogFormVisible = false
-        //   that.isShow = false
-        //   that.isUser = true
-        //   that.userInfo.nickName=data.user.nickname
-        //   that.userInfo.avatar=data.user.avatar
-
-        // }).catch(() => {
-        //   this.loading = false
-        // })
-      },
-      handleCommand (val) {
-        if (val === 'quit') {
-          this.$confirm('确认退出？').then(_ => {
-            this.isShow = true
-            this.isUser = false
-            this.$store.dispatch('Logout', {'userId': 100}).then(res => {
-              this.$router.push('home')
-            })
-          })
+      data: [],
+      router: [],
+      dialogFormVisible: false,
+      formLabelWidth: '120px',
+      isShow: true,
+      isUser: false,
+      form: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    handleSelect (key, keyPath) {
+      this.$emit('getActiveIndex', key)
+    },
+    login: function () {
+      let that = this
+      this.$store.dispatch('Login', this.form).then(result => {
+        if (result && result.data.code === 0) {
+          that.$message.success('登录成功')
+          that.res = result
+          that.router = that.res.data.router
+          localStorage.setItem('access-menus', JSON.stringify(that.router))
+          that.dialogFormVisible = false
+          that.isShow = false
+          that.isUser = true
+          that.userInfo.nickName = that.res.data.user.nickname
+          that.userInfo.avatar = that.res.data.user.avatar
         } else {
-          this.$router.push(val)
+          that.$message.error('用户名或密码错误')
+          that.dialogFormVisible = false
         }
+      }).catch(() => {
+        that.loading = false
+        that.dialogFormVisible = false
+      })
+    },
+    handleCommand (val) {
+      if (val === 'quit') {
+        this.$confirm('确认退出？').then(_ => {
+          this.isShow = true
+          this.isUser = false
+          this.$store.dispatch('Logout', {'userId': 100}).then(res => {
+            this.$router.push('home')
+          })
+        })
+      } else {
+        this.$router.push(val)
       }
     }
   }
+}
 </script>
 <style>
  .topInput{

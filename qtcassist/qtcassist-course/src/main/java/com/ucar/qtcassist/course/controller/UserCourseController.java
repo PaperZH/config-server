@@ -13,12 +13,15 @@ import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.CourseTypeService;
 import com.ucar.qtcassist.course.service.UserCourseService;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
+import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +57,8 @@ public class UserCourseController implements UserCourseApi {
 
         courseIdList = userCourseService.selectCourseIdList(queryDO.getUserId());
         if(courseIdList != null && courseIdList.size() > 0) {
-            total = courseService.getTotalByIdListAndCourseName(courseIdList, queryDO.getCourseName());
+            //根据courseIdList, courseName, startDate, endDate等条件统计记录的总数
+            total = courseService.getTotalByIdListAndCondition(courseIdList, queryDO);
             if(total == 0) {
                 courseVOList = null;
             } else {
@@ -65,14 +69,13 @@ public class UserCourseController implements UserCourseApi {
                 courseVOList = new ArrayList<CourseVO>();
                 if(courseDOList != null) {
                     for (CourseDO courseDO : courseDOList) {
-                        CourseVO courseVO = new CourseVO();
-                        courseVO.setCourseId(courseDO.getId());
                         CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                        CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
                         courseVO.setTypeName(courseType.getTypeName());
-                        courseVO.setCourseName(courseDO.getCourseName());
-                        courseVO.setCourseCover(courseDO.getCourseCover());
-                        courseVO.setPraiseNum(courseDO.getPraiseNum());
-                        courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+                        //查询收藏数
+                        courseVO.setCollectNum(10);
+
                         courseVOList.add(courseVO);
                     }
                 }

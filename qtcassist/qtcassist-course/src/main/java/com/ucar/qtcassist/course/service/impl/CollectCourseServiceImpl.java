@@ -5,8 +5,6 @@ import com.ucar.qtcassist.api.model.DO.CollectCourseDO;
 import com.ucar.qtcassist.course.service.CollectCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -58,6 +56,11 @@ public class CollectCourseServiceImpl implements CollectCourseService {
     @Override
     public CollectCourseDO getByUserIdAndCourseId(Long userId, Long courseId) {
         return collectCourseMapper.getByUserIdAndCourseId(userId, courseId);
+    }
+
+    @Override
+    public Integer getTotalByCourseId(Long courseId) {
+        return collectCourseMapper.getTotalByCourseId(courseId);
     }
 
 }

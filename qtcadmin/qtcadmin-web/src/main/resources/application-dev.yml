@@ -1,30 +1,48 @@
+server:
+  port: 8004
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://127.0.0.1:8001/eureka/
+      defaultZone: http://${spring.cloud.client.ipAddress}:8001/eureka/
     healthcheck:
       enabled: true
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 security:
   basic:
     enabled: false
 
-server:
-  port: 8004
-
 spring:
   application:
     name: api-admin
-  datasource:
-    url: jdbc:mysql://10.104.20.123:3306/qtccloud?useUnicode=true&characterEncoding=utf8
-    username: developer
-    password: developer1015
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
+
+jdbc:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.104.20.123:3306/qtccloud?useUnicode=true&characterEncoding=utf8
+    username: developer
+    password: developer1015
+    initialSize: 5
+    minIdle: 5
+    maxActive: 100
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 100
+    filters: stat,wall,slf4j
+
 mybatis:
   mapper-locations: mapper/**Mapper.xml
   configuration:
@@ -35,8 +53,3 @@ logging:
 ribbon:
   eureka:
     enable: true
-
-file:
-  filePath: e:/file/uploaded_files/
-  pre: /files
-  server: http://127.0.0.1:8004

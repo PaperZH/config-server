@@ -7,7 +7,7 @@
 
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
         <el-form-item label="课程名">
-          <el-input  v-model="formInline.name" placeholder="输入计划名称" size="small"></el-input>
+          <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small"></el-input>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker size="small"
@@ -37,14 +37,28 @@
               <span style="display: block;float: left">{{item.courseName}}</span>
               <span style="float: right"><a v-on:click="handleDetail(item.courseId)" href="#">详情</a></span>
             </div>
-            <div class="bottom clearfix" style="margin-top: 6px;">
-              <span class="time">{{item.typeName}}</span>
-              <span class="time" style="margin-left: 1%" >
-                 <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
-              </span>
-              <div>
-                <time class="time">{{item.publishTime}}</time>
-              </div>
+            <div class="bottom clearfix" style="margin-top: 26px;">
+              <el-row :gutter="24">
+                <el-col :span="8">
+                  <span class="time">{{item.typeName}}</span>
+                </el-col>
+                <el-col :span="16">
+                  <span class="time">
+                    <el-col :span="8">
+                      <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                    </el-col>
+                    <el-col :span="8">
+                      <i class="el-icon-star-on" >{{item.collectNum}}</i>
+                    </el-col>
+                    <el-col :span="8">
+                      <i class="el-icon-edit" >{{item.readNum}}</i>
+                    </el-col>
+                  </span>
+                </el-col>
+              </el-row>
+            </div>
+            <div>
+              <span class="time">发布日期: {{item.publishTime}}</span>
             </div>
           </div>
         </el-card>
@@ -55,7 +69,7 @@
         <el-pagination
           :size-change="handleSizeChange"
           :current-change="handleCurrentChange"
-          :current-page="currentPage"
+          :current-page="queryParams.currentPage"
           :page-sizes="[100, 200, 300, 400]"
           :page-size="5"
           layout="total, prev, pager, next, jumper"
@@ -70,9 +84,7 @@
       name: 'favorite',
       data () {
         return {
-          currentPage: 1,
           total: 0,
-          checked: false,
           checkList: [],
           formInline: {
             name: '',
@@ -116,7 +128,7 @@
           if (this.formInline.name.trim().length === 0) {
             this.queryParams.courseName = null
           } else {
-            this.queryParams.courseName = this.formInline.name
+            this.queryParams.courseName = this.formInline.name.trim()
           }
           if (this.formInline.date == null) {
             this.queryParams.startDate = null

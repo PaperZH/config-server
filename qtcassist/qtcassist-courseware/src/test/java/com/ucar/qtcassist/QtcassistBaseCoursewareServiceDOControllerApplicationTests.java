@@ -1,11 +1,9 @@
 package com.ucar.qtcassist;
 
+import com.taobao.metamorphosis.client.producer.SendResult;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
-import com.ucar.qtcassist.api.model.Result;
-import com.ucar.qtcassist.courseware.controller.CoursewareController;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
-import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -17,6 +15,8 @@ import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.udfs.client.UDFSClient;
 import com.zuche.framework.udfs.client.upload.UDFSUploadResultVO;
 import com.zuche.framework.udfs.client.upload.UDFSUploadVO;
+import org.apache.commons.collections.CollectionUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +28,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Date;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -49,9 +50,6 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     BaseCoursewareMapper baseCoursewareMapper;
 
 
-    @Test
-    public void contextLoads() {
-    }
 
     @Test
     public void upload() throws Exception {
@@ -61,7 +59,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         inputStream = new FileInputStream(temfile);
         url = remoteFileService.uploadFile(inputStream, "test");
         System.out.println("++++++++++++++++" + url);
-
+        Assert.assertNotNull(url);
 
     }
 
@@ -79,19 +77,9 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
         UDFSUploadResultVO resultVO = UDFSClient.upload(vo);
         System.out.println(resultVO.getOriginalName());
+        Assert.assertNotNull(resultVO);
     }
 
-    @Test
-    public void addCoursewareTest() {
-        FrontCoursewareDTO frontCoursewareDTO = new FrontCoursewareDTO();
-        frontCoursewareDTO.setBaseCoursewareId(1L);
-        frontCoursewareDTO.setCoursewareDescription("test");
-        frontCoursewareDTO.setCoursewareName("test1");
-        frontCoursewareDTO.setTypeId(1L);
-        frontCoursewareDTO.setPublishTime(new Date(System.currentTimeMillis()));
-        frontCoursewareDTO.setUpdateTime(new Date(System.currentTimeMillis()));
-//        coursewareService.addCourseware(frontCoursewareDTO);
-    }
 
     @Test
     public void updateBaseCourseware() {
@@ -105,23 +93,20 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         baseCoursewareDO.setSourceUrl("test123");
         baseCoursewareDO.setId(4L);
 
-        baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+        Assert.assertThat(baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO),CoreMatchers.is(1));
+
     }
 
     @Test
-    public void MqTest() {
+    public void MqTest() throws Exception {
         File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test.pptx");
         File pdf = new File("C:\\Users\\xsj\\Desktop\\qtc\\MQtest.pptx");
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(ppt);
         fileDTO.setId(1L);
-//        fileDTO.setLocation();
-        try {
-            mqService.msgSend(fileDTO);
+        SendResult sendResult= mqService.msgSend(fileDTO);
+        Assert.assertTrue(sendResult.isSuccess());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -132,6 +117,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 //        temList.add(3l);
 //        temList.add(4l);
         List<CoursewareDTO> list = coursewareService.selectCoursewareList(temList);
+        Assert.assertTrue(CollectionUtils.isNotEmpty(list));
         if(list != null) {
             for(int i = 0; i < list.size(); i++) {
                 System.out.println(list.get(i).getSourceUrl());
@@ -147,22 +133,8 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         if(!dir.exists()) {
             dir.mkdirs();
         }
+        Assert.assertNotNull(dir.getPath());
         System.out.println(dir.getPath());
-    }
-
-    @Test
-    public void addCourseware(){
-        CoursewareDO coursewareDO=new CoursewareDO();
-        coursewareDO.setTypeId(1l);
-        coursewareDO.setCoursewareName("testc");
-        coursewareDO.setCoursewareDescription("testDs");
-        coursewareDO.setBaseCoursewareId(1l);
-        coursewareDO.setCoursewareNum(3l);
-        coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
-        coursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
-        CoursewareController coursewareController =new CoursewareController();
-
-//        coursewareService.addCourseware(coursewareDO);
     }
 
     @Before

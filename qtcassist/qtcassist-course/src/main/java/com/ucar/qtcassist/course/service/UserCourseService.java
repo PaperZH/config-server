@@ -1,8 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.api.model.DO.UserCourseDO;
-
-import java.util.Date;
 import java.util.List;
 
 public interface UserCourseService {

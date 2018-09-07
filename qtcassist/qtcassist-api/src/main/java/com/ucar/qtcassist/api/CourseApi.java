@@ -1,56 +1,59 @@
 package com.ucar.qtcassist.api;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ucar.qtcassist.api.common.Page;
-import com.ucar.qtcassist.api.model.DO.CourseDO;
-import com.ucar.qtcassist.api.model.DO.QueryDO;
+import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
-import com.ucar.qtcassist.api.model.VO.QueryVO;
-import netscape.javascript.JSObject;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
 public interface CourseApi {
     /**
      * 根据类型获取分页后的课程列表
-     * @param queryVO (int currentPage, int pageSize, String type)
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize, String type)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页
+     * Integer pageSize 分布查询的每页的记录数目
+     * String type 查询的排序类型，default（默认）, time(发布时间降序), hot(点赞数量降序)
      * @return
      */
     @PostMapping("/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
-    @PostMapping("/getRecCourseList")
-    List<CourseDO> getCourseList(@RequestBody QueryDO query);
-
     /**
-     * 根据课程Id来查询课程列表
-     * @param params
+     * 获取推荐课程列表
+     * @param queryVO(courseIds, courseName, currentPage, pageSize)
+     * Long[] courseIds 要匹配的所有课程的id数组
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
      * @return
      */
-    @PostMapping("/getCourseListByIds")
-    List<CourseDO> getCourseListByIds(@RequestBody Map<String,Object> params);
+    @PostMapping("/getRecCourseList")
+    Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
+
+    /**
+     * 获取所有课程的id和courseName
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
+    @PostMapping("/getCourseIdAndCourseName")
+    Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
-     * @param courseId
+     * @param courseId 要查询的课程的id
      * @return
      */
     @GetMapping("/getCourseDetail/{courseId}")
-    Result<CourseDetailVO> getCourseDetail(@PathVariable("courseId") Long courseId);
-
-    /**
-     * 根据课程ID获取课程详细信息
-     * @param courseId
-     * @return
-     */
-    @GetMapping("/getRecCourseDetail/{courseId}")
-    CourseDO getRecCourseDetail(@PathVariable("courseId") Long courseId);
+    Result<CourseDetailVO<CoursewareDTO>> getCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
      * 增加课程
@@ -58,7 +61,7 @@ public interface CourseApi {
      * @return
      */
     @PostMapping("/addCourse")
-    Result addCourse(@RequestBody CourseUserVO courseUser);
+    Result<CourseVO> addCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 更新课程
@@ -66,7 +69,7 @@ public interface CourseApi {
      * @return
      */
     @PostMapping("/updateCourse")
-    Result updateCourse(@RequestBody CourseUserVO courseUser);
+    Result<CourseVO> updateCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 删除课程

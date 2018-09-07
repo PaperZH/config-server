@@ -1,6 +1,6 @@
 package com.ucar.qtcassist;
 
-import com.ucar.qtcassist.base.util.RedisStringDemo;
+import com.ucar.qtcassist.base.util.RedisStringUtil;
 import com.zuche.framework.common.SpringApplicationContext;
 import com.zuche.framework.enums.BusinessLineEnum;
 import com.zuche.framework.remote.RemoteClient;
@@ -30,12 +30,8 @@ import java.io.InputStream;
 public class QtcassistBaseApplicationTests extends AbstractJUnit4SpringContextTests {
 
 
-    @Test
-    public void contextLoads() {
-    }
-
     @Autowired
-    private RedisStringDemo redisStringDemo;
+    private RedisStringUtil redisStringDemo;
 
     @Test
     public void redisTest(){
@@ -59,7 +55,9 @@ public class QtcassistBaseApplicationTests extends AbstractJUnit4SpringContextTe
         vo.setBusinessLine(BusinessLineEnum.EVP);
 
         UDFSUploadResultVO resultVO= (UDFSUploadResultVO)client.executeToObject("ucarudfs.commonResourceInsert.service", vo);
+        Assert.assertNotNull(resultVO);
         System.out.println(resultVO.getOriginalName());
+        Assert.assertThat(resultVO.getOriginalName(),CoreMatchers.notNullValue());
     }
 
     @Test
@@ -76,7 +74,9 @@ public class QtcassistBaseApplicationTests extends AbstractJUnit4SpringContextTe
         vo.setBusinessLine(BusinessLineEnum.EVP);
 
         UDFSUploadResultVO resultVO=  UDFSClient.upload(vo);
+        Assert.assertNotNull(resultVO);
         System.out.println(resultVO.getOriginalName());
+        Assert.assertThat(resultVO.getOriginalName(),CoreMatchers.notNullValue());
 
 
     }

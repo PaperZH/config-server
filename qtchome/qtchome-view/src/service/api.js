@@ -34,8 +34,8 @@ export function post (url, data) {
     url: url,
     method: 'post',
     data: data,
-    headers:{
-      'Content-Type':'application/json'
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 }

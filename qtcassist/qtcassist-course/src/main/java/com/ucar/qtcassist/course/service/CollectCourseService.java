@@ -1,8 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.api.model.DO.CollectCourseDO;
-
-import java.util.Date;
 import java.util.List;
 
 public interface CollectCourseService {
@@ -23,4 +21,6 @@ public interface CollectCourseService {
     int deleteListByIdList(Long userId, Long[] courseIds);
 
     CollectCourseDO getByUserIdAndCourseId(Long userId, Long courseId);
+
+    Integer getTotalByCourseId(Long courseId);
 }
