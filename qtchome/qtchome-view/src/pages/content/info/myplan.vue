@@ -74,7 +74,7 @@
           currentPage4: 4,
           dataPlan: [],
           queryParams: {
-            userId: this.$store.getters.userId,
+            studentId: this.$store.getters.userId,
             planName: '',
             currentPage: 1,
             pageSize: 5
