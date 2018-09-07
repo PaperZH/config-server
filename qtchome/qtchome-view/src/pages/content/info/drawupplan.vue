@@ -92,7 +92,7 @@
           tableData: [],
           queryParams: {
             userId: '',
-            planName: '',
+            planTitle: null,
             currentPage: 1,
             pageSize: 5
           }
@@ -101,7 +101,7 @@
       methods: {
         onSubmit () {
           console.log('submit!')
-          this.queryParams.planName = this.formInline.name
+          this.queryParams.planTitle = this.formInline.name
           this.queryParams.currentPage = 1
           this.getTeacherPlan()
         },
@@ -117,7 +117,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.planId}}).then(res => {
+            this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.id}}).then(res => {
               this.tableData.splice(index, 1)
               this.$message.success('删除成功')
               console.log(res)

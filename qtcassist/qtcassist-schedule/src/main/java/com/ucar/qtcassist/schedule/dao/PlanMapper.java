@@ -1,19 +1,27 @@
 package com.ucar.qtcassist.schedule.dao;
 
 import com.ucar.qtcassist.api.model.DO.PlanDO;
+import com.ucar.qtcassist.schedule.dto.PlanDTO;
+import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface PlanMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(PlanDO record);
+    int insert(PlanDTO record);
 
-    int insertSelective(PlanDO record);
+    int insertSelective(PlanDTO record);
 
     PlanDO selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(PlanDO record);
+    List<PlanDO> queryPlan(QueryPlanDTO planDTO);
 
-    int updateByPrimaryKey(PlanDO record);
+    int queryTotal(QueryPlanDTO planDTO);
+
+    int updateByPrimaryKeySelective(PlanDTO record);
+
+    int updateByPrimaryKey(PlanDTO record);
 }

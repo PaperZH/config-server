@@ -145,8 +145,8 @@
         currentPage4: 1,
         tableData: [],
         queryParams: {
-          userId: '',
-          planName: '',
+          teacherId: '',
+          planTitle: null,
           currentPage: 1,
           pageSize: 5
         }
@@ -155,7 +155,7 @@
     methods: {
       onSubmit () {
         console.log('submit!')
-        this.queryParams.planName = this.formInline.name
+        this.queryParams.planTitle = this.formInline.name
         this.queryParams.currentPage = 1
         this.getTeacherPlan()
       },
@@ -226,7 +226,7 @@
       }
     },
     mounted () {
-      this.queryParams.userId = this.$store.getters.userId
+      this.queryParams.teacherId = this.$store.getters.userId
       this.getTeacherPlan()
     },
     name: 'drawupplan'

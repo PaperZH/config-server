@@ -1,10 +1,13 @@
 package com.ucar.qtc.admin.controller;
 
+import com.netflix.discovery.converters.Auto;
 import com.ucar.qtc.admin.domain.BannerDO;
-import com.ucar.qtc.admin.domain.CourseDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
+import com.ucar.qtc.admin.dto.UserDTO;
+import com.ucar.qtc.admin.dto.do2dto.UserConvert;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.BannerService;
+import com.ucar.qtc.admin.service.FileService;
 import com.ucar.qtc.admin.service.RecommandCourseService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
@@ -14,7 +17,11 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pages")
@@ -27,6 +34,7 @@ public class FrontPageController {
     @Autowired
     private RecommandCourseService recommandCourseService;
 
+    @Autowired
     private CourseServiceRpc courseService;
 
     @GetMapping("getRecBanner")
@@ -75,4 +83,9 @@ public class FrontPageController {
         return ResponseResult.ok().put("list",list);
     }
 
+    @GetMapping("getUserInfoById")
+    public ResponseResult getUserInfoById(@RequestParam("id") Long id) {
+        UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
+        return ResponseResult.ok().put("data",userDTO);
+    }
 }

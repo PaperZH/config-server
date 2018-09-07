@@ -22,13 +22,14 @@ public class MultipartConfig {
      */
     @Bean
     MultipartConfigElement multipartConfigElement() {
+        String tmpLocation = System.getProperty("user.dir") + "/data/tmp";
         MultipartConfigFactory configFactory = new MultipartConfigFactory();
-        String location = System.getProperty("user.dir") + "/file/base/tmp";
-        File tmpFile = new File(location);
+        File tmpFile = new File(tmpLocation);
         if (!tmpFile.exists()) {
+            // 目录不存在
             tmpFile.mkdirs();
         }
-        configFactory.setLocation(location);
+        configFactory.setLocation(tmpLocation);
         return configFactory.createMultipartConfig();
     }
 }
