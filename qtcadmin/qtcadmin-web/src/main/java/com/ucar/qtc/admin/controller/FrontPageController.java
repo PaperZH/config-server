@@ -27,7 +27,6 @@ import java.util.Map;
 @RequestMapping("/pages")
 public class FrontPageController {
 
-
     @Autowired
     private BannerService bannerService;
 
