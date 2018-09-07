@@ -1,6 +1,8 @@
 package com.ucar.qtc.controller;
 
+import com.ucar.qtc.service.PlanService;
 import com.ucar.qtc.utils.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,7 +13,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/plan")
 public class PlanController {
-
+    @Autowired
+    PlanService planService;
     /**
      * 根据教师ID获得学生信息
      *
@@ -42,10 +45,12 @@ public class PlanController {
     @RequestMapping("/getTeacherPlan")
     public ResponseResult getTeacherPlanList(@RequestParam Map<String, Object> params) {
         System.out.println(params);
+        System.out.println(planService.getTeacherPlanList(params));
+//        return planService.getTeacherPlanList(params);
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 8; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("planId",i);
+            hashMap.put("id",i);
             hashMap.put("planContent", "培训内容"+i );
             hashMap.put("planDestination", "培训目的"+i);
             hashMap.put("planScore", 10);
@@ -80,6 +85,7 @@ public class PlanController {
     @GetMapping("/getPublishedPlan")
     public ResponseResult getPublishedPlan(@RequestParam Map<String,Object> params){
         System.out.println(params);
+        System.out.println(planService.getPublishedPlanList(params));
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 8; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
@@ -187,11 +193,13 @@ public class PlanController {
     @RequestMapping("/addPlan")
     public ResponseResult addPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        if(params.get("planId")==null){
+        if(params.get("id")==null){
             System.out.println("执行增加操作");
+            System.out.println(planService.addPlan(params));
         }
         else{
             System.out.println("执行更新操作");
+            System.out.println(planService.updatePlan(params));
         }
         return ResponseResult.ok();
     }
@@ -204,8 +212,9 @@ public class PlanController {
     @RequestMapping("/addPublishedPlan")
     public ResponseResult addPublishedPlan(@RequestBody Map<String,Object> params){
         System.out.println(params);
-        if(params.get("planId")==null){
+        if(params.get("id")==null){
             System.out.println("执行增加操作");
+            System.out.println(planService.addPublishedPlan(params));
         }
         else{
             System.out.println("执行更新操作");
@@ -240,6 +249,7 @@ public class PlanController {
     @GetMapping("/deletePlan")
     public ResponseResult deletePlan(@RequestParam long planId){
         System.out.println(planId);
+        System.out.println(planService.deletePlan(planId));
         return ResponseResult.ok("删除成功");
     }
     /**
@@ -250,6 +260,7 @@ public class PlanController {
     @GetMapping("/deletePublishedPlan")
     public ResponseResult deletePublishedPlan(@RequestParam long planId){
         System.out.println(planId);
+        System.out.println(planService.deletePublished(planId));
         return ResponseResult.ok("删除成功");
     }
 
