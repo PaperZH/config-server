@@ -29,13 +29,13 @@
             <img :src="scope.row.courseCover" height="80">
           </template>
         </el-table-column>
-        <el-table-column label="课程名" prop="courseName" width="200" align="center"></el-table-column>
-        <el-table-column label="课程类型" prop="typeName" width="100"  align="center"></el-table-column>
-         <el-table-column label="点赞数" prop="praiseNum" width="100"  align="center"></el-table-column>
+        <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
+        <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
+         <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
         <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>       
-        <el-table-column label="推荐信息" prop="recCourseInfo" width="400" align="center"></el-table-column>
-        <el-table-column label="课程介绍" prop="courseDescription" align="center"></el-table-column>  
-       <el-table-column label="操作" align="center" width="200">
+        <el-table-column label="推荐信息" prop="recCourseInfo" width="220" align="center"></el-table-column>
+        <el-table-column label="课程介绍" prop="courseDescription" width="220" align="center"></el-table-column>  
+       <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.courseId)">删除</el-button>

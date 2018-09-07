@@ -26,7 +26,7 @@
       <el-table :data="fileRows" border highlight-current-row v-loading="loading" style="width: 100%;">
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.bannerImg" height="40">
+            <img :src="scope.row.bannerImg" height="80">
           </template>
         </el-table-column>
         <el-table-column label="类型" width="80" prop="type" align="center">
@@ -35,9 +35,9 @@
           </template>
         </el-table-column>
         <el-table-column label="标题" prop="bannerTitle" width="240" align="center"></el-table-column>
-        <el-table-column label="描述" prop="bannerDescription" width="420" align="center"></el-table-column>
+        <el-table-column label="描述" prop="bannerDescription" width="360" align="center"></el-table-column>
         <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="跳转地址" prop="bannerUrl" align="center"></el-table-column>
+        <el-table-column label="跳转地址" prop="bannerUrl" width="80" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
