@@ -59,23 +59,10 @@
               <p v-else>暂未评分</p>
             </template>
           </el-table-column>
-          <el-table-column
-            label="课程"
-            width="100"
-           >
-          <template slot-scope="scope" >
-            <el-button
-              type="primary"
-              round
-              @click="handleCourse(scope.row.planId)"
-              size="small"
-            >查看课程</el-button>
-          </template>
-          </el-table-column>
           <el-table-column label="操作" width="200px">
             <template slot-scope="scope">
               <el-button
-                @click="handleEdit(scope.row.planId)"
+                @click="handleEdit(scope.row.id)"
                 size="mini"
                 type="info"
               >评价</el-button>
@@ -87,8 +74,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <plan-course  :courseopen.sync="courseopen" v-bind:courseData="courseData" title="计划课程信息" v-bind:planId="planId"></plan-course>
-        <dialog-plan  :show.sync="show" v-bind:message="message" title="发布计划" v-bind:students="this.indexList"></dialog-plan>
+        <dialog-plan  :show.sync="show" v-bind:message="message" title="发布计划" v-bind:students="this.indexList" @getTeacherPlan="getTeacherPlan"></dialog-plan>
         <edit-plan  :show.sync="edit" v-bind:message="planDetails" title="计划评价" @getTeacherPlan="getTeacherPlan"></edit-plan>
         <div class="block" style="text-align: right">
           <el-pagination
@@ -109,12 +95,10 @@
 
 <script>
   import dialogplan from '@/pages/content/dialog/dialogplan'  // 发布计划弹框
-  import planCourse from '@/pages/content/dialog/planCourse'  // 计划课程弹框
   import editPlan from '@/pages/content/dialog/addPublishedplan'  // 编辑计划课程弹框
   export default {
     components: {
       'dialog-plan': dialogplan,
-      'plan-course': planCourse,
       'edit-plan': editPlan
     },
     data () {
@@ -122,7 +106,6 @@
         show: false,
         courseopen: false,
         edit: false,
-        courseData: [ ],
         planId: 0,
         indexList: [{
           name: '张三',
@@ -162,20 +145,11 @@
       onAddPlan () {
         this.show = true
       },
-      handleCourse (planId) {
-        console.log('查看course')
-        this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseByPlanId', 'data': {'planId': planId}}).then(res => {
-          console.log(res)
-          this.courseData = res.data.data
-          this.courseopen = true
-          this.planId = planId
-        })
-      },
       handleEdit (val) {
         console.log(val)
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
           console.log(res)
-          this.planDetails = res.data.data
+          this.planDetails = res.data.re
           this.edit = true
         })
       },
@@ -186,7 +160,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.planId}}).then(res => {
+          this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.id}}).then(res => {
             this.tableData.splice(index, 1)
             this.$message.success('删除成功')
             console.log(res)
@@ -219,9 +193,9 @@
       },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
-          this.tableData = res.data.data
-          this.indexList = res.data.students
-          this.total = res.data.total
+          this.tableData = res.data.re.rows
+          this.indexList = [{'studentName': '张三', 'studentId': 5}]
+          this.total = res.data.re.total
         })
       }
     },

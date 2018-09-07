@@ -12,17 +12,17 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="总分" >
-            <el-input v-model="message.plan.planScore" readonly></el-input>
+            <el-input v-model="message.planScore" readonly></el-input>
           </el-form-item>
         </el-col>
         <el-col>
           <el-collapse v-model="activeName" accordion>
             <el-collapse-item title="培训内容" name="1">
-              <el-input v-model="message.plan.planContent" type="textarea"resize="none" disabled
+              <el-input v-model="message.planContent" type="textarea"resize="none" disabled
                         :autosize="{ minRows: 8, maxRows: 12}"></el-input>
             </el-collapse-item>
             <el-collapse-item title="培训目的" name="2">
-              <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  disabled
+              <el-input v-model="message.planDestination"  type="textarea" resize="none"  disabled
                         :autosize="{ minRows: 8, maxRows: 12}"></el-input>
             </el-collapse-item>
             <el-collapse-item title="学员总结" name="4">
@@ -85,25 +85,21 @@
     },
     methods: {
       onSubmit () {
-        let score = this.message.studentGetScore
-        if (score === undefined) {
-          this.$message.error('请输入分数')
-          return
-        }
-        if (score.match(/^[1-9](\d){0,2}$/)) {
-          let data = {
-            'studentGetScore': this.message.studentGetScore,
-            'teacherEvaluateContent': this.message.teacherEvaluateContent,
-            'planId': this.message.planId
+        this.$refs['message'].validate((valid) => {
+          if (valid) {
+            let data = {
+              'studentGetScore': this.message.studentGetScore,
+              'teacherEvaluateContent': this.message.teacherEvaluateContent,
+              'id': this.message.id}
+            console.log(data)
+            this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
+              this.$emit('getTeacherPlan')
+              this.visible = false
+            })
+          } else {
+            console.log('失败')
           }
-          console.log(data)
-          this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
-            this.$emit('getTeacherPlan')
-            this.visible = false
-          })
-        } else {
-          console.log('失败')
-        }
+        })
       },
       onCan () {
         this.activeName = '3'
