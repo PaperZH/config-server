@@ -3,8 +3,8 @@ package com.ucar.qtc.service;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.Map;
 
 @FeignClient(value = "qtcassist")
@@ -51,6 +51,14 @@ public interface CourseService {
     public ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
+     * 根据用户ID和课程ID来查看用户是否已点赞课程.
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/collectCourse/isCollectedCourse/{userId}/{courseId}")
+    public ResponseResult isCollectedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+
+    /**
      * 根据用户ID和课程ID批量删除收藏的课程
       * @param params (long userId, long[] courseId)
      * @return
@@ -83,6 +91,13 @@ public interface CourseService {
     public ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 
     /**
+     * 添加课程评价
+     * @return
+     */
+    @RequestMapping(value = "/evaluateCourse/addEvaluateCourse")
+    public ResponseResult addEvaluateCourse(@RequestBody Map<String,Object> params);
+
+    /**
      * 根据课程名字或发布时间区间获取发布的课程分页列表
      * @param params (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
@@ -98,31 +113,25 @@ public interface CourseService {
     @RequestMapping(value = "/userCourse/deleteUserCourseList")
     public ResponseResult deletePublishedCourse(Map<String,Object> params);
 
-//    /**
-//     * 增加课程
-//     * @param course (CourseDetail courseDetail)
-//     * @return
-//     */
-//    @RequestMapping("/course/addCourseWithOldCourseware")
-//    public ResponseResult addCourseWithOldCourseware(Map<String,Object> course);
-//
-//    /**
-//     * 增加课程
-//     * @param course (CourseDetail courseDetail)
-//     * @return
-//     */
-//    @RequestMapping("/course/addCourseWithNewCourseware")
-//    public ResponseResult addCourseWithNewCourseware(Map<String,Object> course);
 
     @RequestMapping
     public ResponseResult getPlanList(String planName);
+
     /**
      * 更新课程
      * @param course ((long userId , Course course))
      * @return
      */
-    @RequestMapping("/course/updateCourse")
+    @RequestMapping(value = "/course/updateCourse")
     public ResponseResult updateCourse(Map<String,Object> course);
+
+    /**
+     * 更新课程
+     * @param course ((long userId , Course course))
+     * @return
+     */
+    @RequestMapping(value = "/course/addCourse")
+    public ResponseResult addCourse(Map<String,Object> course);
 
     /**
      * 获取课程类型列表

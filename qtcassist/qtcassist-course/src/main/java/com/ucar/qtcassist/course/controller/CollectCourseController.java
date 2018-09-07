@@ -18,10 +18,10 @@ import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-
-import java.text.SimpleDateFormat;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -135,6 +135,22 @@ public class CollectCourseController implements CollectCourseApi {
         } else {
             logger.info("批量删除收藏课程信息失败");
             return Result.getBusinessException("批量删除收藏课程信息失败","");
+        }
+    }
+
+    /**
+     * 查看用户是否已收藏该课程
+     * @param userId 用户id
+     * @param courseId 课程id
+     * @return
+     */
+    @Override
+    public Result<Boolean> isCollectedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
+        CollectCourseDO collectCourse = collectCourseService.getByUserIdAndCourseId(userId, courseId);
+        if(collectCourse != null && collectCourse.getDelFlag() == 1) {
+            return Result.getSuccessResult(true);
+        } else {
+            return Result.getSuccessResult(false);
         }
     }
 }

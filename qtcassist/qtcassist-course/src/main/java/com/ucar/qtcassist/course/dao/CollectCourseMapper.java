@@ -3,8 +3,6 @@ package com.ucar.qtcassist.course.dao;
 import com.ucar.qtcassist.api.model.DO.CollectCourseDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 import java.util.List;
 
 @Component

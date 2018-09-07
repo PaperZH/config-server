@@ -1,9 +1,17 @@
 package com.ucar.qtc.controller;
 
 import com.ucar.qtc.service.CourseService;
+import com.ucar.qtc.service.FileUploadService;
 import com.ucar.qtc.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -18,6 +26,8 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private FileUploadService fileUploadService;
 
     /**
      * 获取要推荐的课程列表,返回课程基本信息
@@ -48,6 +58,11 @@ public class CourseController {
         return courseService.getCourseDetail(id);
     }
 
+    @RequestMapping(value = "/file/upload")
+    public ResponseResult upload(@RequestPart("file") MultipartFile file){
+        return fileUploadService.upload(file, "");
+    }
+
     /**
      * 根据查询条件来获取发布的课程
      * @return
@@ -55,6 +70,15 @@ public class CourseController {
     @RequestMapping(value = "/updateCourse", method = RequestMethod.POST)
     ResponseResult updateCourse(@RequestBody Map<String,Object> params){
         return courseService.updateCourse(params);
+    }
+
+    /**
+     * 创建的课程
+     * @return
+     */
+    @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
+    ResponseResult addCourse(@RequestBody Map<String,Object> params) {
+        return courseService.addCourse(params);
     }
 
     /**
@@ -75,6 +99,17 @@ public class CourseController {
     ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.addCollectCourse(userId, courseId);
     }
+
+    /**
+     * 根据用户ID和课程ID来判断用户是否已收藏课程
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/isCollectedCourse/{userId}/{courseId}")
+    ResponseResult isCollectedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.isCollectedCourse(userId, courseId);
+    }
+
     /**
      * 根据条件批量删除收藏的课程
      * @return
@@ -105,13 +140,22 @@ public class CourseController {
     }
 
     /**
-     * 根据用户ID和课程ID来点赞课程
+     * 根据用户ID和课程ID来判断用户是否已点赞课程
      * @param
      * @return
      */
     @RequestMapping(value = "/deletePraiseCourse/{userId}/{courseId}")
     ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.deletePraiseCourse(userId, courseId);
+    }
+
+    /**
+     * 添加课程评价
+     * @return
+     */
+    @RequestMapping(value = "/addEvaluateCourse")
+    ResponseResult addEvaluateCourse(@RequestBody Map<String,Object> params){
+        return courseService.addEvaluateCourse(params);
     }
 
     /**
@@ -122,58 +166,6 @@ public class CourseController {
     ResponseResult getPublishedCourse(@RequestParam Map<String,Object> params){
         return courseService.queryPublishedCourse(params);
     }
-
-//    /**
-//     * 添加课程
-//     * @return
-//     */
-//    @RequestMapping(value = "/addCourseWithOldCourseware",method = RequestMethod.POST)
-//    public ResponseResult addCourseWithOldCourseware(@RequestBody Map<String,Object> params){
-//        System.out.println(params);
-//        return courseService.addCourseWithOldCourseware(params);
-
-//        System.out.println(JSON.toJSONString(map));
-//        System.out.println(map.get("courseWare"));
-//        HashMap<String,Object> course = new HashMap<>();
-//        //课程基本信息
-//        course.put("courseCover","static/image/2.jpg");
-//        course.put("courseName","课程名称");
-//        course.put("type_name","课程类型");
-//        course.put("courseDescription","课程描述说明");
-//        course.put("courseScore",4.5);
-//        course.put("readNum",100);
-//        course.put("praiseNum",100);
-//        course.put("publishTime","2018-8-15");
-//        course.put("updateTime","2018-8-15");
-//        //课程相关教师基本信息
-//        HashMap<String,Object> teacher = new HashMap<>();
-//        teacher.put("username", "教师名称");
-//        teacher.put("email","教师邮箱");
-//        teacher.put("imageUrl","static/to.jpg");
-//        //课程相关课件信息
-//        ArrayList<Map> courseWarelist = new ArrayList<>();
-//        for (int i = 0; i <6; i++) {
-//            HashMap<String,Object> courseWare = new HashMap<>();
-//            courseWare.put("name","课件名称"+i);
-//            courseWare.put("description","课件描述"+i);
-//            courseWare.put("publishTime","2018-8-15");
-//            courseWare.put("sourceUrl","static/source.pdf");
-//            courseWarelist.add(courseWare);
-//        }
-//        course.put("teacher",teacher);
-//        course.put("courseWare",courseWarelist);
-//        return  ResponseResult.data(course);
-//    }
-
-//    /**
-//     * 添加课程
-//     * @return
-//     */
-//    @RequestMapping(value = "/addCourseWithNewCourseware",method = RequestMethod.POST)
-//    public ResponseResult addCourseWithNewCourseware(@RequestBody Map<String,Object> params) {
-//        System.out.println(params);
-//        return courseService.addCourseWithNewCourseware(params);
-//    }
 
     /**
      * 根据条件批量删除发布的课程

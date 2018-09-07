@@ -30,12 +30,12 @@
           <el-form-item label="上传课程封面:">
             <el-upload
               class="avatar-uploader1"
-              :action="action()"
+              action=""
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
               :before-upload="beforeAvatarUpload">
-              <img v-if="courseDetailForm.course.courseCover" :src="courseDetailForm.course.courseCover" class="avatar1">
+              <img v-if="courseDetailForm.course.courseCover" :src="courseDetailForm.course.courseCover" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon1"></i>
             </el-upload>
           </el-form-item>
@@ -115,31 +115,25 @@
         console.log(tab, event)
       },
       onSubmit () {
-        console.log(this.courseDetailForm)
         // 如果courseId存在，则是修改课程信息，否则是新建课程信息
         let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
         if (this.courseDetailForm.course.courseId != null) {
           this.$store.dispatch('Post', {'url': '/api-home/course/updateCourse', 'data': data}).then(res => {
-            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+            console.log(res.data)
+            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
           })
         } else {
           this.$store.dispatch('Post', {'url': '/api-home/course/addCourse', 'data': data}).then(res => {
-            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+            console.log(res.data)
+            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
           })
         }
-        this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+        // this.$router.push({name: 'addCourse', params: this.courseDetailForm})
       },
       handleAvatarSuccess (res, file) {
-        console.log(file)
-        // URL.createObjectURL(file.raw)
-        this.courseDetailForm.course.courseCover = res.fileUrl
-        console.log(this.courseDetailForm.course.courseCover)
-      },
-      action () {
-        return 'http://127.0.0.1:8006/file/upload'
+        console.log(res);
       },
       beforeAvatarUpload (file) {
-        console.log(file)
         const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -149,7 +143,11 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        let fd = new FormData();
+        fd.append('file', file);
+        this.$store.dispatch('Post', {'url': '/api-home/course/file/upload', 'data': fd}).then(res => {
+          this.courseDetailForm.course.courseCover = res.data.fileUrl;
+        })
       },
       handleRemove () {
 
