@@ -34,50 +34,10 @@ public class RecCourseController {
 
     @PostMapping
     public ResponseResult getRecourseList(@RequestBody QueryVO queryVO){
-        List<Long> listCourseIds = new ArrayList<Long>();
+       List<CourseVO> result = recCourseService.listRecCourseByQuery(queryVO);
+       if(result == null)
+           return ResponseResult.error();
 
-        //首先通过名字查询课程信息
-        List courseVOS = (List) courseService.getCourseIdAndCourseName(queryVO).get("ids");
-        if(courseVOS==null||courseVOS.isEmpty()){
-            return ResponseResult.error(-1,"无课程信息");
-        }
-
-        Map<String,Object> resMap = new HashMap<String,Object>();
-        Iterator iterator = courseVOS.iterator();
-        //取出课程信息ID
-        while(iterator.hasNext()){
-            Map tempMap = (Map)iterator.next();
-            listCourseIds.add(((Integer) tempMap.get("id")).longValue());
-        }
-        resMap.put("ids",listCourseIds);
-        List<RecommandCourseDO> recommandCourseList = recCourseService.list(resMap);
-        if(recommandCourseList.size() == 0){
-            return ResponseResult.error(-1,"无推荐课程信息");
-        }
-        Long[] ids = new Long[recommandCourseList.size()];
-        iterator = recommandCourseList.iterator();
-        int index = 0;
-        while(iterator.hasNext()){
-            ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
-        }
-        List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
-        queryVO.setCourseIds(ids);
-        recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
-        List<CourseVO> result = new ArrayList<CourseVO>();
-
-        //按照ord_num的顺序，将数据填充
-        for(int i = 0;i < ids.length;i ++){
-            iterator = recCourseVOS.iterator();
-            while(iterator.hasNext()){
-                CourseVO temp = (CourseVO) iterator.next();
-                if(temp.getCourseId() == ids[i]){
-                    temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
-                    temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
-                    result.add(temp);
-                }
-            }
-
-        }
         return ResponseResult.ok().put("list",result);
     }
 
