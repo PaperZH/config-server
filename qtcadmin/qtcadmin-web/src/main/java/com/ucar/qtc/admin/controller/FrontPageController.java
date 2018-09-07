@@ -9,6 +9,7 @@ import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.BannerService;
 import com.ucar.qtc.admin.service.FileService;
 import com.ucar.qtc.admin.service.RecommandCourseService;
+import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
 import com.ucar.qtc.common.utils.PageUtils;
@@ -36,6 +37,10 @@ public class FrontPageController {
 
     @Autowired
     private CourseServiceRpc courseService;
+
+    @Autowired
+
+    private UserService userService;
 
     @GetMapping("getRecBanner")
     public ResponseResult bannerList() {
