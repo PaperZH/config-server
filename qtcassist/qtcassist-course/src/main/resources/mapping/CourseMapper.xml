@@ -177,7 +177,7 @@
   </update>
 
   <select id="getCourseIdAndCourseName" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
-    select id, course_name
+    select id, course_name, course_Description
     from assist_course
     where del_flag = 1
     <if test="courseName != null">

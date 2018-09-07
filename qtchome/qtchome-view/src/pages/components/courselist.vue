@@ -1,31 +1,42 @@
 <template>
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px;margin-right: 0px; margin-top: 0px;">
-
-      <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 20%; float: left">
+      <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 22%; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
           <div v-on:click="handleDetails(item)">
             <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
             <div style="padding: 9px;">
-
-              <span >{{item.courseName}}</span>
+              <span>{{item.courseName}}</span>
               <div class="bottom clearfix">
-                <span class="time">{{item.typeName}}</span>
-                <span class="time">
-                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
-              </span>
+                <el-row>
+                  <el-col :span="8">
+                    <span class="time">{{item.typeName}}</span>
+                  </el-col>
+                  <el-col :span="16">
+                    <span class="time">
+                      <el-col :span="8">
+                        <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                      </el-col>
+                      <el-col :span="8">
+                        <i class="el-icon-star-on" >{{item.collectNum}}</i>
+                      </el-col>
+                      <el-col :span="8">
+                        <i class="el-icon-edit" >{{item.readNum}}</i>
+                      </el-col>
+                    </span>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <span class="time">发布日期: {{item.publishTime}}</span>
+                </el-row>
               </div>
-              <span >{{item.publishTime}}</span>
-              <!--<time class="button">{{item.publishTime}}</time>-->
             </div>
           </div>
         </el-card>
       </div>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="16">
+      <el-col :span="12">
         <div>
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="课程名">
@@ -38,7 +49,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="block" v-show="isShow" style="display: inline; text-align: right; margin-top: 2%;">
+        <div class="block" v-show="isShow" style="display: inline; text-align: center; margin-top: 2%;">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -102,6 +113,8 @@
         handleSearch () {
           if (this.queryParams.courseName === null || this.queryParams.courseName.length === 0) {
             this.queryParams.courseName = null
+          } else {
+            this.queryParams.courseName = this.queryParams.courseName.trim()
           }
           this.getCourseList()
         }

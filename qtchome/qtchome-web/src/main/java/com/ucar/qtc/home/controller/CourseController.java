@@ -1,9 +1,18 @@
 package com.ucar.qtc.home.controller;
 
+import com.ucar.qtc.home.service.AdminService;
 import com.ucar.qtc.home.service.CourseService;
+import com.ucar.qtc.home.service.FileUploadService;
 import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -18,14 +27,19 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    @Autowired
+    private AdminService adminService;
 
     /**
      * 获取要推荐的课程列表,返回课程基本信息
      * @return
      */
     @RequestMapping(value = "/getRecCourseList" , method = RequestMethod.GET)
-    public ResponseResult getRecCourseList(@RequestParam Map<String,Object> params){
-        return  courseService.getRecCourseList(params);
+    public ResponseResult getRecCourseList(){
+        return  adminService.getRecCourse();
     }
 
     /**
@@ -48,6 +62,11 @@ public class CourseController {
         return courseService.getCourseDetail(id);
     }
 
+    @RequestMapping(value = "/file/upload")
+    public ResponseResult upload(@RequestPart("file") MultipartFile file){
+        return fileUploadService.upload(file, "");
+    }
+
     /**
      * 根据查询条件来获取发布的课程
      * @return
@@ -55,6 +74,15 @@ public class CourseController {
     @RequestMapping(value = "/updateCourse", method = RequestMethod.POST)
     ResponseResult updateCourse(@RequestBody Map<String,Object> params){
         return courseService.updateCourse(params);
+    }
+
+    /**
+     * 创建的课程
+     * @return
+     */
+    @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
+    ResponseResult addCourse(@RequestBody Map<String,Object> params) {
+        return courseService.addCourse(params);
     }
 
     /**
@@ -75,6 +103,17 @@ public class CourseController {
     ResponseResult addCollectCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.addCollectCourse(userId, courseId);
     }
+
+    /**
+     * 根据用户ID和课程ID来判断用户是否已收藏课程
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/isCollectedCourse/{userId}/{courseId}")
+    ResponseResult isCollectedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
+        return courseService.isCollectedCourse(userId, courseId);
+    }
+
     /**
      * 根据条件批量删除收藏的课程
      * @return
@@ -105,13 +144,22 @@ public class CourseController {
     }
 
     /**
-     * 根据用户ID和课程ID来点赞课程
+     * 根据用户ID和课程ID来判断用户是否已点赞课程
      * @param
      * @return
      */
     @RequestMapping(value = "/deletePraiseCourse/{userId}/{courseId}")
     ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.deletePraiseCourse(userId, courseId);
+    }
+
+    /**
+     * 添加课程评价
+     * @return
+     */
+    @RequestMapping(value = "/addEvaluateCourse")
+    ResponseResult addEvaluateCourse(@RequestBody Map<String,Object> params){
+        return courseService.addEvaluateCourse(params);
     }
 
     /**

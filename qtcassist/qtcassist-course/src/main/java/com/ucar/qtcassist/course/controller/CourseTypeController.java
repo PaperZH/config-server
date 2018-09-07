@@ -5,7 +5,10 @@ import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.course.service.CourseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

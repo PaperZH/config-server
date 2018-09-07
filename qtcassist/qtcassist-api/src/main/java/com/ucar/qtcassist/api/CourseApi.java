@@ -2,8 +2,6 @@ package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
-import com.ucar.qtcassist.api.model.DO.CourseDO;
-import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
@@ -63,7 +61,7 @@ public interface CourseApi {
      * @return
      */
     @PostMapping("/addCourse")
-    Result addCourse(@RequestBody CourseUserVO courseUser);
+    Result<CourseVO> addCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 更新课程
@@ -71,7 +69,7 @@ public interface CourseApi {
      * @return
      */
     @PostMapping("/updateCourse")
-    Result updateCourse(@RequestBody CourseUserVO courseUser);
+    Result<CourseVO> updateCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 删除课程

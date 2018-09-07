@@ -1,9 +1,7 @@
 package com.ucar.qtcassist.course.util;
 
 import com.ucar.qtcassist.api.model.DO.CourseDO;
-import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,8 +33,8 @@ public class CourseConvertUtil {
         courseVO.setCourseId(courseDO.getId());
         courseVO.setCourseName(courseDO.getCourseName());
         courseVO.setCourseCover(courseDO.getCourseCover());
-//        courseVO.setCourseDescription(courseDO.getCourseDescription());
-//        courseVO.setCourseScore(courseDO.getCourseScore());
+        courseVO.setCourseDescription(courseDO.getCourseDescription());
+        courseVO.setCourseScore(courseDO.getCourseScore());
         courseVO.setPraiseNum(courseDO.getPraiseNum());
         courseVO.setReadNum(courseDO.getReadNum());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

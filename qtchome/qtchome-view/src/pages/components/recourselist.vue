@@ -44,8 +44,8 @@
       }
     },
     created () {
-      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourse'}).then(res => {
-        this.tableData = res.data.data
+      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList'}).then(res => {
+        this.tableData = res.data.list
       })
     }
 

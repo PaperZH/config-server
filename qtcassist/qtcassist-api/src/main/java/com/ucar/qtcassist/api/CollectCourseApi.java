@@ -29,9 +29,18 @@ public interface CollectCourseApi {
 
     /**
      * 根据用户ID和课程ID批量删除收藏的课程
-     * @param queryVO (long userId, long[] courseId)
+     * @param queryVO (long userId, long[] courseIds)
      * @return
      */
     @PostMapping("/deleteCollectCourseList")
     Result deleteCollectCourseList(@RequestBody QueryVO queryVO);
+
+    /**
+     * 查看用户是否已收藏该课程
+     * @param userId 用户id
+     * @param courseId 课程id
+     * @return
+     */
+    @GetMapping("/isCollectedCourse/{userId}/{courseId}")
+    Result<Boolean> isCollectedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
 }

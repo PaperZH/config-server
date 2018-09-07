@@ -24,7 +24,7 @@ public interface UserCourseApi {
 
     /**
      * 根据用户ID和课程ID删除发布的课程
-     * @param queryVO (long userId, long[] courseId)
+     * @param queryVO (long userId, long[] courseIds)
      * @return
      */
     @PostMapping("/deleteUserCourseList")
