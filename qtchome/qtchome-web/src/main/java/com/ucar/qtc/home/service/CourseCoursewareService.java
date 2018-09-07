@@ -1,4 +1,4 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
 import com.ucar.qtcassist.api.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;

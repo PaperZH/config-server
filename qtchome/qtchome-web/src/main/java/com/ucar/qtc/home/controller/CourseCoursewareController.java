@@ -1,15 +1,13 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
+import com.ucar.qtc.home.service.HCoursewareService;
 import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
-import com.ucar.qtc.service.CourseCoursewareService;
-import com.ucar.qtc.service.HCoursewareService;
+import com.ucar.qtc.home.service.CourseCoursewareService;
 import com.ucar.qtcassist.api.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.File;
 
 /**
  * 请填写类注释
