@@ -38,7 +38,7 @@
                   <div style="text-align: center; margin-top: 20%;">
                     <el-button type="primary" round @click="handlePraiseCourse(course.courseId)" >{{praise.praiseText}}</el-button>
                     <el-button type="success" round @click="handleCollectCourse(course.courseId)">{{collect.collectText}}</el-button>
-                    <el-button type="info" round @click="dialogVisible = true">评价</el-button>
+                    <el-button type="info" round @click="evaluateDialogVisible = true">评价</el-button>
                   </div>
                 </div>
               </div>
@@ -87,9 +87,13 @@
                 <el-table-column label="操作">
                   <template slot-scope="scope">
                     <el-button
-                      size="mini" @click="handleClick(scope.row)"
+                      size="mini" @click="handleDownloadClick(scope.row)"
                       type="danger"
                     >下载</el-button>
+                    <el-button
+                      size="mini" @click="handleStudyClick(scope.row)"
+                      type="danger"
+                    >学习</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -131,7 +135,7 @@
       </el-col>
     </el-row>
     </div>
-    <el-dialog title="评价课程" :visible.sync="dialogVisible" width="30%" >
+    <el-dialog title="评价课程" :visible.sync="evaluateDialogVisible" width="30%" >
       <div class="block">
         <el-row :gutter="24">
           <el-col :span="8">
@@ -144,9 +148,12 @@
       </div>
       <el-input type="textarea" :rows="5" placeholder="请输入评价内容" v-model="evaluateCourse.evaluateContent"></el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="evaluateDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addEvaluateCourse(course.courseId)">确 定</el-button>
       </span>
+    </el-dialog>
+    <el-dialog title="" :visible.sync="studyDialogVisible" >
+      <iframe :src="sourceUrl" style="width:100%; height: 600px"></iframe>
     </el-dialog>
   </div>
 
@@ -160,7 +167,9 @@
       },
       data () {
         return {
-          dialogVisible: false,
+          evaluateDialogVisible: false,
+          studyDialogVisible: false,
+          sourceUrl: null,
           evaluateCourse: {
             evaluateScore: 5,
             evaluateContent: null
@@ -202,11 +211,16 @@
         handleCurrentChange (val) {
           console.log(`当前页: ${val}`)
         },
-        handleClick (row) {
+        handleDownloadClick (row) {
           let data = {'sourceUrl': row.sourceUrl}
           this.$store.dispatch('Post', {'url': '/api-home/file/download', 'data': data}).then(res => {
             console.log(res)
           })
+        },
+        handleStudyClick (row) {
+          let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
+          this.sourceUrl = sourceUrl
+          this.studyDialogVisible = true
         },
         handlePraiseCourse (val) {
           // let userId = this.$store.getters.userId
@@ -262,7 +276,7 @@
         addEvaluateCourse (val) {
           // let userId = this.$store.getters.userId
           let userId = 100
-          this.dialogVisible = false
+          this.evaluateDialogVisible = false
           let data = {'userId': userId, 'courseId': val, 'evaluateScore': this.evaluateCourse.evaluateScore, 'evaluateContent': this.evaluateCourse.evaluateContent}
           if (userId == null || userId === '') {
             this.$notify.warning({'title': '评价失败', 'message': '请先登陆'})
@@ -323,6 +337,9 @@
     }
 </script>
 
-<style scoped>
+<style >
+  .el-dialog{
+    height: 80%
+  }
 
 </style>
