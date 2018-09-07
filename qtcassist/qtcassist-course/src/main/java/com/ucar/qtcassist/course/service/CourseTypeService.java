@@ -1,7 +1,6 @@
 package com.ucar.qtcassist.course.service;
 
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
-
 import java.util.List;
 
 public interface CourseTypeService {

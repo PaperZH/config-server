@@ -27,3 +27,5 @@ spring:
 ribbon:
    ReadTimeout: 60000
    ConnectTimeout: 30000
+     eureka:
+       enabled: true

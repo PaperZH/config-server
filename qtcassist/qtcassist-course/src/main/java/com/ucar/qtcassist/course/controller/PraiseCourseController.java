@@ -1,14 +1,14 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.api.PraiseCourseApi;
-import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.PraiseCourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.PraiseCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
@@ -33,9 +33,7 @@ public class PraiseCourseController implements PraiseCourseApi {
                 praiseCourse.setPublishDate(new Date());
                 praiseCourse.setDelFlag(new Byte("1"));
                 praiseCourseService.updateByPrimaryKeySelective(praiseCourse);
-
                 courseService.updatePraiseNum(courseId, +1);
-
                 return Result.getSuccessResult("添加点赞课程成功");
                 //更新course
             }
@@ -77,6 +75,12 @@ public class PraiseCourseController implements PraiseCourseApi {
         }
     }
 
+    /**
+     * 查看用户是否已点赞该课程
+     * @param userId 用户id
+     * @param courseId 课程id
+     * @return
+     */
     @Override
     public Result<Boolean> isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
         PraiseCourseDO praiseCourse = praiseCourseService.getByUserIdAndCourseId(userId, courseId);
@@ -86,6 +90,5 @@ public class PraiseCourseController implements PraiseCourseApi {
             return Result.getSuccessResult(false);
         }
     }
-
 
 }

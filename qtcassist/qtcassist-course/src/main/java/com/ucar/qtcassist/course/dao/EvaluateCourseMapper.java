@@ -2,7 +2,6 @@ package com.ucar.qtcassist.course.dao;
 
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

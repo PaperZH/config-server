@@ -3,8 +3,6 @@ package com.ucar.qtcassist.api;
 import com.ucar.qtcassist.api.model.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import java.util.List;
 
 public interface CourseCoursewareApi {
 

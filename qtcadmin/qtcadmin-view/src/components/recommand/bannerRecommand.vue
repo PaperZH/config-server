@@ -26,7 +26,7 @@
       <el-table :data="fileRows" border highlight-current-row v-loading="loading" style="width: 100%;">
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.bannerImg" height="40">
+            <img :src="scope.row.bannerImg" height="80">
           </template>
         </el-table-column>
         <el-table-column label="类型" width="80" prop="type" align="center">
@@ -35,9 +35,9 @@
           </template>
         </el-table-column>
         <el-table-column label="标题" prop="bannerTitle" width="240" align="center"></el-table-column>
-        <el-table-column label="描述" prop="bannerDescription" width="420" align="center"></el-table-column>
+        <el-table-column label="描述" prop="bannerDescription" width="360" align="center"></el-table-column>
         <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="跳转地址" prop="bannerUrl" align="center"></el-table-column>
+        <el-table-column label="跳转地址" prop="bannerUrl" width="80" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
@@ -126,7 +126,7 @@
               :on-success="editHandleAvatarSuccess"
               :before-upload="editBeforeAvatarUpload">
               <div slot="tip" class="el-upload__tip" >上传模板只能是 jpg/jpeg/png/gif 格式，且不超过5MB</div>
-              <img v-if="editForm.url" :src="editForm.url" class="avatar">
+              <img v-if="editForm.bannerImg" :src="editForm.bannerImg" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -339,7 +339,7 @@
         API.uploadBanner(fd).then(function (result) {
           if (result && parseInt(result.code) === 0) {
             that.addImageUrl = result.fileUrl
-            that.addForm.imgUrl = that.addImageUrl
+            that.addForm.bannerImg = that.addImageUrl
             that.$message.success({
               showClose: true,
               message: "上传成功",
@@ -379,7 +379,7 @@
 
         let fd = new FormData();                                                                                                                                                                                                                                                                                                                                      
         fd.append('file', file);
-        API.uploadFile(fd).then(function (result) {
+        API.uploadBanner(fd).then(function (result) {
           if (result && parseInt(result.code) === 0) {
             that.editForm.bannerImg = result.fileUrl
             that.$message.success({

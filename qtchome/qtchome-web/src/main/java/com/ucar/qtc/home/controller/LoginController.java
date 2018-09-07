@@ -1,13 +1,10 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ucar.qtc.common.dto.LoginDTO;
-import com.ucar.qtc.service.LoginService;
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.dto.LoginDTO;
+import com.ucar.qtc.home.service.LoginService;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * @Author : pingli.zheng
@@ -25,10 +22,8 @@ public class LoginController {
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public ResponseResult getLogin(@RequestBody LoginDTO loginDTO){
-
         return loginService.login(loginDTO);
     }
-
 
     /**
      * 退出登录请求
@@ -36,8 +31,6 @@ public class LoginController {
      */
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public ResponseResult getLogOut(@RequestParam String userId){
-        System.out.println(userId);
-        System.out.println("dao le ");
         return ResponseResult.ok();
     }
 }

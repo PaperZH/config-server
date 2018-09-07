@@ -1,7 +1,6 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
-import com.ucar.qtc.utils.ResponseResult;
-
+import com.ucar.qtc.home.utils.ResponseResult;
 import java.util.Map;
 
 public interface UserService {
@@ -16,7 +15,7 @@ public interface UserService {
      * @param map (User user)
      * @return
      */
-    ResponseResult updateUser(Map<String,Object> map);
+    ResponseResult updateUser(Map<String, Object> map);
 
     /**
      * 获取用户菜单信息

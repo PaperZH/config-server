@@ -5,8 +5,6 @@ import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.course.service.UserCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service

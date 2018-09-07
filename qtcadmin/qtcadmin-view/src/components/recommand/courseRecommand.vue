@@ -19,36 +19,26 @@
           <el-form-item>
             <el-button type="primary" @click="showAddDialog">新增</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="danger" v-on:click="handleBatchRemove(sels)" :disabled="this.sels.length === 0">批量删除</el-button>
-          </el-form-item>
         </el-form>
       </el-col>
 
       <!-- 列表 -->
       <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column type="selection" width="40">
-        </el-table-column>
-        <el-table-column label="预览" align="center">
+        <el-table-column label="预览" align="center" width="200">
           <template slot-scope="scope">
-            <img :src="scope.row.couseCover" height="40">
+            <img :src="scope.row.courseCover" height="80">
           </template>
         </el-table-column>
-        <el-table-column label="类型" width="80" prop="type" align="center">
-          <template slot-scope="couseCover">
-            <el-tag >图片</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="课程名" prop="courseName" width="240" align="center"></el-table-column>
-        <el-table-column label="课程介绍" prop="description" width="420" align="center"></el-table-column>
-        <el-table-column label="课程评分" prop="courseScore" width="80"  align="center"></el-table-column>
-        <el-table-column label="阅读数" prop="readNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="课程评分" prop="courseScore" width="80"  align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
+        <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
+         <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
+        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>       
+        <el-table-column label="推荐信息" prop="recCourseInfo" width="220" align="center"></el-table-column>
+        <el-table-column label="课程介绍" prop="courseDescription" width="220" align="center"></el-table-column>  
+       <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.courseId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -67,16 +57,12 @@
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
           <el-form-item label="课程名" prop="title">
-            <el-row class="demo-autocomplete">
-              <el-col :span="12">
                 <el-autocomplete
-                  class="inline-input"
-                  :v-model="courseName"
+                  popper-class="my-autocomplete"
+                  v-model="courseName"
                   :fetch-suggestions="querySearch"
-                  placeholder="请输入课程名"
-                  :trigger-on-focus="false"
-                  @select="handleSelect"
-                >
+                  placeholder="请输入内容"
+                  @select="handleSelect">
                 <i
                   class="el-icon-edit el-input__icon"
                   slot="suffix"
@@ -84,12 +70,19 @@
                 </i>
                 <template slot-scope="{ item }">
                   <div class="name">{{ item.courseName }}</div>
-                </template></el-autocomplete>
-              </el-col>
-            </el-row>
+                </template></el-autocomplete>         
+             
           </el-form-item>
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="推荐信息" prop="description" >
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="addForm.description">
+              </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -100,9 +93,17 @@
 
       <!-- 编辑界面 -->
       <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-        <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+        <el-form :model="editForm" label-width="80px" ref="editForm">
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="推荐信息" prop="orderNum">
+             <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="editForm.description">
+              </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -127,7 +128,11 @@
         },
         sels:[],
         courseRows:[],
-        courseData:[],
+        // coursedata:[
+        //   {
+        //     "listCourse":{
+        ids:[],
+        
         courseName:'',
         total: 0,
         page: 1,
@@ -143,33 +148,31 @@
         //新增推荐课程 数据
         addForm: {
           courseId: '',
-          orderNum: ''
+          orderNum: '',
+          description: ''
         },
         //编辑推荐课程 数据
         editFormVisible: false,
         editForm: {
            courseId: '',
-           orderNum: ''
+           orderNum: '',
+           description: ''
         },
       }
     },
     methods: {
       //关于输入课程名称的查询方法（Element自带的方法体系）
        querySearch(queryString, cb) {
-        searchCourse(queryString);
-        var results = queryString ? this.coursedata.filter(this.createFilter(queryString)) : this.coursedata;
+        this.searchCourse(queryString);
         // 调用 callback 返回建议列表的数据
-        cb(results);
+        var data = this.ids;
+        cb(data);
       },
-      createFilter(queryString) {
-        return (courseData) => {
-          return (courseData.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
+      handleSelect(item) { 
+        const data = item;
+        this.addForm.courseId = data.id;
+        this.courseName = data.courseName;
       },
-       handleSelect(item) {
-        this.addForm.courseId = item.courseId;
-        console.log(item);
-    },
       handleSizeChange(val) {
         this.limit = val;
         this.searchRecCourse();
@@ -191,14 +194,9 @@
         that.loading = true;
         API.getCourse(params).then(
             function (result) {
-              alert("查询课程");
               that.coursedata = result;
-            },
-            function (err) {
-              that.$message.error({
-                message: err.toString(),
-                duration: 2000
-              });
+              that.loading = false;
+              that.ids = result.listCourse.ids;
             }
           )
           .catch(function (error) {
@@ -215,17 +213,17 @@
         let params = {
           page: that.page,
           limit: that.limit,
-          courseName: that.reccourse.title
+          courseName: that.reccourse.courseName
         }
         that.loading = true;
         
         API.getRecCourse(params).then(
             function (result) {
-              console.log(result)
               that.loading = false;
-              if (result && result.page.rows) {
-                that.total = result.page.total;
-                that.courseRows = result.page.rows;
+              if (result&& result.code == 0) {
+                
+                that.courseRows = result.list;
+                that.loading=false;
               }
             },
             function (err) {
@@ -239,7 +237,6 @@
           )
           .catch(function (error) {
             that.loading = false;
-            console.log(error);
             that.$message.error({
               showClose: true,
               message: "请求出现异常",
@@ -255,7 +252,9 @@
       showEditDialog: function (index, row) {
         let that = this
         this.editFormVisible = true
-        this.editForm = Object.assign({}, row)
+        this.editForm.courseId = row.courseId
+        this.editForm.description = row.recCourseInfo
+        this.editForm.orderNum = row.orderNum
       },
 
       //新增
@@ -269,9 +268,9 @@
               that.loading = false;
               if (result && parseInt(result.code) === 0) {
                 that.$message.success({showClose: true, message: '新增成功', duration: 2000});
-                that.$refs['addForm'].resetFields();
+                // that.$refs['addForm'].resetFields();
                 that.addFormVisible = false;
-                that.search();
+                that.searchRecCourse();
               } else {
                 that.$message.error({showClose: true, message: '新增失败', duration: 2000});
               }
@@ -280,7 +279,6 @@
               that.$message.error({showClose: true, message: err.toString(), duration: 2000});
             }).catch(function (error) {
               that.loading = false;
-              console.log(error);
               that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
             });
 
@@ -291,9 +289,13 @@
        removeRecCourse: function (id) {
         let that = this
         return API.remove({id: id}).then(res => {
+          
           if (res.code === 0) {
-            that.$message.success(res.msg)
-            that.search(this.page);
+            that.searchRecCourse();
+            that.$message.success(res.msg);
+            
+          }else{
+             that.$message.error(res.msg);
           }
         })
       },
@@ -314,13 +316,15 @@
                 });
                 that.$refs["editForm"].resetFields();
                 that.editFormVisible = false;
-                that.search();
+                that.searchRecCourse();
               } else {
                 that.$message.error({
                   showClose: true,
                   message: "修改失败",
                   duration: 2000
                 });
+                that.editFormVisible = false;
+                that.loading = false;
               }
             });
           }
@@ -346,7 +350,7 @@
                       message: "批量删除成功",
                       duration: 1500
                     });
-                    that.search();
+                    that.searchRecCourse();
                   }
                 },
                 function (err) {
@@ -360,7 +364,6 @@
               )
               .catch(function (error) {
                 that.loading = false;
-                console.log(error);
                 that.$message.error({
                   showClose: true,
                   message: "请求出现异常",
@@ -375,7 +378,7 @@
     },
 
     mounted() {
-      this.search(1);
+      this.searchRecCourse();
     }
   }
 </script>
@@ -409,9 +412,5 @@
       margin-top: 15px;
       margin-bottom: 15px;
       float: right;
-      /* width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center */
     }
   </style>

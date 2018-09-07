@@ -1,11 +1,10 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.ucar.qtc.service.FileService;
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.service.FileService;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 

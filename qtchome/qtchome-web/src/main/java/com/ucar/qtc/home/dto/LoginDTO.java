@@ -1,4 +1,4 @@
-package com.ucar.qtc.common.dto;
+package com.ucar.qtc.home.dto;
 
 import javax.validation.constraints.NotNull;
 

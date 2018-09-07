@@ -1,10 +1,10 @@
 package com.ucar.qtc.admin.controller;
 
-import com.ucar.qtc.admin.domain.CourseDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
-import com.ucar.qtc.admin.service.RecommandCourseService;
-import com.ucar.qtc.admin.rpc.ReccourceServiceRpc;
-import com.ucar.qtc.common.dto.QueryDO;
+import com.ucar.qtc.admin.service.RecCourseService;
+import com.ucar.qtc.admin.rpc.CourseServiceRpc;
+import com.ucar.qtc.admin.vo.CourseVO;
+import com.ucar.qtc.admin.vo.QueryVO;
 import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,60 +22,44 @@ import java.util.*;
 public class RecCourseController {
 
     @Autowired
-    private ReccourceServiceRpc recCourceService;
+    private CourseServiceRpc courseService;
 
     @Autowired
-    private RecommandCourseService recommandCourseService;
+    private RecCourseService recCourseService;
 
     @PostMapping("getCourse")
-    public ResponseResult getCourseList(@RequestBody QueryDO queryDO){
-        return ResponseResult.ok().put("list",recCourceService.getCourseList(queryDO));
+    public ResponseResult getCourseList(@RequestBody QueryVO queryVO){
+        return ResponseResult.ok().put("listCourse",courseService.getCourseIdAndCourseName(queryVO));
     }
 
     @PostMapping
-    public ResponseResult getRecourseList(@RequestBody Map<String,Object> map){
+    public ResponseResult getRecourseList(@RequestBody QueryVO queryVO){
+       List<CourseVO> result = recCourseService.listRecCourseByQuery(queryVO);
+       if(result == null)
+           return ResponseResult.error();
 
-        List<Long> listIds = recommandCourseService.list(map);
-        if(listIds == null){
-            return ResponseResult.ok("无数据");
-        }
-        Map<String,Object> ids = new HashMap<String,Object>();
-        ids.put("id",listIds);
-        List<CourseDO> listCourseDo =  recCourceService.getCourseListByIds(ids);
-        List<CourseDO> list = new ArrayList<CourseDO>();
-        Iterator iterator = listIds.iterator();
-        Iterator iterator1;
-        while(iterator.hasNext()){
-            Long temp = (Long) iterator.next();
-             iterator1 = listCourseDo.iterator();
-            while(iterator1.hasNext()){
-                CourseDO tempCouse = (CourseDO)iterator1.next();
-                if(tempCouse.getId()==temp)
-                {
-                    list.add(tempCouse);
-                }
-            }
-        }
-        return ResponseResult.ok().put("list",list);
+        return ResponseResult.ok().put("list",result);
     }
 
-    @PutMapping
+    @PostMapping("save")
     public ResponseResult saveRecourse(@RequestBody RecommandCourseDO courseDO){
+        if(courseDO.getCourseId() == null)
+            return ResponseResult.error();
 
-        if(recommandCourseService.get(courseDO.getId())!=null){
+        if(recCourseService.get(courseDO.getCourseId())!=null){
             courseDO.setDelFlag(1);
-            if(recommandCourseService.update(courseDO)>0)
+            if(recCourseService.update(courseDO)>0)
                 return ResponseResult.ok();
             else
                 return ResponseResult.error();
-        }else if(recommandCourseService.save(courseDO)>0){
+        }else if(recCourseService.save(courseDO)>0){
             return ResponseResult.ok();
         } else {
             return ResponseResult.error();
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/batchRemove")
     public ResponseResult batchRemoveRecCourseByIds(@RequestBody Map<String,Object> params){
 
         Object obj = params.get("id");
@@ -84,15 +68,15 @@ public class RecCourseController {
         for(int i = 0 ;i < list.size();i++ ){
             idForLong[i] = Long.valueOf(list.get(i));
         }
-        if(recommandCourseService.batchremove(idForLong)>0)
+        if(recCourseService.batchremove(idForLong)>0)
             return ResponseResult.ok();
         else
             return ResponseResult.error();
     }
+    @DeleteMapping
+    public ResponseResult removeReccourse(@RequestParam(value="id",defaultValue="-1") Long  courseId){
 
-    public ResponseResult removeReccourse(@RequestBody CourseDO courseDO){
-
-        if(recommandCourseService.remove(courseDO.getId())>0)
+        if(recCourseService.remove(courseId)>0)
             return ResponseResult.ok();
         else
             return ResponseResult.error();

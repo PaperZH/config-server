@@ -111,7 +111,7 @@
         if (this.formInline.name.trim().length === 0) {
           this.queryParams.courseName = null
         } else {
-          this.queryParams.courseName = this.formInline.name
+          this.queryParams.courseName = this.formInline.name.trim()
         }
         if (this.formInline.date == null) {
           this.queryParams.startDate = null

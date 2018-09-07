@@ -1,13 +1,12 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.ucar.qtc.service.HCoursewareService;
+import com.ucar.qtc.home.service.HCoursewareService;
 import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
 import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
 import com.ucar.qtcassist.api.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +21,7 @@ import java.util.List;
 @RequestMapping("/courseware")
 @RestController
 public class HCoursewareController {
+
     @Autowired
     HCoursewareService hcoursewareService;
 
@@ -29,7 +29,6 @@ public class HCoursewareController {
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
         return hcoursewareService.getAllBaseCoursewares();
     }
-
 
     @RequestMapping(value = "/getAllTypes")
     Result<List<CoursewareTypeDTO>> getAllTypes(){

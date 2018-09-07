@@ -4,18 +4,23 @@
 <mapper namespace="com.ucar.qtc.admin.dao.RecommandCourseDao">
 
     <select id="get" resultType="com.ucar.qtc.admin.domain.RecommandCourseDO">
-        select * from sys_recommand_course where id = #{value}
+        select * from sys_recommand_course where course_Id = #{value}
     </select>
 
-    <select id="list" resultType="java.lang.Long">
-        select id from sys_recommand_course c
-        <where>
-            c.del_flag = 1
-            <if test="id != null and id != ''"> and id = #{id} </if>
-            <if test="courseId != null and courseId != ''">
-                and courseId = #{courseId}
-            </if>
-        </where>
+    <select id="list" resultType="com.ucar.qtc.admin.domain.RecommandCourseDO">
+        select * from sys_recommand_course c
+        WHERE
+        c.del_flag = 1
+        <if test="ids != null">
+            <foreach item="item" collection="ids"  index="index" open=" and course_id in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="id != null and id != ''"> and id = #{id} </if>
+        <if test="courseId != null and courseId != ''">
+            and coursei_d = #{courseId}
+        </if>
+
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
@@ -24,9 +29,6 @@
                 order by order_num desc
             </otherwise>
         </choose>
-        <if test="offset != null and limit != null">
-            limit #{offset}, #{limit}
-        </if>
     </select>
 
     <select id="count" resultType="int">
@@ -40,7 +42,7 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.ucar.qtc.admin.domain.RecommandCourseDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.ucar.qtc.admin.domain.RecommandCourseDO">
         INSERT INTO sys_recommand_course
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="courseId != null" >
@@ -49,14 +51,19 @@
             <if test="description != null" >
                 description,
             </if>
+            <if test="orderNum != null" >
+                order_num
+            </if>
         </trim>
-        VALUES
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="courseId != null" >
-                course_id,
+                #{courseId},
             </if>
             <if test="description != null" >
-                description,
+                #{description},
+            </if>
+            <if test="orderNum != null" >
+                #{orderNum},
             </if>
         </trim>
     </insert>
@@ -64,18 +71,21 @@
     <update id="update" parameterType="com.ucar.qtc.admin.domain.RecommandCourseDO">
         update sys_recommand_course
         <set>
-            <if test="courseId != null" >
-                course_id,
-            </if>
             <if test="description != null" >
-                description,
+                description = #{description},
+            </if>
+            <if test="orderNum != null" >
+                order_num = #{orderNum},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag}
             </if>
         </set>
-        where id = #{id}
+        where course_id = #{courseId}
     </update>
 
     <delete id="remove">
-        update sys_recommand_course set del_flag = 0 where id = #{value}
+        update sys_recommand_course set del_flag = 0 where course_id = #{id}
     </delete>
 
     <delete id="batchRemove">

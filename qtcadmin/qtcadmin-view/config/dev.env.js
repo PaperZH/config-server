@@ -4,6 +4,6 @@ var prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_ROOT: '"http://127.0.0.1:8002"',
-  EUREKA_SERVER: '"http://127.0.0.1:8001"'
-  DRUID_SERVER: '"http://127.0.0.1:8004"',
+  EUREKA_SERVER: '"http://127.0.0.1:8001"',
+  DRUID_SERVER: '"http://127.0.0.1:8004"'
 })
