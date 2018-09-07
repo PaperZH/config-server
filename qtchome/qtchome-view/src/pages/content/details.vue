@@ -240,8 +240,8 @@
             this.$notify.warning({'title': '收藏失败', 'message': '请先登陆'})
           } else {
             if (this.collect.isCollected === true) {
-              let data = {"userId": userId, "courseIds": [val]}
-              this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', "data": data}).then(res => {
+              let data = {'userId': userId, 'courseIds': [val]}
+              this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
                 if (res.data.success === true) {
                   this.collect.isCollected = false
                   this.collect.collectText = '收藏'
@@ -263,11 +263,11 @@
           // let userId = this.$store.getters.userId
           let userId = 100
           this.dialogVisible = false
-          let data = {"userId": userId, "courseId": val, "evaluateScore": this.evaluateCourse.evaluateScore, "evaluateContent": this.evaluateCourse.evaluateContent}
+          let data = {'userId': userId, 'courseId': val, 'evaluateScore': this.evaluateCourse.evaluateScore, 'evaluateContent': this.evaluateCourse.evaluateContent}
           if (userId == null || userId === '') {
             this.$notify.warning({'title': '评价失败', 'message': '请先登陆'})
           } else {
-            this.$store.dispatch('Post', {'url': '/api-home/course/addEvaluateCourse', "data": data}).then(res => {
+            this.$store.dispatch('Post', {'url': '/api-home/course/addEvaluateCourse', 'data': data}).then(res => {
               if (res.data.success === true) {
                 this.$notify.success('评价成功')
               }

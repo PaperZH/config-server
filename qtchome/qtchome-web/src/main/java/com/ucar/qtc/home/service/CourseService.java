@@ -1,6 +1,6 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,14 +9,6 @@ import java.util.Map;
 
 @FeignClient(value = "qtcassist")
 public interface CourseService {
-
-    /**
-     * 获取推荐课程列表
-     * @param params (String courseName)
-     * @return
-     */
-    @RequestMapping(value = "/course/getRecCourseList")
-    public ResponseResult getRecCourseList(Map<String,Object> params);
 
     /**
      * 根据类型获取分页后的课程列表

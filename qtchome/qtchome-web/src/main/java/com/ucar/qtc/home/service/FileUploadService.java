@@ -1,8 +1,8 @@
-package com.ucar.qtc.service;
+package com.ucar.qtc.home.service;
 
 
-import com.ucar.qtc.common.dto.config.FeignMultipartSupportConfig;
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.config.FeignMultipartSupportConfig;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;

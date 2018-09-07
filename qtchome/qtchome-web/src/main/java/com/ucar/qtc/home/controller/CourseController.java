@@ -1,8 +1,9 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.ucar.qtc.service.CourseService;
-import com.ucar.qtc.service.FileUploadService;
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.service.AdminService;
+import com.ucar.qtc.home.service.CourseService;
+import com.ucar.qtc.home.service.FileUploadService;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,13 +30,16 @@ public class CourseController {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Autowired
+    private AdminService adminService;
+
     /**
      * 获取要推荐的课程列表,返回课程基本信息
      * @return
      */
     @RequestMapping(value = "/getRecCourseList" , method = RequestMethod.GET)
-    public ResponseResult getRecCourseList(@RequestParam Map<String,Object> params){
-        return  courseService.getRecCourseList(params);
+    public ResponseResult getRecCourseList(){
+        return  adminService.getRecCourse();
     }
 
     /**

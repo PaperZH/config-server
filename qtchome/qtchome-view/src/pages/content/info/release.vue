@@ -131,7 +131,7 @@
         // this.$router.push({name: 'addCourse', params: this.courseDetailForm})
       },
       handleAvatarSuccess (res, file) {
-        console.log(res);
+        console.log(res)
       },
       beforeAvatarUpload (file) {
         const isJPG = file.type === 'image/jpeg'
@@ -143,10 +143,10 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        let fd = new FormData();
-        fd.append('file', file);
+        let fd = new FormData()
+        fd.append('file', file)
         this.$store.dispatch('Post', {'url': '/api-home/course/file/upload', 'data': fd}).then(res => {
-          this.courseDetailForm.course.courseCover = res.data.fileUrl;
+          this.courseDetailForm.course.courseCover = res.data.fileUrl
         })
       },
       handleRemove () {
