@@ -1,13 +1,11 @@
 package com.ucar.qtc.admin.controller;
 
-import com.netflix.discovery.converters.Auto;
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.dto.UserDTO;
 import com.ucar.qtc.admin.dto.do2dto.UserConvert;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.BannerService;
-import com.ucar.qtc.admin.service.FileService;
 import com.ucar.qtc.admin.service.RecommandCourseService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
@@ -38,7 +36,6 @@ public class FrontPageController {
     private CourseServiceRpc courseService;
 
     @Autowired
-
     private UserService userService;
 
     @GetMapping("getRecBanner")
