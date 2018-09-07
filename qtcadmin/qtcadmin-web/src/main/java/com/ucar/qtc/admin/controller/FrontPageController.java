@@ -1,5 +1,6 @@
 package com.ucar.qtc.admin.controller;
 
+import com.netflix.discovery.converters.Auto;
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.dto.UserDTO;
