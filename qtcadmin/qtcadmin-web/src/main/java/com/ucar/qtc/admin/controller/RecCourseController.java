@@ -1,16 +1,11 @@
 package com.ucar.qtc.admin.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.ucar.qtc.admin.domain.CourseDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.service.RecommandCourseService;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
-import com.ucar.qtc.common.dto.QueryDO;
-import com.ucar.qtc.common.utils.Query;
 import com.ucar.qtc.common.utils.ResponseResult;
-import com.ucar.qtc.common.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
