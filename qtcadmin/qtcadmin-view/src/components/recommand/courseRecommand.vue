@@ -24,25 +24,18 @@
 
       <!-- 列表 -->
       <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column type="selection" width="40">
-        </el-table-column>
-        <el-table-column label="预览" align="center">
+        <el-table-column label="预览" align="center" width="200">
           <template slot-scope="scope">
-            <img :src="scope.row.courseCover" height="40">
+            <img :src="scope.row.courseCover" height="80">
           </template>
         </el-table-column>
-        <el-table-column label="类型" width="80" prop="type" align="center">
-          <template slot-scope="scope">
-            <el-tag >图片</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="课程名" prop="courseName" width="240" align="center"></el-table-column>
-        <el-table-column label="课程介绍" prop="courseDescription" width="420" align="center"></el-table-column>
-        <!-- <el-table-column label="课程评分" prop="courseScore" width="80"  align="center"></el-table-column> -->
-        <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
-        <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="课程名" prop="courseName" width="200" align="center"></el-table-column>
+        <el-table-column label="课程类型" prop="typeName" width="100"  align="center"></el-table-column>
+         <el-table-column label="点赞数" prop="praiseNum" width="100"  align="center"></el-table-column>
+        <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>       
+        <el-table-column label="推荐信息" prop="recCourseInfo" width="400" align="center"></el-table-column>
+        <el-table-column label="课程介绍" prop="courseDescription" align="center"></el-table-column>  
+       <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.courseId)">删除</el-button>
@@ -83,6 +76,14 @@
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="推荐信息" prop="description" >
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="addForm.description">
+              </el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -95,6 +96,14 @@
         <el-form :model="editForm" label-width="80px" ref="editForm">
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="推荐信息" prop="orderNum">
+             <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6}"
+                placeholder="请输入内容"
+                v-model="editForm.description">
+              </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -140,12 +149,14 @@
         addForm: {
           courseId: '',
           orderNum: '',
+          description: ''
         },
         //编辑推荐课程 数据
         editFormVisible: false,
         editForm: {
            courseId: '',
-           orderNum: ''
+           orderNum: '',
+           description: ''
         },
       }
     },
@@ -242,6 +253,8 @@
         let that = this
         this.editFormVisible = true
         this.editForm.courseId = row.courseId
+        this.editForm.description = row.recCourseInfo
+        this.editForm.orderNum = row.orderNum
       },
 
       //新增

@@ -72,6 +72,7 @@ public class RecCourseController {
                 CourseVO temp = (CourseVO) iterator.next();
                 if(temp.getCourseId() == ids[i]){
                     temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
+                    temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
                     result.add(temp);
                 }
             }
