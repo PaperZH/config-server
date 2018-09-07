@@ -32,7 +32,7 @@
   </sql>
 
     <sql id="Base_Condition">
-        where assist_user_plan.del_flag = 0
+        where assist_user_plan.del_flag = 1
         <if test="planTitle != null and planTitle != ''">
             and plan_title like  concat('%', #{planTitle}, '%')
         </if>
@@ -68,7 +68,7 @@
 
     <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
     update assist_user_plan
-    set del_flag = 1
+    set del_flag = 0
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -88,9 +88,9 @@
 
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.schedule.dto.UserPlanListDTO" useGeneratedKeys="true"
             keyProperty="id">
-        insert into assist_user_plan(teacher_id, student_id, plan_id ) values
+        insert into assist_user_plan(teacher_id, student_id, plan_id,start_date,end_date,del_flag ) values
         <foreach collection="studentIds" item="studentId" index="index" separator=",">
-        (#{teacherId},#{studentId},#{planId})
+        (#{teacherId},#{studentId},#{planId},#{startDate},#{endDate},1)
     </foreach>
         <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
             <!--<if test="teacherId != null">-->
