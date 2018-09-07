@@ -1,18 +1,18 @@
-package com.ucar.qtc.controller;
+package com.ucar.qtc.home.controller;
 
-import com.ucar.qtc.service.PlanService;
-import com.ucar.qtc.utils.ResponseResult;
+import com.ucar.qtc.home.service.PlanService;
+import com.ucar.qtc.home.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/plan")
 public class PlanController {
+
     @Autowired
     PlanService planService;
     /**
@@ -44,9 +44,6 @@ public class PlanController {
      */
     @RequestMapping("/getTeacherPlan")
     public ResponseResult getTeacherPlanList(@RequestParam Map<String, Object> params) {
-        System.out.println(params);
-        System.out.println(planService.getTeacherPlanList(params));
-//        return planService.getTeacherPlanList(params);
         ArrayList<Map> list = new ArrayList();
         for (int i = 0; i < 8; i++) {
             HashMap<String, Object> hashMap = new HashMap<>();
@@ -95,7 +92,7 @@ public class PlanController {
             hashMap.put("startDate", "2018-8-20");
             hashMap.put("endDate", "2018-8-30");
             if(i%2==0){
-            hashMap.put("studentGetScore", i);}
+                hashMap.put("studentGetScore", i);}
             hashMap.put("planStudentScore", 10);
             if (i % 2 == 0) {
                 hashMap.put("isFinished", true);
@@ -125,7 +122,7 @@ public class PlanController {
             hashMap.put("startDate", "2018-8-20");
             hashMap.put("endDate", "2018-8-30");
             if(i%2==0){
-            hashMap.put("studentGetScore", i);}
+                hashMap.put("studentGetScore", i);}
             hashMap.put("planStudentScore", 10);
             if (i % 2 == 0) {
                 hashMap.put("isFinished", true);
@@ -153,8 +150,8 @@ public class PlanController {
             hashMap.put("courseName", "课程名字"+i);
             hashMap.put("courseDescription", "课程描述"+i);
             list.add(hashMap);
-    }
-    return ResponseResult.data(list);
+        }
+        return ResponseResult.data(list);
     }
 
     /**
