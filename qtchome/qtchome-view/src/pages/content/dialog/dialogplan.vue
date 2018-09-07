@@ -36,9 +36,9 @@
                 :loading="loading">
                 <el-option
                   v-for="item in plans"
-                  :key="item.planId"
+                  :key="item.id"
                   :label="item.planTitle"
-                  :value="item.planId">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -94,7 +94,7 @@
           ]
         },
         params: {
-          'userId': this.$store.getters.userId,
+          'teacherId': this.$store.getters.userId,
           'startDate': null,
           'endDate': null,
           'studentIds': null,
@@ -135,7 +135,7 @@
         if (query !== '') {
           this.loading = true
           setTimeout(() => {
-            this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanListByName', 'data': {'planName': query}}).then(res => {
+            this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': {'planTitle': query}}).then(res => {
               console.log(res)
               this.plans = res.data.data
               this.loading = false

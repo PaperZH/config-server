@@ -35,14 +35,15 @@
         return {
           height: '380px',
           images: [],
-          bannerRes:[]
+          bannerRes: []
         }
       },
       created: function () {
-        // this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
-        //   console.log(res)
-        //   this.images = res.data.page.rows;
-        // })
+        this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
+          console.log(1111)
+          console.log(res)
+          this.images = res.data.page.rows
+        })
       },
       methods: {
         handleDetails (val) {

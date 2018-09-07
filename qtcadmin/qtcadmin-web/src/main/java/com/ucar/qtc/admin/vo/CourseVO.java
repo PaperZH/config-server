@@ -9,12 +9,16 @@ public class CourseVO {
     private String courseCover;
     //详情才有
     private String courseDescription;
+    //推荐信息
+    private String recCourseInfo;
 
     private Integer praiseNum;
     //详情才有
     private String invalidDate;
 
     private String publishTime;
+
+    private Integer orderNum;
 
     public Long getCourseId() {
         return courseId;
@@ -78,5 +82,21 @@ public class CourseVO {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getRecCourseInfo() {
+        return recCourseInfo;
+    }
+
+    public void setRecCourseInfo(String recCourseInfo) {
+        this.recCourseInfo = recCourseInfo;
     }
 }

@@ -3,18 +3,42 @@ package com.ucar.qtcassist.course.controller;
 import com.ucar.qtcassist.api.CourseApi;
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.common.PageResult;
-import com.ucar.qtcassist.api.model.*;
-import com.ucar.qtcassist.api.model.DO.*;
-import com.ucar.qtcassist.api.model.VO.*;
-import com.ucar.qtcassist.course.service.*;
+import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
+import com.ucar.qtcassist.api.model.DO.QueryDO;
+import com.ucar.qtcassist.api.model.DO.UserCourseDO;
+import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
+import com.ucar.qtcassist.api.model.VO.CourseUserVO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
+import com.ucar.qtcassist.api.model.VO.QueryVO;
+import com.ucar.qtcassist.api.model.VO.TeacherVO;
+import com.ucar.qtcassist.course.model.UserDTO;
+import com.ucar.qtcassist.course.service.AdminFeginClient;
+import com.ucar.qtcassist.course.service.CollectCourseService;
+import com.ucar.qtcassist.course.service.CourseCoursewareService;
+import com.ucar.qtcassist.course.service.CourseService;
+import com.ucar.qtcassist.course.service.CourseTypeService;
+import com.ucar.qtcassist.course.service.EvaluateCourseService;
+import com.ucar.qtcassist.course.service.UserCourseService;
 import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/course")
@@ -42,6 +66,9 @@ public class CourseController implements CourseApi {
 
     @Autowired
     private CollectCourseService collectCourseService;
+
+    @Autowired
+    private EvaluateCourseService evaluateCourseService;
 
     /**
      * 根据类型获取分页后的课程列表
@@ -144,20 +171,23 @@ public class CourseController implements CourseApi {
 
         courseVO.setCourseType(courseTypeDO);
         courseVO.setCourseDescription(courseDO.getCourseDescription());
-        Integer collectNum = collectCourseService.getTotalByCourseId(courseVO.getCourseId());
+        Integer collectNum = collectCourseService.getTotalByCourseId(courseId);
         courseVO.setCollectNum(collectNum);
 
         courseDetail.setCourse(courseVO);
 
-//        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
-//        //调用远程的用户服务查询User， 参数为userCourse.getUserId();
-//        Result result = adminFeginClient.getUserById(userCourse.getUserId());
-//        UserDO user = (UserDO) result.getRe();
-//        TeacherVO teacher = new TeacherVO();
-//        teacher.setUserId(user.getUserId());
-//        teacher.setUserName(user.getName());
-//        courseDetail.setTeacher(teacher);
-        courseDetail.setTeacher(null);
+        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
+        String resultStr = adminFeginClient.getUserInfoById(userCourse.getUserId());
+
+        JSONObject jsonObject= (JSONObject) JSONObject.fromObject(resultStr).get("data");
+        UserDTO user = (UserDTO)JSONObject.toBean(jsonObject, UserDTO.class);
+
+        TeacherVO teacher = new TeacherVO();
+        teacher.setUserId(user.getUserId());
+        teacher.setNickname(user.getNickname());
+        teacher.setAvatar(user.getAvatar());
+        teacher.setEmail(user.getEmail());
+        courseDetail.setTeacher(teacher);
 
         List<Long> coursewareIdList = courseCoursewareService.getCoursewareIdListByCourseId(courseId);
         if(coursewareIdList == null || coursewareIdList.size() == 0) {
@@ -166,6 +196,10 @@ public class CourseController implements CourseApi {
             List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
             courseDetail.setCoursewares(coursewareDTOList);
         }
+
+        List<EvaluateCourseDO> evaluates = evaluateCourseService.getListByCourseId(courseId);
+        courseDetail.setEvaluates(evaluates);
+
         return Result.getSuccessResult(courseDetail);
     }
 
@@ -175,7 +209,7 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public Result addCourse(@RequestBody CourseUserVO courseUser) {
+    public Result<CourseVO> addCourse(@RequestBody CourseUserVO courseUser) {
         Long userId = courseUser.getUserId();
         CourseVO courseVO = courseUser.getCourse();
         CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
@@ -195,16 +229,11 @@ public class CourseController implements CourseApi {
             userCourse.setPublishDate(date);
             int count2 = userCourseService.insertSelective(userCourse);
             if(count2 >= 0) {
-                logger.info("添加课程信息成功");
-                return Result.getSuccessResult("添加课程信息成功");
-            } else {
-                logger.info("添加课程信息失败");
-                return Result.getBusinessException("添加课程信息失败","");
+                courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+                return Result.getSuccessResult(courseVO);
             }
-        } else {
-            logger.info("添加课程信息失败");
-            return Result.getBusinessException("添加课程信息失败","");
         }
+        return Result.getBusinessException("添加课程失败","");
     }
 
     /**
@@ -213,7 +242,7 @@ public class CourseController implements CourseApi {
      * @return
      */
     @Override
-    public Result updateCourse(@RequestBody CourseUserVO courseUser) {
+    public Result<CourseVO> updateCourse(@RequestBody CourseUserVO courseUser) {
         Long userId = courseUser.getUserId();
         CourseVO courseVO = courseUser.getCourse();
         CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
@@ -221,17 +250,12 @@ public class CourseController implements CourseApi {
         UserCourseDO userCourse = userCourseService.selectByCourseId(courseVO.getCourseId());
         if(userId.equals(userCourse.getUserId())) {
             int count = courseService.updateByPrimaryKeySelective(courseDO);
-            if(count > 0) {
-                logger.info("更新课程信息成功");
-                return Result.getSuccessResult("更新课程信息成功");
-            } else {
-                logger.info("更新课程信息失败");
-                return Result.getBusinessException("更新课程信息失败","");
+            if(count >= 0) {
+                courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+                return Result.getSuccessResult(courseVO);
             }
-        } else {
-            logger.info("用户和课程不匹配");
-            return Result.getBusinessException("用户和课程不匹配","");
         }
+        return Result.getBusinessException("更新课程失败","");
     }
 
     /**

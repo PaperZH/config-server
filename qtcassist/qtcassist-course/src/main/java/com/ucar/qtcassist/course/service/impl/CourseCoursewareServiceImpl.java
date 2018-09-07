@@ -3,10 +3,8 @@ package com.ucar.qtcassist.course.service.impl;
 import com.ucar.qtcassist.course.dao.CourseCoursewareMapper;
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
 import com.ucar.qtcassist.course.service.CourseCoursewareService;
-import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

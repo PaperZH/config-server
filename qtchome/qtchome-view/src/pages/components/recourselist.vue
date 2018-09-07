@@ -44,9 +44,9 @@
       }
     },
     created () {
-      // this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList', 'data': this.queryParams}).then(res => {
-      //   this.tableData = res.data.re
-      // })
+      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList'}).then(res => {
+        this.tableData = res.data.list
+      })
     }
 
   }

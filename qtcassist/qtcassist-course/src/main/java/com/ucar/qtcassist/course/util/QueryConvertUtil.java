@@ -3,9 +3,6 @@ package com.ucar.qtcassist.course.util;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 
-import java.beans.SimpleBeanInfo;
-import java.text.SimpleDateFormat;
-
 public class QueryConvertUtil {
 
     public static QueryDO convertToQueryDO(QueryVO queryVO) {
@@ -13,7 +10,6 @@ public class QueryConvertUtil {
         if(queryVO.getUserId() != null) {
             queryDO.setUserId(queryVO.getUserId());
         }
-//        queryDO.setCourseId();
         if(queryVO.getCourseIds() != null) {
             queryDO.setCourseIds(queryVO.getCourseIds());
         }
