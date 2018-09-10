@@ -91,6 +91,24 @@ public class UserPlanDO {
         this.teacherEvaluateContent = teacherEvaluateContent == null ? null : teacherEvaluateContent.trim();
     }
 
+    @Override
+    public String toString() {
+        return "UserPlanDO{" +
+                "id=" + id +
+                ", teacherId=" + teacherId +
+                ", studentId=" + studentId +
+                ", planId=" + planId +
+                ", studentEvaluateContent='" + studentEvaluateContent + '\'' +
+                ", studentGetScore=" + studentGetScore +
+                ", studentSummary='" + studentSummary + '\'' +
+                ", teacherEvaluateContent='" + teacherEvaluateContent + '\'' +
+                ", planStudentScore=" + planStudentScore +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", delFlag=" + delFlag +
+                '}';
+    }
+
     public Float getPlanStudentScore() {
         return planStudentScore;
     }

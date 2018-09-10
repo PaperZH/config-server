@@ -1,4 +1,4 @@
-package com.ucar.qtcassist.api.model.vo;
+package com.ucar.qtcassist.api.model.VO;
 
 public class StudentVO {
     public Long getUserId() {

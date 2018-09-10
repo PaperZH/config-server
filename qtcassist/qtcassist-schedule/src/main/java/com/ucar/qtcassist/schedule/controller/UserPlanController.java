@@ -5,7 +5,7 @@ import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.api.model.DO.PlanDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.UserPlanDO;
-import com.ucar.qtcassist.api.model.vo.StudentVO;
+import com.ucar.qtcassist.api.model.VO.StudentVO;
 import com.ucar.qtcassist.course.model.UserDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanDTO;
