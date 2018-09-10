@@ -99,7 +99,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
     @Test
     public void MqTest() throws Exception {
-        File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test.pptx");
+        File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test111.pptx");
         File pdf = new File("C:\\Users\\xsj\\Desktop\\qtc\\MQtest.pptx");
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(ppt);

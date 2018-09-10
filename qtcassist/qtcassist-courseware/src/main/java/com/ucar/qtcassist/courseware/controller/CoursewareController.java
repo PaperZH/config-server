@@ -7,6 +7,7 @@ import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.*;
+import com.ucar.qtcassist.courseware.util.MesListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,8 @@ public class CoursewareController implements CoursewareApi {
     private CoursewareTypeService coursewareTypeService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    MesListener mesListener;
 
 
     /**
@@ -138,7 +141,10 @@ public class CoursewareController implements CoursewareApi {
                 e.printStackTrace();
             }
             try {
-                String sourceUrl = remoteFileService.uploadFile(is, courseCoursewareDTO.getName());
+                int point = courseCoursewareDTO.getFileUrl().lastIndexOf(".");
+                String suffix = courseCoursewareDTO.getFileUrl().substring(point + 1, courseCoursewareDTO.getFileUrl().length());
+                String temname=courseCoursewareDTO.getName()+"."+suffix;
+                String sourceUrl = remoteFileService.uploadFile(is, temname);
                 //插表   baseCourseware
                 BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
                 baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
@@ -158,7 +164,8 @@ public class CoursewareController implements CoursewareApi {
                 coursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
                 coursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
                 coursewareDO.setCoursewareName(courseCoursewareDTO.getName());
-                Long newid = coursewareService.addCourseware(coursewareDO);
+                coursewareService.addCourseware(coursewareDO);
+                Long newid =coursewareDO.getId();
                 //将上传的文件投递到mq中
                 FileDTO fileDTO=new FileDTO();
                 fileDTO.setLocation(courseCoursewareDTO.getFileUrl());
