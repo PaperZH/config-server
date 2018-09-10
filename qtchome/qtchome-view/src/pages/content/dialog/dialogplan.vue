@@ -10,9 +10,9 @@
               placeholder="请选择学员">
               <el-option
                 v-for="item in students"
-                :key="item.studentId"
-                :label="item.studentName"
-                :value="item.studentId">
+                :key="item.userId"
+                :label="item.nickname"
+                :value="item.userId">
               </el-option>
             </el-select>
           </el-form-item>

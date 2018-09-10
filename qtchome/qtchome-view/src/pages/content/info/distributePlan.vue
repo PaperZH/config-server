@@ -14,9 +14,9 @@
         <el-row :gutter="24" style="margin-left: 88px;margin-right: 123px; margin-top: 10px;">
           <el-col :span="4" v-for="(o, index) in indexList" :key="index" >
             <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject" >
-              <img :src=o.studentAvatar class="image" @click="addStyleClick(o)">
+              <img :src=o.avatar class="image" @click="addStyleClick(o)">
               <div style="padding: 14px;text-align: center">
-                <span>{{o.studentName}}</span>
+                <span>{{o.nickname}}</span>
               </div>
             </el-card>
           </el-col>
@@ -191,10 +191,16 @@
           o.style = true
         }
       },
+      getStudents () {
+        let teacherId = this.$store.getters.userId
+        this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': 1}}).then(res => {
+          console.log(res)
+          this.indexList = res.data.re
+        })
+      },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.tableData = res.data.re.rows
-          this.indexList = [{'studentName': '张三', 'studentId': 5}]
           this.total = res.data.re.total
         })
       }
@@ -202,6 +208,7 @@
     mounted () {
       this.queryParams.teacherId = this.$store.getters.userId
       this.getTeacherPlan()
+      this.getStudents()
     },
     name: 'drawupplan'
   }
