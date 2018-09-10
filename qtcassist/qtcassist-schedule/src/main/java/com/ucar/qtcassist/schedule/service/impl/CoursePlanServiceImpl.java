@@ -3,9 +3,12 @@ package com.ucar.qtcassist.schedule.service.impl;
 
 import com.ucar.qtcassist.schedule.dao.CoursePlanMapper;
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
+import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CoursePlanServiceImpl implements CoursePlanService {
@@ -24,13 +27,18 @@ public class CoursePlanServiceImpl implements CoursePlanService {
     }
 
     @Override
-    public int insertSelective(CoursePlanDO record) {
+    public int insertSelective(CoursePlanDTO record) {
         return coursePlanMapper.insertSelective(record);
     }
 
     @Override
-    public CoursePlanDO selectByPrimaryKey(Long id) {
+    public List<CoursePlanDO> selectByPrimaryKey(Long id) {
         return coursePlanMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<CoursePlanDO> selectByCourseName(String courseName) {
+        return coursePlanMapper.selectByCourseName(courseName);
     }
 
     @Override

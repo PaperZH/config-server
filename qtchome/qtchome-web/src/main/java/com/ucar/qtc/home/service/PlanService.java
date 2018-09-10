@@ -74,4 +74,43 @@ public interface PlanService {
      */
     @RequestMapping("/userPlan/delete/{planId}")
     public ResponseResult deletePublished(@PathVariable("planId") long planId);
+
+    /**
+     * 增加计划课程
+     * @param params
+     * @return
+     */
+    @RequestMapping("/coursePlan/add")
+    public ResponseResult addCoursePlan(Map<String,Object> params);
+    /**
+     * 根据计划ID获取相应计划课程
+     * @param planId
+     * @return
+     */
+    @RequestMapping("/coursePlan/get/{planId}")
+    public ResponseResult getCourseByPlanId(@PathVariable("planId") long planId);
+
+    /**
+     * 根据课程名称查询课程
+     * @param courseName
+     * @return
+     */
+    @RequestMapping("/coursePlan/getCourseList")
+    public ResponseResult getCourseList(String courseName);
+
+    /**
+     * 删除计划课程
+     * @param id
+     * @return
+     */
+    @RequestMapping("/coursePlan/delete/{id}")
+    public ResponseResult deleteCourse(@PathVariable("id") long id);
+
+    /**
+     * 获取发布计划详细信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/userPlan/getDetails/{id}")
+    public ResponseResult getPlanDetailsByPlanId(@PathVariable("id") long id);
 }

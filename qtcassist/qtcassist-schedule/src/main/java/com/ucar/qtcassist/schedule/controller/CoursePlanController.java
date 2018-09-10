@@ -4,9 +4,12 @@ import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
+import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/coursePlan")
@@ -35,14 +38,15 @@ public class CoursePlanController {
 
     /**
      * 添加课程计划关系
-     * @param coursePlan 课程计划对象
+     * @param coursePlanDTO
      * @return
      */
     @PostMapping("/add")
-    public Result add(CoursePlanDO coursePlan) {
-        int count = coursePlanService.insertSelective(coursePlan);
+    public Result add(@RequestBody CoursePlanDTO coursePlanDTO) {
+        int count = coursePlanService.insertSelective(coursePlanDTO);
         if(count != 0) {
-            return Result.getSuccessResult("添加课程课件关联信息成功");
+            List<CoursePlanDO> coursePlanDO = coursePlanService.selectByPrimaryKey(coursePlanDTO.getPlanId());
+            return Result.getSuccessResult(coursePlanDO);
         } else {
             return Result.getBusinessException("添加课程课件关联信息失败", "-2");
         }
@@ -55,7 +59,13 @@ public class CoursePlanController {
      */
     @GetMapping("/get/{id}")
     public Result get(@PathVariable("id") Long id) {
-        CoursePlanDO coursePlanDO = coursePlanService.selectByPrimaryKey(id);
+        List<CoursePlanDO> coursePlanDO = coursePlanService.selectByPrimaryKey(id);
+        return Result.getSuccessResult(coursePlanDO);
+    }
+
+    @RequestMapping("/getCourseList")
+    public Result get(@RequestBody String courseName){
+        List<CoursePlanDO> coursePlanDO = coursePlanService.selectByCourseName(courseName);
         return Result.getSuccessResult(coursePlanDO);
     }
 

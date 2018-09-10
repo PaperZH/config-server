@@ -2,6 +2,7 @@ package com.ucar.qtc.admin.controller;
 
 import com.ucar.qtc.admin.domain.BannerDO;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
+import com.ucar.qtc.admin.domain.UserDO;
 import com.ucar.qtc.admin.dto.UserDTO;
 import com.ucar.qtc.admin.dto.do2dto.UserConvert;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -88,5 +90,23 @@ public class FrontPageController {
     public ResponseResult getUserInfoById(@RequestParam("id") Long id) {
         UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
         return ResponseResult.ok().put("data",userDTO);
+    }
+
+    @GetMapping("getStudentInfoById")
+    public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id) {
+        List<UserDTO> userDTOS = new LinkedList<UserDTO>();
+        for(UserDO userDO:userService.getStudentById(id)){
+            userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+        }
+        return ResponseResult.ok().put("data",userDTOS);
+    }
+
+    @GetMapping("getTeacherInfoById")
+    public ResponseResult getTeacherInfoById(@RequestParam("id") Long id) {
+        List<UserDTO> userDTOS = new LinkedList<UserDTO>();
+        for(UserDO userDO:userService.getTeacherById(id)){
+            userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+        }
+        return ResponseResult.ok().put("data",userDTOS);
     }
 }

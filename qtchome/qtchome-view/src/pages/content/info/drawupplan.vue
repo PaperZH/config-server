@@ -36,6 +36,19 @@
           label="总分"
           width="100">
         </el-table-column>
+        <el-table-column
+          label="课程"
+          width="100"
+        >
+          <template slot-scope="scope" >
+            <el-button
+              type="primary"
+              round
+              @click="handleCourse(scope.row.id)"
+              size="small"
+            >分配课程</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
@@ -44,6 +57,7 @@
         </el-table-column>
       </el-table>
       <dialog-plan  :show.sync="show" v-bind:message="message" :title="title"  @EditClick="getTeacherPlan"></dialog-plan>
+      <plan-course  :courseopen.sync="courseopen" v-bind:courseData="courseData" title="计划课程信息" v-bind:id="id" @handleCourse="handleCourse"></plan-course>
       <div class="block" style="text-align: right">
         <el-pagination
           @size-change="handleSizeChange"
@@ -63,13 +77,17 @@
 
 <script>
     import dialogplan from '@/pages/content/dialog/addPlan'  // 添加计划弹框
+    import planCourse from '@/pages/content/dialog/planCourse'  // 计划课程弹框
     export default {
       components: {
-        'dialog-plan': dialogplan
+        'dialog-plan': dialogplan,
+        'plan-course': planCourse
       },
       data () {
         return {
           show: false,
+          courseopen: false,
+          courseData: [],
           indexList: [{
             name: '张三',
             style: false
@@ -135,6 +153,15 @@
           let data = val
           this.message = data
         },
+        handleCourse (planId) {
+          console.log('查看course')
+          this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseByPlanId', 'data': {'planId': planId}}).then(res => {
+            console.log(res)
+            this.courseData = res.data.re
+            this.id = planId
+            this.courseopen = true
+          })
+        },
         handleSizeChange (val) {
           console.log(`每页 ${val} 条`)
         },
@@ -157,8 +184,8 @@
           console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
             console.log(res)
-            this.tableData = res.data.data
-            this.total = res.data.total
+            this.tableData = res.data.re.rows
+            this.total = res.data.re.total
           })
         }
       },

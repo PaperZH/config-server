@@ -16,9 +16,9 @@
         :loading="loading">
         <el-option
           v-for="item in courses"
-          :key="item.courseId"
+          :key="item.id"
           :label="item.courseName"
-          :value="item.courseId">
+          :value="item.id">
         </el-option>
       </el-select>
       <el-button type="primary" @click="addCourse()">添加</el-button>
@@ -63,7 +63,7 @@
         type: Array,
         default: []
       },
-      planId: {
+      id: {
         type: Number,
         default: 0
       }
@@ -85,7 +85,7 @@
     methods: {
       addPlanCourse () {
         console.log(this.courseData)
-        console.log(this.planId)
+        console.log(this.id)
         this.innerVisible = true
       },
       handleDelete (row, index) {
@@ -114,14 +114,11 @@
             type: 'warning'
           })
         } else {
-          let data = {'planId': this.planId, 'courseIds': this.courseIds}
+          let data = {'planId': this.id, 'courseIds': this.courseIds}
           console.log(data)
           this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedCourse', 'data': data}).then(res => {
             console.log(res)
-            let course = res.data.data
-            for (let i = 0; i < course.length; i++) {
-              this.courseData.unshift(course[i])
-            }
+            this.$emit('handleCourse', this.id)
           }).catch(_ => {
             this.$message({
               showClose: true,
@@ -136,11 +133,11 @@
         if (query !== '') {
           this.loading = true
           setTimeout(() => {
-            this.$store.dispatch('Get', {'url': '/api-home/course/getCourseListByName', 'data': {'courseName': query}}).then(res => {
-              this.courses = res.data.data
+            this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseList', 'data': {'courseName': query}}).then(res => {
+              this.courses = res.data.re
               this.loading = false
             })
-          }, 200)
+          }, 500)
         } else {
           this.courses = []
         }

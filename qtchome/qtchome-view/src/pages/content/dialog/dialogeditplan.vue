@@ -24,11 +24,11 @@
         <el-col>
         <el-collapse v-model="activeName" accordion>
           <el-collapse-item title="培训内容" name="1">
-              <el-input v-model="message.plan.planContent" type="textarea"resize="none"  disabled
+              <el-input v-model="message.planContent" type="textarea"resize="none"  disabled
                         :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-collapse-item>
           <el-collapse-item title="培训目的" name="2">
-            <el-input v-model="message.plan.planDestination"  type="textarea" resize="none"  disabled
+            <el-input v-model="message.planDestination"  type="textarea" resize="none"  disabled
                       :autosize="{ minRows: 8, maxRows: 12}"></el-input>
           </el-collapse-item>
           <el-collapse-item title="计划评价" name="3">
@@ -84,7 +84,7 @@
     },
     methods: {
       onSubmit () {
-        let data = {'studentEvaluateContent': this.message.studentEvaluateContent, 'studentSummary': this.message.studentSummary, 'planId': this.message.planId}
+        let data = {'studentEvaluateContent': this.message.studentEvaluateContent, 'studentSummary': this.message.studentSummary, 'id': this.message.id}
         console.log(data)
         this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
           console.log(res)
