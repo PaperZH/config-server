@@ -75,7 +75,7 @@
           dataPlan: [],
           queryParams: {
             studentId: this.$store.getters.userId,
-            planTitle: '',
+            planTitle: null,
             currentPage: 1,
             pageSize: 5
           }
