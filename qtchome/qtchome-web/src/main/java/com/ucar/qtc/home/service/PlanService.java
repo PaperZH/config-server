@@ -10,7 +10,13 @@ import java.util.Map;
 
 @FeignClient("QTCASSIST")
 public interface PlanService {
-
+    /**
+     * 获取学生信息
+     * @param teacherId
+     * @return
+     */
+    @RequestMapping("/userPlan/getStudents/{id}")
+    public ResponseResult getStudents(@PathVariable("id") Long teacherId);
     /**
      * 分页获取教师制定计划列表
      * @param params    (long teacherId, String planTitle,int currentPage, int pageSize)
