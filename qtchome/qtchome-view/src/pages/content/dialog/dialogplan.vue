@@ -123,6 +123,7 @@
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.params}).then(res => {
               console.log(res)
               this.$refs['message'].resetFields()
+              this.$emit('getTeacherPlan')
               this.visible = false
             })
           } else {
@@ -137,7 +138,7 @@
           setTimeout(() => {
             this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': {'planTitle': query}}).then(res => {
               console.log(res)
-              this.plans = res.data.data
+              this.plans = res.data.re.rows
               this.loading = false
             })
           }, 400)

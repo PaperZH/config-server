@@ -4,6 +4,7 @@ import com.ucar.qtcassist.api.model.DO.UserPlanDO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanListDTO;
+import com.ucar.qtcassist.schedule.vo.PlanDetailsVO;
 
 import java.util.List;
 
@@ -23,4 +24,5 @@ public interface UserPlanService {
     List<UserPlanDTO> queryUserPlan(QueryPlanDTO planDTO);
 
     int queryTotal(QueryPlanDTO planDTO);
+
 }

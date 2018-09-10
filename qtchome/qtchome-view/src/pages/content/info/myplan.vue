@@ -36,7 +36,7 @@
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="onAddPlan(scope.row.planId)">总结</el-button>
+          <el-button type="text" size="small" @click="onAddPlan(scope.row.id)">总结</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,7 +75,7 @@
           dataPlan: [],
           queryParams: {
             studentId: this.$store.getters.userId,
-            planName: '',
+            planTitle: '',
             currentPage: 1,
             pageSize: 5
           }
@@ -84,7 +84,7 @@
       methods: {
         onSubmit () {
           console.log('submit!')
-          this.queryParams.planName = this.formInline.name
+          this.queryParams.planTitle = this.formInline.name
           this.queryParams.currentPage = 1
           this.getStudentPlan()
         },
@@ -103,7 +103,7 @@
           console.log(val)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
             console.log(res)
-            this.message = res.data.data
+            this.message = res.data.re
             this.show = true
           })
         },
@@ -118,8 +118,8 @@
         getStudentPlan () {
           console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
-            this.dataPlan = res.data.data
-            this.total = res.data.total
+            this.dataPlan = res.data.re.rows
+            this.total = res.data.re.total
           })
         },
         formatterFinished (row, column, cellValue, index) {

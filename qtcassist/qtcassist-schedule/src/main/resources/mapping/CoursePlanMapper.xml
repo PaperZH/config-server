@@ -5,43 +5,43 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="plan_id" property="planId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
+    <result column="course_description" property="courseDescription" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, plan_id, course_id
+    assist_course_plan.id, plan_id, course_id ,course_name,course_description
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from assist_course_plan
-    where id = #{id,jdbcType=BIGINT}
+    from assist_course_plan left join assist_course on course_id = assist_course.id
+    where plan_id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByCourseName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id,course_name
+    from assist_course where del_flag=1 and course_name like  concat('%', #{courseName}, '%')
+    limit 0,10
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from assist_course_plan
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course_plan (plan_id, course_id)
     values (#{planId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT})
   </insert>
+
   <insert id="insertSelective" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" useGeneratedKeys="true" keyProperty="id">
-    insert into assist_course_plan
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="planId != null" >
-        plan_id,
-      </if>
-      <if test="courseId != null" >
-        course_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="planId != null" >
-        #{planId,jdbcType=BIGINT},
-      </if>
-      <if test="courseId != null" >
-        #{courseId,jdbcType=BIGINT},
-      </if>
-    </trim>
+    insert into assist_course_plan (plan_id,course_id) values
+    <foreach collection="courseIds" item="courseId" index="index" separator=",">
+      (#{planId},#{courseId})
+    </foreach>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" >
     update assist_course_plan
     <set >
@@ -54,6 +54,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.ucar.qtcassist.api.model.DO.CoursePlanDO" >
     update assist_course_plan
     set plan_id = #{planId,jdbcType=BIGINT},

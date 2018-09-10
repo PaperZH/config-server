@@ -1,7 +1,10 @@
 package com.ucar.qtcassist.schedule.dao;
 
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
+import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface CoursePlanMapper {
@@ -9,11 +12,13 @@ public interface CoursePlanMapper {
 
     int insert(CoursePlanDO record);
 
-    int insertSelective(CoursePlanDO record);
+    int insertSelective(CoursePlanDTO record);
 
-    CoursePlanDO selectByPrimaryKey(Long id);
+    List<CoursePlanDO> selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(CoursePlanDO record);
 
     int updateByPrimaryKey(CoursePlanDO record);
+
+    List<CoursePlanDO> selectByCourseName(String courseName);
 }

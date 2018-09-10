@@ -6,6 +6,7 @@ import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanListDTO;
 import com.ucar.qtcassist.schedule.service.UserPlanService;
+import com.ucar.qtcassist.schedule.vo.PlanDetailsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,4 +57,5 @@ public class UserPlanServiceImpl implements UserPlanService {
     public int queryTotal(QueryPlanDTO planDTO) {
         return userPlanMapper.queryTotal(planDTO);
     }
+
 }

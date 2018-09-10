@@ -20,6 +20,10 @@ import java.util.Set;
 public interface UserService {
 	UserDO get(Long id);
 
+	List<UserDO> getTeacherById(Long id);
+
+	List<UserDO> getStudentById(Long id);
+
 	List<UserDO> list(Map<String, Object> map);
 
 	int count(Map<String, Object> map);
