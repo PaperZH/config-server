@@ -80,8 +80,8 @@ public class MesListener implements MessageListener {
                     if(!dir.exists()) {
                         dir.mkdirs();
                     }
-                    //remoteFileService.fileConvert(fPPT, fPDF);
-                    //LOGGER.info("conver successfully");
+                    remoteFileService.fileConvert(fPPT, fPDF);
+                    LOGGER.info("conver successfully");
                 }
                 InputStream in = null;
                 try {
