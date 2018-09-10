@@ -24,6 +24,7 @@
       </div>
       <div style="margin-top: 10px">
         <el-table
+          v-loading="loading"
           :data="tableData"
           border
           style="width: 100%">
@@ -31,7 +32,7 @@
             fixed
             prop="planTitle"
             label="计划名称"
-            width="250">
+            width="180">
           </el-table-column>
           <el-table-column
             prop="studentName"
@@ -41,12 +42,12 @@
           <el-table-column
             prop="startDate"
             label="开始时间"
-            width="220">
+            >
           </el-table-column>
           <el-table-column
             prop="endDate"
             label="结束时间"
-            width="220">
+            >
           </el-table-column>
           <el-table-column
             prop="studentGetScore"
@@ -78,7 +79,6 @@
         <edit-plan  :show.sync="edit" v-bind:message="planDetails" title="计划评价" @getTeacherPlan="getTeacherPlan"></edit-plan>
         <div class="block" style="text-align: right">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage4"
             :page-sizes="[100, 200, 300, 400]"
@@ -107,17 +107,12 @@
         courseopen: false,
         edit: false,
         planId: 0,
-        indexList: [{
-          name: '张三',
-          style: false
-        }, {
-          name: '李斯',
-          style: false
-        }],
+        loading: true,
         styleObject: {
           border: '1px solid #409EFF'
         },
         message: {},
+        indexList: [],
         planDetails: {'plan': { }},
         formInline: {
           name: '',
@@ -137,7 +132,7 @@
     },
     methods: {
       onSubmit () {
-        console.log('submit!')
+        this.loading = true
         this.queryParams.planTitle = this.formInline.name
         this.queryParams.currentPage = 1
         this.getTeacherPlan()
@@ -172,10 +167,8 @@
           })
         })
       },
-      handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
-      },
       handleCurrentChange (val) {
+        this.loading = true
         this.queryParams.currentPage = val
         this.getTeacherPlan()
         console.log(`当前页: ${val}`)
@@ -193,13 +186,14 @@
       },
       getStudents () {
         let teacherId = this.$store.getters.userId
-        this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': 1}}).then(res => {
+        this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': teacherId}}).then(res => {
           console.log(res)
           this.indexList = res.data.re
         })
       },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
+          this.loading = false
           this.tableData = res.data.re.rows
           this.total = res.data.re.total
         })

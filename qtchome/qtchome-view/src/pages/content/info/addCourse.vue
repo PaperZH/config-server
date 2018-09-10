@@ -22,7 +22,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
-                <el-autocomplete
+                <el-autocomplete  ref="sys"
                   popper-class="my-autocomplete"
                   v-model="state4"
                   :fetch-suggestions="querySearchAsync"

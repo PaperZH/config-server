@@ -10,6 +10,7 @@
   </el-form>
     <el-table
       border
+      v-loading="loading"
       :data="dataPlan"
       style="width: 100%"
       :row-class-name="tableRowClassName">
@@ -70,7 +71,7 @@
           },
           total: 0,
           message: {'plan': {}},
-          value5: 3.7,
+          loading: true,
           currentPage4: 4,
           dataPlan: [],
           queryParams: {
@@ -83,7 +84,7 @@
       },
       methods: {
         onSubmit () {
-          console.log('submit!')
+          this.loading = true
           this.queryParams.planTitle = this.formInline.name
           this.queryParams.currentPage = 1
           this.getStudentPlan()
@@ -95,9 +96,6 @@
           this.queryParams.currentPage = val
           this.getStudentPlan()
           console.log(`当前页: ${val}`)
-        },
-        getHtml (val) {
-
         },
         onAddPlan (val) {
           console.log(val)
@@ -118,6 +116,7 @@
         getStudentPlan () {
           console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
+            this.loading = false
             this.dataPlan = res.data.re.rows
             this.total = res.data.re.total
           })

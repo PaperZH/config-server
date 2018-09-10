@@ -86,6 +86,13 @@
     methods: {
       onSubmit () {
         this.$refs['message'].validate((valid) => {
+          let score = this.message.studentGetScore
+          let totalScore = this.message.planScore
+          if (score > totalScore) {
+            this.$message.error('评分不得大于总分')
+            return ' '
+          }
+          console.log(score)
           if (valid) {
             let data = {
               'studentGetScore': this.message.studentGetScore,
