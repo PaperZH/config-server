@@ -2,23 +2,45 @@
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px;margin-right: 0px; margin-top: 0px;">
 
-      <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 20%; float: left">
+      <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 22%; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
           <div v-on:click="handleDetails(item)">
-          <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
-          <div style="padding: 9px;">
-            <span >{{item.courseName}}</span>
-            <div class="bottom clearfix">
-              <span class="time">{{item.typeName}}</span>
-              <span class="time">
-                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
-              </span>
+
+            <div style="width: 100%; height: 200px;">
+              <img v-bind:src="item.courseCover"  class="image">
             </div>
-            <span >{{item.publishTime}}</span>
-            <!--<time class="button">{{item.publishTime}}</time>-->
-          </div>
+
+            <div style="padding: 9px;">
+
+              <div>
+                <span>{{item.courseName}}</span>
+              </div>
+
+              <div class="bottom clearfix">
+                <el-row :gutter="24">
+                  <el-col :span="8">
+                    <span class="time">{{item.typeName}}</span>
+                  </el-col>
+                  <el-col :span="16">
+                    <span class="time">
+                      <el-col :span="8">
+                        <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                      </el-col>
+                      <el-col :span="8">
+                        <i class="el-icon-star-on" >{{item.collectNum}}</i>
+                      </el-col>
+                      <el-col :span="8">
+                        <i class="el-icon-edit" >{{item.readNum}}</i>
+                      </el-col>
+                    </span>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <span class="time">发布日期: {{item.publishTime}}</span>
+                </el-row>
+              </div>
+            </div>
+
           </div>
         </el-card>
       </div>
@@ -46,6 +68,7 @@
     created () {
       this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList'}).then(res => {
         this.tableData = res.data.list
+        console.log(this.tableData)
       })
     }
 
@@ -85,8 +108,11 @@
   }
 
   .image {
+    width: 100%;
     height: 200px;
     display: block;
+    backgroundRepeat:'no-repeat';
+    backgroundSize: 'contain';
   }
 
   .clearfix:before,

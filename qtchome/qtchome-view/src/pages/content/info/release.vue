@@ -78,7 +78,7 @@
             courseName: null,
             courseCover: null,
             courseDescription: '暂无描述',
-            courseScore: '100',
+            courseScore: '10',
             invalidDate: null
           },
           coursewares: [],
