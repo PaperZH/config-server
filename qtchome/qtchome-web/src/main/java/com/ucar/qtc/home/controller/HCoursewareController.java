@@ -35,8 +35,8 @@ public class HCoursewareController {
         return hcoursewareService.getAllType();
     }
 
-    @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    Result uploadCourseware( MultipartFile file) throws Exception{
-        return hcoursewareService.uploadCourseware(file);
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    Result saveCourseware( MultipartFile file) throws Exception{
+        return hcoursewareService.saveCourseware(file);
     }
 }

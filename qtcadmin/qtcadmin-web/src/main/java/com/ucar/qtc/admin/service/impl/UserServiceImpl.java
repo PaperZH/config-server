@@ -51,6 +51,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<UserDO> getTeacherById(Long id) {
+		List<UserDO> users = userMapper.getTeacherById(id);
+		for(UserDO userDO:users){
+			userDO.setRoleIds(userRoleMapper.listRoleId(userDO.getUserId()));
+			userDO.setDeptName(deptMapper.get(userDO.getDeptId()).getName());
+		}
+		return users;
+	}
+
+	@Override
+	public List<UserDO> getStudentById(Long id) {
+		List<UserDO> users = userMapper.getStudentById(id);
+		for(UserDO userDO:users){
+			userDO.setRoleIds(userRoleMapper.listRoleId(userDO.getUserId()));
+			userDO.setDeptName(deptMapper.get(userDO.getDeptId()).getName());
+		}
+		return users;
+	}
+
+	@Override
 	public List<UserDO> list(Map<String, Object> map) {
 		return userMapper.list(map);
 	}

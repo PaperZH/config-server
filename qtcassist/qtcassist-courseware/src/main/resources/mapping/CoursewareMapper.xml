@@ -5,13 +5,14 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="type_id" property="typeId" jdbcType="BIGINT"/>
         <result column="base_courseware_id" property="baseCoursewareId" jdbcType="INTEGER"/>
+        <result column="courseware_num" property="coursewareNum" jdbcType="VARCHAR"/>
         <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR"/>
         <result column="courseware_description" property="coursewareDescription" jdbcType="VARCHAR"/>
         <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, type_id, base_courseware_id, courseware_name, courseware_description, publish_time, 
+    id, type_id, base_courseware_id,courseware_num, courseware_name, courseware_description, publish_time,
     update_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -25,9 +26,9 @@
         <include refid="Base_Column_List"/>
         from assist_courseware
         <where>
-        <foreach collection="list" item="id" open="id in (" separator="," close=")">
-          #{id}
-        </foreach>
+            <foreach collection="list" item="id" open="id in (" separator="," close=")">
+                #{id}
+            </foreach>
         </where>
     </select>
 
@@ -36,16 +37,13 @@
     delete from assist_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
-        insert into assist_courseware ( type_id, base_courseware_id,
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+        insert into assist_courseware ( type_id, base_courseware_id,courseware_num,
         courseware_name, courseware_description,
         publish_time, update_time)
-        values ( #{typeId,jdbcType=BIGINT}, #{baseCoursewareId,jdbcType=INTEGER},
+        values ( #{typeId,jdbcType=BIGINT},#{baseCoursewareId,jdbcType=INTEGER},#{coursewareNum,jdbcType=INTEGER},
         #{coursewareName,jdbcType=VARCHAR}, #{coursewareDescription,jdbcType=VARCHAR},
         #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
-        <selectKey resultType="java.lang.Long" keyProperty="id">
-            SELECT @@IDENTITY AS ID
-        </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
         insert into assist_courseware
@@ -58,6 +56,9 @@
             </if>
             <if test="baseCoursewareId != null">
                 base_courseware_id,
+            </if>
+            <if test="coursewareNum !=null">
+                courseware_num,
             </if>
             <if test="coursewareName != null">
                 courseware_name,
@@ -81,6 +82,9 @@
             </if>
             <if test="baseCoursewareId != null">
                 #{baseCoursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="coursewareNum != null">
+                #{coursewareNum,jdbcType=INTEGER},
             </if>
             <if test="coursewareName != null">
                 #{coursewareName,jdbcType=VARCHAR},
@@ -108,6 +112,9 @@
             <if test="coursewareName != null">
                 courseware_name = #{coursewareName,jdbcType=VARCHAR},
             </if>
+            <if test="coursewareNum != null">
+                courseware_num = #{coursewareNum,jdbcType=VARCHAR},
+            </if>
             <if test="coursewareDescription != null">
                 courseware_description = #{coursewareDescription,jdbcType=VARCHAR},
             </if>
@@ -124,6 +131,7 @@
     update assist_courseware
     set type_id = #{typeId,jdbcType=BIGINT},
       base_courseware_id = #{baseCoursewareId,jdbcType=INTEGER},
+      courseware_num = #{coursewareNaum,jdbcType=VARCHAR},
       courseware_name = #{coursewareName,jdbcType=VARCHAR},
       courseware_description = #{coursewareDescription,jdbcType=VARCHAR},
       publish_time = #{publishTime,jdbcType=TIMESTAMP},

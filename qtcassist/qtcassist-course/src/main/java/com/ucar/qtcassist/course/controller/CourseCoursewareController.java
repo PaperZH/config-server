@@ -6,9 +6,7 @@ import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
 import com.ucar.qtcassist.course.service.CourseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,8 +49,9 @@ public class CourseCoursewareController implements CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
-    @Override
-    public Result addCourseCourseware(@PathVariable Long courseId, @PathVariable Long coursewareId) {
+    @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
+    public Result addCourseCourseware(@RequestParam("courseId") Long courseId,
+                               @RequestParam("coursewareId") Long coursewareId) {
         CourseCoursewareDO courseCourseware = new CourseCoursewareDO();
         courseCourseware.setCourseId(courseId);
         courseCourseware.setCoursewareId(coursewareId);

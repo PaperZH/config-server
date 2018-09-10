@@ -1,28 +1,17 @@
-package com.ucar.qtcassist.api;
+package com.ucar.qtc.home.service;
 
 import com.ucar.qtcassist.api.model.Result;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-public interface CourseCoursewareApi {
-
-//    /**
-//     * 查询某个课程课件的具体课件信息
-//     * @param coursewareId
-//     * @return
-//     */
-//    @GetMapping("/getCourseCourseware/{coursewareId}")
-//    Result<CoursewareDO> getCourseCourseware(@PathVariable("coursewareId") Long coursewareId);
-//
-//    /**
-//     * 查看某一门课程的所有课件的具体信息
-//     * @param courseId 课程ID
-//     * @return 课件列表
-//     */
-//    @GetMapping("/getCourseCoursewareList/{courseId}")
-//    Result<List<CoursewareDO>> getCourseCoursewareList(@PathVariable("courseId") Long courseId);
-
+/**
+ * 请填写类注释
+ *
+ * @author shijie.xu
+ * @since 2018年09月05日
+ */
+@FeignClient(name = "qtcassist" ,path = "/courseCourseware")
+public interface CourseCoursewareService {
     /**
      * 添加一个课程课件
      * @param courseId
@@ -54,5 +43,4 @@ public interface CourseCoursewareApi {
     @GetMapping("/deleteCourseCourseware/{courseId}/{coursewareId}")
     Result deleteCourseCourseware(@PathVariable("courseId") Long courseId,
                                   @PathVariable("coursewareId") Long coursewareId);
-
 }

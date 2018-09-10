@@ -1,13 +1,13 @@
 package com.ucar.qtc.home.service;
 
+import com.ucar.qtc.home.config.FeignMultipartSupportConfig;
 import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
+import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
 import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
 import com.ucar.qtcassist.api.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -18,17 +18,23 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
-@FeignClient(name = "qtcassist",path = "/course")
+@FeignClient(name = "qtcassist",path = "/courseware",configuration = FeignMultipartSupportConfig.class)
 public interface HCoursewareService  {
-
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Result uploadCourseware(@RequestPart(value = "file") MultipartFile file) throws Exception;
+    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST,
+    produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result saveCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
 
     @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();
+
+    @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
+    Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num);
+
+    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
+    Result uploadCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
+
+
 }

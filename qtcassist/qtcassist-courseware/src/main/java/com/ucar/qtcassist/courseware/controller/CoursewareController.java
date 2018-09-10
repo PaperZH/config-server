@@ -2,8 +2,6 @@ package com.ucar.qtcassist.courseware.controller;
 
 import com.ucar.qtcassist.api.CoursewareApi;
 import com.ucar.qtcassist.api.model.*;
-import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
-import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
@@ -16,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +27,7 @@ import java.util.List;
  * @since 2018年08月13日
  */
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/courseware")
 public class CoursewareController implements CoursewareApi {
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
     @Autowired
@@ -43,15 +40,17 @@ public class CoursewareController implements CoursewareApi {
     private MqService mqService;
     @Autowired
     private CoursewareTypeService coursewareTypeService;
+    @Autowired
+    private FileService fileService;
+
 
     /**
-     *
      * test
-     * */
+     */
     @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
     //Result addCoursewareFromSys(@RequestBody MultipartFile file,@RequestBody UploadCoursewareDTO uploadCoursewareDTO,@RequestBody HttpServletRequest request) throws Exception;
 
-    public Result addCoursewareFromSys(@RequestParam("file") MultipartFile file,@RequestParam("uploadCoursewareDTO") UploadCoursewareDTO uploadCoursewareDTO) throws Exception{
+    public Result addCoursewareFromSys(@RequestParam("file") MultipartFile file, @RequestParam("uploadCoursewareDTO") UploadCoursewareDTO uploadCoursewareDTO) throws Exception {
         return Result.getSuccessResult("MultipartFile test");
     }
 
@@ -68,15 +67,14 @@ public class CoursewareController implements CoursewareApi {
 
     /**
      * 课件类型列表
-     *
-     * */
-    @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
-    public Result<List<CoursewareTypeDTO>> getAllType(){
-        List<CoursewareTypeDTO> coursewareTypeDTOList =new ArrayList<>();
-        List<CoursewareTypeDO> list =coursewareTypeService.getAllType();
-        if(list!=null&&list.size()>0){
-            for(int i=0;i<list.size();i++){
-                CoursewareTypeDTO coursewareTypeDTO =new CoursewareTypeDTO();
+     */
+    @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
+    public Result<List<CoursewareTypeDTO>> getAllType() {
+        List<CoursewareTypeDTO> coursewareTypeDTOList = new ArrayList<>();
+        List<CoursewareTypeDO> list = coursewareTypeService.getAllType();
+        if(list != null && list.size() > 0) {
+            for(int i = 0; i < list.size(); i++) {
+                CoursewareTypeDTO coursewareTypeDTO = new CoursewareTypeDTO();
                 coursewareTypeDTO.setId(list.get(i).getId());
                 coursewareTypeDTO.setTypeName(list.get(i).getTypeName());
                 coursewareTypeDTOList.add(coursewareTypeDTO);
@@ -94,7 +92,7 @@ public class CoursewareController implements CoursewareApi {
      * @return
      */
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
-    public Result addCourseware(@RequestParam Long id) {
+    public Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num) {
         CoursewareDO coursewareDO = new CoursewareDO();
         BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(id);
         coursewareDO.setBaseCoursewareId(id);
@@ -103,30 +101,87 @@ public class CoursewareController implements CoursewareApi {
         coursewareDO.setPublishTime(baseCoursewareDTO.getPublishTime());
         coursewareDO.setUpdateTime(baseCoursewareDTO.getUpdateTime());
         coursewareDO.setTypeId(baseCoursewareDTO.getTypeId());
-        return Result.getSuccessResult(coursewareService.addCourseware(coursewareDO));
+        coursewareDO.setCoursewareNum(num);
+        coursewareService.addCourseware(coursewareDO);
+        return Result.getSuccessResult(coursewareDO.getId());
     }
 
     /**
-     *课件上传
-     *
-     * */
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
-    public Result uploadCourseware(MultipartFile file) throws Exception {
-        String res=null;
-        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+     * 课件上传
+     */
+    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    public Result saveCourseware(MultipartFile file) throws Exception {
+        String res = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(new Date());
         if(!file.isEmpty()) {
             String coursewareName = file.getOriginalFilename();
             res = remoteFileService.saveTemFile(coursewareName);
-            File file1 = new File(date+"/"+res);
+            File file1 = new File(date + "/" + res);
             System.out.println(file1.getAbsolutePath());
             FileUtils.copyInputStreamToFile(file.getInputStream(), file1);
         }
-        return Result.getSuccessResult(date+"/"+res);
+        return Result.getSuccessResult(date + "/" + res);
     }
 
     /**
-     * 从本地上传课件进行添加
+     * 本地课件操作
+     */
+    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
+    public Result uploadCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
+        InputStream is = null;
+        File file = new File(courseCoursewareDTO.getFileUrl());
+        if(file != null && courseCoursewareDTO.getName() != null) {
+            try {
+                is = new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                String sourceUrl = remoteFileService.uploadFile(is, courseCoursewareDTO.getName());
+                //插表   baseCourseware
+                BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
+                baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+                baseCoursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+                baseCoursewareDO.setSourceUrl(sourceUrl);
+                baseCoursewareDO.setCoursewareName(courseCoursewareDTO.getName());
+                baseCoursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
+                baseCoursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
+                baseCoursewareService.addBaseCourseware(baseCoursewareDO);
+                Long newBaseid=baseCoursewareDO.getId();
+                //插表   Courseware
+                CoursewareDO coursewareDO=new CoursewareDO();
+                coursewareDO.setCoursewareNum(courseCoursewareDTO.getHour());
+                coursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+                coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+                coursewareDO.setBaseCoursewareId(newBaseid);
+                coursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
+                coursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
+                coursewareDO.setCoursewareName(courseCoursewareDTO.getName());
+                Long newid = coursewareService.addCourseware(coursewareDO);
+                //将上传的文件投递到mq中
+                FileDTO fileDTO=new FileDTO();
+                fileDTO.setLocation(courseCoursewareDTO.getFileUrl());
+                fileDTO.setId(newBaseid);
+                fileDTO.setOriginalFilename(courseCoursewareDTO.getName());
+                fileDTO.setFile(file);
+                mqService.msgSend(fileDTO);
+
+                return Result.getSuccessResult(newid);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return Result.getServiceError();
+
+    }
+
+
+    /**
+     * 课件添加
      *
      * @param file,uploadCoursewareDTO
      */

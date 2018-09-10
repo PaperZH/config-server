@@ -18,6 +18,10 @@ public interface UserDao {
 	
 	List<UserDO> list(Map<String, Object> map);
 
+	List<UserDO> getTeacherById(Long userId);
+
+	List<UserDO> getStudentById(Long userId);
+
 	int count(Map<String, Object> map);
 	
 	int save(UserDO user);
