@@ -5,14 +5,20 @@ import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.api.model.DO.PlanDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.UserPlanDO;
+import com.ucar.qtcassist.api.model.vo.StudentVO;
+import com.ucar.qtcassist.course.model.UserDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanListDTO;
+import com.ucar.qtcassist.schedule.service.AdminFeginClient;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import com.ucar.qtcassist.schedule.service.PlanService;
 import com.ucar.qtcassist.schedule.service.UserPlanService;
 import com.ucar.qtcassist.schedule.vo.PlanDetailsVO;
 import com.ucar.qtcassist.schedule.vo.UserPlanVO;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +37,8 @@ public class UserPlanController {
     private CoursePlanService coursePlanService;
     @Autowired
     private PlanService planService;
+    @Autowired
+    private AdminFeginClient adminFeginClient;
     /**
      * 删除用户培训计划关系
      * @param id 用户培训计划id
@@ -47,6 +55,25 @@ public class UserPlanController {
     }
 
     /**
+     * 根据teacherId获取学生列表
+     * @return
+     */
+    @RequestMapping("/getStudents/{id}")
+    public Result getStudentsById(@PathVariable("id") Long id){
+        String resultStr = adminFeginClient.getStudentInfoById(id);
+        JSONArray  jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+        System.out.println(jsonObject);
+        List<UserDTO> user = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
+        List<StudentVO> studentVOS = new ArrayList<>();
+        for (UserDTO userDTO:user
+                ) {
+            StudentVO studentVO = new StudentVO();
+            BeanUtils.copyProperties(userDTO,studentVO);
+            studentVOS.add(studentVO);
+        }
+        return Result.getSuccessResult(studentVOS);
+    }
+    /**
      * 根据计划ID获取详细信息
      * @param id
      * @return
@@ -62,20 +89,20 @@ public class UserPlanController {
         PlanDO planDO = planService.selectByPrimaryKey(planId);
 
         //远程调用用户信息
-//        long studentId = userPlanDO.getStudentId();
-//        userPlanVO.setStudentName("学生1");
-//        long teacherId = userPlanDO.getTeacherId();
-//        userPlanVO.setTeacherName("导师1");
+        long teacherId = userPlanDO.getTeacherId();
+        String studentInfo = adminFeginClient.getUserInfoById(teacherId);
+        JSONObject jsonObject= (JSONObject) JSONObject.fromObject(studentInfo).get("data");
+        UserDTO user = (UserDTO)JSONObject.toBean(jsonObject, UserDTO.class);
 
         //获取课程信息
         List<CoursePlanDO> coursePlanDOS = coursePlanService.selectByPrimaryKey(planId);
-
         PlanDetailsVO planDetailsVO = new PlanDetailsVO();
         BeanUtils.copyProperties(userPlanDO,planDetailsVO);
         planDetailsVO.setPlanContent(planDO.getPlanContent());
         planDetailsVO.setPlanDestination(planDO.getPlanDestination());
         planDetailsVO.setPlanScore(planDO.getPlanScore());
         planDetailsVO.setCourses(coursePlanDOS);
+        planDetailsVO.setTeacherName(user.getNickname());
         return Result.getSuccessResult(planDetailsVO);
     }
 
@@ -111,22 +138,24 @@ public class UserPlanController {
      */
     @RequestMapping("/getPlan")
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
-        System.out.println("daozaaaaaaaaaa");
         Integer total = userPlanService.queryTotal(planDTO);
-            List<UserPlanDTO> planList = userPlanService.queryUserPlan(planDTO);
-            List<UserPlanVO> userPlanVOS = new ArrayList<>();
-            for (UserPlanDTO plan : planList
-                    ) {
-                UserPlanVO userPlanVO = new UserPlanVO();
-                BeanUtils.copyProperties(plan, userPlanVO);
-                //微服务查询User姓名
-                    long studentId = plan.getStudentId();
-                    userPlanVO.setStudentName("学生1");
-                    long teacherId = plan.getTeacherId();
-                    userPlanVO.setTeacherName("导师1");
+        List<UserPlanDTO> planList = userPlanService.queryUserPlan(planDTO);
+        List<UserPlanVO> userPlanVOS = new ArrayList<>();
+        for (UserPlanDTO plan : planList
+                ) {
+            UserPlanVO userPlanVO = new UserPlanVO();
+            BeanUtils.copyProperties(plan, userPlanVO);
+            //微服务查询User姓名
+            Long studentId = plan.getStudentId();
+                String studentInfo = adminFeginClient.getUserInfoById(studentId);
+                JSONObject jsonObject= (JSONObject) JSONObject.fromObject(studentInfo).get("data");
+                if(jsonObject!=null) {
+                    UserDTO user = (UserDTO) JSONObject.toBean(jsonObject, UserDTO.class);
+                    userPlanVO.setStudentName(user.getNickname());
+                }
                 userPlanVOS.add(userPlanVO);
-            }
-            return PageResult.getSuccessResult(userPlanVOS, total);
+        }
+        return PageResult.getSuccessResult(userPlanVOS, total);
     }
 
     /**
