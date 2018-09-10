@@ -99,8 +99,10 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
     @Test
     public void MqTest() throws Exception {
-        File ppt = new File("C:\\Users\\xsj\\Desktop\\qtc\\test.pptx");
-        File pdf = new File("C:\\Users\\xsj\\Desktop\\qtc\\MQtest.pptx");
+        String pdfLocation ="2018-09-10/convert/88.pdf";
+        String pptLocation ="2018-09-10\\7ebb7c96a73d417d9315d70e44f95ffa.docx";
+        File ppt = new File("pdfLocation");
+        File pdf = new File("pptLocation");
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(ppt);
         fileDTO.setId(1L);
