@@ -107,7 +107,7 @@ public class UserPlanController {
     }
 
     /**
-     * 查询获取制定计划
+     * 查询获取发布计划
      */
     @RequestMapping("/getPlan")
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
