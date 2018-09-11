@@ -141,7 +141,6 @@
         this.show = true
       },
       handleEdit (val) {
-        console.log(val)
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
           this.planDetails = res.data.re
           this.edit = true
