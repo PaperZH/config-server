@@ -10,8 +10,6 @@
               <img v-bind:src="course.courseCover"  style="width: 100%; height: 550px;display: block; backgroundRepeat:'no-repeat'; backgroundSize: 'contain';">
             </div>
 
-            <!--<img style="width: 65%; height: 550px; display: block; float: left;" v-bind:src="course.courseCover"/>-->
-
             <div style="float: right;width: 30%; height: 550px;" >
 
               <div style="height: 150px; border-bottom: 1px solid #52464621;">
@@ -107,7 +105,7 @@
                     <el-button
                       size="mini" @click="handleDownloadClick(scope.row)"
                       type="danger"
-                    ><a href="files/yang.pdf" download>下载</a></el-button>
+                    ><a href="" onclick="">下载</a></el-button>
                     <el-button
                       size="mini" @click="handleStudyClick(scope.row)"
                       type="danger"
@@ -244,8 +242,9 @@
           })
         },
         handleStudyClick (row) {
-          let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
-          this.sourceUrl = sourceUrl
+          // let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
+          // this.sourceUrl = sourceUrl
+          this.sourceUrl = row.sourceUrl
           this.studyDialogVisible = true
         },
         handlePraiseCourse (val) {

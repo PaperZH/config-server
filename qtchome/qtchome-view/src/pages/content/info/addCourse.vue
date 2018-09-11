@@ -71,9 +71,8 @@
             </el-col>
           </el-row>
           <el-form-item label="课件描述:" prop="describe">
-            <el-input v-model="form.describe" placeholder="请输入课程
-          描述" type="textarea"
-                      :rows="3"></el-input>
+            <el-input v-model="form.describe" placeholder="请输入课程描述"
+                      type="textarea" :rows="3"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -124,15 +123,10 @@
         isShow: false,
         state4: '',
         course: {
-          courseWare:
-            {}
-
+          courseWare: {}
         },
-
         coursewareTypeOptions: [],
-
         courseWareList: [],
-
         form: {
           hour: '',
           name: '',
@@ -140,21 +134,25 @@
           describe: '',
           fileUrl: '',
           baseCoursewareId: '',
-          courseId: '2'
+          courseId: ''
 
         }
       }
     },
-    mounted: function () {
+    mounted () {
+      console.log(this.$router.currentRoute.params)
+      // 得到课程的id
+      this.form.courseId = this.$router.currentRoute.params.course.courseId
+      console.log(this.form.courseId)
+      // 得到课程的课件的集合
+      this.course.courseWare = this.$router.currentRoute.params.coursewares
+      console.log(this.course.courseWare)
       this.loadAll()
-      console.log(this.courseWareList)
-      this.courseId = this.$router.currentRoute.params.courseId
     },
     methods: {
       onAddCourseWare () {
-        console.log(this.form)
         this.$store.dispatch('Post', {
-          'url': `/api-home/courseCourseware/addCourseCourseware`,
+          'url': '/api-home/courseCourseware/addCourseCourseware',
           'data': this.form
         }).then(fileRes => {
           console.log(fileRes.data.re)
