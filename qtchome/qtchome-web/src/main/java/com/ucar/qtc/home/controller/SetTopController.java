@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SetTopController {
 
     @Autowired
-
     private SetTopService setTopService;
 
     /**

@@ -23,6 +23,7 @@ spring:
 
 zuul:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+#  ignoredServices: "*"
 
 ribbon:
   ReadTimeout: 600000
