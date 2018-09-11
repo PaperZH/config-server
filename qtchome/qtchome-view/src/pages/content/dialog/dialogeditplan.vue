@@ -85,9 +85,7 @@
     methods: {
       onSubmit () {
         let data = {'studentEvaluateContent': this.message.studentEvaluateContent, 'studentSummary': this.message.studentSummary, 'id': this.message.id}
-        console.log(data)
         this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
-          console.log(res)
           this.visible = false
         })
       },

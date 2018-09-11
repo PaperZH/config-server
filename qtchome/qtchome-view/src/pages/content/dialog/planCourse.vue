@@ -84,8 +84,6 @@
     },
     methods: {
       addPlanCourse () {
-        console.log(this.courseData)
-        console.log(this.id)
         this.innerVisible = true
       },
       handleDelete (row, index) {
@@ -97,7 +95,6 @@
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlanCourse', 'data': {'id': row.id}}).then(res => {
             this.courseData.splice(index, 1)
             this.$message.success('删除成功')
-            console.log(res)
           }).catch(_ => {
             this.$message({
               type: 'info',
@@ -107,7 +104,6 @@
         })
       },
       addCourse () {
-        console.log(this.courseIds)
         if (this.courseIds.length === 0) {
           this.$message({
             message: '请添加至少一个课程',
@@ -115,9 +111,7 @@
           })
         } else {
           let data = {'planId': this.id, 'courseIds': this.courseIds}
-          console.log(data)
           this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedCourse', 'data': data}).then(res => {
-            console.log(res)
             this.$emit('handleCourse', this.id)
           }).catch(_ => {
             this.$message({

@@ -78,9 +78,6 @@
       return {
         visible: this.show,
         loading: false,
-        options4: [],
-        list: [],
-        courses: [],
         plans: [],
         rules: {
           planId: [
@@ -109,7 +106,6 @@
     },
     methods: {
       onSubmit () {
-        console.log(this.message.date)
         this.$refs['message'].validate((valid) => {
           if (valid) {
             if (this.message.date.length <= 1) {
@@ -121,13 +117,11 @@
             this.params.studentIds = this.message.studentIds
             this.params.planId = this.message.planId
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.params}).then(res => {
-              console.log(res)
               this.$refs['message'].resetFields()
               this.$emit('getTeacherPlan')
               this.visible = false
             })
           } else {
-            console.log('error submit!!')
             return false
           }
         })
@@ -137,7 +131,6 @@
           this.loading = true
           setTimeout(() => {
             this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': {'planTitle': query}}).then(res => {
-              console.log(res)
               this.plans = res.data.re.rows
               this.loading = false
             })

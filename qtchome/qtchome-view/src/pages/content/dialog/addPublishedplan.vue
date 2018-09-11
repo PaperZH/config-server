@@ -69,7 +69,6 @@
         visible: this.show,
         activeName: '3',
         plan: this.message.plan,
-        value10: [],
         rules: {
           studentGetScore: [
             { required: true, message: '请输入计划学分', trigger: 'blur' },
@@ -92,13 +91,11 @@
             this.$message.error('评分不得大于总分')
             return ' '
           }
-          console.log(score)
           if (valid) {
             let data = {
               'studentGetScore': this.message.studentGetScore,
               'teacherEvaluateContent': this.message.teacherEvaluateContent,
               'id': this.message.id}
-            console.log(data)
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
               this.$emit('getTeacherPlan')
               this.visible = false

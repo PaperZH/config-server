@@ -143,7 +143,6 @@
       handleEdit (val) {
         console.log(val)
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
-          console.log(res)
           this.planDetails = res.data.re
           this.edit = true
         })
@@ -158,7 +157,6 @@
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.id}}).then(res => {
             this.tableData.splice(index, 1)
             this.$message.success('删除成功')
-            console.log(res)
           }).catch(_ => {
             this.$message({
               type: 'info',
@@ -171,7 +169,6 @@
         this.loading = true
         this.queryParams.currentPage = val
         this.getTeacherPlan()
-        console.log(`当前页: ${val}`)
       },
       getMes (data) {
         console.log(data)
@@ -187,7 +184,6 @@
       getStudents () {
         let teacherId = this.$store.getters.userId
         this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': teacherId}}).then(res => {
-          console.log(res)
           this.indexList = res.data.re
         })
       },
