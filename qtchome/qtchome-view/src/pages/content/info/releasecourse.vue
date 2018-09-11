@@ -143,11 +143,9 @@
         this.getPublishedCourse()
       },
       getPublishedCourse () {
-        console.log(this.queryParams)
         this.$store.dispatch('Get', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
           this.tableData = res.data.re.rows
-          console.log(res.data.re)
         })
       }
     },

@@ -116,7 +116,6 @@
         getCourseList () {
           const url = '/api-home/course/getCourseList'
           this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
-            console.log(res.data.re)
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
           })

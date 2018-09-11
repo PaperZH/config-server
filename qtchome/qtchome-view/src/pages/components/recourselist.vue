@@ -68,7 +68,6 @@
     created () {
       this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList'}).then(res => {
         this.tableData = res.data.list
-        console.log(this.tableData)
       })
     }
 
