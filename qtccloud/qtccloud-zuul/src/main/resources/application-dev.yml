@@ -30,8 +30,6 @@ ribbon:
   eureka:
     enabled: true
 
-
-
 hystrix:
   command:
     default:

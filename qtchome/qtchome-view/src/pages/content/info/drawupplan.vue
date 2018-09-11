@@ -130,7 +130,6 @@
             this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.id}}).then(res => {
               this.tableData.splice(index, 1)
               this.$message.success('删除成功')
-              console.log(res)
             }).catch(_ => {
               this.$message({
                 type: 'info',
@@ -148,7 +147,6 @@
         handleCourse (planId) {
           console.log('查看course')
           this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseByPlanId', 'data': {'planId': planId}}).then(res => {
-            console.log(res)
             this.courseData = res.data.re
             this.id = planId
             this.courseopen = true
@@ -158,7 +156,6 @@
           this.loading = true
           this.queryParams.currentPage = val
           this.getTeacherPlan()
-          console.log(`当前页: ${val}`)
         },
         formatterFinished (row, column, cellValue, index) {
           if (cellValue === true) {
@@ -168,9 +165,7 @@
           }
         },
         getTeacherPlan () {
-          console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
-            console.log(res)
             this.loading = false
             this.tableData = res.data.re.rows
             this.total = res.data.re.total
