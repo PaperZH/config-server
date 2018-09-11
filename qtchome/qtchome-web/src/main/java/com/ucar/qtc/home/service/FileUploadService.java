@@ -22,7 +22,7 @@ public interface FileUploadService {
 
     @RequestMapping(method = RequestMethod.POST,
                     value = "/file/upload",
-                    produces = {MediaType.APPLICATION_JSON_UTF8_VALUE },
+                    produces = MediaType.APPLICATION_JSON_UTF8_VALUE ,
                     consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseResult upload(@RequestPart(value = "file") MultipartFile file, @RequestParam("key") String key);
 }

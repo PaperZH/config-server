@@ -5,8 +5,9 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://10.104.108.177:8001/eureka/
-      healthcheck:
-        enabled: true
+    healthcheck:
+      enabled: true
+
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
