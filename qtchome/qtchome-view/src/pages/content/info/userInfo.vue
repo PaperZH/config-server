@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="16">
             <el-form-item label="用户名:">
-              <el-input v-model="form.name" placeholder="请输入用户名" ></el-input>
+              <el-input v-model="form.name" placeholder="请输入用户名" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="16">
@@ -17,7 +17,7 @@
             <label style="margin-left: 37px;">头像：</label>
             <el-upload
               class="avatar-uploader"
-              action="http://127.0.0.1:8006/file/upload"
+              action="http://127.0.0.1:8006/course/file/upload"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
@@ -29,7 +29,7 @@
 
 
         <el-form-item label="邮箱:">
-          <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="form.email" placeholder="请输入邮箱" readonly></el-input>
         </el-form-item>
 
         <el-form-item style="text-align: right;">
@@ -50,10 +50,10 @@
         activeName: 'first',
         form: {
           name: '',
-          avatar: ''
-        },
-        imageUrl: ''
-
+          nickname: '',
+          avatar: '',
+          email: ''
+        }
       }
     },
     methods: {
@@ -62,8 +62,14 @@
       },
       onSubmit () {
         console.log(this.form)
+        let userInfo = {'id': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
+        console.log(userInfo)
+        this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
+          console.log(res)
+        })
       },
       handleAvatarSuccess (res, file) {
+        console.log(res)
         this.form.avatar = res.fileUrl
       },
       beforeAvatarUpload (file) {
@@ -81,10 +87,8 @@
     },
     mounted: function () {
       let userId = this.$store.getters.userId
-      console.log(userId)
       this.$store.dispatch('Get', {'url': `/api-home/user/get/${userId}`}).then(res => {
-        this.form = res.data.user
-        console.log(res)
+        this.form = res.data.data
       })
     }
   }

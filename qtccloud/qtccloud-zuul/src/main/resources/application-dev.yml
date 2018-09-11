@@ -5,8 +5,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://${spring.cloud.client.ipAddress}:8001/eureka/
-      healthcheck:
-        enabled: true
+    healthcheck:
+      enabled: true
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
@@ -26,8 +26,8 @@ zuul:
 #  ignoredServices: "*"
 
 ribbon:
-  ReadTimeout: 600000
-  ConnectTimeout: 300000
+  ReadTimeout: 60000
+  ConnectTimeout: 30000
   eureka:
     enabled: true
 
@@ -39,4 +39,4 @@ hystrix:
           enabled: true
         isolation:
           thread:
-            timeoutInMilliseconds: 600000
+            timeoutInMilliseconds: 60000
