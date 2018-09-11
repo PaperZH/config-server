@@ -1,6 +1,7 @@
-package com.ucar.test.controller;
+package com.ucar.qtcassist.hystrix;
 
 import com.alibaba.fastjson.JSON;
+import com.ucar.qtcassist.api.DemoApi;
 import com.ucar.qtcassist.api.model.User;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
@@ -17,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 
 @Component
-public class HelloFallbackFactory implements FallbackFactory<HelloBackgroundService>{
+public class HelloFallbackFactory implements FallbackFactory<DemoApi>{
 
     /** 日志记录器 */
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloFallbackFactory.class);
 
     @Override
-    public HelloBackgroundService create(Throwable cause) {
-        return new HelloBackgroundService (){
+    public DemoApi create(Throwable cause) {
+        return new DemoApi (){
 
             @Override
             public User hello(String name,Integer age){
