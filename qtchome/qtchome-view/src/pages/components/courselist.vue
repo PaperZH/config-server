@@ -1,14 +1,23 @@
 <template>
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px;margin-right: 0px; margin-top: 0px;">
+
       <div v-for="(item, index) in tableData" :key="index" style="padding: 11px; margin-top: 3px; width: 22%; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
           <div v-on:click="handleDetails(item)">
-            <div  class="image" v-bind:style="{backgroundImage:'url(' + item.courseCover + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"></div>
+
+            <div style="width: 100%; height: 200px;">
+              <img v-bind:src="item.courseCover"  class="image">
+            </div>
+
             <div style="padding: 9px;">
-              <span>{{item.courseName}}</span>
+
+              <div>
+                <span>{{item.courseName}}</span>
+              </div>
+
               <div class="bottom clearfix">
-                <el-row>
+                <el-row :gutter="24">
                   <el-col :span="8">
                     <span class="time">{{item.typeName}}</span>
                   </el-col>
@@ -30,6 +39,7 @@
                   <span class="time">发布日期: {{item.publishTime}}</span>
                 </el-row>
               </div>
+
             </div>
           </div>
         </el-card>
@@ -54,10 +64,10 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="queryParams.currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="8"
-            layout="total, prev, pager, next, jumper"
-            :total=total>
+            :page-sizes="[8, 16, 24, 32]"
+            :page-size="queryParams.pageSize"
+            layout="sizes, total, prev, pager, next, jumper"
+            :total="total">
           </el-pagination>
         </div>
       </el-col>
@@ -93,10 +103,10 @@
       },
       methods: {
         handleSizeChange (val) {
-          console.log(`每页 ${val} 条`)
+          this.queryParams.pageSize = val
+          this.getCourseList()
         },
         handleCurrentChange (val) {
-          console.log(`当前页: ${val}`)
           this.queryParams.currentPage = val
           this.getCourseList()
         },
@@ -122,7 +132,6 @@
       mounted () {
         this.getCourseList()
       }
-
     }
 </script>
 
@@ -159,8 +168,11 @@
   }
 
   .image {
+    width: 100%;
     height: 200px;
     display: block;
+    backgroundRepeat:'no-repeat';
+    backgroundSize: 'contain';
   }
 
   .clearfix:before,

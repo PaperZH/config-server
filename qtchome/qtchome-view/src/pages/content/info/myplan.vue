@@ -10,6 +10,7 @@
   </el-form>
     <el-table
       border
+      v-loading="loading"
       :data="dataPlan"
       style="width: 100%"
       :row-class-name="tableRowClassName">
@@ -43,7 +44,6 @@
     <dialog-edit-plan  :show.sync="show" v-bind:message="message" title="填写学习总结"></dialog-edit-plan>
     <div class="block" style="text-align: right">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
         :page-sizes="[100, 200, 300, 400]"
@@ -70,12 +70,12 @@
           },
           total: 0,
           message: {'plan': {}},
-          value5: 3.7,
+          loading: true,
           currentPage4: 4,
           dataPlan: [],
           queryParams: {
             studentId: this.$store.getters.userId,
-            planTitle: '',
+            planTitle: null,
             currentPage: 1,
             pageSize: 5
           }
@@ -83,26 +83,18 @@
       },
       methods: {
         onSubmit () {
-          console.log('submit!')
+          this.loading = true
           this.queryParams.planTitle = this.formInline.name
           this.queryParams.currentPage = 1
           this.getStudentPlan()
-        },
-        handleSizeChange (val) {
-          console.log(`每页 ${val} 条`)
         },
         handleCurrentChange (val) {
           this.queryParams.currentPage = val
           this.getStudentPlan()
           console.log(`当前页: ${val}`)
         },
-        getHtml (val) {
-
-        },
         onAddPlan (val) {
-          console.log(val)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
-            console.log(res)
             this.message = res.data.re
             this.show = true
           })
@@ -116,8 +108,8 @@
           return ''
         },
         getStudentPlan () {
-          console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
+            this.loading = false
             this.dataPlan = res.data.re.rows
             this.total = res.data.re.total
           })

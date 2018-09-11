@@ -12,6 +12,7 @@
     </el-form>
     <div style="margin-top: 10px">
       <el-table
+        v-loading="loading"
         :data="tableData"
         border
         style="width: 100%">
@@ -24,12 +25,12 @@
         <el-table-column
           prop="planContent"
           label="培训内容"
-          width="400">
+          width="390">
         </el-table-column>
         <el-table-column
           prop="planDestination"
           label="培训目的"
-          width="400">
+          width="390">
         </el-table-column>
         <el-table-column
           prop="planScore"
@@ -49,7 +50,7 @@
             >分配课程</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
             <el-button type="primary" icon="el-icon-delete"  @click="handleClick(scope.row,scope.$index)"></el-button>
@@ -60,7 +61,6 @@
       <plan-course  :courseopen.sync="courseopen" v-bind:courseData="courseData" title="计划课程信息" v-bind:id="id" @handleCourse="handleCourse"></plan-course>
       <div class="block" style="text-align: right">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage4"
           :page-sizes="[100, 200, 300, 400]"
@@ -88,16 +88,8 @@
           show: false,
           courseopen: false,
           courseData: [],
-          indexList: [{
-            name: '张三',
-            style: false
-          }, {
-            name: '李斯',
-            style: false
-          }],
-          styleObject: {
-            border: '1px solid #409EFF'
-          },
+          id: null,
+          loading: true,
           title: '',
           message: {},
           formInline: {
@@ -118,7 +110,7 @@
       },
       methods: {
         onSubmit () {
-          console.log('submit!')
+          this.loading = true
           this.queryParams.planTitle = this.formInline.name
           this.queryParams.currentPage = 1
           this.getTeacherPlan()
@@ -138,7 +130,6 @@
             this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.id}}).then(res => {
               this.tableData.splice(index, 1)
               this.$message.success('删除成功')
-              console.log(res)
             }).catch(_ => {
               this.$message({
                 type: 'info',
@@ -156,22 +147,15 @@
         handleCourse (planId) {
           console.log('查看course')
           this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseByPlanId', 'data': {'planId': planId}}).then(res => {
-            console.log(res)
             this.courseData = res.data.re
             this.id = planId
             this.courseopen = true
           })
         },
-        handleSizeChange (val) {
-          console.log(`每页 ${val} 条`)
-        },
         handleCurrentChange (val) {
+          this.loading = true
           this.queryParams.currentPage = val
           this.getTeacherPlan()
-          console.log(`当前页: ${val}`)
-        },
-        getMes (data) {
-          console.log(data)
         },
         formatterFinished (row, column, cellValue, index) {
           if (cellValue === true) {
@@ -181,9 +165,8 @@
           }
         },
         getTeacherPlan () {
-          console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
-            console.log(res)
+            this.loading = false
             this.tableData = res.data.re.rows
             this.total = res.data.re.total
           })

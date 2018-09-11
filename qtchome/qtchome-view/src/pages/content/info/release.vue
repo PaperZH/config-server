@@ -78,7 +78,7 @@
             courseName: null,
             courseCover: null,
             courseDescription: '暂无描述',
-            courseScore: '100',
+            courseScore: '10',
             invalidDate: null
           },
           coursewares: [],
@@ -97,11 +97,9 @@
         this.$store.dispatch('Get', {'url': '/api-home/course/getCourseTypeList'}).then(res => {
           this.courseTypeList = res.data.re
         })
-
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
-            // this.form = res.data.re
             this.courseDetailForm.course = res.data.re.course
             this.courseDetailForm.coursewares = res.data.re.coursewares
           })
@@ -119,16 +117,14 @@
         let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
         if (this.courseDetailForm.course.courseId != null) {
           this.$store.dispatch('Post', {'url': '/api-home/course/updateCourse', 'data': data}).then(res => {
-            console.log(res.data)
-            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
+            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
           })
         } else {
           this.$store.dispatch('Post', {'url': '/api-home/course/addCourse', 'data': data}).then(res => {
-            console.log(res.data)
-            // this.$router.push({name: 'addCourse', params: this.courseDetailForm.course.courseId})
+            this.courseDetailForm.course.courseId = res.data.re.courseId
+            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
           })
         }
-        // this.$router.push({name: 'addCourse', params: this.courseDetailForm})
       },
       handleAvatarSuccess (res, file) {
         console.log(res)

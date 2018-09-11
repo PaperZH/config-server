@@ -16,23 +16,15 @@ public class PlanController {
     @Autowired
     PlanService planService;
     /**
-     * 根据教师ID获得学生信息
+     * 根据教师ID获得学生信息 1
      *
-     * @param techerId
+     * @param teacherId
      * @return
      */
     @RequestMapping("/getStudents")
-    public ResponseResult getStudents(long techerId) {
-        System.out.println(techerId);
-        ArrayList<Map> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("studentId",i+100);
-            hashMap.put("studentName", "张山" + i);
-            hashMap.put("studentAvatar", "static/image/5.jpg");
-            list.add(hashMap);
-        }
-        return ResponseResult.data(list);
+    public ResponseResult getStudents(@RequestParam long teacherId) {
+        System.out.println(teacherId);
+        return planService.getStudents(teacherId);
     }
 
 
@@ -46,17 +38,6 @@ public class PlanController {
     public ResponseResult getTeacherPlanList(@RequestParam Map<String, Object> params) {
         System.out.println(params);
         return planService.getTeacherPlanList(params);
-//        ArrayList<Map> list = new ArrayList();
-//        for (int i = 0; i < 8; i++) {
-//            HashMap<String, Object> hashMap = new HashMap<>();
-//            hashMap.put("id",i);
-//            hashMap.put("planContent", "培训内容"+i );
-//            hashMap.put("planDestination", "培训目的"+i);
-//            hashMap.put("planScore", 10);
-//            hashMap.put("planTitle", "计划名称" + i);
-//            list.add(hashMap);
-//        }
-//        return ResponseResult.ok().put("data", list).put("total", 20);
     }
 
     /**
@@ -86,9 +67,6 @@ public class PlanController {
     @GetMapping("/deletePlan")
     public ResponseResult deletePlan(@RequestParam long planId){
         return planService.deletePlan(planId);
-//        System.out.println(planId);
-//        System.out.println(planService.deletePlan(planId));
-//        return ResponseResult.ok("删除成功");
     }
 
 
@@ -241,17 +219,7 @@ public class PlanController {
     @RequestMapping("/addPublishedCourse")
     public ResponseResult addPublishedCourse(@RequestBody Map<String,Object> params){
         return planService.addCoursePlan(params);
-//        System.out.println(params);
-//        ArrayList<Map> list = new ArrayList();
-//        for (int i = 0; i < 3; i++) {
-//            HashMap<String, Object> hashMap = new HashMap<>();
-//            hashMap.put("id",i);
-//            hashMap.put("courseId", 2);
-//            hashMap.put("courseName", "SpringCCC");
-//            hashMap.put("courseDescription", "这是一首小情歌");
-//            list.add(hashMap);
-//        }
-//        return ResponseResult.data(list);
+
     }
 
     /**
@@ -262,7 +230,5 @@ public class PlanController {
     @GetMapping("/deletePlanCourse")
     public ResponseResult deletePlanCourse(@RequestParam long id){
         return planService.deleteCourse(id);
-//        System.out.println(id);
-//        return ResponseResult.ok("删除成功");
     }
 }

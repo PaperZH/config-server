@@ -1,5 +1,6 @@
 package com.ucar.qtc.home.service;
 
+import com.ucar.qtcassist.api.CourseCoursewareApi;
 import com.ucar.qtcassist.api.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2018年09月05日
  */
 @FeignClient(name = "qtcassist" ,path = "/courseCourseware")
-public interface CourseCoursewareService {
+public interface CourseCoursewareService extends CourseCoursewareApi {
     /**
      * 添加一个课程课件
      * @param courseId

@@ -13,6 +13,10 @@ public class CourseVO {
     private String recCourseInfo;
 
     private Integer praiseNum;
+
+    private Integer readNum;
+
+    private Integer collectNum;
     //详情才有
     private String invalidDate;
 
@@ -66,6 +70,22 @@ public class CourseVO {
 
     public void setPraiseNum(Integer praiseNum) {
         this.praiseNum = praiseNum;
+    }
+
+    public Integer getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(Integer readNum) {
+        this.readNum = readNum;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 
     public String getInvalidDate() {

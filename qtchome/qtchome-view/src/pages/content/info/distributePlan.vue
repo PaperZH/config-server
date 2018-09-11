@@ -14,9 +14,9 @@
         <el-row :gutter="24" style="margin-left: 88px;margin-right: 123px; margin-top: 10px;">
           <el-col :span="4" v-for="(o, index) in indexList" :key="index" >
             <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject" >
-              <img :src=o.studentAvatar class="image" @click="addStyleClick(o)">
+              <img :src=o.avatar class="image" @click="addStyleClick(o)">
               <div style="padding: 14px;text-align: center">
-                <span>{{o.studentName}}</span>
+                <span>{{o.nickname}}</span>
               </div>
             </el-card>
           </el-col>
@@ -24,6 +24,7 @@
       </div>
       <div style="margin-top: 10px">
         <el-table
+          v-loading="loading"
           :data="tableData"
           border
           style="width: 100%">
@@ -31,7 +32,7 @@
             fixed
             prop="planTitle"
             label="计划名称"
-            width="250">
+            width="180">
           </el-table-column>
           <el-table-column
             prop="studentName"
@@ -41,12 +42,12 @@
           <el-table-column
             prop="startDate"
             label="开始时间"
-            width="220">
+            >
           </el-table-column>
           <el-table-column
             prop="endDate"
             label="结束时间"
-            width="220">
+            >
           </el-table-column>
           <el-table-column
             prop="studentGetScore"
@@ -78,7 +79,6 @@
         <edit-plan  :show.sync="edit" v-bind:message="planDetails" title="计划评价" @getTeacherPlan="getTeacherPlan"></edit-plan>
         <div class="block" style="text-align: right">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage4"
             :page-sizes="[100, 200, 300, 400]"
@@ -107,17 +107,12 @@
         courseopen: false,
         edit: false,
         planId: 0,
-        indexList: [{
-          name: '张三',
-          style: false
-        }, {
-          name: '李斯',
-          style: false
-        }],
+        loading: true,
         styleObject: {
           border: '1px solid #409EFF'
         },
         message: {},
+        indexList: [],
         planDetails: {'plan': { }},
         formInline: {
           name: '',
@@ -137,7 +132,7 @@
     },
     methods: {
       onSubmit () {
-        console.log('submit!')
+        this.loading = true
         this.queryParams.planTitle = this.formInline.name
         this.queryParams.currentPage = 1
         this.getTeacherPlan()
@@ -146,9 +141,7 @@
         this.show = true
       },
       handleEdit (val) {
-        console.log(val)
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
-          console.log(res)
           this.planDetails = res.data.re
           this.edit = true
         })
@@ -163,7 +156,6 @@
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.id}}).then(res => {
             this.tableData.splice(index, 1)
             this.$message.success('删除成功')
-            console.log(res)
           }).catch(_ => {
             this.$message({
               type: 'info',
@@ -172,13 +164,10 @@
           })
         })
       },
-      handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
-      },
       handleCurrentChange (val) {
+        this.loading = true
         this.queryParams.currentPage = val
         this.getTeacherPlan()
-        console.log(`当前页: ${val}`)
       },
       getMes (data) {
         console.log(data)
@@ -191,10 +180,16 @@
           o.style = true
         }
       },
+      getStudents () {
+        let teacherId = this.$store.getters.userId
+        this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': teacherId}}).then(res => {
+          this.indexList = res.data.re
+        })
+      },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
+          this.loading = false
           this.tableData = res.data.re.rows
-          this.indexList = [{'studentName': '张三', 'studentId': 5}]
           this.total = res.data.re.total
         })
       }
@@ -202,6 +197,7 @@
     mounted () {
       this.queryParams.teacherId = this.$store.getters.userId
       this.getTeacherPlan()
+      this.getStudents()
     },
     name: 'drawupplan'
   }

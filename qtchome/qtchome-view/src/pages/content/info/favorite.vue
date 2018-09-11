@@ -1,13 +1,8 @@
 <template>
-
-
-
-
   <div style="border: 1px solid #dcdfe6;">
-
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
         <el-form-item label="课程名">
-          <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small"></el-input>
+          <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker size="small"
@@ -28,15 +23,22 @@
       <el-checkbox-group v-model="checkList">
       <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
+
           <div style="position: absolute; color: #172dff">
             <el-checkbox  :label="item.courseId">&nbsp</el-checkbox>
           </div>
-          <img v-bind:src="item.courseCover"  class="image">
+
+          <div style="width: 100%; height: 200px;">
+            <img v-bind:src="item.courseCover"  class="image">
+          </div>
+
           <div style="padding: 7px;">
+
             <div  class="time" style="position: relative">
               <span style="display: block;float: left">{{item.courseName}}</span>
               <span style="float: right"><a v-on:click="handleDetail(item.courseId)" href="#">详情</a></span>
             </div>
+
             <div class="bottom clearfix" style="margin-top: 26px;">
               <el-row :gutter="24">
                 <el-col :span="8">
@@ -56,10 +58,11 @@
                   </span>
                 </el-col>
               </el-row>
+              <el-row>
+                <span class="time">发布日期: {{item.publishTime}}</span>
+              </el-row>
             </div>
-            <div>
-              <span class="time">发布日期: {{item.publishTime}}</span>
-            </div>
+
           </div>
         </el-card>
       </el-col>
@@ -67,13 +70,13 @@
     </el-row>
       <div class="block" style="text-align: right">
         <el-pagination
-          :size-change="handleSizeChange"
-          :current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
           :current-page="queryParams.currentPage"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="5"
+          :page-sizes="[6, 9, 12, 15]"
+          :page-size="queryParams.pageSize"
           layout="total, prev, pager, next, jumper"
-          :total=total>
+          :total="total">
         </el-pagination>
       </div>
   </div>
@@ -98,21 +101,18 @@
             startDate: null,
             endDate: null,
             currentPage: 1,
-            pageSize: 9
+            pageSize: 6
           }
         }
       },
       methods: {
         handleSizeChange (val) {
-          console.log(`每页 ${val} 条`)
+          this.queryParams.pageSize = val
+          this.getCollectCourse()
         },
         handleCurrentChange (val) {
           this.queryParams.currentPage = val
           this.getCollectCourse()
-          console.log(`当前页: ${val}`)
-        },
-        getHtml (val) {
-
         },
         handleDetail (val) {
           let data = {'userId': this.queryParams.userId, 'courseId': val}
@@ -142,7 +142,6 @@
           this.getCollectCourse()
         },
         getCollectCourse () {
-          console.log(this.queryParams)
           this.$store.dispatch('Get', {'url': '/api-home/course/getCollectCourse', 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
@@ -173,9 +172,10 @@
 
   .image {
     width: 100%;
+    height: 200px;
     display: block;
-
-
+    backgroundRepeat:'no-repeat';
+    backgroundSize: 'contain';
   }
 
   .clearfix:before,

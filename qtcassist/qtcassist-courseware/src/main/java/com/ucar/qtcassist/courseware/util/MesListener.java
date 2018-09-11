@@ -43,62 +43,73 @@ public class MesListener implements MessageListener {
     @Override
     public void recieveMessages(Message message) {
         Object obj = HessianSerializerUtils.deserialize(message.getData());
-        FileDTO fileDTO = (FileDTO) obj;
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String date = simpleDateFormat.format(new Date());
-        String location = date + "/convert/";
-        LOGGER.warn("location:" + location);
-        File file = fileDTO.getFile();
-
-        String coursewareName = fileDTO.getOriginalFilename();
-        int point = fileDTO.getLocation().lastIndexOf(".");
-        String suffix = fileDTO.getLocation().substring(point + 1, fileDTO.getLocation().length());
-        String Name = coursewareName+"."+suffix;
-
-
-        String preUrl = null;
-        LOGGER.error("MqListener:" + coursewareName);
-
-
-        File fPPT = file;
-        File fPDF = null;
         if(obj instanceof FileDTO) {
-            //判断是否为需要转化的文件类型
-            if(fileService.typeCheck(Name)) {
+            FileDTO fileDTO = (FileDTO) obj;
 
-                String pdfLocation = location + coursewareName + "." + FileConstant.PDF;
-                //LOGGER.error("pdfLocation:" + pdfLocation);
-                fPDF = new File(pdfLocation);
-                File dir = new File(location);
-                if(!dir.exists()) {
-                    dir.mkdirs();
-                }
-                remoteFileService.fileConvert(fPPT, fPDF);
-                LOGGER.info("conver successfully");
-            }
-            InputStream in = null;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = simpleDateFormat.format(new Date());
+            String location = date + "/convert/";
+            LOGGER.warn("location:" + location);
+
+            File file = null;
+            String coursewareName = null;
+            String Name = null;
             try {
-                in = new FileInputStream(fPDF);
-                preUrl = remoteFileService.uploadFile(in, coursewareName + "." + FileConstant.PDF);
-                LOGGER.info("upload successfully[preUrl]" + preUrl);
-            } catch (IOException e) {
+                coursewareName = fileDTO.getOriginalFilename();
+                int point = fileDTO.getLocation().lastIndexOf(".");
+                String suffix = fileDTO.getLocation().substring(point + 1, fileDTO.getLocation().length());
+                Name = coursewareName + "." + suffix;
+                file = fileDTO.getFile();
+
+
+                String preUrl = null;
+                LOGGER.error("MqListener:" + coursewareName);
+
+
+                File fPPT = file;
+                File fPDF = null;
+
+                //判断是否为需要转化的文件类型
+                if(fileService.typeCheck(Name)) {
+
+                    String pdfLocation = location + coursewareName + "." + FileConstant.PDF;
+                    //LOGGER.error("pdfLocation:" + pdfLocation);
+                    fPDF = new File(pdfLocation);
+                    File dir = new File(location);
+                    if(!dir.exists()) {
+                        dir.mkdirs();
+                    }
+                    remoteFileService.fileConvert(fPPT, fPDF);
+                    LOGGER.info("conver successfully");
+                }
+                InputStream in = null;
+                try {
+                    in = new FileInputStream(fPDF);
+                    preUrl = remoteFileService.uploadFile(in, coursewareName + "." + FileConstant.PDF);
+                    LOGGER.info("upload successfully[preUrl]" + preUrl);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //查BaseCourseware表，将preUrl放入表中
+                BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
+                if(baseCoursewareDO != null) {
+                    baseCoursewareDO.setPreviewUrl(preUrl);
+                    baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+                    int temp = baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+                    LOGGER.info("id:" + baseCoursewareDO.getId());
+                    if(temp == 1) {
+                        LOGGER.info("add basecourseware successfully");
+                    } else {
+                        LOGGER.info("add basecourseware failed");
+                    }
+                }
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            //查BaseCourseware表，将preUrl放入表中
-            BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
-            if(baseCoursewareDO != null) {
-                baseCoursewareDO.setPreviewUrl(preUrl);
-                baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
-                int temp = baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
-                LOGGER.info("id:" + baseCoursewareDO.getId());
-                if(temp == 1) {
-                    LOGGER.info("add basecourseware successfully");
-                } else {
-                    LOGGER.info("add basecourseware failed");
-                }
-            }
         }
+
     }
 
     @Override

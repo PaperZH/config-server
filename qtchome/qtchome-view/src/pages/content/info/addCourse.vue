@@ -6,7 +6,9 @@
       </div>
       <div class="text item">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item> <el-button style="float: right; padding: 3px 0" type="text" @click="onAddCourseWare()">添加</el-button></el-form-item>
+          <el-form-item>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="onAddCourseWare()">添加</el-button>
+          </el-form-item>
           <el-row>
             <el-col :span="12">
               <el-form-item :span="10" label="课时:" prop="hour">
@@ -20,7 +22,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
-                <el-autocomplete
+                <el-autocomplete  ref="sys"
                   popper-class="my-autocomplete"
                   v-model="state4"
                   :fetch-suggestions="querySearchAsync"
@@ -69,9 +71,8 @@
             </el-col>
           </el-row>
           <el-form-item label="课件描述:" prop="describe">
-            <el-input v-model="form.describe" placeholder="请输入课程
-          描述" type="textarea"
-                      :rows="3"></el-input>
+            <el-input v-model="form.describe" placeholder="请输入课程描述"
+                      type="textarea" :rows="3"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -114,26 +115,18 @@
     </el-card>
   </div>
 </template>
-
 <script>
-
   export default {
     name: 'addCourse',
-    data() {
+    data () {
       return {
         isShow: false,
         state4: '',
         course: {
-          courseWare:
-            {
-            }
-
+          courseWare: {}
         },
-
         coursewareTypeOptions: [],
-
         courseWareList: [],
-
         form: {
           hour: '',
           name: '',
@@ -141,44 +134,37 @@
           describe: '',
           fileUrl: '',
           baseCoursewareId: '',
-          courseId:'2'
+          courseId: ''
 
         }
       }
     },
-    mounted: function () {
-      /*this.$nextTick(function () {
-        this.course = this.$router.currentRoute.params
-        this.courseList = this.course.courseWare
-        if (this.courseList.length) {
-
-        }
-        this.isShow = true
-      })*/
+    mounted () {
+      console.log(this.$router.currentRoute.params)
+      // 得到课程的id
+      this.form.courseId = this.$router.currentRoute.params.course.courseId
+      console.log(this.form.courseId)
+      // 得到课程的课件的集合
+      this.course.courseWare = this.$router.currentRoute.params.coursewares
+      console.log(this.course.courseWare)
       this.loadAll()
-      console.log(this.courseWareList)
-      this.courseId = this.$router.currentRoute.params.courseId
-
     },
     methods: {
-      onAddCourseWare() {
-        console.log(this.form)
-        // var formData = JSON.stringify(this.form)
-        this.$store.dispatch('Post', {'url': `/api-home/courseCourseware/addCourseCourseware`, 'data': this.form}).then(fileRes => {
+      onAddCourseWare () {
+        this.$store.dispatch('Post', {
+          'url': '/api-home/courseCourseware/addCourseCourseware',
+          'data': this.form
+        }).then(fileRes => {
           console.log(fileRes.data.re)
-          this.form.fileUrl = fileRes.data.re
         })
-        //this.isShow = true
       },
-      handleRemove(file) {
+      handleRemove (file) {
         console.log(file)
       },
-      beforeRemove(file, fileList) {
+      beforeRemove (file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`)
       },
-      beforeAvatarUpload(file) {
-        //http://127.0.0.1:8006/api-home/courseware/upload
-
+      beforeAvatarUpload (file) {
         let tem = new FormData()
 
         tem.append('file', file)
@@ -188,16 +174,15 @@
         })
         console.log(file)
       },
-      handleAvatarSuccess(res, file) {
+      handleAvatarSuccess (res, file) {
         console.log(file)
         this.form.fileUrl = res.fileUrl
       },
-      handleExceed(files, fileList) {
+      handleExceed (files, fileList) {
         console.log(this.$refs.upload)
         this.$message.warning(`已经选择上传文件`)
       },
-      loadAll() {
-        //课件信息列表
+      loadAll () {
         console.log('---------------------loadAll----------------------------')
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllBaseCoursewares`,
@@ -206,7 +191,6 @@
           this.courseWareList = coursewareListRes.data.re
           console.log(this.courseWareList)
         })
-        //课件类型列表
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllTypes`,
           'data': ''
@@ -215,22 +199,21 @@
           console.log(coursewareTypeListRes.data.re)
         })
       },
-      querySearchAsync(queryString, cb) {
+      querySearchAsync (queryString, cb) {
         var courseWareList = this.courseWareList
         var results = queryString ? courseWareList.filter(this.createStateFilter(queryString)) : courseWareList
-        //clearTimeout(this.timeout)
         cb(results)
       },
-      createStateFilter(queryString) {
+      createStateFilter (queryString) {
         return (courseWare) => {
           return (courseWare.coursewareName.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
-      handleSelect(item) {
+      handleSelect (item) {
         this.form.baseCoursewareId = item.id
       },
 
-      handleChange(item) {
+      handleChange (item) {
         console.log(item)
         this.form.typeId = item
       }

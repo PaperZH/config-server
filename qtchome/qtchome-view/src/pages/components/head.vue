@@ -42,7 +42,7 @@
       </div>
       </el-col>
     </el-row>
-    <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="500">
+    <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="500px">
       <el-form :model="form">
         <el-form-item label="用户名" :label-width="formLabelWidth">
           <el-input v-model="form.username" auto-complete="off"></el-input>

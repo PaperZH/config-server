@@ -5,9 +5,14 @@
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="20" :offset="2">
           <div class="grid-content bg-purple" style="max-height:600px;">
-            <img style="max-width: 65%; display: block; float: left;" v-bind:src="course.courseCover"/>
-            <div style="float: right;min-width: 30%;" >
-              <div style=" border-bottom: 1px solid #52464621;">
+
+            <div style="width: 65%; height: 550px; display: block; float: left;">
+              <img v-bind:src="course.courseCover"  style="width: 100%; height: 550px;display: block; backgroundRepeat:'no-repeat'; backgroundSize: 'contain';">
+            </div>
+
+            <div style="float: right;width: 30%; height: 550px;" >
+
+              <div style="height: 150px; border-bottom: 1px solid #52464621;">
                 <div><h2>{{course.courseName}}</h2></div>
                 <div>
                   <el-row :gutter="24">
@@ -27,26 +32,37 @@
                     <span >上架时间：{{course.publishTime}}</span>
                 </div>
               </div>
-              <div>
-                <div><h4>课程上传老师</h4></div>
-                <div style="height: 116px;">
-                  <div style="width: 40%;float: left"><img style="max-width: 80px;height: 70px" v-bind:src="teacher.avatar"/></div>
-                  <div style="width: 60%;float: left"><span>{{teacher.nickname}}</span><br/><br/><br/><span>{{teacher.email}}</span></div>
+
+              <div style="height: 380px;">
+                <div style="height: 50px;"><h4>课程上传老师</h4></div>
+                <div style="height: 120px;">
+                  <div style="width: 40%;float: left">
+                    <img style="max-width: 80px;height: 70px" v-bind:src="teacher.avatar"/>
+                  </div>
+                  <div style="width: 60%;float: left">
+                    <span>{{teacher.nickname}}</span><br/><br/><br/>
+                    <span>{{teacher.email}}</span>
+                  </div>
                 </div>
                 <div>
-                  <div style=""><span>课时数：{{tableData.length}}</span><br/><br/><br/><span>有效期：{{course.invalidDate}}</span></div>
-                  <div style="text-align: center; margin-top: 20%;">
+                  <div style="height: 80px;">
+                    <span>课时数：{{tableData.length}}</span><br/><br/>
+                    <span>有效期：{{course.invalidDate}}</span>
+                  </div>
+                  <div style="height: 100px; text-align: center; margin-top: 30px;">
                     <el-button type="primary" round @click="handlePraiseCourse(course.courseId)" >{{praise.praiseText}}</el-button>
                     <el-button type="success" round @click="handleCollectCourse(course.courseId)">{{collect.collectText}}</el-button>
                     <el-button type="info" round @click="evaluateDialogVisible = true">评价</el-button>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
+
     <div>
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="20" :offset="2"><div class="grid-content bg-purple" >
@@ -89,7 +105,7 @@
                     <el-button
                       size="mini" @click="handleDownloadClick(scope.row)"
                       type="danger"
-                    >下载</el-button>
+                    ><a href="" onclick="">下载</a></el-button>
                     <el-button
                       size="mini" @click="handleStudyClick(scope.row)"
                       type="danger"
@@ -135,26 +151,34 @@
       </el-col>
     </el-row>
     </div>
-    <el-dialog title="评价课程" :visible.sync="evaluateDialogVisible" width="30%" >
-      <div class="block">
-        <el-row :gutter="24">
-          <el-col :span="8">
-            <span class="demonstration">请评分：</span>
-          </el-col>
-          <el-col :span="14">
-            <el-rate v-model="evaluateCourse.evaluateScore" :max="10" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"> </el-rate>
-          </el-col>
-        </el-row>
-      </div>
-      <el-input type="textarea" :rows="5" placeholder="请输入评价内容" v-model="evaluateCourse.evaluateContent"></el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="evaluateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addEvaluateCourse(course.courseId)">确 定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog title="" :visible.sync="studyDialogVisible" >
-      <iframe :src="sourceUrl" style="width:100%; height: 600px"></iframe>
-    </el-dialog>
+
+    <div style="width: 50%; height: 250px;">
+      <el-dialog title="评价课程" :visible.sync="evaluateDialogVisible" >
+        <div class="block">
+          <el-row :gutter="24">
+            <el-col :span="8">
+              <span class="demonstration">请评分：</span>
+            </el-col>
+            <el-col :span="12">
+              <el-rate v-model="evaluateCourse.evaluateScore" :max="10" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"> </el-rate>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-input type="textarea" :rows="5" placeholder="请输入评价内容" v-model="evaluateCourse.evaluateContent"></el-input>
+          </el-row>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="evaluateDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addEvaluateCourse(course.courseId)">确 定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+
+    <div>
+      <el-dialog id="studyDialog" title="" :visible.sync="studyDialogVisible" width="100%">
+        <iframe :src="sourceUrl" style="width:100%; height: 600px"></iframe>
+      </el-dialog>
+    </div>
   </div>
 
 </template>
@@ -218,8 +242,9 @@
           })
         },
         handleStudyClick (row) {
-          let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
-          this.sourceUrl = sourceUrl
+          // let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
+          // this.sourceUrl = sourceUrl
+          this.sourceUrl = row.sourceUrl
           this.studyDialogVisible = true
         },
         handlePraiseCourse (val) {
@@ -338,8 +363,6 @@
 </script>
 
 <style >
-  .el-dialog{
-    height: 80%
-  }
+
 
 </style>

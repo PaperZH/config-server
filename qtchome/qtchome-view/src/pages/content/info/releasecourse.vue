@@ -3,7 +3,7 @@
 
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
       <el-form-item label="课程名">
-        <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small"></el-input>
+        <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small" clearable></el-input>
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker  size="small"
@@ -20,30 +20,49 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
+    <el-row :gutter="24" style=" margin-left: 82px;margin-right: 82px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
       <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
         <el-card :body-style="{ padding: '0px' } " >
+
           <div style="position: absolute; color: #172dff;">
             <el-checkbox :label="item.courseId">&nbsp</el-checkbox>
           </div>
-          <img v-bind:src="item.courseCover"  class="image">
+
+          <div style="width:100%; height: 200px">
+            <img v-bind:src="item.courseCover" class="image">
+          </div>
+
           <div style="padding: 7px;">
             <div  class="time" style="position: relative">
               <span style="display: block;float: left">{{item.courseName}}</span>
               <span style="float: right"><a v-on:click="handleRelease(item)" href="#">编辑</a></span>
             </div>
+
             <div class="bottom clearfix" style="margin-top: 26px;">
-              <span class="time">{{item.typeName}}</span>
-              <span class="time">
-                <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.collectNum}}</i>
-                <i class="fa fa-thumbs-o-up" >{{item.readNum}}</i>
-              </span>
+              <el-row :gutter="24">
+                <el-col :span="8">
+                  <span class="time">{{item.typeName}}</span>
+                </el-col>
+                <el-col :span="16">
+                  <span class="time">
+                    <el-col :span="8">
+                      <i class="fa fa-thumbs-o-up" >{{item.praiseNum}}</i>
+                    </el-col>
+                    <el-col :span="8">
+                      <i class="el-icon-star-on" >{{item.collectNum}}</i>
+                    </el-col>
+                    <el-col :span="8">
+                      <i class="el-icon-edit" >{{item.readNum}}</i>
+                    </el-col>
+                  </span>
+                </el-col>
+              </el-row>
+              <el-row>
+                <span class="time">发布日期: {{item.publishTime}}</span>
+              </el-row>
             </div>
-            <div>
-              <span class="time">{{item.publishTime}}</span>
-            </div>
+
           </div>
         </el-card>
       </el-col>
@@ -53,11 +72,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="queryParams.currentPage"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="5"
+        :current-page.sync="queryParams.currentPage"
+        :page-sizes="[6, 9, 12, 15]"
+        :page-size="queryParams.pageSize"
         layout="total, prev, pager, next, jumper"
-        :total=total>
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -84,19 +103,18 @@
           startDate: null,
           endDate: null,
           currentPage: 1,
-          pageSize: 9
+          pageSize: 6
         }
       }
     },
     methods: {
       handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+        this.queryParams.pageSize = val
+        this.getPublishedCourse()
       },
       handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
-      },
-      getHtml (val) {
-
+        this.queryParams.currentPage = val
+        this.getPublishedCourse()
       },
       handleRelease (item) {
         this.$router.push({name: 'release', params: item})
@@ -125,7 +143,6 @@
         this.getPublishedCourse()
       },
       getPublishedCourse () {
-        console.log(this.queryParams)
         this.$store.dispatch('Get', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
           this.tableData = res.data.re.rows
@@ -156,9 +173,10 @@
 
   .image {
     width: 100%;
+    height: 200px;
     display: block;
-
-
+    backgroundRepeat:'no-repeat';
+    backgroundSize: 'contain';
   }
 
   .clearfix:before,
