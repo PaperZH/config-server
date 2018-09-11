@@ -66,6 +66,13 @@ public interface CourseMapper {
     List<CourseDO> getListByCondition(QueryDO queryDO);
 
     /**
+     * 根据课程id批量删除课程
+     * @param ids
+     * @return
+     */
+    Integer deleteListByIdList(@Param("ids") Long[] ids);
+
+    /**
      * 根据id更新某一门课程的点赞数
      * @param courseId 课程的id
      * @param change 点赞数的变化值，（+1：点赞， -1：取消点赞）

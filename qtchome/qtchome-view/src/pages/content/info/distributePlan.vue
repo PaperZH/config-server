@@ -13,8 +13,8 @@
       <div style="border: 1px solid #dcdfe6;">
         <el-row :gutter="24" style="margin-left: 88px;margin-right: 123px; margin-top: 10px;">
           <el-col :span="4" v-for="(o, index) in indexList" :key="index" >
-            <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject" >
-              <img :src=o.avatar class="image" @click="addStyleClick(o)">
+            <el-card :body-style="{ padding: '0px' }" v-bind:style="o.style?' ':styleObject"  >
+              <img :src=o.avatar  @click="addStyleClick(o)" style="width: 100%;height: 120px">
               <div style="padding: 14px;text-align: center">
                 <span>{{o.nickname}}</span>
               </div>

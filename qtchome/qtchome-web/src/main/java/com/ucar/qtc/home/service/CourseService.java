@@ -98,6 +98,22 @@ public interface CourseService {
     public ResponseResult queryPublishedCourse(Map<String,Object> params);
 
     /**
+     * 用户添加课程
+     * @param course ((long userId , Course course))
+     * @return
+     */
+    @RequestMapping(value = "/userCourse/addUserCourse")
+    public ResponseResult addUserCourse(Map<String,Object> course);
+
+    /**
+     * 用户更新课程
+     * @param course ((long userId , Course course))
+     * @return
+     */
+    @RequestMapping(value = "/userCourse/updateUserCourse")
+    public ResponseResult updateUserCourse(Map<String,Object> course);
+
+    /**
      * 根据用户ID和课程ID删除发布的课程
      * @param params (long userId, long[] courseId)
      * @return
@@ -108,22 +124,6 @@ public interface CourseService {
 
     @RequestMapping
     public ResponseResult getPlanList(String planName);
-
-    /**
-     * 更新课程
-     * @param course ((long userId , Course course))
-     * @return
-     */
-    @RequestMapping(value = "/course/updateCourse")
-    public ResponseResult updateCourse(Map<String,Object> course);
-
-    /**
-     * 更新课程
-     * @param course ((long userId , Course course))
-     * @return
-     */
-    @RequestMapping(value = "/course/addCourse")
-    public ResponseResult addCourse(Map<String,Object> course);
 
     /**
      * 获取课程类型列表

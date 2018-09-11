@@ -1,6 +1,7 @@
 package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.common.Page;
+import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
@@ -19,8 +20,21 @@ public interface UserCourseApi {
     @PostMapping("/getUserCourseList")
     Result<Page<CourseVO>> getUserCourseList(@RequestBody QueryVO queryVO);
 
-    @GetMapping("/addUserCourse/{userId}/{courseId}")
-    Result addUserCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId);
+    /**
+     * 用户增加课程
+     * @param courseUser (long userId , CourseVO courseVO)
+     * @return
+     */
+    @PostMapping("/addUserCourse")
+    Result<CourseVO> addUserCourse(@RequestBody CourseUserVO courseUser);
+
+    /**
+     * 用户更新课程
+     * @param courseUser (long userId , CourseVO courseVO)
+     * @return
+     */
+    @PostMapping("/updateUserCourse")
+    Result<CourseVO> updateUserCourse(@RequestBody CourseUserVO courseUser);
 
     /**
      * 根据用户ID和课程ID删除发布的课程

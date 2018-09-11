@@ -25,5 +25,7 @@ public interface CourseService {
 
     List<CourseDO> getListByCondition(QueryDO queryDO);
 
+    Integer deleteListByIdList(Long[] ids);
+
     Integer updatePraiseNum(Long courseId, int change);
 }
