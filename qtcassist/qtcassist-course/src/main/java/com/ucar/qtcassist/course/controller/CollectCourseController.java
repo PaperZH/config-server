@@ -58,29 +58,22 @@ public class CollectCourseController implements CollectCourseApi {
         if(courseIdList != null && courseIdList.size() > 0) {
             //根据courseIdList, courseName, startDate, endDate等条件统计记录的总数
             total = courseService.getTotalByIdListAndCondition(courseIdList, queryDO);
-            if(total == 0) {
-                courseVOList = null;
-            } else {
+            if(total > 0) {
                 queryDO.setCourseIdsFromList(courseIdList);
                 // 根据courseIdList, courseName, startDate, endDate, startIndex, pageSize等条件查询用户收藏的课程列表
                 courseDOList = courseService.getListByCondition(queryDO);
                 courseVOList = new ArrayList<CourseVO>();
-                if(courseDOList != null) {
-                    for (CourseDO courseDO : courseDOList) {
-                        CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-                        CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+                for (CourseDO courseDO : courseDOList) {
+                    CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                    CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
 
-                        courseVO.setTypeName(courseType.getTypeName());
-                        //查询收藏数
-                        courseVO.setCollectNum(10);
+                    courseVO.setTypeName(courseType.getTypeName());
+                    //查询收藏数
+                    courseVO.setCollectNum(10);
 
-                        courseVOList.add(courseVO);
-                    }
+                    courseVOList.add(courseVO);
                 }
             }
-        } else {
-            total = 0;
-            courseVOList = null;
         }
         return PageResult.getSuccessResult(courseVOList, total);
     }
