@@ -23,7 +23,9 @@ spring:
 
 zuul:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-#  ignoredServices: "*"
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
 
 ribbon:
   ReadTimeout: 60000
