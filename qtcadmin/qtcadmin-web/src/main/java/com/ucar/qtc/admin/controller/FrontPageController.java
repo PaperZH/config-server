@@ -109,4 +109,15 @@ public class FrontPageController {
         }
         return ResponseResult.ok().put("data",userDTOS);
     }
+
+    @PostMapping("updateUserInfo")
+    public ResponseResult updateUserInfo(@RequestBody UserDO userDO){
+        UserDO user = new UserDO();
+        user.setUserId(userDO.getUserId());
+        user.setNickname(userDO.getAvatar());
+        if(userService.update(user)>0){
+         return ResponseResult.ok();
+        }
+        return ResponseResult.error();
+    }
 }
