@@ -40,7 +40,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ucar.qtcassist.QtcassistApplication</mainClass>
+                    <mainClass>com.ucar.qtcassist.QtcassistScheduleApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
