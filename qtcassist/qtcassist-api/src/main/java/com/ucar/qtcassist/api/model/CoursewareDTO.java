@@ -34,6 +34,11 @@ public class CoursewareDTO {
     private Date publishTime;
     /**
      *
+     *
+     * */
+    private String preUrl;
+    /**
+     *
      * */
     private String sourceUrl;
     public String getName() {
@@ -82,5 +87,13 @@ public class CoursewareDTO {
 
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
+    }
+
+    public String getPreUrl() {
+        return preUrl;
+    }
+
+    public void setPreUrl(String preUrl) {
+        this.preUrl = preUrl;
     }
 }
