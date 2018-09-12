@@ -227,7 +227,7 @@
         let id = this.$router.currentRoute.params.courseId
         if (id) {
           this.$nextTick(function () {
-            sessionStorage.getItem('courseId', id)
+            sessionStorage.setItem('courseId', id)
             this.getCourseDetails(id)
           })
         } else {

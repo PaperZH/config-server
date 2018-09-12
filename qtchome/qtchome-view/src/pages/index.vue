@@ -35,8 +35,9 @@
       let tempPath = this.$route.path
       if (tempPath) {
         this.$router.push(tempPath)
+      } else {
+        this.$router.push('home')
       }
-      this.$router.push('home')
     },
     methods: {
       getActiveIndex (data) {
