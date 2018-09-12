@@ -224,14 +224,15 @@
       },
       mounted: function () {
         let cId = sessionStorage.getItem('courseId')
-        if (cId) {
+        let id = this.$router.currentRoute.params.courseId
+        if (id) {
+          this.$nextTick(function () {
+            sessionStorage.getItem('courseId', id)
+            this.getCourseDetails(id)
+          })
+        } else {
           this.getCourseDetails(cId)
         }
-        this.$nextTick(function () {
-          let id = this.$router.currentRoute.params.courseId
-          sessionStorage.getItem('courseId', id)
-          this.getCourseDetails(id)
-        })
       },
       methods: {
         handleSizeChange (val) {

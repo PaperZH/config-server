@@ -32,7 +32,7 @@
       }
     },
     mounted: function () {
-      let tempPath = this.route.tempPath
+      let tempPath = this.$route
       if (tempPath) {
         this.$router.push(tempPath)
       }
