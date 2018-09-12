@@ -223,8 +223,13 @@
         }
       },
       mounted: function () {
+        let cId = sessionStorage.getItem('courseId')
+        if (cId) {
+          this.getCourseDetails(cId)
+        }
         this.$nextTick(function () {
           let id = this.$router.currentRoute.params.courseId
+          sessionStorage.getItem('courseId', id)
           this.getCourseDetails(id)
         })
       },
