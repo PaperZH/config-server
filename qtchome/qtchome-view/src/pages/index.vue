@@ -33,10 +33,10 @@
     },
     mounted: function () {
       let tempPath = this.$route.path
-      if (tempPath) {
-        this.$router.push(tempPath)
-      } else {
+      if (tempPath === '/') {
         this.$router.push('home')
+      } else {
+        this.$router.push(tempPath)
       }
     },
     methods: {
