@@ -223,10 +223,16 @@
         }
       },
       mounted: function () {
-        this.$nextTick(function () {
-          let id = this.$router.currentRoute.params.courseId
-          this.getCourseDetails(id)
-        })
+        let cId = sessionStorage.getItem('courseId')
+        let id = this.$router.currentRoute.params.courseId
+        if (id) {
+          this.$nextTick(function () {
+            sessionStorage.setItem('courseId', id)
+            this.getCourseDetails(id)
+          })
+        } else {
+          this.getCourseDetails(cId)
+        }
       },
       methods: {
         handleSizeChange (val) {

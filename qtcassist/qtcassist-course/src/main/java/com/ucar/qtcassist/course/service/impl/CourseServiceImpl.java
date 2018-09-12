@@ -65,6 +65,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public Integer deleteListByIdList(Long[] ids) {
+        return courseMapper.deleteListByIdList(ids);
+    }
+
+    @Override
     public Integer updatePraiseNum(Long courseId, int change) {
         return courseMapper.updatePraiseNum(courseId, change);
     }

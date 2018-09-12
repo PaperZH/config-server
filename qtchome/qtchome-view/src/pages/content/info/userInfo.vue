@@ -61,15 +61,11 @@
         console.log(tab, event)
       },
       onSubmit () {
-        console.log(this.form)
         let userInfo = {'id': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
-        console.log(userInfo)
         this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
-          console.log(res)
         })
       },
       handleAvatarSuccess (res, file) {
-        console.log(res)
         this.form.avatar = res.fileUrl
       },
       beforeAvatarUpload (file) {

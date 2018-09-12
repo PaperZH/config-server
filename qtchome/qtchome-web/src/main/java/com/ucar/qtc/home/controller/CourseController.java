@@ -71,18 +71,18 @@ public class CourseController {
      * 根据查询条件来获取发布的课程
      * @return
      */
-    @RequestMapping(value = "/updateCourse", method = RequestMethod.POST)
-    ResponseResult updateCourse(@RequestBody Map<String,Object> params){
-        return courseService.updateCourse(params);
+    @RequestMapping(value = "/updateUserCourse", method = RequestMethod.POST)
+    ResponseResult updateUserCourse(@RequestBody Map<String,Object> params){
+        return courseService.updateUserCourse(params);
     }
 
     /**
      * 创建的课程
      * @return
      */
-    @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
-    ResponseResult addCourse(@RequestBody Map<String,Object> params) {
-        return courseService.addCourse(params);
+    @RequestMapping(value = "/addUserCourse", method = RequestMethod.POST)
+    ResponseResult addUserCourse(@RequestBody Map<String,Object> params) {
+        return courseService.addUserCourse(params);
     }
 
     /**

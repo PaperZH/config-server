@@ -211,80 +211,18 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 增加课程
-     * @param courseUser (long userId , Course course)
+     * 根据课程ID批量删除课程
+     * @param queryVO (long[] courseIds)
      * @return
      */
     @Override
-    public Result<CourseVO> addCourse(@RequestBody CourseUserVO courseUser) {
-        Long userId = courseUser.getUserId();
-        CourseVO courseVO = courseUser.getCourse();
-        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
-
-        Date date = new Date();
-        courseDO.setPublishTime(date);
-        courseDO.setUpdateTime(date);
-        courseDO.setReadNum(0);
-        courseDO.setPraiseNum(0);
-
-        int count = courseService.insertSelective(courseDO);
+    public Result deleteCourseList(@RequestBody QueryVO queryVO) {
+        Long[] courseIds = queryVO.getCourseIds();
+        int count = courseService.deleteListByIdList(courseIds);
         if(count > 0) {
-            Long courseId = courseDO.getId();
-            UserCourseDO userCourse = new UserCourseDO();
-            userCourse.setUserId(userId);
-            userCourse.setCourseId(courseId);
-            userCourse.setPublishDate(date);
-            int count2 = userCourseService.insertSelective(userCourse);
-            if(count2 >= 0) {
-                courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
-                return Result.getSuccessResult(courseVO);
-            }
-        }
-        return Result.getBusinessException("添加课程失败","");
-    }
-
-    /**
-     * 更新课程
-     * @param courseUser (long userId , Course course)
-     * @return
-     */
-    @Override
-    public Result<CourseVO> updateCourse(@RequestBody CourseUserVO courseUser) {
-        Long userId = courseUser.getUserId();
-        CourseVO courseVO = courseUser.getCourse();
-        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
-
-        UserCourseDO userCourse = userCourseService.selectByCourseId(courseVO.getCourseId());
-        if(userId.equals(userCourse.getUserId())) {
-            int count = courseService.updateByPrimaryKeySelective(courseDO);
-            if(count >= 0) {
-                return Result.getSuccessResult(courseVO);
-            }
-        }
-        return Result.getBusinessException("更新课程失败","");
-    }
-
-    /**
-     * 删除课程
-     * @param userId 用户ID
-     * @param courseId 课程ID
-     * @return
-     */
-    @Override
-    public Result deleteCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId) {
-        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
-        if(userId.equals(userCourse.getUserId())) {
-            int count = courseService.deleteByPrimaryKey(courseId);
-            if(count > 0) {
-                logger.info("删除课程信息成功");
-                return Result.getSuccessResult("删除课程信息成功");
-            } else {
-                logger.info("删除课程信息失败");
-                return Result.getBusinessException("删除课程信息失败","");
-            }
+            return Result.getSuccessResult("批量删除课程信息成功");
         } else {
-            logger.info("用户和课程不匹配");
-            return Result.getBusinessException("用户和课程不匹配","");
+            return Result.getSuccessResult("批量删除课程信息失败");
         }
     }
 
