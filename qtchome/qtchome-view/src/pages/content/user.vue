@@ -29,7 +29,7 @@ export default {
     }
   },
   mounted: function () {
-    this.menus = JSON.parse(localStorage.getItem('access-menus'))
+    this.menus = JSON.parse(sessionStorage.getItem('access-menus'))
     if (this.menus != null) {
       this.$router.push(this.menus[0].path)
     }

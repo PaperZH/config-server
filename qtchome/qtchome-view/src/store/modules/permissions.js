@@ -36,10 +36,8 @@ export const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(result => {
           sessionStorage.setItem('access-token', result.data.token)
-          sessionStorage.setItem('access-menus', result.data.menus)
-          sessionStorage.setItem('access-router', result.data.router)
+          sessionStorage.setItem('access-menus', JSON.stringify(result.data.router))
           sessionStorage.setItem('access-userinfo', JSON.stringify(result.data.user))
-          console.log(sessionStorage.getItem('access-userinfo'))
           resolve(result)
         }).catch(error => {
           reject(error)
