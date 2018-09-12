@@ -1,5 +1,6 @@
 package com.ucar.test.controller;
 
+import com.ucar.qtcassist.api.DemoApi;
 import com.ucar.qtcassist.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,22 +22,22 @@ import java.util.Map;
 public class HelloController {
 
     @Autowired
-    private HelloBackgroundService helloBackgroundService;
+    private DemoApi demoApi;
 
     @RequestMapping("/hello")
     public Map<String, Object> hello() {
         Map<String, Object> ret = new HashMap<String, Object>();
         StringBuffer sb = new StringBuffer();
-        String s1 = helloBackgroundService.hello("张三");
+        String s1 = demoApi.hello("张三");
         sb.append(s1).append("\n");
         User user = null;
         try {
-            user = helloBackgroundService.hello(URLEncoder.encode("李四", "UTF-8"), 30);
+            user = demoApi.hello(URLEncoder.encode("李四", "UTF-8"), 30);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         sb.append(user.toString()).append("\n");
-        String s3 = helloBackgroundService.hello(new User("王五", 19));
+        String s3 = demoApi.hello(new User("王五", 19));
         sb.append(s3).append("\n");
         ret.put("show", sb.toString());
         sb.append("test2");

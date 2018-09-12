@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.api;
 
+import com.ucar.qtcassist.hystrix.HelloFallbackFactory;
 import com.ucar.qtcassist.api.model.User;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author wangyang
  * @since 2018/8/21
  */
+
+@FeignClient(value = "qtcassist",fallbackFactory = HelloFallbackFactory.class)
 public interface DemoApi {
 
     @GetMapping(value = "/hello2")
