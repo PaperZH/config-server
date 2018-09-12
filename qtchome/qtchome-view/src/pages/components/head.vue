@@ -108,7 +108,6 @@ export default {
           that.$message.success('登录成功')
           that.res = result
           that.router = that.res.data.router
-          localStorage.setItem('access-menus', JSON.stringify(that.router))
           that.dialogFormVisible = false
           that.isShow = false
           that.isUser = true
@@ -129,12 +128,26 @@ export default {
           this.isShow = true
           this.isUser = false
           this.$store.dispatch('Logout', {'userId': 100}).then(res => {
+            sessionStorage.removeItem('access-token')
+            sessionStorage.removeItem('access-menus')
+            sessionStorage.removeItem('access-userinfo')
             this.$router.push('home')
           })
         })
       } else {
         this.$router.push(val)
       }
+    }
+  },
+  mounted: function () {
+    let temprouter = sessionStorage.getItem('access-router')
+    let tempuser = sessionStorage.getItem('access-userinfo')
+    if (temprouter) {
+      this.router = temprouter
+      this.userInfo.nickName = tempuser.nickname
+      this.userInfo.avatar = tempuser.avatar
+      this.isShow = false
+      this.isUser = true
     }
   }
 }

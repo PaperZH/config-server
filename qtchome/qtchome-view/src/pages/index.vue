@@ -27,11 +27,15 @@
     },
     data () {
       return {
-        activeIndex: 'home',
+        activeIndex: '',
         search: ''
       }
     },
     mounted: function () {
+      let tempPath = this.route.tempPath
+      if (tempPath) {
+        this.$router.push(tempPath)
+      }
       this.$router.push('home')
     },
     methods: {

@@ -116,11 +116,11 @@
         // 如果courseId存在，则是修改课程信息，否则是新建课程信息
         let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
         if (this.courseDetailForm.course.courseId != null) {
-          this.$store.dispatch('Post', {'url': '/api-home/course/updateCourse', 'data': data}).then(res => {
+          this.$store.dispatch('Post', {'url': '/api-home/course/updateUserCourse', 'data': data}).then(res => {
             this.$router.push({name: 'addCourse', params: this.courseDetailForm})
           })
         } else {
-          this.$store.dispatch('Post', {'url': '/api-home/course/addCourse', 'data': data}).then(res => {
+          this.$store.dispatch('Post', {'url': '/api-home/course/addUserCourse', 'data': data}).then(res => {
             this.courseDetailForm.course.courseId = res.data.re.courseId
             this.$router.push({name: 'addCourse', params: this.courseDetailForm})
           })
