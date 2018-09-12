@@ -35,10 +35,7 @@ export const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(result => {
-          sessionStorage.setItem('access-token', JSON.stringify(result.data.token))
-          sessionStorage.setItem('access-menus', JSON.stringify(result.data.router))
-          sessionStorage.setItem('access-router', result.data.router)
-          sessionStorage.setItem('access-userinfo', JSON.stringify(result.data.user))
+          this.commit('SET_USERID', result.data.user.userId)
           resolve(result)
         }).catch(error => {
           reject(error)
@@ -103,7 +100,7 @@ export const user = {
 export const getters = {
   token: state => state.token,
   avatar: state => state.avatar,
-  userId: state => state.userId,
+  userId: state => state.user.userId,
   name: state => state.name,
   menu: state => state.menu,
   addRouters: state => state.addRouters,

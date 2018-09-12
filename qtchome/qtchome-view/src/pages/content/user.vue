@@ -31,7 +31,7 @@ export default {
   mounted: function () {
     this.menus = JSON.parse(localStorage.getItem('access-menus'))
     if (this.menus != null) {
-      this.$router.push(this.menus[0].redirect)
+      this.$router.push(this.menus[0].path)
     }
   },
   methods: {
