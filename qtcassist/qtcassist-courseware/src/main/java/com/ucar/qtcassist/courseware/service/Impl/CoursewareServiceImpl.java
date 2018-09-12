@@ -63,6 +63,7 @@ public class CoursewareServiceImpl implements CoursewareService {
                 coursewareDTO.setId(coursewareDOList.get(i).getId());
                 coursewareDTO.setPublishTime(coursewareDOList.get(i).getPublishTime());
                 coursewareDTO.setSourceUrl(baseCoursewareDO.getSourceUrl());
+                coursewareDTO.setPreUrl(baseCoursewareDO.getPreviewUrl());
                 coursewareDTOList.add(coursewareDTO);
             }
             return coursewareDTOList;
