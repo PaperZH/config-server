@@ -3,6 +3,8 @@ package com.ucar.qtc.base.controller;
 import com.ucar.qtc.base.utils.FileUtils;
 import com.ucar.qtc.base.utils.ResponseResult;
 import com.ucar.qtc.base.utils.StringUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,7 @@ import java.io.IOException;
  * @description 文件服务
  * @date 2018-08-16 10:23
  */
+@Api(description = "文件基础服务API接口")
 @RestController
 @RequestMapping("/file")
 public class FileController {
@@ -34,6 +37,7 @@ public class FileController {
      * @param key
      * @return
      */
+    @ApiOperation(value="指定文件名上传文件", notes="指定文件名上传文件")
     @PostMapping("upload")
     public ResponseResult upload(MultipartFile file, String key) {
         try {

@@ -20,6 +20,8 @@ import EurekaList from '../components/monitor/eureka/list'
 
 import DruidList from '../components/monitor/druid/list'
 
+import Swagger2List from '../components/monitor/api/list'
+
 import BannerList from '../components/recommand/bannerRecommand'
 
 import RecCourseList from '../components/recommand/courseRecommand'
@@ -115,7 +117,6 @@ let router = new Router({
         {path: '/base/log', component: LogList, name: '日志管理', menuShow: true}
       ]
     },
-
     {
       path: '/',
       component: Home,
@@ -137,7 +138,6 @@ let router = new Router({
         {path: '/monitor/eureka',component: EurekaList, name: '服务监控', menuShow: true},
       ]
     },
-
     {
       path: '/',
       component: Home,
@@ -148,7 +148,17 @@ let router = new Router({
         {path: '/monitor/druid',component: DruidList, name: 'SQL监控', menuShow: true},
       ]
     },
-
+    {
+      path: '/',
+      component: Home,
+      name: 'API调用',
+      menuShow: true,
+      leaf: true,
+      iconCls: 'fa fa-group',
+      children: [
+        {path: '/monitor/api', component: Swagger2List, name: 'API调用', menuShow: true}
+      ]
+    },
     {
       path: '/',
       component: Home,

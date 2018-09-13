@@ -5,9 +5,13 @@ import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
+import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
 
@@ -17,6 +21,7 @@ import java.util.*;
  * 功能描述:推荐课程
  *
  */
+@Api(description = "首页课程推荐服务API接口")
 @RestController
 @RequestMapping("/recCourse")
 public class RecCourseController {
@@ -27,11 +32,14 @@ public class RecCourseController {
     @Autowired
     private RecCourseService recCourseService;
 
+    @ApiOperation(value="获取推荐课程信息", notes="获取推荐课程信息")
     @PostMapping("getCourse")
     public ResponseResult getCourseList(@RequestBody QueryVO queryVO){
         return ResponseResult.ok().put("listCourse",courseService.getCourseIdAndCourseName(queryVO));
     }
 
+    @ApiOperation(value="获取推荐课程列表信息", notes="获取推荐课程列表信息")
+    @Log("获取推荐课程列表信息")
     @PostMapping
     public ResponseResult getRecourseList(@RequestBody QueryVO queryVO){
        List<CourseVO> result = recCourseService.listRecCourseByQuery(queryVO);
@@ -41,6 +49,8 @@ public class RecCourseController {
         return ResponseResult.ok().put("list",result);
     }
 
+    @ApiOperation(value="保存推荐课程信息", notes="保存推荐课程信息")
+    @Log("保存推荐课程信息")
     @PostMapping("save")
     public ResponseResult saveRecourse(@RequestBody RecommandCourseDO courseDO){
         if(courseDO.getCourseId() == null)
@@ -59,6 +69,8 @@ public class RecCourseController {
         }
     }
 
+    @ApiIgnore
+    @Log("批量删除推荐课程信息")
     @DeleteMapping("/batchRemove")
     public ResponseResult batchRemoveRecCourseByIds(@RequestBody Map<String,Object> params){
 
@@ -73,6 +85,9 @@ public class RecCourseController {
         else
             return ResponseResult.error();
     }
+
+    @ApiOperation(value="删除推荐课程信息", notes="删除推荐课程信息")
+    @Log("删除推荐课程信息")
     @DeleteMapping
     public ResponseResult removeReccourse(@RequestParam(value="id",defaultValue="-1") Long  courseId){
 

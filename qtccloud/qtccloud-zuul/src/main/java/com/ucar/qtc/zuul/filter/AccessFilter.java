@@ -35,7 +35,7 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     MenuService menuService;
 
-    private String ignorePath = "/api-admin/login,/api-home/,/api-admin/pages,/api-admin/homeLogin";
+    private String ignorePath = "/api-admin/login,/api-home/,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs";
 
     @Override
     public String filterType() {
@@ -126,7 +126,7 @@ public class AccessFilter extends ZuulFilter {
         boolean flag = false;
         for (String s : ignorePath.split(",")) {
 
-            if (requestUri.startsWith(s)) {
+            if (requestUri.contains(s)) {
                 return true;
             }
         }
