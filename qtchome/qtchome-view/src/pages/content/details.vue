@@ -84,7 +84,6 @@
                     第 {{scope.$index+1}} 课
                   </template>
                 </el-table-column>
-
                 <el-table-column
                   prop="name"
                   label="课件名称"
@@ -102,19 +101,16 @@
                 </el-table-column>
                 <el-table-column label="操作">
                   <template slot-scope="scope">
-                    <el-button
-                      size="mini" @click="handleDownloadClick(scope.row)"
-                      type="danger"
-                    ><a href="" onclick="">下载</a></el-button>
-                    <el-button
-                      size="mini" @click="handleStudyClick(scope.row)"
-                      type="danger"
-                    >学习</el-button>
+                    <el-button size="mini" type="danger" >
+                      <a :href="scope.row.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
+                    </el-button>
+                    <el-button size="mini" @click="handleStudyClick(scope.row)" type="danger" >学习</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
           </el-tab-pane>
+
           <el-tab-pane label="课程评价">
             <div>
               <el-table
@@ -146,6 +142,7 @@
               </el-table>
             </div>
           </el-tab-pane>
+
         </el-tabs>
       </div>
       </el-col>
@@ -156,8 +153,8 @@
       <el-dialog title="评价课程" :visible.sync="evaluateDialogVisible" >
         <div class="block">
           <el-row :gutter="24">
-            <el-col :span="8">
-              <span class="demonstration">请评分：</span>
+            <el-col :span="12">
+              <span class="demonstration">评价分数：</span>
             </el-col>
             <el-col :span="12">
               <el-rate v-model="evaluateCourse.evaluateScore" :max="10" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"> </el-rate>
@@ -176,7 +173,7 @@
 
     <div>
       <el-dialog id="studyDialog" title="" :visible.sync="studyDialogVisible" width="100%">
-        <iframe :src="sourceUrl" style="width:100%; height: 600px"></iframe>
+        <iframe :src="previewUrl" style="width:100%; height: 600px"></iframe>
       </el-dialog>
     </div>
   </div>
@@ -193,6 +190,7 @@
         return {
           evaluateDialogVisible: false,
           studyDialogVisible: false,
+          previewUrl: null,
           sourceUrl: null,
           evaluateCourse: {
             evaluateScore: 5,
@@ -240,16 +238,8 @@
         handleCurrentChange (val) {
           console.log(`当前页: ${val}`)
         },
-        handleDownloadClick (row) {
-          let data = {'sourceUrl': row.sourceUrl}
-          this.$store.dispatch('Post', {'url': '/api-home/file/download', 'data': data}).then(res => {
-            console.log(res)
-          })
-        },
         handleStudyClick (row) {
-          // let sourceUrl = 'http://udfstest.10101111.com/ucarudfs/resource/' + row.sourceUrl
-          // this.sourceUrl = sourceUrl
-          this.sourceUrl = row.sourceUrl
+          this.previewUrl = row.preUrl
           this.studyDialogVisible = true
         },
         handlePraiseCourse (val) {
