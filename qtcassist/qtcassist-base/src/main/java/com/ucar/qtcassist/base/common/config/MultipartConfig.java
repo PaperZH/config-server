@@ -25,9 +25,9 @@ public class MultipartConfig {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         String location = System.getProperty("user.dir") + "/data/tmp";
         //文件最大KB，MB
-        factory.setMaxFileSize("10MB");
+        factory.setMaxFileSize("30MB");
         //设置总上传数据总大小
-        factory.setMaxFileSize("50MB");
+        factory.setMaxFileSize("30MB");
         File tmpFile = new File(location);
         if (!tmpFile.exists()) {
             tmpFile.mkdirs();
