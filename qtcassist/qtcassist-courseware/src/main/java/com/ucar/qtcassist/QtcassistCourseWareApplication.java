@@ -10,7 +10,6 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-@MapperScan("com.ucar.qtcassist.*.dao")
 @ComponentScan("com.ucar.qtcassist")
 @EnableDiscoveryClient
 @EnableFeignClients
