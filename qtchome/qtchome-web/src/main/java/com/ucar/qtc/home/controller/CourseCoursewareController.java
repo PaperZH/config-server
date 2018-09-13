@@ -30,7 +30,6 @@ public class CourseCoursewareController {
     @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
     public Result add(@RequestBody CourseCoursewareDTO courseCoursewareDTO){
         if(!courseCoursewareDTO.getFileUrl().equals("")&&courseCoursewareDTO.getFileUrl()!=null){
-            hCoursewareService.uploadCourseware(courseCoursewareDTO);
             return Result.getSuccessResult(hCoursewareService.uploadCourseware(courseCoursewareDTO));
         }else if(courseCoursewareDTO.getBaseCoursewareId()!=null){
             Result rid =hCoursewareService.addCourseware(courseCoursewareDTO.getBaseCoursewareId(),courseCoursewareDTO.getHour());
