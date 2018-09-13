@@ -53,3 +53,12 @@ logging:
 ribbon:
   eureka:
     enable: true
+
+swagger:
+  base-package: com.ucar.qtc.admin.controller
+  globalOperationParameters[0]:
+    name: Authorization
+    description: JWT TOKEN
+    modelRef: string
+    parameterType: header
+    required: false

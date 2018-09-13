@@ -10,6 +10,8 @@ import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.common.dto.UserToken;
 import com.ucar.qtc.common.utils.JwtUtils;
 import com.ucar.qtc.common.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,7 @@ import java.util.Map;
  * @description: 用户登陆退出
  * @date: 2018/8/7 10:19
  */
+@Api(description = "登陆退出服务API接口")
 @RequestMapping()
 @RestController
 public class LoginController {
@@ -42,6 +45,7 @@ public class LoginController {
      * @param response
      * @return
      */
+    @ApiOperation(value="后台用户登陆", notes="后台用户登陆")
     @Log("登录")
     @PostMapping("/login")
     ResponseResult login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
@@ -80,6 +84,7 @@ public class LoginController {
      * @param response
      * @return
      */
+    @ApiOperation(value="前台用户登陆", notes="前台用户登陆")
     @Log("登录")
     @PostMapping("/homeLogin")
     ResponseResult homeLogin(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
@@ -115,6 +120,7 @@ public class LoginController {
      * @param response
      * @return
      */
+    @ApiOperation(value="用户退出", notes="用户退出")
     @RequestMapping("/logout")
     ResponseResult logout(HttpServletRequest request, HttpServletResponse response) {
         menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));

@@ -7,8 +7,11 @@ import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.MenuDTO;
 import com.ucar.qtc.common.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +22,21 @@ import java.util.Map;
  * @description: 菜单管理
  * @date: 2018/8/7 10:19
  */
+@Api(description = "菜单服务API接口")
 @RequestMapping("/menu")
 @RestController()
 public class MenuController {
     @Autowired
     MenuService menuService;
 
+    @ApiIgnore
     @Log("访问菜单")
     @GetMapping("tree")
     Tree<MenuDO>  tree(){
         return menuService.getTree();
     }
 
+    @ApiOperation(value="获取菜单信息", notes="获取菜单信息")
     @Log("访问菜单列表")
     @GetMapping
     List<Tree<MenuDO>>  list(){
@@ -42,6 +48,7 @@ public class MenuController {
      * @param id
      * @return
      */
+    @ApiOperation(value="获取ID获取菜单信息", notes="获取ID获取菜单信息")
     @GetMapping("{id}")
     MenuDO get(@PathVariable("id") Long id) {
         MenuDO menu = menuService.get(id);
@@ -53,6 +60,7 @@ public class MenuController {
      * @param params
      * @return
      */
+    @ApiOperation(value="获取菜单列表信息", notes="获取菜单列表信息")
     @Log("访问菜单列表")
     @GetMapping("list")
     List<MenuDO> list(@RequestParam Map<String, Object> params) {
@@ -65,6 +73,7 @@ public class MenuController {
      * @param menuDO
      * @return
      */
+    @ApiOperation(value="修改菜单信息", notes="修改菜单信息")
     @Log("修改菜单")
     @PutMapping()
     ResponseResult update(@RequestBody MenuDO menuDO){
@@ -79,6 +88,7 @@ public class MenuController {
      * @param menuDO
      * @return
      */
+    @ApiOperation(value="添加菜单信息", notes="添加菜单信息")
     @Log("添加菜单")
     @PostMapping
     ResponseResult save(@RequestBody MenuDO menuDO){
@@ -91,6 +101,7 @@ public class MenuController {
      * @param id
      * @return
      */
+    @ApiOperation(value="删除菜单信息", notes="删除菜单信息")
     @Log("删除菜单")
     @DeleteMapping()
     ResponseResult remove(Long id){
@@ -104,6 +115,7 @@ public class MenuController {
      * 用户菜单
      * @return
      */
+    @ApiOperation(value="获取当前用户菜单信息", notes="获取当前用户菜单信息")
     @GetMapping("userMenus")
     List<MenuDTO> userMenus(){
         List<MenuDO> menuDOS = menuService.userMenus(Long.parseLong(FilterContextHandler.getUserID()));
@@ -118,6 +130,7 @@ public class MenuController {
         return menuDTOS;
     }
 
+    @ApiIgnore
     @GetMapping("clearCache")
     ResponseResult clearCache(){
         Boolean flag = menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
@@ -131,6 +144,7 @@ public class MenuController {
      * 当前用户菜单的树形结构
      * @return
      */
+    @ApiOperation(value="获取当前用户菜单信息", notes="获取当前用户菜单信息")
     @Log("当前用户菜单")
     @RequestMapping("/currentUserMenus")
     List<Tree<MenuDO>> currentUserMenus() {
@@ -138,6 +152,7 @@ public class MenuController {
         return menus;
     }
 
+    @ApiOperation(value="获取角色菜单信息", notes="获取角色菜单信息")
     @GetMapping("/roleId")
     List<Long> menuIdsByRoleId(Long roleId){
         return menuService.MenuIdsByRoleId(roleId);
