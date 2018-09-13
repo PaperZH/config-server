@@ -11,7 +11,6 @@ import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
-import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.VO.TeacherVO;
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,8 +193,12 @@ public class CourseController implements CourseApi {
             courseDetail.setCoursewares(null);
         } else {
             List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
+            String preUrl = null;
+            String sourceUrl = null;
             for(CoursewareDTO coursewareDTO : coursewareDTOList) {
-                String sourceUrl = UrlPrefixConstant.COURSEWARE_URL_PREFIX + coursewareDTO.getSourceUrl();
+                preUrl = UrlPrefixConstant.COURSEWARE_URL_PREFIX + coursewareDTO.getPreUrl();
+                sourceUrl = UrlPrefixConstant.COURSEWARE_URL_PREFIX + coursewareDTO.getSourceUrl();
+                coursewareDTO.setPreUrl(preUrl);
                 coursewareDTO.setSourceUrl(sourceUrl);
             }
             courseDetail.setCoursewares(coursewareDTOList);

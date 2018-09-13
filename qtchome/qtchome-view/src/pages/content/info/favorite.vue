@@ -21,14 +21,14 @@
 
     <el-row :gutter="24" style=" margin-left: 82px;margin-right: 96px; margin-top: 0px;">
       <el-checkbox-group v-model="checkList">
-      <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px;">
+      <el-col :span="8" v-for="(item, index) in tableData" :key="item.courseId" style="margin-top: 20px; height: 330px">
         <el-card :body-style="{ padding: '0px' } " >
 
           <div style="position: absolute; color: #172dff">
             <el-checkbox  :label="item.courseId">&nbsp</el-checkbox>
           </div>
 
-          <div style="width: 100%; height: 200px;">
+          <div style="width: 100%; height: 240px;">
             <img v-bind:src="item.courseCover"  class="image">
           </div>
 
@@ -172,7 +172,7 @@
 
   .image {
     width: 100%;
-    height: 200px;
+    height: 240px;
     display: block;
     backgroundRepeat:'no-repeat';
     backgroundSize: 'contain';
