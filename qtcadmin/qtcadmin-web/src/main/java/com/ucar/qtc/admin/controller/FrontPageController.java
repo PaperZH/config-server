@@ -14,6 +14,8 @@ import com.ucar.qtc.admin.vo.QueryVO;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
 import com.ucar.qtc.common.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+@Api(description = "前台页面API接口")
 @RestController
 @RequestMapping("/pages")
 public class FrontPageController {
@@ -40,6 +43,7 @@ public class FrontPageController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value="获取推荐图片", notes="获取推荐图片")
     @GetMapping("getRecBanner")
     public ResponseResult bannerList() {
         int limit = 6;
@@ -56,6 +60,7 @@ public class FrontPageController {
         return ResponseResult.page(pageUtils);
     }
 
+    @ApiOperation(value="获取推荐课程", notes="获取推荐课程")
     @GetMapping("getRecCourse")
     public ResponseResult getRecourseList(){
 
@@ -86,12 +91,14 @@ public class FrontPageController {
         return ResponseResult.ok().put("list",list);
     }
 
+    @ApiOperation(value="根据ID获取用户信息", notes="根据ID获取用户信息")
     @GetMapping("getUserInfoById")
     public ResponseResult getUserInfoById(@RequestParam("id") Long id) {
         UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
         return ResponseResult.ok().put("data",userDTO);
     }
 
+    @ApiOperation(value="获取ID获取学员信息", notes="获取ID获取学员信息")
     @GetMapping("getStudentInfoById")
     public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
@@ -101,6 +108,7 @@ public class FrontPageController {
         return ResponseResult.ok().put("data",userDTOS);
     }
 
+    @ApiOperation(value="获取ID获取老师信息", notes="获取ID获取老师信息")
     @GetMapping("getTeacherInfoById")
     public ResponseResult getTeacherInfoById(@RequestParam("id") Long id) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
@@ -110,6 +118,7 @@ public class FrontPageController {
         return ResponseResult.ok().put("data",userDTOS);
     }
 
+    @ApiOperation(value="修改用户信息", notes="修改用户信息")
     @PostMapping("updateUserInfo")
     public ResponseResult updateUserInfo(@RequestBody UserDO userDO){
         if(userDO == null)

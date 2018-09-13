@@ -23,6 +23,7 @@
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
                 <el-autocomplete  ref="sys"
+
                   popper-class="my-autocomplete"
                   v-model="state4"
                   :fetch-suggestions="querySearchAsync"
@@ -39,6 +40,7 @@
             <el-col :span="8">
               <el-form-item :span="8" label="上传文件:" prop="fileUrl">
                 <el-upload ref="upload"
+                           :disabled="uploadIsDisabled"
                            action=""
                            :on-remove="handleRemove"
                            :auto-upload="true"
@@ -120,6 +122,7 @@
     name: 'addCourse',
     data () {
       return {
+        uploadIsDisabled: false,
         isShow: false,
         state4: '',
         course: {
@@ -165,8 +168,8 @@
         return this.$confirm(`确定移除 ${file.name}？`)
       },
       beforeAvatarUpload (file) {
+        this.$refs.sys.disabled = true
         let tem = new FormData()
-
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/save`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
@@ -211,6 +214,7 @@
       },
       handleSelect (item) {
         this.form.baseCoursewareId = item.id
+        this.uploadIsDisabled = true
       },
 
       handleChange (item) {

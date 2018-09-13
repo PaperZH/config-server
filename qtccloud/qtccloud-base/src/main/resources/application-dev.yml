@@ -37,3 +37,6 @@ file:
   filePath: e:/file/uploaded_files/
   pre: /files
   server: http://${spring.cloud.client.ipAddress}:${server.port}
+
+swagger:
+  base-package: com.ucar.qtc.base.controller

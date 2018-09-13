@@ -12,8 +12,11 @@ import com.ucar.qtc.common.dto.LoginUserDTO;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
 import com.ucar.qtc.common.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import java.util.Map;
  * @description: 用户管理
  * @date: 2018/8/7 10:19
  */
+@Api(description = "用户服务API接口")
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -35,6 +39,7 @@ public class UserController {
 	 * 登录的当前用户，前台需要验证用户登录的页面可以调用此方法
 	 * @return
 	 */
+	@ApiOperation(value="当前登陆用户", notes="当前登陆用户")
     @GetMapping("/currentUser")
 	LoginUserDTO currentUser(){
 		LoginUserDTO loginUserDTO = new LoginUserDTO();
@@ -54,6 +59,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value="根据ID获取用户信息", notes="根据ID获取用户信息")
     @GetMapping("{id}")
     ResponseResult get(@PathVariable("id") Long id ){
 		UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
@@ -65,6 +71,7 @@ public class UserController {
 	 * @param params
 	 * @return
 	 */
+	@ApiOperation(value="获取用户信息", notes="获取用户信息")
 	@Log("获取用户列表")
     @GetMapping()
     ResponseResult listByPage(@RequestParam Map<String, Object> params) {
@@ -81,6 +88,8 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
+	@ApiOperation(value="添加用户信息", notes="添加用户信息")
+	@Log("添加用户")
 	@PostMapping()
     ResponseResult save(@RequestBody UserDO user) {
 		user.setDelFlag(1);
@@ -93,6 +102,8 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
+	@ApiOperation(value="修改用户信息", notes="修改用户信息")
+	@Log("修改用户")
 	@PutMapping()
     ResponseResult update(@RequestBody UserDO user) {
 		return ResponseResult.operate(userService.update(user) > 0);
@@ -103,6 +114,8 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
+	@ApiOperation(value="修改用户昵称信息", notes="修改用户昵称信息")
+	@Log("修改用户昵称和图片")
 	@PostMapping("/changeProfile")
 	ResponseResult changeProfile(@RequestBody UserDO user) {
 		ResponseResult result = ResponseResult.operate(userService.changeProfile(user) > 0);
@@ -116,11 +129,14 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value="删除用户信息", notes="删除用户信息")
+	@Log("删除用户")
 	@DeleteMapping()
     ResponseResult remove(Long id) {
 		return ResponseResult.operate (userService.remove(id) > 0);
 	}
 
+	@ApiIgnore
 	@PostMapping("/batchRemove")
 	@ResponseBody
     ResponseResult batchRemove(@RequestParam("ids[]") Long[] userIds) {
@@ -131,6 +147,7 @@ public class UserController {
 		return ResponseResult.error();
 	}
 
+	@ApiIgnore
 	@PostMapping("/exits")
 	@ResponseBody
 	boolean exits(@RequestParam Map<String, Object> params) {

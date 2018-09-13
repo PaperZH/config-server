@@ -5,6 +5,8 @@ import com.ucar.qtc.base.dto.LogDO;
 import com.ucar.qtc.base.utils.PageUtils;
 import com.ucar.qtc.base.utils.Query;
 import com.ucar.qtc.base.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.Map;
  * @description: 基础日志服务控制层
  * @date: 2018/8/7 10:19
  */
+@Api(description = "日志基础服务API接口")
 @RequestMapping("/log")
 @RestController
 public class LogController {
@@ -28,6 +31,7 @@ public class LogController {
      * @param params
      * @return
      */
+    @ApiOperation(value="获取日志列表信息", notes="获取日志列表信息")
     @GetMapping()
     ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
@@ -39,6 +43,7 @@ public class LogController {
      * @param logDO
      * @return
      */
+    @ApiOperation(value="保存日志信息", notes="保存日志信息")
     @PostMapping("/save")
     ResponseResult save(@RequestBody LogDO logDO) {
         if (logService.save(logDO) > 0) {
@@ -52,6 +57,7 @@ public class LogController {
      * @param id
      * @return
      */
+    @ApiOperation(value="删除日志信息", notes="删除日志信息")
     @DeleteMapping()
     ResponseResult remove(Long id) {
         if (logService.remove(id) > 0) {
@@ -65,6 +71,7 @@ public class LogController {
      * @param params
      * @return
      */
+    @ApiOperation(value="批量删除日志信息", notes="批量删除日志信息")
     @PostMapping("/batchRemove")
     ResponseResult batchRemove(@RequestBody Map<String, Object> params) {
         Object obj = params.get("ids");
