@@ -1,11 +1,16 @@
 package com.ucar.qtcassist.api;
 
-import com.ucar.qtcassist.api.model.*;
-import org.springframework.web.bind.annotation.*;
+import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
+import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
+import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
+import com.ucar.qtcassist.api.model.Result;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.List;
 
 /**

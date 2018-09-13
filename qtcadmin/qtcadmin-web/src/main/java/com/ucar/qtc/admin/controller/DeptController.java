@@ -20,7 +20,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/dept")
 public class DeptController {
+
 	private String prefix = "system/dept";
+
 	@Autowired
 	private DeptService deptService;
 

@@ -140,10 +140,8 @@ export default {
     }
   },
   mounted: function () {
-    let temprouter = sessionStorage.getItem('access-router')
-    let tempuser = sessionStorage.getItem('access-userinfo')
-    if (temprouter) {
-      this.router = temprouter
+    let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+    if (tempuser) {
       this.userInfo.nickName = tempuser.nickname
       this.userInfo.avatar = tempuser.avatar
       this.isShow = false

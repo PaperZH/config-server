@@ -16,10 +16,10 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients
 @EnableCaching
 @SpringBootApplication
-public class QtcassistApplication {
+public class QtcassistScheduleApplication {
 
     public static void main(String[] args) {
-        ApplicationContext applicationContext = SpringApplication.run(QtcassistApplication.class, args);
+        ApplicationContext applicationContext = SpringApplication.run(QtcassistScheduleApplication.class, args);
         SpringApplicationContext.initApplicationContext(applicationContext);
     }
 }

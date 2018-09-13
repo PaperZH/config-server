@@ -29,12 +29,9 @@
           </span>
           <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <div @click="jumpTo('/user/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
+                <div @click="jumpTo('/user/profile')"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人信息</span></div>
               </el-dropdown-item>
-              <!-- <el-dropdown-item>
-                <div @click="jumpTo('/user/changepwd')"><span style="color: #555;font-size: 14px;">修改密码</span></div>
-              </el-dropdown-item> -->
-              <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item divided @click.native="logout"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;退出登录</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,7 +41,7 @@
     <el-col :span="24" class="main">
       <!--左侧导航-->
       <aside :class="{showSidebar:!collapsed}">
-        
+
         <!--导航菜单-->
         <el-menu :default-active="defaultActiveIndex" router :collapse="collapsed" @select="handleSelect">
           <template v-for="(item,index) in menus" v-if="item.menuShow">

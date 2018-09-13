@@ -105,6 +105,4 @@ public class BannerController {
     public ResponseResult remove(@RequestParam("ids[]") Long[] ids) {
         return ResponseResult.operate(bannerService.batchRemove(ids) > 0);
     }
-
-
 }

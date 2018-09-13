@@ -11,13 +11,13 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.context.annotation.ComponentScan;
 
 @MapperScan("com.ucar.test.dao")
-@ComponentScan("com.ucar")
+//@ComponentScan("com.ucar")
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages={"com.ucar.qtcassist.api"})
 @EnableHystrix
 @EnableHystrixDashboard
 @EnableCaching
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.ucar.test","com.ucar.qtcassist.hystrix"})
 public class TestApplication {
 
     public static void main(String[] args) {

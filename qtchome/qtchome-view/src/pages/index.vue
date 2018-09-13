@@ -32,11 +32,12 @@
       }
     },
     mounted: function () {
-      let tempPath = this.route.tempPath
-      if (tempPath) {
+      let tempPath = this.$route.path
+      if (tempPath === '/') {
+        this.$router.push('home')
+      } else {
         this.$router.push(tempPath)
       }
-      this.$router.push('home')
     },
     methods: {
       getActiveIndex (data) {

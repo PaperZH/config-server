@@ -101,13 +101,14 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     public void MqTest() throws Exception {
         String pdfLocation ="2018-09-10/convert/88.pdf";
         String pptLocation ="2018-09-10\\7ebb7c96a73d417d9315d70e44f95ffa.docx";
-        File ppt = new File("pdfLocation");
-        File pdf = new File("pptLocation");
+        File ppt = new File(pptLocation);
+        File pdf = new File(pdfLocation);
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(ppt);
         fileDTO.setId(1L);
-        SendResult sendResult= mqService.msgSend(fileDTO);
-        Assert.assertTrue(sendResult.isSuccess());
+        remoteFileService.fileConvert(ppt,pdf);
+//        SendResult sendResult= mqService.msgSend(fileDTO);
+//        Assert.assertTrue(sendResult.isSuccess());
 
     }
 
