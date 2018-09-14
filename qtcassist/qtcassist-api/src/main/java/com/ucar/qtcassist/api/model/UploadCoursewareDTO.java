@@ -1,5 +1,7 @@
 package com.ucar.qtcassist.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -15,6 +17,7 @@ public class UploadCoursewareDTO {
 
     private String coursewareDescription;
 
+    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:MM")
     private Date publishTime;
 
     public Long getTypeId() {
