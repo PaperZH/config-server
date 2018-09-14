@@ -2,7 +2,7 @@ import { login, logout, get, post, remove, put } from '@/service/api'
 export const user = {
   state: {
     token: '',
-    userId: 100,
+    userId: '',
     name: '',
     avatar: '',
     addRouters: [],
@@ -35,6 +35,7 @@ export const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(result => {
+          commit('SET_USERID', result.data.user.userId)
           sessionStorage.setItem('access-token', result.data.token)
           sessionStorage.setItem('access-menus', JSON.stringify(result.data.router))
           sessionStorage.setItem('access-userinfo', JSON.stringify(result.data.user))
@@ -46,9 +47,9 @@ export const user = {
     },
 
     Logout: function ({commit}, param) {
-      console.log(param)
       return new Promise((resolve, reject) => {
         logout(param.userId).then(response => {
+          commit('SET_USERID', '')
           const data = response.data
           resolve(data)
         }).catch(error => {
@@ -102,7 +103,7 @@ export const user = {
 export const getters = {
   token: state => state.token,
   avatar: state => state.avatar,
-  userId: state => state.userId,
+  userId: state => state.user.userId,
   name: state => state.name,
   menu: state => state.menu,
   addRouters: state => state.addRouters,
