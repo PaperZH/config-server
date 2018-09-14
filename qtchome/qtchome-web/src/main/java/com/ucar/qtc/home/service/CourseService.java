@@ -4,7 +4,7 @@ import com.ucar.qtc.home.utils.ResponseResult;
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
