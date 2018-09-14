@@ -40,7 +40,7 @@ public class PlanController {
      * @return
      */
     @RequestMapping("/getTeacherPlan")
-    public ResponseResult getTeacherPlanList(@RequestParam QueryPlanDTO queryPlanDTO) {
+    public ResponseResult getTeacherPlanList( QueryPlanDTO queryPlanDTO) {
         return planService.getTeacherPlanList(queryPlanDTO);
     }
 
@@ -51,6 +51,7 @@ public class PlanController {
      */
     @RequestMapping("/addPlan")
     public ResponseResult addPlan(@RequestBody PlanDTO planDTO){
+        System.out.println(planDTO);
         if(planDTO.getId()==null){
            return planService.addPlan(planDTO);
         }
@@ -78,7 +79,7 @@ public class PlanController {
      * @return
      */
     @GetMapping("/getPublishedPlan")
-    public ResponseResult getPublishedPlan(@RequestParam QueryPlanDTO queryPlanDTO){
+    public ResponseResult getPublishedPlan( QueryPlanDTO queryPlanDTO){
         return planService.getPublishedPlanList(queryPlanDTO);
     }
 
@@ -89,7 +90,7 @@ public class PlanController {
      * @return
      */
     @GetMapping("/getStudentPlan")
-    public ResponseResult getStudentPlanList(@RequestParam QueryPlanDTO queryPlanDTO) {
+    public ResponseResult getStudentPlanList( QueryPlanDTO queryPlanDTO) {
         return planService.getPublishedPlanList(queryPlanDTO);
     }
 
@@ -113,12 +114,12 @@ public class PlanController {
      * @return
      */
     @RequestMapping("/addPublishedPlan")
-    public ResponseResult addPublishedPlan(@RequestBody UserPlanListDTO userPlanListDTO){
+    public ResponseResult addPublishedPlan( @RequestBody UserPlanListDTO userPlanListDTO){
            return  planService.addPublishedPlan(userPlanListDTO);
     }
 
     @RequestMapping("/updatePublishedPlan")
-    public ResponseResult updatePublishedPlan(@RequestBody UserPlanDO userPlanDO){
+    public ResponseResult updatePublishedPlan(@RequestBody  UserPlanDO userPlanDO){
         return planService.updatePublishedPlan(userPlanDO);
     }
 
@@ -159,7 +160,7 @@ public class PlanController {
      * @return
      */
     @RequestMapping("/addPublishedCourse")
-    public ResponseResult addPublishedCourse(@RequestBody CoursePlanDTO coursePlanDTO){
+    public ResponseResult addPublishedCourse(@RequestBody  CoursePlanDTO coursePlanDTO){
         return planService.addCoursePlan(coursePlanDTO);
 
     }
