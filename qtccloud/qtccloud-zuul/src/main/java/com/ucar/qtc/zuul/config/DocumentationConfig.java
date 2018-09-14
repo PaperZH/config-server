@@ -1,15 +1,14 @@
 package com.ucar.qtc.zuul.config;
 
-import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +19,9 @@ import java.util.List;
  * @description zuul读取eureka注册的所有服务
  * @date 2018-09-12 17:42
  */
-@Configuration
-@EnableSwagger2Doc
 @Component
 @Primary
+@EnableSwagger2
 class DocumentationConfig implements SwaggerResourcesProvider {
 
     @Autowired
