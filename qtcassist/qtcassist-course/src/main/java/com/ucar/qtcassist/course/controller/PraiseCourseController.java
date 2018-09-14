@@ -44,6 +44,7 @@ public class PraiseCourseController implements PraiseCourseApi {
             praiseCourse.setPublishDate(new Date());
             praiseCourse.setDelFlag(new Byte("1"));
             int count = praiseCourseService.insert(praiseCourse);
+            courseService.updatePraiseNum(courseId, +1);
             //更新course
             if (count > 0) {
                 return Result.getSuccessResult("添加点赞课程成功");

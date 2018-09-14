@@ -21,6 +21,7 @@ public interface CourseApi {
      * Integer currentPage 分页查询的当前页
      * Integer pageSize 分布查询的每页的记录数目
      * String type 查询的排序类型，default（默认）, time(发布时间降序), hot(点赞数量降序)
+     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
      * @return
      */
     @PostMapping("/getCourseList")
@@ -39,7 +40,7 @@ public interface CourseApi {
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 
     /**
-     * 获取所有课程的id和courseName
+     * 获取所有在有效期内的课程的id和courseName
      * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
@@ -64,5 +65,13 @@ public interface CourseApi {
      */
     @PostMapping("/deleteCourseList")
     Result deleteCourseList(@RequestBody QueryVO queryVO);
+
+    /**
+     * 根据课程ID来增加课程学习次数
+     * @param courseId 课程的id
+     * @return
+     */
+    @GetMapping("/addCourseReadNum/{courseId}")
+    Result addCourseReadNum(@PathVariable("courseId") Long courseId);
 
 }

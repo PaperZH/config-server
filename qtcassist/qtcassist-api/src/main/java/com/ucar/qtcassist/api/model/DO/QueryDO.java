@@ -1,5 +1,7 @@
 package com.ucar.qtcassist.api.model.DO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +16,17 @@ public class QueryDO {
 
     private String orderType;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     private Integer startIndex;
 
     private Integer pageSize;
+
+    private Boolean isInValidDate;
 
     public Long getUserId() {
         return userId;
@@ -92,6 +98,14 @@ public class QueryDO {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Boolean getIsInValidDate() {
+        return isInValidDate;
+    }
+
+    public void setIsInValidDate(Boolean isInValidDate) {
+        this.isInValidDate = isInValidDate;
     }
 
     public void setCourseIdsFromList(List<Long> courseIdList) {

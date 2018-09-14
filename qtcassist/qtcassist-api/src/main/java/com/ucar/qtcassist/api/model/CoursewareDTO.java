@@ -33,7 +33,7 @@ public class CoursewareDTO {
     /**
      * 发布时间
      * */
-    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:MM")
+    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
     /**
      *

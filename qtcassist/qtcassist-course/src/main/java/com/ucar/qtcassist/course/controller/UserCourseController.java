@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -96,6 +98,20 @@ public class UserCourseController implements UserCourseApi {
         courseDO.setUpdateTime(date);
         courseDO.setReadNum(0);
         courseDO.setPraiseNum(0);
+
+        if(courseDO.getInvalidDate() == null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateStr = sdf.format(date);
+            String year = String.valueOf(Integer.valueOf(dateStr.substring(0,4)) + 10);
+            String invalidDateStr = year.concat(dateStr.substring(4));
+            Date invalidDate = null;
+            try {
+                invalidDate = sdf.parse(invalidDateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            courseDO.setInvalidDate(invalidDate);
+        }
 
         int count = courseService.insertSelective(courseDO);
         if(count > 0) {
