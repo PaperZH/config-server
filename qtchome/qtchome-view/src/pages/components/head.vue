@@ -144,6 +144,7 @@ export default {
     if (tempuser) {
       this.userInfo.nickName = tempuser.nickname
       this.userInfo.avatar = tempuser.avatar
+      this.$store.commit('SET_USERID', tempuser.userId)
       this.isShow = false
       this.isUser = true
     }
