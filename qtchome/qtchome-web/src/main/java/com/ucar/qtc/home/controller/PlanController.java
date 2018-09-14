@@ -1,7 +1,13 @@
 package com.ucar.qtc.home.controller;
 
+import com.ucar.qtc.home.dto.CoursePlanDTO;
+import com.ucar.qtc.home.dto.PlanDTO;
+import com.ucar.qtc.home.dto.QueryPlanDTO;
+import com.ucar.qtc.home.dto.UserPlanDTO;
+import com.ucar.qtc.home.dto.UserPlanListDTO;
 import com.ucar.qtc.home.service.PlanService;
 import com.ucar.qtc.home.utils.ResponseResult;
+import com.ucar.qtcassist.api.model.DO.UserPlanDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,26 +36,26 @@ public class PlanController {
     /**
      * 获取教师制定计划列表 1
      *
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/getTeacherPlan")
-    public ResponseResult getTeacherPlanList(@RequestParam Map<String, Object> params) {
-        return planService.getTeacherPlanList(params);
+    public ResponseResult getTeacherPlanList(@RequestParam QueryPlanDTO queryPlanDTO) {
+        return planService.getTeacherPlanList(queryPlanDTO);
     }
 
     /**
      * 增加制定计划....包含更新操作 1
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/addPlan")
-    public ResponseResult addPlan(@RequestBody Map<String,Object> params){
-        if(params.get("id")==null){
-           return planService.addPlan(params);
+    public ResponseResult addPlan(@RequestBody PlanDTO planDTO){
+        if(planDTO.getId()==null){
+           return planService.addPlan(planDTO);
         }
         else{
-           return planService.updatePlan(params);
+           return planService.updatePlan(planDTO);
         }
     }
 
@@ -68,23 +74,23 @@ public class PlanController {
 
     /**
      * 分页获取发布的计划列表   1
-     * @param params
+     * @param
      * @return
      */
     @GetMapping("/getPublishedPlan")
-    public ResponseResult getPublishedPlan(@RequestParam Map<String,Object> params){
-        return planService.getPublishedPlanList(params);
+    public ResponseResult getPublishedPlan(@RequestParam QueryPlanDTO queryPlanDTO){
+        return planService.getPublishedPlanList(queryPlanDTO);
     }
 
     /**
      * 分页获取学生计划列表
      *
-     * @param params
+     * @param
      * @return
      */
     @GetMapping("/getStudentPlan")
-    public ResponseResult getStudentPlanList(@RequestParam Map<String, Object> params) {
-        return planService.getPublishedPlanList(params);
+    public ResponseResult getStudentPlanList(@RequestParam QueryPlanDTO queryPlanDTO) {
+        return planService.getPublishedPlanList(queryPlanDTO);
     }
 
 
@@ -103,20 +109,18 @@ public class PlanController {
 
     /**
      * 增加发布计划。。。包含更新操作 1
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/addPublishedPlan")
-    public ResponseResult addPublishedPlan(@RequestBody Map<String,Object> params){
-        if(params.get("id")==null){
-           return  planService.addPublishedPlan(params);
-        }
-        else{
-            return planService.updatePublishedPlan(params);
-        }
+    public ResponseResult addPublishedPlan(@RequestBody UserPlanListDTO userPlanListDTO){
+           return  planService.addPublishedPlan(userPlanListDTO);
     }
 
-
+    @RequestMapping("/updatePublishedPlan")
+    public ResponseResult updatePublishedPlan(@RequestBody UserPlanDO userPlanDO){
+        return planService.updatePublishedPlan(userPlanDO);
+    }
 
     /**
      * 删除发布的计划  1
@@ -151,12 +155,12 @@ public class PlanController {
 
     /**
      * 增加发布计划课程  1
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/addPublishedCourse")
-    public ResponseResult addPublishedCourse(@RequestBody Map<String,Object> params){
-        return planService.addCoursePlan(params);
+    public ResponseResult addPublishedCourse(@RequestBody CoursePlanDTO coursePlanDTO){
+        return planService.addCoursePlan(coursePlanDTO);
 
     }
 
