@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,8 +30,8 @@ import java.util.concurrent.Executor;
  */
 @Component
 public class MesListener implements MessageListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MesListener.class);
 
-    private static Logger LOGGER = LoggerFactory.getLogger(BaseCoursewareServiceImpl.class);
     @Autowired
     private FileService fileService;
     @Autowired
@@ -42,6 +41,7 @@ public class MesListener implements MessageListener {
 
     @Override
     public void recieveMessages(Message message) {
+        LOGGER.info("get message" + message);
         Object obj = HessianSerializerUtils.deserialize(message.getData());
 
         if(obj instanceof FileDTO) {
@@ -50,7 +50,7 @@ public class MesListener implements MessageListener {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String date = simpleDateFormat.format(new Date());
             String location = date + "/convert/";
-            LOGGER.warn("location:" + location);
+            LOGGER.info("location:" + location);
 
             File file = null;
             String coursewareName = null;
@@ -62,11 +62,8 @@ public class MesListener implements MessageListener {
                 Name = coursewareName + "." + suffix;
                 file = fileDTO.getFile();
 
-
                 String preUrl = null;
-                LOGGER.error("MqListener:" + coursewareName);
-
-
+                LOGGER.info("MqListener:" + coursewareName);
                 File fPPT = file;
                 File fPDF = null;
 
@@ -81,16 +78,14 @@ public class MesListener implements MessageListener {
                         dir.mkdirs();
                     }
                     remoteFileService.fileConvert(fPPT, fPDF);
-                    LOGGER.info("conver successfully");
+                    LOGGER.info("convert successfully");
                 }
                 InputStream in = null;
-                try {
-                    in = new FileInputStream(fPDF);
-                    preUrl = remoteFileService.uploadFile(in, coursewareName + "." + FileConstant.PDF);
-                    LOGGER.info("upload successfully[preUrl]" + preUrl);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                in = new FileInputStream(fPDF);
+                preUrl = remoteFileService.uploadFile(in, coursewareName + "." + FileConstant.PDF);
+                LOGGER.info("upload successfully[preUrl]" + preUrl);
+
                 //查BaseCourseware表，将preUrl放入表中
                 BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
                 if(baseCoursewareDO != null) {
