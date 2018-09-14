@@ -179,7 +179,8 @@
   <select id="getCourseIdAndCourseName" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
     select id, course_name, course_Description
     from assist_course
-    where del_flag = 1
+    where
+    del_flag = 1 and invalid_date &gt; now()
     <if test="courseName != null">
       and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
     </if>
@@ -190,7 +191,9 @@
 
   <select id="getTotalByIdListAndCondition" resultType="java.lang.Integer" >
     select count(id)
-    from assist_course where del_flag = 1
+    from assist_course
+    where
+    del_flag = 1
     <if test="ids != null">
       <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
         #{id}
@@ -201,6 +204,9 @@
     </if>
     <if test="condition.startDate != null">
       and publish_time between #{condition.startDate, jdbcType=TIMESTAMP} and #{condition.endDate, jdbcType=TIMESTAMP}
+    </if>
+    <if test="condition.isInValidDate != null and condition.isInValidDate == true">
+      and invalid_date &gt; now()
     </if>
   </select>
 
@@ -213,6 +219,9 @@
       <if test="courseName != null">
         and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
       </if>
+      <if test="isInValidDate != null and isInValidDate == true">
+        and invalid_date &gt; now()
+      </if>
     </where>
     <trim>
       <if test="orderType == 'time'">
@@ -221,7 +230,7 @@
       <if test="orderType == 'hot'">
         order by praise_num desc
       </if>
-      <if test="startIndex!=null and pageSize!=null">
+      <if test="startIndex != null and pageSize != null">
         limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
       </if>
     </trim>
@@ -231,10 +240,15 @@
   <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
-    from assist_course where del_flag = 1
+    from assist_course
+    where
+    del_flag = 1
     <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
       #{id}
     </foreach>
+    <if test="isInValidDate != null and isInValidDate == true">
+      and invalid_date &gt; now()
+    </if>
     <if test="courseName != null and courseName != ''">
       and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
     </if>
@@ -259,6 +273,12 @@
   <update id="updatePraiseNum">
     update assist_course
     set praise_num = praise_num + #{change}
+    where id = #{courseId, jdbcType=BIGINT}
+  </update>
+
+  <update id="addCourseReadNum">
+    update assist_course
+    set read_num = read_num + 1
     where id = #{courseId, jdbcType=BIGINT}
   </update>
 

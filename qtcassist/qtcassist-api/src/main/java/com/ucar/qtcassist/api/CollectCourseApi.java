@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CollectCourseApi {
     /**
      * 查询某个用户收藏的课程
-     * @param  queryVO (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize)
+     * @param  queryVO (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize，Boolean isInvalidDate)
      * @return
      */
     @PostMapping("/getCollectCourseList")

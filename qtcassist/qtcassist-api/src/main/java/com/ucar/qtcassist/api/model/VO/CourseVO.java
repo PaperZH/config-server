@@ -1,6 +1,9 @@
 package com.ucar.qtcassist.api.model.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
+
+import java.util.Date;
 
 public class CourseVO {
     private Long courseId;
@@ -22,10 +25,13 @@ public class CourseVO {
     private Integer readNum;
 
     private Integer collectNum;
-    //详情才有
-    private String invalidDate;
 
-    private String publishTime;
+    //详情才有
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date invalidDate;
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date publishTime;
 
     public Long getCourseId() {
         return courseId;
@@ -107,19 +113,19 @@ public class CourseVO {
         this.collectNum = collectNum;
     }
 
-    public String getInvalidDate() {
+    public Date getInvalidDate() {
         return invalidDate;
     }
 
-    public void setInvalidDate(String invalidDate) {
+    public void setInvalidDate(Date invalidDate) {
         this.invalidDate = invalidDate;
     }
 
-    public String getPublishTime() {
+    public Date getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(String publishTime) {
+    public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
     }
 }
