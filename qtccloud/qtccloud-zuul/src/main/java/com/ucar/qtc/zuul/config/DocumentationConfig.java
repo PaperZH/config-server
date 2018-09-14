@@ -3,6 +3,7 @@ package com.ucar.qtc.zuul.config;
 import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -35,8 +36,13 @@ class DocumentationConfig implements SwaggerResourcesProvider {
     public List<SwaggerResource> get() {
         List resources = new ArrayList<>();
         for (String str : discoveryClient.getServices()) {
-            if (!str.equalsIgnoreCase(zuulName)) {
-                resources.add(swaggerResource(str, "/"+ str +"/v2/api-docs", "2.0"));
+            List<ServiceInstance> listInstance = discoveryClient.getInstances(str);
+            for (ServiceInstance instance : listInstance) {
+                String serviceId = instance.getServiceId();
+                String host = instance.getHost();
+                if (!str.equalsIgnoreCase(zuulName) && str.equalsIgnoreCase(serviceId)) {
+                    resources.add(swaggerResource(host+"/"+str, "/"+ str +"/v2/api-docs", "2.0"));
+                }
             }
         }
         return resources;
