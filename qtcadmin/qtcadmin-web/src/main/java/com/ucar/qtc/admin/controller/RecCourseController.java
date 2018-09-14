@@ -10,6 +10,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -33,14 +34,14 @@ public class RecCourseController {
     private RecCourseService recCourseService;
 
     @ApiOperation(value="获取推荐课程信息", notes="获取推荐课程信息")
-    @PostMapping("getCourse")
+    @PostMapping(value="getCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getCourseList(@RequestBody QueryVO queryVO){
         return ResponseResult.ok().put("listCourse",courseService.getCourseIdAndCourseName(queryVO));
     }
 
     @ApiOperation(value="获取推荐课程列表信息", notes="获取推荐课程列表信息")
     @Log("获取推荐课程列表信息")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(@RequestBody QueryVO queryVO){
        List<CourseVO> result = recCourseService.listRecCourseByQuery(queryVO);
        if(result == null)
@@ -51,7 +52,7 @@ public class RecCourseController {
 
     @ApiOperation(value="保存推荐课程信息", notes="保存推荐课程信息")
     @Log("保存推荐课程信息")
-    @PostMapping("save")
+    @PostMapping(value="save", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult saveRecourse(@RequestBody RecommandCourseDO courseDO){
         if(courseDO.getCourseId() == null)
             return ResponseResult.error();
@@ -71,7 +72,7 @@ public class RecCourseController {
 
     @ApiIgnore
     @Log("批量删除推荐课程信息")
-    @DeleteMapping("/batchRemove")
+    @DeleteMapping(value="/batchRemove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult batchRemoveRecCourseByIds(@RequestBody Map<String,Object> params){
 
         Object obj = params.get("id");
@@ -88,7 +89,7 @@ public class RecCourseController {
 
     @ApiOperation(value="删除推荐课程信息", notes="删除推荐课程信息")
     @Log("删除推荐课程信息")
-    @DeleteMapping
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult removeReccourse(@RequestParam(value="id",defaultValue="-1") Long  courseId){
 
         if(recCourseService.remove(courseId)>0)

@@ -8,6 +8,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -32,14 +33,14 @@ public class DeptController {
 
 	@ApiOperation(value="获取部门列表信息", notes="获取部门列表信息")
 	@Log("获取部门列表")
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Tree<DeptDO>> list() {
 		return deptService.getTree().getChildren();
 	}
 
 	@ApiOperation(value="根据部门ID获取部门信息", notes="根据部门ID获取部门信息")
 	@Log("根据部门ID获取部门信息")
-	@GetMapping("{pId}")
+	@GetMapping(value="{pId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	DeptDO get(@PathVariable("pId") Long pId) {
 		DeptDO dept = deptService.get(pId);
 		return dept;
@@ -50,7 +51,7 @@ public class DeptController {
 	 */
 	@ApiOperation(value="保存部门", notes="保存部门")
 	@Log("保存部门")
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseResult save(@RequestBody DeptDO sysDept) {
 
 		if (deptService.save(sysDept) > 0) {
@@ -64,7 +65,7 @@ public class DeptController {
 	 */
 	@ApiOperation(value="修改部门", notes="修改部门")
 	@Log("修改部门")
-	@PutMapping
+	@PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseResult update(@RequestBody DeptDO sysDept) {
 		if (deptService.update(sysDept) > 0) {
 			return ResponseResult.ok();
@@ -77,7 +78,7 @@ public class DeptController {
 	 */
 	@ApiOperation(value="删除部门", notes="删除部门")
 	@Log("删除部门")
-	@DeleteMapping
+	@DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseResult remove(Long id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("parentId", id);
@@ -99,21 +100,21 @@ public class DeptController {
 	 */
 	@ApiIgnore
 	@Log("批量删除部门")
-	@PostMapping("batchRemove")
+	@PostMapping(value="batchRemove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseResult remove(@RequestParam("ids[]") Long[] deptIds) {
 		deptService.batchRemove(deptIds);
 		return ResponseResult.ok();
 	}
 
 	@ApiIgnore
-	@GetMapping("tree")
+	@GetMapping(value="tree", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Tree<DeptDO> tree() {
 		Tree<DeptDO> tree = deptService.getTree();
 		return tree;
 	}
 
 	@ApiIgnore
-	@GetMapping("treeView")
+	@GetMapping(value="treeView", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	String treeView() {
 		return  prefix + "/deptTree";
 	}
