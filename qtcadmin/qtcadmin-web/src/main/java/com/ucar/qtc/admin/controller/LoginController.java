@@ -13,6 +13,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class LoginController {
      */
     @ApiOperation(value="后台用户登陆", notes="后台用户登陆")
     @Log("登录")
-    @PostMapping("/login")
+    @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
         String username = loginDTO.getUsername().trim();
         String password = loginDTO.getPassword().trim();
@@ -86,7 +87,7 @@ public class LoginController {
      */
     @ApiOperation(value="前台用户登陆", notes="前台用户登陆")
     @Log("登录")
-    @PostMapping("/homeLogin")
+    @PostMapping(value="/homeLogin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult homeLogin(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
         String username = loginDTO.getUsername().trim();
         String password = loginDTO.getPassword().trim();
@@ -121,7 +122,7 @@ public class LoginController {
      * @return
      */
     @ApiOperation(value="用户退出", notes="用户退出")
-    @RequestMapping("/logout")
+    @RequestMapping(value="/logout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult logout(HttpServletRequest request, HttpServletResponse response) {
         menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
         return ResponseResult.ok();

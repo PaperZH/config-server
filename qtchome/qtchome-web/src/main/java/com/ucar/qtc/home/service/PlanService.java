@@ -1,7 +1,12 @@
 package com.ucar.qtc.home.service;
 
+import com.ucar.qtc.home.dto.CoursePlanDTO;
+import com.ucar.qtc.home.dto.PlanDTO;
+import com.ucar.qtc.home.dto.QueryPlanDTO;
+import com.ucar.qtc.home.dto.UserPlanListDTO;
 import com.ucar.qtc.home.utils.ResponseResult;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import com.ucar.qtcassist.api.model.DO.UserPlanDO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,51 +24,51 @@ public interface PlanService {
     public ResponseResult getStudents(@PathVariable("id") Long teacherId);
     /**
      * 分页获取教师制定计划列表
-     * @param params    (long teacherId, String planTitle,int currentPage, int pageSize)
+     * @param
      * @return
      */
     @PostMapping("/plan/getPlan")
-    public ResponseResult getTeacherPlanList(Map<String,Object> params);
+    public ResponseResult getTeacherPlanList(QueryPlanDTO queryPlanDTO);
 
     /**
      * 分页获取发布的计划列表
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/userPlan/getPlan")
-    public ResponseResult getPublishedPlanList(Map<String,Object> params);
+    public ResponseResult getPublishedPlanList(QueryPlanDTO queryPlanDTO);
 
     /**
      * 增加制定计划
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/plan/add")
-    public ResponseResult addPlan (Map<String,Object> params);
+    public ResponseResult addPlan (PlanDTO planDTO);
 //
     /**
      * 更新制定计划
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/plan/update")
-    public ResponseResult updatePlan(Map<String,Object> params);
+    public ResponseResult updatePlan(PlanDTO planDTO);
 
     /**
      * 增加发布的计划
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/userPlan/add")
-    public ResponseResult addPublishedPlan (Map<String,Object> params);
+    public ResponseResult addPublishedPlan (UserPlanListDTO userPlanListDTO);
 
     /**
      * 更新发布的计划
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/userPlan/update")
-    public ResponseResult updatePublishedPlan(Map<String,Object> params);
+    public ResponseResult updatePublishedPlan(UserPlanDO userPlanDO);
 
     /**
      * 删除制定的计划
@@ -83,11 +88,11 @@ public interface PlanService {
 
     /**
      * 增加计划课程
-     * @param params
+     * @param
      * @return
      */
     @RequestMapping("/coursePlan/add")
-    public ResponseResult addCoursePlan(Map<String,Object> params);
+    public ResponseResult addCoursePlan(CoursePlanDTO coursePlanDTO);
     /**
      * 根据计划ID获取相应计划课程
      * @param planId

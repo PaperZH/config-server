@@ -47,18 +47,11 @@ mybatis:
   mapper-locations: mapper/**Mapper.xml
   configuration:
       map-underscore-to-camel-case: true
+
 logging:
-  level: debug
+  level:
+    root: INFO
 
 ribbon:
   eureka:
     enable: true
-
-swagger:
-  base-package: com.ucar.qtc.admin.controller
-  globalOperationParameters[0]:
-    name: Authorization
-    description: JWT TOKEN
-    modelRef: string
-    parameterType: header
-    required: false

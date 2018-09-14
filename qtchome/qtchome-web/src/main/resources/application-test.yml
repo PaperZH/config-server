@@ -19,7 +19,8 @@ security:
     enabled: false
 
 logging:
-  level: debug
+  level:
+    root: INFO
 
 spring:
   application:
