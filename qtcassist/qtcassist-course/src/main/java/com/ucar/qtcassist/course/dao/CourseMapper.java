@@ -80,4 +80,11 @@ public interface CourseMapper {
      */
     Integer updatePraiseNum(@Param("courseId") Long courseId, @Param("change") int change);
 
+    /**
+     * 根据课程ID来增加课程学习次数
+     * @param courseId 课程的id
+     * @return
+     */
+    Integer addCourseReadNum(@Param("courseId") Long courseId);
+
 }

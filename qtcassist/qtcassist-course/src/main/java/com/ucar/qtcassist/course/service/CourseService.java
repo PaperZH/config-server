@@ -28,4 +28,6 @@ public interface CourseService {
     Integer deleteListByIdList(Long[] ids);
 
     Integer updatePraiseNum(Long courseId, int change);
+
+    Integer addCourseReadNum(Long courseId);
 }

@@ -3,15 +3,17 @@
 
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
       <el-form-item label="课程名">
-        <el-input  v-model="formInline.name" placeholder="输入课程名称" size="small" clearable></el-input>
+        <el-input  v-model="formInline.name" placeholder="课程名关键词" size="small" clearable></el-input>
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker  size="small"
                          v-model="formInline.date"
+                         value-format="yyyy-MM-dd"
+                         format="yyyy-MM-dd"
                          type="daterange"
                          range-separator="至"
                          start-placeholder="开始日期"
-                         end-placeholder="结束日期">
+                         end-placeholder="截止日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -87,18 +89,15 @@
     name: 'favorite',
     data () {
       return {
-        // currentPage4: 1,
         total: 0,
-        // checked: false,
         checkList: [],
         formInline: {
-          name: '',
-          date: ''
+          name: null,
+          date: null
         },
         tableData: {},
         queryParams: {
-          // userId: this.$store.getters.userId,
-          userId: 100,
+          userId: null,
           courseName: null,
           startDate: null,
           endDate: null,
@@ -126,7 +125,7 @@
         })
       },
       handleSearch () {
-        if (this.formInline.name.trim().length === 0) {
+        if (this.formInline.name == null || this.formInline.name.trim().length === 0) {
           this.queryParams.courseName = null
         } else {
           this.queryParams.courseName = this.formInline.name.trim()
@@ -135,21 +134,25 @@
           this.queryParams.startDate = null
           this.queryParams.endDate = null
         } else {
-          this.queryParams.startDate = this.formInline.date[0]
-          this.queryParams.endDate = this.formInline.date[1]
+          this.queryParams.startDate = this.formInline.date[0].concat(' 00:00:00')
+          this.queryParams.endDate = this.formInline.date[1].concat(' 23:59:59')
         }
         this.queryParams.currentPage = 1
         this.checkList = []
         this.getPublishedCourse()
       },
       getPublishedCourse () {
-        this.$store.dispatch('Get', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
+        this.$store.dispatch('Post', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
           this.tableData = res.data.re.rows
         })
       }
     },
     mounted () {
+      let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+      if (tempuser) {
+        this.queryParams.userId = tempuser.userId
+      }
       this.getPublishedCourse()
     }
   }

@@ -1,5 +1,7 @@
 package com.ucar.qtcassist.api.model.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class QueryVO {
@@ -11,13 +13,17 @@ public class QueryVO {
 
     private String type;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     private Integer currentPage;
 
     private Integer pageSize;
+
+    private Boolean isInValidDate;
 
     public Long getUserId() {
         return userId;
@@ -81,5 +87,13 @@ public class QueryVO {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Boolean getIsInValidDate() {
+        return isInValidDate;
+    }
+
+    public void setIsInValidDate(Boolean isInValidDate) {
+        this.isInValidDate = isInValidDate;
     }
 }
