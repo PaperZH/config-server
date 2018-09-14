@@ -96,7 +96,7 @@
               'studentGetScore': this.message.studentGetScore,
               'teacherEvaluateContent': this.message.teacherEvaluateContent,
               'id': this.message.id}
-            this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': data}).then(res => {
+            this.$store.dispatch('Post', {'url': '/api-home/plan/updatePublishedPlan', 'data': data}).then(res => {
               this.$emit('getTeacherPlan')
               this.visible = false
             })
