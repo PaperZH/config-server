@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: ${spring.cloud.client.ipAddress}
+    hostname: ${spring.cloud.client.ip-address}
 
   server:
       enable-self-preservation: false

@@ -10,6 +10,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -31,14 +32,14 @@ public class MenuController {
 
     @ApiIgnore
     @Log("访问菜单")
-    @GetMapping("tree")
+    @GetMapping(value="tree", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     Tree<MenuDO>  tree(){
         return menuService.getTree();
     }
 
     @ApiOperation(value="获取菜单信息", notes="获取菜单信息")
     @Log("访问菜单列表")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<Tree<MenuDO>>  list(){
         return menuService.getTree().getChildren();
     }
@@ -49,7 +50,7 @@ public class MenuController {
      * @return
      */
     @ApiOperation(value="获取ID获取菜单信息", notes="获取ID获取菜单信息")
-    @GetMapping("{id}")
+    @GetMapping(value="{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     MenuDO get(@PathVariable("id") Long id) {
         MenuDO menu = menuService.get(id);
         return menu;
@@ -62,7 +63,7 @@ public class MenuController {
      */
     @ApiOperation(value="获取菜单列表信息", notes="获取菜单列表信息")
     @Log("访问菜单列表")
-    @GetMapping("list")
+    @GetMapping(value="list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<MenuDO> list(@RequestParam Map<String, Object> params) {
         List<MenuDO> menus = menuService.list(params);
         return menus;
@@ -75,7 +76,7 @@ public class MenuController {
      */
     @ApiOperation(value="修改菜单信息", notes="修改菜单信息")
     @Log("修改菜单")
-    @PutMapping()
+    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult update(@RequestBody MenuDO menuDO){
         if(menuService.update(menuDO)>0){
             return ResponseResult.ok();
@@ -90,7 +91,7 @@ public class MenuController {
      */
     @ApiOperation(value="添加菜单信息", notes="添加菜单信息")
     @Log("添加菜单")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult save(@RequestBody MenuDO menuDO){
         menuDO.setDelFlag(1);
         return ResponseResult.operate(menuService.save(menuDO)>0);
@@ -103,7 +104,7 @@ public class MenuController {
      */
     @ApiOperation(value="删除菜单信息", notes="删除菜单信息")
     @Log("删除菜单")
-    @DeleteMapping()
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult remove(Long id){
         if(menuService.remove(id)>0){
             return ResponseResult.ok();
@@ -116,7 +117,7 @@ public class MenuController {
      * @return
      */
     @ApiOperation(value="获取当前用户菜单信息", notes="获取当前用户菜单信息")
-    @GetMapping("userMenus")
+    @GetMapping(value="userMenus", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<MenuDTO> userMenus(){
         List<MenuDO> menuDOS = menuService.userMenus(Long.parseLong(FilterContextHandler.getUserID()));
         List<MenuDTO> menuDTOS = new ArrayList<>();
@@ -131,7 +132,7 @@ public class MenuController {
     }
 
     @ApiIgnore
-    @GetMapping("clearCache")
+    @GetMapping(value="clearCache", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult clearCache(){
         Boolean flag = menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
         if (flag){
@@ -146,14 +147,14 @@ public class MenuController {
      */
     @ApiOperation(value="获取当前用户菜单信息", notes="获取当前用户菜单信息")
     @Log("当前用户菜单")
-    @RequestMapping("/currentUserMenus")
+    @RequestMapping(value="/currentUserMenus", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<Tree<MenuDO>> currentUserMenus() {
         List<Tree<MenuDO>> menus = menuService.listMenuTree(Long.parseLong(FilterContextHandler.getUserID()));
         return menus;
     }
 
     @ApiOperation(value="获取角色菜单信息", notes="获取角色菜单信息")
-    @GetMapping("/roleId")
+    @GetMapping(value="/roleId", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<Long> menuIdsByRoleId(Long roleId){
         return menuService.MenuIdsByRoleId(roleId);
     }

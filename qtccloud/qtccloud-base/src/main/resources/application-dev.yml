@@ -4,14 +4,14 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${spring.cloud.client.ipAddress}:8001/eureka/
+      defaultZone: http://${spring.cloud.client.ip-address}:8001/eureka/
     healthcheck:
       enabled: true
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
     prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
 security:
   basic:
@@ -36,7 +36,7 @@ ribbon:
 file:
   filePath: e:/file/uploaded_files/
   pre: /files
-  server: http://${spring.cloud.client.ipAddress}:${server.port}
+  server: http://${spring.cloud.client.ip-address}:${server.port}
 
 swagger:
   base-package: com.ucar.qtc.base.controller

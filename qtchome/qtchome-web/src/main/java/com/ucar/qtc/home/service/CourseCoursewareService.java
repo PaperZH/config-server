@@ -2,7 +2,7 @@ package com.ucar.qtc.home.service;
 
 import com.ucar.qtcassist.api.CourseCoursewareApi;
 import com.ucar.qtcassist.api.model.Result;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 /**

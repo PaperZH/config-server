@@ -17,6 +17,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class FrontPageController {
     private UserService userService;
 
     @ApiOperation(value="获取推荐图片", notes="获取推荐图片")
-    @GetMapping("getRecBanner")
+    @GetMapping(value="getRecBanner", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult bannerList() {
         int limit = 6;
         int offset = 0;
@@ -61,7 +62,7 @@ public class FrontPageController {
     }
 
     @ApiOperation(value="获取推荐课程", notes="获取推荐课程")
-    @GetMapping("getRecCourse")
+    @GetMapping(value="getRecCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(){
 
         List<RecommandCourseDO> recommandCourseList = recCourseService.list(null);
@@ -92,14 +93,14 @@ public class FrontPageController {
     }
 
     @ApiOperation(value="根据ID获取用户信息", notes="根据ID获取用户信息")
-    @GetMapping("getUserInfoById")
+    @GetMapping(value="getUserInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getUserInfoById(@RequestParam("id") Long id) {
         UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
         return ResponseResult.ok().put("data",userDTO);
     }
 
     @ApiOperation(value="获取ID获取学员信息", notes="获取ID获取学员信息")
-    @GetMapping("getStudentInfoById")
+    @GetMapping(value="getStudentInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
         for(UserDO userDO:userService.getStudentById(id)){
@@ -109,7 +110,7 @@ public class FrontPageController {
     }
 
     @ApiOperation(value="获取ID获取老师信息", notes="获取ID获取老师信息")
-    @GetMapping("getTeacherInfoById")
+    @GetMapping(value="getTeacherInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getTeacherInfoById(@RequestParam("id") Long id) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
         for(UserDO userDO:userService.getTeacherById(id)){
@@ -119,7 +120,7 @@ public class FrontPageController {
     }
 
     @ApiOperation(value="修改用户信息", notes="修改用户信息")
-    @PostMapping("updateUserInfo")
+    @PostMapping(value="updateUserInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult updateUserInfo(@RequestBody UserDO userDO){
         if(userDO == null)
             return ResponseResult.error("更新信息为空");
