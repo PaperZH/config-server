@@ -112,9 +112,19 @@ public class CoursewareController implements CoursewareApi {
     /**
      * 课件上传
      */
-    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
-    public Result saveCourseware(MultipartFile file) throws Exception {
-        String res = null;
+    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
+    public Result uploadCourseware(MultipartFile file) throws Exception {
+        InputStream in =file.getInputStream();
+        String name = file.getOriginalFilename();
+        String sourceUrl = remoteFileService.uploadFile(in, name);
+        BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
+        baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+        baseCoursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+        baseCoursewareDO.setSourceUrl(sourceUrl);
+        baseCoursewareService.addBaseCourseware(baseCoursewareDO);
+        Long newBaseid=baseCoursewareDO.getId();
+
+        /*String res = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(new Date());
         if(!file.isEmpty()) {
@@ -123,67 +133,50 @@ public class CoursewareController implements CoursewareApi {
             File file1 = new File(date + "/" + res);
             System.out.println(file1.getAbsolutePath());
             FileUtils.copyInputStreamToFile(file.getInputStream(), file1);
-        }
-        return Result.getSuccessResult(date + "/" + res);
+        }*/
+        return Result.getSuccessResult(newBaseid);
     }
 
     /**
      * 本地课件操作
      */
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
-    public Result uploadCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
+    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    public Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
         InputStream is = null;
-        File file = new File(courseCoursewareDTO.getFileUrl());
-        if(file != null && courseCoursewareDTO.getName() != null) {
             try {
-                is = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            try {
-                int point = courseCoursewareDTO.getFileUrl().lastIndexOf(".");
-                String suffix = courseCoursewareDTO.getFileUrl().substring(point + 1, courseCoursewareDTO.getFileUrl().length());
-                String temname=courseCoursewareDTO.getName()+"."+suffix;
-                String sourceUrl = remoteFileService.uploadFile(is, temname);
+                Long baseCoursewareId = courseCoursewareDTO.getBaseCoursewareId();
                 //插表   baseCourseware
                 BaseCoursewareDO baseCoursewareDO=new BaseCoursewareDO();
+                baseCoursewareDO.setId(baseCoursewareId);
                 baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
                 baseCoursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
-                baseCoursewareDO.setSourceUrl(sourceUrl);
                 baseCoursewareDO.setCoursewareName(courseCoursewareDTO.getName());
                 baseCoursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
                 baseCoursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
-                baseCoursewareService.addBaseCourseware(baseCoursewareDO);
-                Long newBaseid=baseCoursewareDO.getId();
+                baseCoursewareService.updateBaseCourseware(baseCoursewareDO);
                 //插表   Courseware
                 CoursewareDO coursewareDO=new CoursewareDO();
                 coursewareDO.setCoursewareNum(courseCoursewareDTO.getHour());
                 coursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
                 coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
-                coursewareDO.setBaseCoursewareId(newBaseid);
+                coursewareDO.setBaseCoursewareId(baseCoursewareId);
                 coursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
                 coursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
                 coursewareDO.setCoursewareName(courseCoursewareDTO.getName());
                 coursewareService.addCourseware(coursewareDO);
-                Long newid =coursewareDO.getId();
+                Long newCoursewareId =coursewareDO.getId();
                 //将上传的文件投递到mq中
                 FileDTO fileDTO=new FileDTO();
-                fileDTO.setLocation(courseCoursewareDTO.getFileUrl());
-                fileDTO.setId(newBaseid);
-                fileDTO.setOriginalFilename(courseCoursewareDTO.getName());
-                fileDTO.setFile(file);
+                fileDTO.setId(baseCoursewareId);
                 mqService.msgSend(fileDTO);
 
-                return Result.getSuccessResult(newid);
+                return Result.getSuccessResult(newCoursewareId);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
         return Result.getServiceError();
-
     }
 
     /**

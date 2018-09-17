@@ -23,7 +23,7 @@ public class CourseCoursewareDTO {
 
     private String describe;
 
-    private String fileUrl;
+    private int flag;
 
     private Long baseCoursewareId;
 
@@ -61,13 +61,20 @@ public class CourseCoursewareDTO {
         this.describe = describe;
     }
 
-    public String getFileUrl() {
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+/* public String getFileUrl() {
         return fileUrl;
     }
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
-    }
+    }*/
 
     public Long getBaseCoursewareId() {
         return baseCoursewareId;
