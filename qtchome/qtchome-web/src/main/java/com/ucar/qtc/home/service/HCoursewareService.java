@@ -23,9 +23,9 @@ public interface HCoursewareService  {
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
-    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST,
+    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
     produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Result saveCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
+    Result uploadCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
 
     @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();
@@ -33,8 +33,8 @@ public interface HCoursewareService  {
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
     Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num);
 
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
-    Result uploadCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
+    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
 
 }

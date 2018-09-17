@@ -42,3 +42,8 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000
+
+
+multipart:
+   maxFileSize: 50Mb
+   maxRequestSize: 50Mb

@@ -135,7 +135,7 @@
           name: '',
           typeId: '',
           describe: '',
-          fileUrl: '',
+          flag: '',
           baseCoursewareId: '',
           courseId: ''
 
@@ -160,6 +160,7 @@
         }).then(fileRes => {
           console.log(fileRes.data.re)
         })
+        console.log(this.form)
       },
       handleRemove (file) {
         console.log(file)
@@ -171,10 +172,11 @@
         this.$refs.sys.disabled = true
         let tem = new FormData()
         tem.append('file', file)
-        this.$store.dispatch('Post', {'url': `/api-home/courseware/save`, 'data': tem}).then(fileRes => {
+        this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
-          this.form.fileUrl = fileRes.data.re
+          this.form.baseCoursewareId = fileRes.data.re
         })
+        this.form.flag = 1
         console.log(file)
       },
       handleAvatarSuccess (res, file) {

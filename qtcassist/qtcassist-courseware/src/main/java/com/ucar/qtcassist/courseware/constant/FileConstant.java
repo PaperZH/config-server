@@ -14,6 +14,11 @@ public class FileConstant {
     public static final String PPTX = "pptx";
     public static final String PDF = "pdf";
 
-    public static final String LOCATION="C:/qtcTemFile/";
+    public static final String LOCATION = "C:/qtcTemFile/";
+
+    /**
+     * 文件下载前缀
+     * */
+    public static final String URLPREFIX = "http://udfstest.10101111.com/ucarudfs/resource/";
 
 }

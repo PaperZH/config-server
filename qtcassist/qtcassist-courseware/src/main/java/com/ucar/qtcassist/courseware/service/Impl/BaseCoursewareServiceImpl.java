@@ -36,17 +36,18 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
     public List<BaseCoursewareListDTO> getAllBaseCoursewares() {
         List<BaseCoursewareDO> listDO = baseCoursewareMapper.getAllBaseCoursewares();
         List<BaseCoursewareListDTO> listDTO = new ArrayList<>();
+        List<CoursewareTypeDO> typeList = coursewareTypeService.getAllType();
         for(int i = 0; i < listDO.size(); i++) {
             BaseCoursewareListDTO baseCoursewareListDTO = new BaseCoursewareListDTO();
             BaseCoursewareDO baseCoursewareDO = listDO.get(i);
             baseCoursewareListDTO.setId(baseCoursewareDO.getId());
             baseCoursewareListDTO.setCoursewareName(baseCoursewareDO.getCoursewareName());
             baseCoursewareListDTO.setTypeId(baseCoursewareDO.getTypeId());
-
-            String typeName = coursewareTypeService.getType(baseCoursewareDO.getTypeId());
-
-                baseCoursewareListDTO.setTypeName(typeName);
-
+            for(int j=0;j< typeList.size();j++){
+                if(typeList.get(j).getId()==baseCoursewareDO.getTypeId()){
+                    baseCoursewareListDTO.setTypeName(typeList.get(j).getTypeName());
+                }
+            }
             listDTO.add(baseCoursewareListDTO);
         }
         return listDTO;
@@ -85,6 +86,16 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
     @Override
     public Long getNewId() {
         return baseCoursewareMapper.getNewId();
+    }
+
+    @Override
+    public int updateBaseCourseware(BaseCoursewareDO baseCoursewareDO) {
+        if(baseCoursewareDO != null && baseCoursewareDO.getId() != null) {
+            return baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
+        } else {
+            return 0;
+        }
+
     }
 
 

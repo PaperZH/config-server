@@ -45,4 +45,9 @@ public interface BaseCoursewareService {
      * 获取当前添加字段的id
      */
     Long getNewId();
+
+    /**
+     * 更新课件信息
+     * */
+    int updateBaseCourseware(BaseCoursewareDO baseCoursewareDO);
 }

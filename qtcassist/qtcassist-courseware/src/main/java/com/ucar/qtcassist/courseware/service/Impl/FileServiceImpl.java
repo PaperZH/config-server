@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
 
     @Override
     public boolean typeCheck(String coursewareName) {
         int point = coursewareName.lastIndexOf(".");
         //名称
         String Name = coursewareName.substring(0, point);
-        LOGGER.error(Name);
+        LOGGER.info(Name);
         //后缀
         String suffix = coursewareName.substring(point + 1, coursewareName.length());
-        LOGGER.error(suffix);
+        LOGGER.info(suffix);
         //根据文件名后缀判断文件类型
         if(suffix.equals(FileConstant.DOC) || suffix.equals(FileConstant.DOCX) || suffix.equals(FileConstant.PPT) || suffix.equals(FileConstant.PPTX)) {
             return true;

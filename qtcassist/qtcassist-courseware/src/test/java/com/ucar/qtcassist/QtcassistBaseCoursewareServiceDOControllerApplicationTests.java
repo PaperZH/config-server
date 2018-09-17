@@ -104,7 +104,6 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         File ppt = new File(pptLocation);
         File pdf = new File(pdfLocation);
         FileDTO fileDTO = new FileDTO();
-        fileDTO.setFile(ppt);
         fileDTO.setId(1L);
         remoteFileService.fileConvert(ppt,pdf);
 //        SendResult sendResult= mqService.msgSend(fileDTO);
