@@ -17,11 +17,11 @@
             <label style="margin-left: 37px;">头像：</label>
             <el-upload
               class="avatar-uploader"
-              action="http://127.0.0.1:8006/course/file/upload"
+              action="http://127.0.0.1:8002/api-home/course/file/upload"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
-              :before-upload="beforeAvatarUpload">
+              accept="image/jpeg,image/gif,image/png"
+              :before-upload="beforeAvatarUpload" >
               <img v-if="form.avatar" :src="form.avatar" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -66,6 +66,7 @@
         })
       },
       handleAvatarSuccess (res, file) {
+        console.log(res.fileUrl)
         this.form.avatar = res.fileUrl
       },
       beforeAvatarUpload (file) {
@@ -78,7 +79,6 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
       }
     },
     mounted: function () {

@@ -5,7 +5,7 @@ import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
 import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
 import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
 import com.ucar.qtcassist.api.model.Result;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

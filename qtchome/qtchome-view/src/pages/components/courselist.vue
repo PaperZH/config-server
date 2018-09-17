@@ -94,7 +94,8 @@
             type: this.type,
             currentPage: 1,
             pageSize: 12,
-            courseName: null
+            courseName: null,
+            isInValidDate: true
           },
           tableData: [],
           loading: false,
@@ -117,7 +118,7 @@
         },
         getCourseList () {
           const url = '/api-home/course/getCourseList'
-          this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
+          this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
             // 如果已加载完所有的数据，则不再加载
@@ -165,7 +166,7 @@
           this.loading = true
           const url = '/api-home/course/getCourseList'
           this.queryParams.currentPage = this.queryParams.currentPage + 1
-          this.$store.dispatch('Get', {'url': url, 'data': this.queryParams}).then(res => {
+          this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = this.tableData.concat(res.data.re.rows)
             if (this.queryParams.currentPage * this.queryParams.pageSize >= this.total) {

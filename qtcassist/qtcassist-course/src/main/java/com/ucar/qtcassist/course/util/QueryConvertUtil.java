@@ -31,6 +31,10 @@ public class QueryConvertUtil {
         if(queryVO.getPageSize() != null) {
             queryDO.setPageSize(queryVO.getPageSize());
         }
+
+        if(queryVO.getIsInValidDate() != null) {
+            queryDO.setIsInValidDate(queryVO.getIsInValidDate());
+        }
         return queryDO;
     }
 }

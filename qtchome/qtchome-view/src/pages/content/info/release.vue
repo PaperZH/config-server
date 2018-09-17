@@ -18,12 +18,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item :span="8" label="总分:">
-            <el-input v-model="courseDetailForm.course.courseScore" placeholder=""></el-input>
+            <el-input v-model="courseDetailForm.course.courseScore" placeholder="满分10分"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item :span="8" label="作者:">
-            <el-input v-model="courseDetailForm.teacher.username" placeholder="" readonly></el-input>
+            <el-input v-model="courseDetailForm.teacher.nickname" placeholder="" readonly></el-input>
           </el-form-item>
         </el-col>
         <el-col >
@@ -44,7 +44,9 @@
           <el-form-item label="课程有效期:">
             <el-date-picker
               v-model="courseDetailForm.course.invalidDate"
-              type="date"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              format="yyyy-MM-dd HH:mm:ss"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -78,15 +80,14 @@
             courseName: null,
             courseCover: null,
             courseDescription: '暂无描述',
-            courseScore: '10',
+            courseScore: null,
             invalidDate: null
           },
           coursewares: [],
           teacher: {
-            userId: 100,
-            username: '张三'
+            userId: null,
+            nickname: null
           }
-          // teacher: {}
         },
         imageUrl: ''
 
@@ -97,13 +98,21 @@
         this.$store.dispatch('Get', {'url': '/api-home/course/getCourseTypeList'}).then(res => {
           this.courseTypeList = res.data.re
         })
+
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
             this.courseDetailForm.course = res.data.re.course
             this.courseDetailForm.coursewares = res.data.re.coursewares
+            this.courseDetailForm.teacher.userId = res.data.re.teacher.userId
+            this.courseDetailForm.teacher.nickname = res.data.re.teacher.nickname
           })
         } else {
+          let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+          if (tempuser) {
+            this.courseDetailForm.teacher.userId = tempuser.userId
+            this.courseDetailForm.teacher.nickname = tempuser.nickname
+          }
           console.log('创建新的course')
         }
       })

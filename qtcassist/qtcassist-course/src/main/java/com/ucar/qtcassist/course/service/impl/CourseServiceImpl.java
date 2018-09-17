@@ -74,4 +74,9 @@ public class CourseServiceImpl implements CourseService {
         return courseMapper.updatePraiseNum(courseId, change);
     }
 
+    @Override
+    public Integer addCourseReadNum(Long courseId) {
+        return courseMapper.addCourseReadNum(courseId);
+    }
+
 }
