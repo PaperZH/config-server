@@ -4,6 +4,8 @@ import com.ucar.qtc.home.service.AdminService;
 import com.ucar.qtc.home.service.CourseService;
 import com.ucar.qtc.home.service.FileUploadService;
 import com.ucar.qtc.home.utils.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import java.util.Map;
  * @Description : 课程服务
  * @Date : 8:22 2018/8/16
  */
+@Api("课程接口")
 @RestController
 @RequestMapping("/course")
 public class CourseController {
@@ -37,6 +40,7 @@ public class CourseController {
      * 获取要推荐的课程列表,返回课程基本信息
      * @return
      */
+    @ApiOperation(value="获取要推荐的课程列表,返回课程基本信息", notes="get请求，不需要传参")
     @RequestMapping(value = "/getRecCourseList" , method = RequestMethod.GET)
     public ResponseResult getRecCourseList(){
         return  adminService.getRecCourse();
@@ -47,6 +51,7 @@ public class CourseController {
      * @param params (pageSize,currentPage,type)
      * @return
      */
+    @ApiOperation(value="获取要课程列表,返回课程基本信息", notes="get请求，不需要传参")
     @RequestMapping(value = "/getCourseList" ,method = RequestMethod.GET)
     public ResponseResult getCourseList(@RequestParam Map<String,Object> params){
         return  courseService.getCourseList(params);
@@ -57,11 +62,13 @@ public class CourseController {
      * @param id
      * @return
      */
+    @ApiOperation(value="获取要课程基本信息", notes="get请求，传课程ID参数")
     @RequestMapping(value = "/getDetails/{id}", method = RequestMethod.GET)
     public ResponseResult getCourseDetails(@PathVariable long id){
         return courseService.getCourseDetail(id);
     }
 
+    @ApiOperation(value="上传文件", notes="post请求")
     @RequestMapping(value = "/file/upload")
     public ResponseResult upload(@RequestPart("file") MultipartFile file){
         return fileUploadService.upload(file, "");
@@ -71,6 +78,7 @@ public class CourseController {
      * 根据查询条件来获取发布的课程
      * @return
      */
+    @ApiOperation(value="更改课程", notes="get请求，不需要传参")
     @RequestMapping(value = "/updateUserCourse", method = RequestMethod.POST)
     ResponseResult updateUserCourse(@RequestBody Map<String,Object> params){
         return courseService.updateUserCourse(params);
@@ -80,6 +88,7 @@ public class CourseController {
      * 创建的课程
      * @return
      */
+    @ApiOperation(value="添加课程基本信息", notes="post请求")
     @RequestMapping(value = "/addUserCourse", method = RequestMethod.POST)
     ResponseResult addUserCourse(@RequestBody Map<String,Object> params) {
         return courseService.addUserCourse(params);
