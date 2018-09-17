@@ -2,8 +2,6 @@ package com.ucar.qtcassist.course.util;
 
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CourseConvertUtil {
@@ -28,15 +26,8 @@ public class CourseConvertUtil {
         if(courseVO.getCourseScore() != null) {
             courseDO.setCourseScore(courseVO.getCourseScore());
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(courseVO.getInvalidDate() != null) {
-            Date invalidDate = null;
-            try {
-                invalidDate = sdf.parse(courseVO.getInvalidDate());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            courseDO.setInvalidDate(invalidDate);
+            courseDO.setInvalidDate(courseVO.getInvalidDate());
         }
         courseDO.setUpdateTime(new Date());
         return courseDO;
@@ -65,12 +56,11 @@ public class CourseConvertUtil {
         if(courseDO.getReadNum() != null) {
             courseVO.setReadNum(courseDO.getReadNum());
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(courseDO.getInvalidDate() != null) {
-            courseVO.setInvalidDate(sdf.format(courseDO.getInvalidDate()));
+            courseVO.setInvalidDate(courseDO.getInvalidDate());
         }
         if(courseDO.getPublishTime() != null) {
-            courseVO.setPublishTime(sdf.format(courseDO.getPublishTime()));
+            courseVO.setPublishTime(courseDO.getPublishTime());
         }
         return courseVO;
     }

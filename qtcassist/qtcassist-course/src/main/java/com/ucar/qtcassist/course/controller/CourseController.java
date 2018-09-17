@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,12 +71,13 @@ public class CourseController implements CourseApi {
     private EvaluateCourseService evaluateCourseService;
 
     /**
-     * 根据类型获取分页后的课程列表
-     * @param queryVO (String courseName, int currentPage, int pageSize, String type)
+     * 根据类型获取分页后的在有效期内的课程列表
+     * @param queryVO (String courseName, int currentPage, int pageSize, String type, Boolean isInValidDate)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页
      * Integer pageSize 分布查询的每页的记录数目
      * String type 查询的排序类型，default（默认）, time(发布时间降序), hot(点赞数量降序)
+     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
      * @return
      */
     @Override
@@ -139,7 +141,7 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 获取所有课程的id和courseName
+     * 获取所有在有效期内的课程的id和courseName
      * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页(可以为null)
@@ -221,6 +223,21 @@ public class CourseController implements CourseApi {
     public Result deleteCourseList(@RequestBody QueryVO queryVO) {
         Long[] courseIds = queryVO.getCourseIds();
         int count = courseService.deleteListByIdList(courseIds);
+        if(count > 0) {
+            return Result.getSuccessResult("批量删除课程信息成功");
+        } else {
+            return Result.getSuccessResult("批量删除课程信息失败");
+        }
+    }
+
+    /**
+     * 根据课程ID来增加课程学习次数
+     * @param courseId 课程的id
+     * @return
+     */
+    @Override
+    public Result addCourseReadNum(@PathVariable Long courseId) {
+        int count = courseService.addCourseReadNum(courseId);
         if(count > 0) {
             return Result.getSuccessResult("批量删除课程信息成功");
         } else {

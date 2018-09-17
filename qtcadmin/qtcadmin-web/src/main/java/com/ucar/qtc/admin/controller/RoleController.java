@@ -9,6 +9,7 @@ import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,7 +35,7 @@ public class RoleController {
      */
     @ApiOperation(value="获取角色列表信息", notes="获取角色列表信息")
     @Log("获取角色列表")
-    @GetMapping()
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     PageUtils list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
         List<RoleDO> roleDOS = roleService.list(query);
@@ -49,7 +50,7 @@ public class RoleController {
      * @return
      */
     @ApiIgnore
-    @GetMapping("/userId/{userId}")
+    @GetMapping(value="/userId/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     List<Long> roleIdByUserId(@PathVariable Long userId){
         return roleService.RoleIdsByUserId(userId);
     }
@@ -61,7 +62,7 @@ public class RoleController {
      */
     @ApiOperation(value="保存角色信息", notes="保存角色信息")
     @Log("保存角色")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult save(@RequestBody RoleDO roleDO){
         if(roleService.save(roleDO)>0){
             return ResponseResult.ok();
@@ -76,7 +77,7 @@ public class RoleController {
      */
     @ApiOperation(value="修改角色信息", notes="修改角色信息")
     @Log("修改角色")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult update(@RequestBody RoleDO roleDO){
         if(roleService.update(roleDO)>0){
             return ResponseResult.ok();
@@ -91,7 +92,7 @@ public class RoleController {
      */
     @ApiOperation(value="删除角色信息", notes="删除角色信息")
     @Log("删除角色")
-    @DeleteMapping()
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult remove(Long id) {
         return ResponseResult.operate (roleService.remove(id) > 0);
     }

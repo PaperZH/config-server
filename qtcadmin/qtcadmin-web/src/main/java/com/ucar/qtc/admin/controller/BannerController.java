@@ -10,6 +10,7 @@ import com.ucar.qtc.common.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,7 @@ public class BannerController {
     private FileUploadService fileUploadServie;
 
     @ApiOperation(value="根据id获取Banner信息", notes="根据id获取Banner信息")
-    @GetMapping("{id}")
+    @GetMapping(value="{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult get(@PathVariable Long id) {
         BannerDTO bannerDTO = BannerConvert.MAPPER.do2dto(bannerService.get(id));
         return ResponseResult.data(bannerDTO);
@@ -45,7 +46,7 @@ public class BannerController {
      */
     @ApiOperation(value="上传banner文件", notes="上传banner文件")
     @Log("上传banner文件")
-    @PostMapping("upload")
+    @PostMapping(value="upload", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult upload(MultipartFile file, String key) {
         ResponseResult result = fileUploadServie.upload(file, key);
         return result;
@@ -58,7 +59,7 @@ public class BannerController {
      */
     @ApiOperation(value="获取banner文件列表", notes="获取banner文件列表")
     @Log("获取banner文件列表")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
         List<BannerDO> bannerList = bannerService.list(query);
@@ -74,7 +75,7 @@ public class BannerController {
      */
     @ApiOperation(value="添加banner文件数据", notes="添加banner文件数据")
     @Log("添加banner文件数据")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult save(@RequestBody BannerDO banner) {
         banner.setDelFlag(1);
         return ResponseResult.operate(bannerService.save(banner) > 0);
@@ -87,7 +88,7 @@ public class BannerController {
      */
     @ApiOperation(value="修改banner文件数据", notes="修改banner文件数据")
     @Log("修改banner文件数据")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult update(@RequestBody BannerDO banner) {
         return ResponseResult.operate(bannerService.update(banner) > 0);
     }
@@ -99,7 +100,7 @@ public class BannerController {
      */
     @ApiOperation(value="删除banner文件数据", notes="删除banner文件数据")
     @Log("删除banner文件数据")
-    @DeleteMapping
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult remove(Long id) {
         return ResponseResult.operate(bannerService.remove(id) > 0);
     }
@@ -108,7 +109,7 @@ public class BannerController {
      * 删除
      */
     @ApiOperation(value="批量删除", notes="批量删除")
-    @DeleteMapping("/batchRemove")
+    @DeleteMapping(value="/batchRemove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult remove(@RequestParam("ids[]") Long[] ids) {
         return ResponseResult.operate(bannerService.batchRemove(ids) > 0);
     }

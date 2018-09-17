@@ -19,10 +19,10 @@ public class BaseCoursewareDTO {
 
     private String coursewareDescription;
 
-    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:MM")
+    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
-    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:MM")
+    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String previewUrl;

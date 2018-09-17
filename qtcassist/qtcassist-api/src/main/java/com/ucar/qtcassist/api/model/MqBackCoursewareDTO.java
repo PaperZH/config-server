@@ -18,7 +18,7 @@ public class MqBackCoursewareDTO {
 
     private String coursewareDescription;
 
-    @JsonFormat(timezone = "GMT+8" ,pattern = "yyyy-MM-dd HH:MM")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
     /**

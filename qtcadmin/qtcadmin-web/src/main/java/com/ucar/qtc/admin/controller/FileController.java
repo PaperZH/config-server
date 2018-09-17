@@ -11,6 +11,7 @@ import com.ucar.qtc.common.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -41,14 +42,14 @@ public class FileController {
      * @return
      */
     @ApiOperation(value="获取ID获取文件信息", notes="获取ID获取文件信息")
-    @GetMapping("{id}")
+    @GetMapping(value="{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult get(@PathVariable Long id) {
         FileDTO fileDTO = FileConvert.MAPPER.do2dto(fileService.get(id));
         return ResponseResult.data(fileDTO);
     }
 
     @ApiIgnore
-    @GetMapping("getToken")
+    @GetMapping(value="getToken", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getToken() {
         return ResponseResult.ok().put("token", FilterContextHandler.getToken()).put("url", "http://localhost:8002/api-admin/file/upload")
                 .put("key", StringUtils.generateUUID());
@@ -62,7 +63,7 @@ public class FileController {
      */
     @ApiOperation(value="上传文件", notes="上传文件，可以指定文件名")
     @Log("上传banner文件")
-    @PostMapping("upload")
+    @PostMapping(value="upload", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult upload(MultipartFile file, String key) {
         ResponseResult result = fileUploadServie.upload(file, key);
         return result;
@@ -75,7 +76,7 @@ public class FileController {
      */
     @ApiOperation(value="获取文件列表", notes="获取文件列表")
     @Log("获取文件列表")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult list(@RequestParam Map<String, Object> params) {
         Query query = new Query(params);
         List<FileDO> fileList = fileService.list(query);
@@ -91,7 +92,7 @@ public class FileController {
      */
     @ApiOperation(value="保存文件", notes="保存文件")
     @Log("添加文件数据")
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult save(@RequestBody FileDO file) {
         file.setDelFlag(1);
         file.setType(1);
@@ -105,7 +106,7 @@ public class FileController {
      */
     @ApiOperation(value="修改文件", notes="修改文件")
     @Log("修改文件数据")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult update(@RequestBody FileDO file) {
         return ResponseResult.operate(fileService.update(file) > 0);
     }
@@ -117,7 +118,7 @@ public class FileController {
      */
     @ApiOperation(value="删除文件", notes="删除文件")
     @Log("删除文件数据")
-    @DeleteMapping
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult remove(Long id) {
         return ResponseResult.operate(fileService.remove(id) > 0);
     }
@@ -126,7 +127,7 @@ public class FileController {
      * 删除
      */
     @ApiIgnore
-    @DeleteMapping("/batchRemove")
+    @DeleteMapping(value="/batchRemove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult remove(@RequestParam("ids[]") Long[] ids) {
         return ResponseResult.operate(fileService.batchRemove(ids) > 0);
     }
