@@ -8,6 +8,7 @@ import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +68,7 @@ public class CourseController {
      * @param file
      * @return
      */
-    @RequestMapping(value = "/file/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/file/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult upload(@RequestPart("file") MultipartFile file){
         return fileUploadService.upload(file, "");
     }
