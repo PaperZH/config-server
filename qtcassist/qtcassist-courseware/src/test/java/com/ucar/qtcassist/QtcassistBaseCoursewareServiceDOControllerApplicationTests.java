@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes=QtcassistCourseWareApplication.class)
 public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends AbstractJUnit4SpringContextTests {
 
     @Autowired
