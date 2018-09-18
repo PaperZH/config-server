@@ -1,24 +1,22 @@
 <template>
   <el-card class="box-card" shadow="never">
-    <el-form ref="courseDetailForm" :model="courseDetailForm" label-width="100px"  >
+    <el-form ref="courseDetailForm" :model="courseDetailForm" :rules="courseCheckRules" label-width="100px"  >
       <el-row>
         <el-col >
-          <el-form-item label="课程名称:">
+          <el-form-item label="课程名称:" prop="course.courseName">
             <el-input v-model="courseDetailForm.course.courseName" placeholder="请输入课程名称" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :span="8" label="课程分类:">
-            <el-select v-model="courseDetailForm.course.courseType" value-key="id" placeholder="请选择分类" >
-              <div  v-for="(item, index) in courseTypeList">
-                <el-option  :key="item.id" :label="item.typeName" :value="item"></el-option>
-              </div>
+          <el-form-item :span="8" label="课程分类:" prop="course.courseType">
+            <el-select v-model="courseDetailForm.course.courseType" value-key="id" placeholder="请选择分类">
+              <el-option  v-for="(item, index) in courseTypeList" :key="item.id" :label="item.typeName" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :span="8" label="总分:">
-            <el-input v-model="courseDetailForm.course.courseScore" placeholder="满分10分"></el-input>
+          <el-form-item :span="8" label="课程分数:" prop="course.courseScore">
+            <el-input v-model="courseDetailForm.course.courseScore" placeholder="课程分数（0-10分）"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -27,7 +25,7 @@
           </el-form-item>
         </el-col>
         <el-col >
-          <el-form-item label="上传课程封面:">
+          <el-form-item label="课程封面:">
             <el-upload
               class="avatar-uploader1"
               action=""
@@ -57,7 +55,7 @@
                   :rows="5"></el-input>
       </el-form-item>
       <el-form-item style="text-align: right;">
-        <el-button type="primary" @click="onSubmit">下一步</el-button>
+        <el-button type="primary" @click="onSubmit">{{submitButtonText}}</el-button>
       </el-form-item>
 
     </el-form>
@@ -66,6 +64,28 @@
 <script>
   export default {
     data () {
+      const validateCourseName = (rule, value, callback) => {
+        if (value === null) {
+          callback(new Error('课程名称不能为空'))
+        } else if (value.trim() === '') {
+          callback(new Error('课程名称不能为空字符串'))
+        } else {
+          callback()
+        }
+      }
+      const validateCourseScore = (rule, value, callback) => {
+        if (value === null) {
+          callback(new Error('课程分数不能为空'))
+        } else if (isNaN(value)) {
+          callback(new Error('课程分数必须是0-10的数值'))
+        } else if (value < 0 || value > 10) {
+          callback(new Error('课程分数不能超过0-10的范围'))
+        } else if (value >= 0 && value <= 10) {
+          callback()
+        } else {
+          callback(new Error('课程分数必须是0-10的数值'))
+        }
+      }
       return {
         activeName: 'first',
         courseTypeList: [{
@@ -89,8 +109,21 @@
             nickname: null
           }
         },
-        imageUrl: ''
-
+        imageUrl: '',
+        submitButtonText: null,
+        courseCheckRules: {
+          course: {
+            courseName: [
+              {required: true, trigger: 'blur', validator: validateCourseName}
+            ],
+            courseType: [
+              {required: true, trigger: 'change', message: '课程类型不能为空'}
+            ],
+            courseScore: [
+              {required: true, trigger: 'blur', validator: validateCourseScore}
+            ]
+          }
+        }
       }
     },
     mounted: function () {
@@ -101,6 +134,7 @@
 
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
+          this.submitButtonText = '更新课程'
           this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
             this.courseDetailForm.course = res.data.re.course
             this.courseDetailForm.coursewares = res.data.re.coursewares
@@ -108,12 +142,12 @@
             this.courseDetailForm.teacher.nickname = res.data.re.teacher.nickname
           })
         } else {
+          this.submitButtonText = '发布课程'
           let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
           if (tempuser) {
             this.courseDetailForm.teacher.userId = tempuser.userId
             this.courseDetailForm.teacher.nickname = tempuser.nickname
           }
-          console.log('创建新的course')
         }
       })
     },
@@ -122,18 +156,24 @@
         console.log(tab, event)
       },
       onSubmit () {
-        // 如果courseId存在，则是修改课程信息，否则是新建课程信息
-        let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
-        if (this.courseDetailForm.course.courseId != null) {
-          this.$store.dispatch('Post', {'url': '/api-home/course/updateUserCourse', 'data': data}).then(res => {
-            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
-          })
-        } else {
-          this.$store.dispatch('Post', {'url': '/api-home/course/addUserCourse', 'data': data}).then(res => {
-            this.courseDetailForm.course.courseId = res.data.re.courseId
-            this.$router.push({name: 'addCourse', params: this.courseDetailForm})
-          })
-        }
+        this.$refs.courseDetailForm.validate(valid => {
+          if (valid) {
+            // 如果courseId存在，则是修改课程信息，否则是新建课程信息
+            let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
+            if (this.courseDetailForm.course.courseId != null) {
+              this.$store.dispatch('Post', {'url': '/api-home/course/updateUserCourse', 'data': data}).then(res => {
+                this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+              })
+            } else {
+              this.$store.dispatch('Post', {'url': '/api-home/course/addUserCourse', 'data': data}).then(res => {
+                this.courseDetailForm.course.courseId = res.data.re.courseId
+                this.$router.push({name: 'addCourse', params: this.courseDetailForm})
+              })
+            }
+          } else {
+            return false
+          }
+        })
       },
       handleAvatarSuccess (res, file) {
         console.log(res)
