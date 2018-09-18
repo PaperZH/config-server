@@ -6,7 +6,6 @@ import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
-import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

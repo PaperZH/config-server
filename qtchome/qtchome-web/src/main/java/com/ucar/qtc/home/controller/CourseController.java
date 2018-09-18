@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -171,8 +172,8 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/addEvaluateCourse")
-    ResponseResult addEvaluateCourse(@RequestBody Map<String,Object> params){
-        return courseService.addEvaluateCourse(params);
+    ResponseResult addEvaluateCourse(@RequestBody EvaluateCourseDO params){
+        return courseService.addEvaluateCourse( params);
     }
 
     /**
@@ -180,7 +181,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/getPublishedCourse", method = RequestMethod.GET)
-    ResponseResult getPublishedCourse(@RequestParam Map<String,Object> params){
+    ResponseResult getPublishedCourse(@RequestParam QueryVO params){
         return courseService.queryPublishedCourse(params);
     }
 
@@ -189,7 +190,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/deletePublishedCourse")
-    ResponseResult deletePublishedCourse(@RequestBody Map<String,Object> params){
+    ResponseResult deletePublishedCourse(@RequestBody QueryVO params){
         return courseService.deletePublishedCourse(params);
     }
 
