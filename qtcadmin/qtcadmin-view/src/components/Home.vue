@@ -132,15 +132,13 @@
           .then(() => {
             //确认
             that.loading = true;
-            localStorage.removeItem("access-token");
-            localStorage.removeItem("menus")
-            API.logout('').then(function (res) {
-              that.$message.error({showClose: true, message: res.msg, duration: 2000});
+            API.logout().then(function (res) {
+              localStorage.removeItem("access-token");
+              localStorage.removeItem("menus")
+              that.$router.go("/login"); //用go刷新
             })
-            that.$router.go("/login"); //用go刷新
           })
           .catch(() => {
-
           });
       },
 

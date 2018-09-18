@@ -43,8 +43,8 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar" >
       <el-pagination layout="total,sizes, prev,pager, next,jumper" background
-            @size-change="handleSizeChange"  
-            @current-change="handleCurrentChange" 
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
             :page-size="limit"
             :total="total"
             :page-sizes="[10, 20, 30]">
@@ -109,7 +109,7 @@
           }
         })
       },
-      selsChange(sels) { 
+      selsChange(sels) {
         this.sels = sels;
       },
       handleBatchRemove: function (rows) {

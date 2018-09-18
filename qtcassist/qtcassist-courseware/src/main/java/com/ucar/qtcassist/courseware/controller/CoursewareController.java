@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.courseware.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.CoursewareApi;
 import com.ucar.qtcassist.api.model.*;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
@@ -186,5 +187,10 @@ public class CoursewareController implements CoursewareApi {
     public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
+    }
+
+    @RequestMapping(value = "/queryList" )
+    public Result<List<BackCoursewareDTO>> queryList(@RequestParam("pageNo") Integer pageNo,@RequestParam("pageSize") Integer pageSize){
+       return Result.getSuccessResult(coursewareService.queryPage(pageNo,pageSize));
     }
 }

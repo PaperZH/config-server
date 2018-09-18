@@ -8,11 +8,13 @@ import com.ucar.qtc.common.annotation.Log;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.common.dto.UserToken;
+import com.ucar.qtc.common.service.RedisCacheService;
 import com.ucar.qtc.common.utils.JwtUtils;
 import com.ucar.qtc.common.utils.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +35,17 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
+    @Value("${cache.time}")
+    private String cacheTime;
+
     @Autowired
     UserService userService;
 
     @Autowired
     MenuService menuService;
+
+    @Autowired
+    RedisCacheService redisCacheService;
 
     /**
      * 用户登陆
@@ -69,6 +77,10 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // redis缓存保存token
+        redisCacheService.put(userDO.getUsername(),token, Long.parseLong(cacheTime)*60*1000);
+
         //首先清除用户缓存权限
         menuService.clearCache(userDO.getUserId());
 
@@ -108,6 +120,10 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // redis缓存保存token
+        redisCacheService.put(userDO.getUsername(),token, Long.parseLong(cacheTime)*60*1000);
+
         return ResponseResult.ok("登录成功")
                 .put("token", token).put("user", userDO)
                 .put("perms", menuService.FrontPermsByUserId(userDO.getUserId()))
@@ -122,9 +138,11 @@ public class LoginController {
      * @return
      */
     @ApiOperation(value="用户退出", notes="用户退出")
+    @Log("用户退出")
     @RequestMapping(value="/logout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseResult logout(HttpServletRequest request, HttpServletResponse response) {
         menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
+        redisCacheService.remove(FilterContextHandler.getUsername());
         return ResponseResult.ok();
     }
 }
