@@ -1,11 +1,12 @@
 package com.ucar.qtcassist;
 
-import com.taobao.metamorphosis.client.producer.SendResult;
+import com.github.pagehelper.PageInfo;
+import com.ucar.qtcassist.api.model.BackCoursewareDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
-import com.ucar.qtcassist.courseware.model.DTO.FrontCoursewareDTO;
+import com.ucar.qtcassist.courseware.service.BaseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import com.ucar.qtcassist.courseware.service.MqService;
 import com.ucar.qtcassist.courseware.service.RemoteFileService;
@@ -30,11 +31,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = QtcassistCourseWareApplication.class)
 public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends AbstractJUnit4SpringContextTests {
 
     @Autowired
@@ -49,6 +49,8 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     @Autowired
     BaseCoursewareMapper baseCoursewareMapper;
 
+    @Autowired
+    BaseCoursewareService baseCoursewareService;
 
 
     @Test
@@ -80,7 +82,6 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         Assert.assertNotNull(resultVO);
     }
 
-
     @Test
     public void updateBaseCourseware() {
         BaseCoursewareDO baseCoursewareDO = new BaseCoursewareDO();
@@ -93,20 +94,19 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
         baseCoursewareDO.setSourceUrl("test123");
         baseCoursewareDO.setId(4L);
 
-        Assert.assertThat(baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO),CoreMatchers.is(1));
+        Assert.assertThat(baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO), CoreMatchers.is(1));
 
     }
 
     @Test
     public void MqTest() throws Exception {
-        String pdfLocation ="2018-09-10/convert/88.pdf";
-        String pptLocation ="2018-09-10\\7ebb7c96a73d417d9315d70e44f95ffa.docx";
+        String pdfLocation = "2018-09-10/convert/88.pdf";
+        String pptLocation = "2018-09-10\\7ebb7c96a73d417d9315d70e44f95ffa.docx";
         File ppt = new File(pptLocation);
         File pdf = new File(pdfLocation);
         FileDTO fileDTO = new FileDTO();
-        fileDTO.setFile(ppt);
         fileDTO.setId(1L);
-        remoteFileService.fileConvert(ppt,pdf);
+        remoteFileService.fileConvert(ppt, pdf);
 //        SendResult sendResult= mqService.msgSend(fileDTO);
 //        Assert.assertTrue(sendResult.isSuccess());
 
@@ -131,13 +131,21 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
     }
 
     @Test
-    public void fiel(){
-        File dir=new File("test.txt");
+    public void fiel() {
+        File dir = new File("test.txt");
         if(!dir.exists()) {
             dir.mkdirs();
         }
         Assert.assertNotNull(dir.getPath());
         System.out.println(dir.getPath());
+    }
+
+    @Test
+    public void qu() {
+
+        List<BackCoursewareDTO> pi = coursewareService.queryPage(1, 5);
+        //List<BackCoursewareDTO> list = pi.getList();
+
     }
 
     @Before

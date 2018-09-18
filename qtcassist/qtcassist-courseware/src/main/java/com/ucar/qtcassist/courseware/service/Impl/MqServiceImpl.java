@@ -7,6 +7,8 @@ import com.taobao.metamorphosis.client.producer.SendResult;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.MqService;
 import com.zuche.framework.remote.nio.codec.HessianSerializerUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MqServiceImpl implements MqService {
+    private static Logger LOGGER = LoggerFactory.getLogger(MqServiceImpl.class);
 
     @Autowired
     private MessageProducer producer;
@@ -30,9 +33,9 @@ public class MqServiceImpl implements MqService {
         String topic = defaultTopic.getTopic();
         final SendResult sendResult = producer.sendMessage(new Message(topic, HessianSerializerUtils.serialize(fileDTO)));
         if(!sendResult.isSuccess()) {
-            System.err.println("Send message failed,error message:" + sendResult.getErrorMessage());
+            LOGGER.error("Send message failed,error message:" + sendResult.getErrorMessage());
         } else {
-            System.out.println("Send message successfully,sent to " + sendResult.getPartition());
+            LOGGER.info("Send message successfully,sent to " + sendResult.getPartition());
         }
 
         return sendResult;

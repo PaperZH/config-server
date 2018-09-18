@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,69 +30,64 @@ import java.util.concurrent.Executor;
  */
 @Component
 public class MesListener implements MessageListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MesListener.class);
 
-    private static Logger LOGGER = LoggerFactory.getLogger(BaseCoursewareServiceImpl.class);
     @Autowired
     private FileService fileService;
     @Autowired
     private RemoteFileService remoteFileService;
     @Autowired
     private BaseCoursewareMapper baseCoursewareMapper;
+    @Autowired
+    private FileDownLoad fileDownLoad;
 
     @Override
     public void recieveMessages(Message message) {
+        LOGGER.info("get message：" + message);
         Object obj = HessianSerializerUtils.deserialize(message.getData());
 
         if(obj instanceof FileDTO) {
             FileDTO fileDTO = (FileDTO) obj;
+            BaseCoursewareDO baseCoursewareDO =baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String date = simpleDateFormat.format(new Date());
-            String location = date + "/convert/";
-            LOGGER.warn("location:" + location);
+            if(baseCoursewareDO!=null) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String date = simpleDateFormat.format(new Date());
+                String location = date + "/convert/";
+                LOGGER.info("location:" + location);
 
-            File file = null;
-            String coursewareName = null;
-            String Name = null;
-            try {
-                coursewareName = fileDTO.getOriginalFilename();
-                int point = fileDTO.getLocation().lastIndexOf(".");
-                String suffix = fileDTO.getLocation().substring(point + 1, fileDTO.getLocation().length());
-                Name = coursewareName + "." + suffix;
-                file = fileDTO.getFile();
-
-
-                String preUrl = null;
-                LOGGER.error("MqListener:" + coursewareName);
-
-
-                File fPPT = file;
-                File fPDF = null;
-
-                //判断是否为需要转化的文件类型
-                if(fileService.typeCheck(Name)) {
-
-                    String pdfLocation = location + coursewareName + "." + FileConstant.PDF;
-                    //LOGGER.error("pdfLocation:" + pdfLocation);
-                    fPDF = new File(pdfLocation);
-                    File dir = new File(location);
-                    if(!dir.exists()) {
-                        dir.mkdirs();
-                    }
-                    remoteFileService.fileConvert(fPPT, fPDF);
-                    LOGGER.info("conver successfully");
-                }
-                InputStream in = null;
+                File file = null;
+                String coursewareName = baseCoursewareDO.getCoursewareName();
+                String name = null;
+                String sourceUrl = baseCoursewareDO.getSourceUrl();
                 try {
+                    int point = sourceUrl.lastIndexOf(".");
+                    String suffix = sourceUrl.substring(point + 1, sourceUrl.length());
+                    name = coursewareName + "." + suffix;
+                    file = fileDownLoad.downloadNet(sourceUrl);
+
+                    String preUrl = null;
+                    LOGGER.info("MqListener:" + coursewareName);
+                    File fPPT = file;
+                    File fPDF = null;
+                    //判断是否为需要转化的文件类型
+                    if(fileService.typeCheck(name)) {
+                        String pdfLocation = location + coursewareName + "." + FileConstant.PDF;
+                        fPDF = new File(pdfLocation);
+                        File dir = new File(location);
+                        if(!dir.exists()) {
+                            dir.mkdirs();
+                        }
+                        remoteFileService.fileConvert(fPPT, fPDF);
+                        LOGGER.info("convert successfully");
+                    }
+                    InputStream in = null;
+
                     in = new FileInputStream(fPDF);
                     preUrl = remoteFileService.uploadFile(in, coursewareName + "." + FileConstant.PDF);
-                    LOGGER.info("upload successfully[preUrl]" + preUrl);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //查BaseCourseware表，将preUrl放入表中
-                BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
-                if(baseCoursewareDO != null) {
+                    LOGGER.info("upload successfully.....");
+                    //查BaseCourseware表，将preUrl放入表中
+                    // BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(fileDTO.getId());
                     baseCoursewareDO.setPreviewUrl(preUrl);
                     baseCoursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
                     int temp = baseCoursewareMapper.updateByPrimaryKeySelective(baseCoursewareDO);
@@ -103,10 +97,10 @@ public class MesListener implements MessageListener {
                     } else {
                         LOGGER.info("add basecourseware failed");
                     }
-                }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

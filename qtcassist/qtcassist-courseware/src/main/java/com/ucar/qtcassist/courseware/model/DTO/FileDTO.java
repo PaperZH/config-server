@@ -15,7 +15,7 @@ public class FileDTO implements Serializable {
     /**
      * 文件
      */
-    private File file;
+//    private File file;
     /**
      * baseCoursewareId
      */
@@ -27,7 +27,12 @@ public class FileDTO implements Serializable {
     /**
      * 文件在服务器中的绝对路径
      */
-    private String location;
+//    private String location;
+    /**
+     * 文件在服务器中的Url
+     *
+     * */
+    private String sourceUrl;
 
 
     public Long getId() {
@@ -38,13 +43,13 @@ public class FileDTO implements Serializable {
         this.id = id;
     }
 
-    public File getFile() {
+/*    public File getFile() {
         return file;
     }
 
     public void setFile(File file) {
         this.file = file;
-    }
+    }*/
 
     public String getOriginalFilename() {
         return originalFilename;
@@ -54,11 +59,18 @@ public class FileDTO implements Serializable {
         this.originalFilename = originalFilename;
     }
 
-    public String getLocation() {
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
+/*    public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
+    }*/
 }

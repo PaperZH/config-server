@@ -1,9 +1,6 @@
 package com.ucar.qtcassist.api;
 
-import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
-import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
-import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
-import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +21,8 @@ public interface CoursewareApi {
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
-    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
-    Result saveCourseware(MultipartFile file) throws Exception;
+    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
+    Result uploadCourseware(MultipartFile file) throws Exception;
 
     @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
     Result getBaseCourseware(@PathVariable("baseCoursewareId") Long baseCoursewareId);
@@ -41,7 +38,10 @@ public interface CoursewareApi {
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
     Result addCourseware(@RequestParam(value = "id") Long id,@RequestParam(value = "num") Long num);
 
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
-    Result uploadCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
+    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
+
+    @RequestMapping(value = "/queryList" )
+    Result<List<BackCoursewareDTO>> queryList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize);
 
 }

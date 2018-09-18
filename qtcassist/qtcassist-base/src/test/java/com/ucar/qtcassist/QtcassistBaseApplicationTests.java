@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = QtcassistBaseApplication.class)
 public class QtcassistBaseApplicationTests extends AbstractJUnit4SpringContextTests {
 
 

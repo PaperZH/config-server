@@ -1,9 +1,13 @@
 package com.ucar.qtcassist.courseware.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ucar.qtcassist.api.model.BackCoursewareDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
+import com.ucar.qtcassist.courseware.model.DO.BackDO;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
@@ -12,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 请填写类注释
@@ -71,5 +77,29 @@ public class CoursewareServiceImpl implements CoursewareService {
             return null;
         }
 
+    }
+
+    @Override
+    public List<BackCoursewareDTO> queryPage(Integer pageNo, Integer pageSize) {
+        pageNo = pageNo == null ? 1 : pageNo;
+        pageSize = pageSize == null ? 10 : pageSize;
+        PageHelper.startPage(pageNo, pageSize);
+        List<BackDO> backDoList = coursewareMapper.selectBack();
+        List<BackCoursewareDTO> backCoursewareDTOList=new ArrayList<>();
+        for(int i=0;i<backDoList.size();i++){
+            BackCoursewareDTO backCoursewareDTO =new BackCoursewareDTO();
+            BackDO temBackDO =backDoList.get(i);
+            backCoursewareDTO.setBaseCoursewareDescription(temBackDO.getBaseCoursewareDescription());
+            backCoursewareDTO.setBaseCoursewareName(temBackDO.getBaseCoursewareName());
+            backCoursewareDTO.setCoursewareDescription(temBackDO.getCoursewareDescription());
+            backCoursewareDTO.setCoursewareName(temBackDO.getCoursewareName());
+            backCoursewareDTO.setCoursewareType(temBackDO.getCoursewareType());
+            backCoursewareDTO.setPreUrl(temBackDO.getPreUrl());
+            backCoursewareDTO.setSourceUrl(temBackDO.getSourceUrl());
+            backCoursewareDTOList.add(backCoursewareDTO);
+        }
+//        PageInfo<BackCoursewareDTO> page=new PageInfo<>(backCoursewareDTOList);
+
+        return backCoursewareDTOList;
     }
 }
