@@ -158,9 +158,8 @@
           'url': '/api-home/courseCourseware/addCourseCourseware',
           'data': this.form
         }).then(fileRes => {
-          console.log(fileRes.data.re)
+          console.log('fileRes.data.re'+fileRes.data.re)
         })
-        console.log(this.form)
       },
       handleRemove (file) {
         console.log(file)
@@ -174,21 +173,24 @@
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
-          this.form.baseCoursewareId = fileRes.data.re
+          if(fileRes.data.re!=null){
+            this.form.baseCoursewareId = fileRes.data.re
+            this.uploadSuccessfully()
+            this.form.flag = 1
+          }else {
+            this.uploadfailed()
+          }
         })
-        this.form.flag = 1
         console.log(file)
       },
       handleAvatarSuccess (res, file) {
         console.log(file)
-        this.form.fileUrl = res.fileUrl
       },
       handleExceed (files, fileList) {
         console.log(this.$refs.upload)
         this.$message.warning(`已经选择上传文件`)
       },
       loadAll () {
-        console.log('---------------------loadAll----------------------------')
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllBaseCoursewares`,
           'data': ''
@@ -222,6 +224,22 @@
       handleChange (item) {
         console.log(item)
         this.form.typeId = item
+      },
+      uploadSuccessfully() {
+        this.$alert('上传成功', '提示', {
+          confirmButtonText: '确定',
+          /*callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }*/
+        });
+      },
+      uploadfailed() {
+        this.$alert('上传失败，请重试', '警告', {
+          confirmButtonText: '确定',
+        });
       }
 
     }
