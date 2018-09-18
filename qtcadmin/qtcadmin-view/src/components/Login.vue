@@ -86,7 +86,7 @@ export default {
               console.log(error);
               that.$message.error({
                 showClose: true,
-                message: "请求出现异常",
+                message: "请重新登陆",
                 duration: 2000
               });
             });

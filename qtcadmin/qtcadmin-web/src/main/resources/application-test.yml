@@ -17,12 +17,25 @@ security:
   basic:
     enabled: false
 
+cache:
+  time: 5
+
 spring:
   application:
     name: api-admin
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
+
+  redis:
+      hostName: 10.104.108.177
+      port: 6379
+      jedis:
+        pool:
+          maxActive: 1024
+          maxWait: 1000
+          maxIdle: 200
+      timeout: 10000
 
 jdbc:
   datasource:
