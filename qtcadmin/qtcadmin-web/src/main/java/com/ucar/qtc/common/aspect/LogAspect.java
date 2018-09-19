@@ -26,8 +26,8 @@ import java.util.Date;
  * @description: 公共jar包日志记录切面
  * @date: 2018/8/7 10:19
  */
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class LogAspect {
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
