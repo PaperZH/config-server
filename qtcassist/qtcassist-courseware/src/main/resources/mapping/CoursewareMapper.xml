@@ -25,12 +25,19 @@
     id, type_id, base_courseware_id,courseware_num, courseware_name, courseware_description, publish_time,
     update_time
   </sql>
-    <select id="selectBack" resultMap="BaseResultMap2" >
+    <select id="selectBack" parameterType="com.ucar.qtcassist.api.model.VO.CoursewareQueryVO"
+            resultMap="BaseResultMap2">
         select
         ac.courseware_name,ac.courseware_description,abc.courseware_name,abc.courseware_description,
         abc.preview_url,abc.source_url,act.type_name
-        from  assist_course_type act,assist_courseware ac,assist_base_courseware abc
-        where ac.type_id=act.id AND ac.base_courseware_id=abc.id
+        from assist_course_type act,assist_courseware ac,assist_base_courseware abc
+        <where>
+            <if test="coursewareName!=null">
+              ac.courseware_name like CONCAT('%',#{coursewareName, jdbcType=VARCHAR},'%')
+            </if>
+            and ac.type_id=act.id
+            and ac.base_courseware_id=abc.id
+        </where>
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -54,7 +61,8 @@
     delete from assist_courseware
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.ucar.qtcassist.courseware.model.DO.CoursewareDO">
         insert into assist_courseware ( type_id, base_courseware_id,courseware_num,
         courseware_name, courseware_description,
         publish_time, update_time)

@@ -2,7 +2,9 @@ package com.ucar.qtcassist;
 
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.model.BackCoursewareDTO;
+import com.ucar.qtcassist.api.model.BackDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
@@ -142,8 +144,12 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
     @Test
     public void qu() {
+        CoursewareQueryVO coursewareQueryVO=new CoursewareQueryVO();
+        coursewareQueryVO.setCoursewareName("ja");
+        coursewareQueryVO.setPageNo(1);
+        coursewareQueryVO.setPageSize(5);
 
-        List<BackCoursewareDTO> pi = coursewareService.queryPage(1, 5);
+        BackDTO pi = coursewareService.queryPage(coursewareQueryVO);
         //List<BackCoursewareDTO> list = pi.getList();
 
     }

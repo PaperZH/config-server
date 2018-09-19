@@ -3,7 +3,9 @@ package com.ucar.qtcassist.courseware.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.model.BackCoursewareDTO;
+import com.ucar.qtcassist.api.model.BackDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
@@ -16,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 请填写类注释
@@ -59,8 +59,8 @@ public class CoursewareServiceImpl implements CoursewareService {
     @Override
     public List<CoursewareDTO> selectCoursewareList(List<Long> list) {
         if(list != null && list.size() > 0) {
-        List<CoursewareDO> coursewareDOList = coursewareMapper.selectByListKey(list);
-        List<CoursewareDTO> coursewareDTOList = new ArrayList<>();
+            List<CoursewareDO> coursewareDOList = coursewareMapper.selectByListKey(list);
+            List<CoursewareDTO> coursewareDTOList = new ArrayList<>();
             for(int i = 0; i < coursewareDOList.size(); i++) {
                 BaseCoursewareDO baseCoursewareDO = baseCoursewareMapper.selectByPrimaryKey(coursewareDOList.get(i).getBaseCoursewareId());
                 CoursewareDTO coursewareDTO = new CoursewareDTO();
@@ -80,15 +80,19 @@ public class CoursewareServiceImpl implements CoursewareService {
     }
 
     @Override
-    public List<BackCoursewareDTO> queryPage(Integer pageNo, Integer pageSize) {
+    public BackDTO queryPage(CoursewareQueryVO coursewareQueryVO) {
+        Integer pageNo = coursewareQueryVO.getPageNo();
+        Integer pageSize = coursewareQueryVO.getPageSize();
         pageNo = pageNo == null ? 1 : pageNo;
         pageSize = pageSize == null ? 10 : pageSize;
         PageHelper.startPage(pageNo, pageSize);
-        List<BackDO> backDoList = coursewareMapper.selectBack();
-        List<BackCoursewareDTO> backCoursewareDTOList=new ArrayList<>();
-        for(int i=0;i<backDoList.size();i++){
-            BackCoursewareDTO backCoursewareDTO =new BackCoursewareDTO();
-            BackDO temBackDO =backDoList.get(i);
+        BackDTO backDTO = new BackDTO();
+        List<BackDO> backDoList = coursewareMapper.selectBack(coursewareQueryVO);
+        PageInfo pageInfo = new PageInfo<>(backDoList);
+        List<BackCoursewareDTO> backCoursewareDTOList = new ArrayList<>();
+        for(int i = 0; i < backDoList.size(); i++) {
+            BackCoursewareDTO backCoursewareDTO = new BackCoursewareDTO();
+            BackDO temBackDO = backDoList.get(i);
             backCoursewareDTO.setBaseCoursewareDescription(temBackDO.getBaseCoursewareDescription());
             backCoursewareDTO.setBaseCoursewareName(temBackDO.getBaseCoursewareName());
             backCoursewareDTO.setCoursewareDescription(temBackDO.getCoursewareDescription());
@@ -98,8 +102,8 @@ public class CoursewareServiceImpl implements CoursewareService {
             backCoursewareDTO.setSourceUrl(temBackDO.getSourceUrl());
             backCoursewareDTOList.add(backCoursewareDTO);
         }
-//        PageInfo<BackCoursewareDTO> page=new PageInfo<>(backCoursewareDTOList);
-
-        return backCoursewareDTOList;
+        backDTO.setBackCoursewareDTOList(backCoursewareDTOList);
+        backDTO.setCount(pageInfo.getTotal());
+        return backDTO;
     }
 }

@@ -2,6 +2,8 @@ package com.ucar.qtcassist.courseware.service;
 
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.model.BackCoursewareDTO;
+import com.ucar.qtcassist.api.model.BackDTO;
+import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
@@ -31,5 +33,5 @@ public interface CoursewareService {
 
     List<CoursewareDTO> selectCoursewareList(List<Long> list);
 
-    List<BackCoursewareDTO> queryPage(Integer pageNo, Integer pageSize);
+    BackDTO queryPage(CoursewareQueryVO coursewareQueryVO);
 }

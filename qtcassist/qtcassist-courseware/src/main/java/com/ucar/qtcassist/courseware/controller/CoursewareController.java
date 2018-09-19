@@ -3,6 +3,7 @@ package com.ucar.qtcassist.courseware.controller;
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.CoursewareApi;
 import com.ucar.qtcassist.api.model.*;
+import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
@@ -190,7 +191,7 @@ public class CoursewareController implements CoursewareApi {
     }
 
     @RequestMapping(value = "/queryList" )
-    public Result<List<BackCoursewareDTO>> queryList(@RequestParam("pageNo") Integer pageNo,@RequestParam("pageSize") Integer pageSize){
-       return Result.getSuccessResult(coursewareService.queryPage(pageNo,pageSize));
+    public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO){
+       return Result.getSuccessResult(coursewareService.queryPage(coursewareQueryVO));
     }
 }

@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.courseware.dao;
 
+import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.model.DO.BackDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import org.springframework.stereotype.Component;
@@ -23,5 +24,5 @@ public interface CoursewareMapper {
 
     List<CoursewareDO> selectByListKey(List<Long> id);
 
-    List<BackDO> selectBack();
+    List<BackDO> selectBack(CoursewareQueryVO coursewareQueryVO);
 }
