@@ -27,7 +27,7 @@ spring:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
   redis:
-    host: 127.0.0.1
+    host: 10.104.108.177
     port: 6379
     jedis:
       pool:
