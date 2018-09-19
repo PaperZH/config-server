@@ -9,9 +9,9 @@
     <el-col :span="24" class="wrap-main" v-loading="loading" element-loading-text="拼命加载中">
        <!--工具条-->
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-        <el-form :inline="true" :model="course">
+        <el-form :inline="true" :model="courseware">
           <el-form-item>
-            <el-input v-model="course.courseName" placeholder="课程名" @keyup.enter.native="handleSearch"></el-input>
+            <el-input v-model="courseware.coursewareName" placeholder="课程名" @keyup.enter.native="handleSearch"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="handleSearch">查询</el-button>
@@ -21,15 +21,13 @@
 
       <!-- 列表 -->
       <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column label="预览" align="center" width="200">
-          <template slot-scope="scope">
-            <img :src="scope.row.courseCover" height="80">
-          </template>
-        </el-table-column>
-        <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
-        <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
-         <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>      
-        <el-table-column label="课程介绍" prop="courseDescription" width="220" align="center"></el-table-column>  
+        <el-table-column label="课件名" prop="coursewareName" width="120" align="center"></el-table-column>
+        <el-table-column label="课件类别" prop="coursewareType" width="80" align="center"></el-table-column>
+        <el-table-column label="课件描述" prop="coursewareDescription" align="center"></el-table-column>
+        <el-table-column label="元课件名" prop="baseCoursewareName" width="120" align="center"></el-table-column>
+        <el-table-column label="元课件描述" prop="baseCoursewareDescription" align="center"></el-table-column>
+        <el-table-column label="预览地址" prop="preUrl" align="center"></el-table-column>      
+        <el-table-column label="文件地址" prop="sourceUrl" align="center"></el-table-column>  
        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
@@ -48,34 +46,12 @@
               :page-sizes="[10, 20, 30]">
         </el-pagination>
       </el-col>
-
-      <!-- 编辑界面 -->
-      <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-        <el-form :model="editForm" label-width="80px" ref="editForm">
-          <el-form-item label="排序" prop="orderNum">
-            <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="推荐信息" prop="orderNum">
-             <el-input
-                type="textarea"
-                :autosize="{ minRows: 3, maxRows: 6}"
-                placeholder="请输入内容"
-                v-model="editForm.description">
-              </el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="editFormVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="editSubmit" :loading="addLoading">提交</el-button>
-        </div>
-      </el-dialog>
-
     </el-col>
   </el-row>
 </template>
 
 <script>
-  import API from '../../api/api_course'
+  import API from '../../api/api_courseware'
 
   export default {
     name: "List",
@@ -85,52 +61,39 @@
           coursewareName: ''
         },
         courseRows:[],
-        courseName:'',
         total: 0,
         page: 1,
         limit: 10,
         loading: false,
-        //编辑推荐课程 数据
-        editFormVisible: false,
-        editForm: {
-           courseId: '',
-           orderNum: '',
-           description: ''
-        },
       }
     },
     methods: {
-      handleSelect(item) { 
-        const data = item;
-        this.addForm.courseId = data.id;
-        this.courseName = data.courseName;
-      },
       handleSizeChange(val) {
         this.limit = val;
-        this.searchCourse();
+        this.searchCourseware();
       },
       handleCurrentChange(val) {
         this.page = val;
-        this.searchCourse();
+        this.searchCourseware();
       },
       handleSearch() {
         this.total = 0;
         this.page = 1;
-        this.searchCourse();
+        this.searchCourseware();
       },
-      searchCourse: function () {
+      searchCourseware: function () {
         let that = this;
         let params = {
-          //courseName: this.course.courseName,
+          coursewareName: this.courseware.coursewareName,
           pageNo: this.page,
           pageSize: this.limit
         }
         that.loading = true;
-        API.getCourseList(params).then(
+        API.getCoursewareList(params).then(
             function (result) {
-              that.courseRows = result.re;
+              that.courseRows = result.re.backCoursewareDTOList;
               that.loading = false;
-              //that.total = result.re.total
+              that.total = result.re.count
             }
           )
           .catch(function (error) {
@@ -150,7 +113,7 @@
         this.editForm.orderNum = row.orderNum
       },
       //删除
-       removeRecCourse: function (id) {
+       removeRecCourseware: function (id) {
         let that = this
         return API.remove({id: id}).then(res => {
           
@@ -196,7 +159,7 @@
       }
     },
     mounted() {
-      this.searchCourse();
+      this.searchCourseware();
     }
   }
 </script>

@@ -190,7 +190,7 @@ public class CoursewareController implements CoursewareApi {
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
 
-    @RequestMapping(value = "/queryList" )
+    @RequestMapping(value = "/queryList")
     public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO){
        return Result.getSuccessResult(coursewareService.queryPage(coursewareQueryVO));
     }

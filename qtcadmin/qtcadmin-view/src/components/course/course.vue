@@ -30,10 +30,13 @@
         <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
          <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>      
         <el-table-column label="课程介绍" prop="courseDescription" align="center"></el-table-column>  
+        <el-table-column label="失效时间" prop="invalidDate" align="center"></el-table-column>   
        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeRecCourse(scope.row.courseId)">删除</el-button>
+            <!--  @click="showEditDialog(scope.$index,scope.row)" -->
+            <el-button size="mini">编辑</el-button>
+            <!-- type="danger" @click="removeRecCourse(scope.row.courseId)" -->
+            <el-button size="mini" >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +67,7 @@
               </el-input>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div slot="footer" class="dialog-footer" aria-disabled="true">
           <el-button @click.native="editFormVisible = false">取消</el-button>
           <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
         </div>
