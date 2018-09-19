@@ -22,13 +22,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
-                <el-autocomplete  ref="sys"
+                <el-autocomplete ref="sys"
 
-                  popper-class="my-autocomplete"
-                  v-model="state4"
-                  :fetch-suggestions="querySearchAsync"
-                  placeholder="请输入系统课件名"
-                  @select="handleSelect"
+                                 popper-class="my-autocomplete"
+                                 v-model="state4"
+                                 :fetch-suggestions="querySearchAsync"
+                                 placeholder="请输入系统课件名"
+                                 @select="handleSelect"
                 >
                   <template slot-scope="{ item }">
                     <div class="name">课程名称：{{ item.value=item.coursewareName }}</div>
@@ -119,8 +119,9 @@
 </template>
 <script>
   export default {
+    inject:['reload'],
     name: 'addCourse',
-    data () {
+    data() {
       return {
         uploadIsDisabled: false,
         isShow: false,
@@ -142,7 +143,7 @@
         }
       }
     },
-    mounted () {
+    mounted() {
       console.log(this.$router.currentRoute.params)
       // 得到课程的id
       this.form.courseId = this.$router.currentRoute.params.course.courseId
@@ -153,44 +154,49 @@
       this.loadAll()
     },
     methods: {
-      onAddCourseWare () {
+      onAddCourseWare() {
         this.$store.dispatch('Post', {
           'url': '/api-home/courseCourseware/addCourseCourseware',
           'data': this.form
         }).then(fileRes => {
-          console.log('fileRes.data.re'+fileRes.data.re)
+          if (fileRes.data.re == 1) {
+            this.addSuccessfully()
+          } else{
+
+          }
+          console.log('fileRes.data.re:' + fileRes.data.re)
         })
       },
-      handleRemove (file) {
+      handleRemove(file) {
         console.log(file)
       },
-      beforeRemove (file, fileList) {
+      beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`)
       },
-      beforeAvatarUpload (file) {
+      beforeAvatarUpload(file) {
         this.$refs.sys.disabled = true
         let tem = new FormData()
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
-          if(fileRes.data.re!=null){
+          if (fileRes.data.re != null) {
             this.form.baseCoursewareId = fileRes.data.re
             this.uploadSuccessfully()
             this.form.flag = 1
-          }else {
+          } else {
             this.uploadfailed()
           }
         })
         console.log(file)
       },
-      handleAvatarSuccess (res, file) {
+      handleAvatarSuccess(res, file) {
         console.log(file)
       },
-      handleExceed (files, fileList) {
+      handleExceed(files, fileList) {
         console.log(this.$refs.upload)
         this.$message.warning(`已经选择上传文件`)
       },
-      loadAll () {
+      loadAll() {
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllBaseCoursewares`,
           'data': ''
@@ -206,22 +212,22 @@
           console.log(coursewareTypeListRes.data.re)
         })
       },
-      querySearchAsync (queryString, cb) {
+      querySearchAsync(queryString, cb) {
         var courseWareList = this.courseWareList
         var results = queryString ? courseWareList.filter(this.createStateFilter(queryString)) : courseWareList
         cb(results)
       },
-      createStateFilter (queryString) {
+      createStateFilter(queryString) {
         return (courseWare) => {
           return (courseWare.coursewareName.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
-      handleSelect (item) {
+      handleSelect(item) {
         this.form.baseCoursewareId = item.id
         this.uploadIsDisabled = true
       },
 
-      handleChange (item) {
+      handleChange(item) {
         console.log(item)
         this.form.typeId = item
       },
@@ -240,7 +246,24 @@
         this.$alert('上传失败，请重试', '警告', {
           confirmButtonText: '确定',
         });
-      }
+      },
+      addSuccessfully() {
+        this.$alert('课件添加成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            /*this.form.hour=''
+            this.form.describe=''
+            this.form.name=''
+            this.form.baseCoursewareId=''*/
+            this.reload()
+          }
+        });
+      },
+      uploadfailed() {
+        this.$alert('课件添加失败，请重试', '警告', {
+          confirmButtonText: '确定',
+        });
+      },
 
     }
 

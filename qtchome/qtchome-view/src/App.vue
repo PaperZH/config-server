@@ -1,12 +1,26 @@
 <template>
   <div id="app">
-    <router-view class="app-container"/>
+    <!--<router-view class="app-container"/>-->
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
+
 </template>
 
 <script>
  // import { mapActions } from 'vuex'
   export default {
+    name:'app',
+    provide(){
+      return {
+        reload:this.reload
+      }
+    },
+    data(){
+      return {
+        isRouterAlive:true
+      }
+    },
+
     mounted () {
       /**
        * 根据携带的cookie，自动获取当前系统的所有按钮权限，会发起一个http请求
@@ -14,7 +28,12 @@
 
     },
     methods: {
-
+      reload(){
+        this.isRouterAlive=false
+        this.$nextTick(function () {
+          this.isRouterAlive=true
+        })
+      }
     }
   }
 </script>

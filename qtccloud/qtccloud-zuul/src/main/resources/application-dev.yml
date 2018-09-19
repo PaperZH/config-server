@@ -21,7 +21,7 @@ spring:
       max-file-size: 100Mb
       max-request-size: 100Mb
   redis:
-      hostName: 127.0.0.1
+      hostName: 10.104.108.177
       port: 6379
       jedis:
         pool:
