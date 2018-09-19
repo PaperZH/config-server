@@ -13,6 +13,9 @@ eureka:
     prefer-ip-address: true
     instance-id: 10.104.108.177:${server.port}
 
+cache:
+  time: 5
+
 spring:
   application:
     name: zuul

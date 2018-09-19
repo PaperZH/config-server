@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-public class Swigger2Config extends WebMvcConfigurationSupport {
+public class Swagger2Config extends WebMvcConfigurationSupport {
 
     @Bean
     public Docket createRestApi() {

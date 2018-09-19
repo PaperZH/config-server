@@ -6,7 +6,6 @@ import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
-import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 功能描述:
- *
- * @param: $param$
- * @return: $return$
- * @auther: $user$
- * @date: $date$ $time$
+ * author：guodong.zhang
+ * 功能描述：
+ * 对推荐课程的Service类的实现
  */
 @Service
 public class RecCourseServiceImpl implements RecCourseService {
@@ -45,52 +41,18 @@ public class RecCourseServiceImpl implements RecCourseService {
 
     @Override
     public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
-        List<Long> listCourseIds = new ArrayList<Long>();
-
         //首先通过名字查询课程信息
-        List courseVOS = (List) courseService.getCourseIdAndCourseName(queryVO).get("ids");
-        if(courseVOS==null||courseVOS.isEmpty()){
+        List courses = (List) courseService.getCourseIdAndCourseName(queryVO).get("ids");
+        if(courses==null||courses.isEmpty()){
             return null;
         }
-
-        Map<String,Object> resMap = new HashMap<String,Object>();
-        Iterator iterator = courseVOS.iterator();
-        //取出课程信息ID
-        while(iterator.hasNext()){
-            Map tempMap = (Map)iterator.next();
-            listCourseIds.add(((Integer) tempMap.get("id")).longValue());
-        }
-        resMap.put("ids",listCourseIds);
-
-        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(resMap);
+        //通过查询课程的ID，查询推荐课程
+        Map<String,Object> courseResMap = getCoursesMap(courses);
+        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(courseResMap);
         if(recommandCourseList.size() == 0){
             return null;
         }
-        Long[] ids = new Long[recommandCourseList.size()];
-        iterator = recommandCourseList.iterator();
-        int index = 0;
-        while(iterator.hasNext()){
-            ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
-        }
-        List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
-        queryVO.setCourseIds(ids);
-        recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
-        List<CourseVO> result = new ArrayList<CourseVO>();
-
-        //按照ord_num的顺序，将数据填充
-        for(int i = 0;i < ids.length;i ++){
-            iterator = recCourseVOS.iterator();
-            while(iterator.hasNext()){
-                CourseVO temp = (CourseVO) iterator.next();
-                if(temp.getCourseId() == ids[i]){
-                    temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
-                    temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
-                    result.add(temp);
-                }
-            }
-
-        }
-        return result;
+        return getRecCourseList(recommandCourseList,courses);
     }
 
     @Override
@@ -116,5 +78,54 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Override
     public int batchremove(Long[] ids) {
         return recommandCourseDao.batchremove(ids);
+    }
+
+    /**
+     * 获得Course的map结构信息
+     * @param courseList 查询的课程列表信息
+     * @return
+     */
+    private Map<String,Object> getCoursesMap(List courseList){
+        List<Long> ids = new ArrayList<Long>();
+        Map<String,Object> resMap = new HashMap<String,Object>();
+        Iterator iterator = courseList.iterator();
+        //取出课程信息ID
+        while(iterator.hasNext()){
+            Map tempMap = (Map)iterator.next();
+            ids.add(((Integer) tempMap.get("id")).longValue());
+        }
+        resMap.put("ids",ids);
+        return resMap;
+    }
+    /**
+     * @param recommandCourseList 推荐课程列表
+     * @param courseVOS 课程信息列表
+     * @return
+     */
+    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList,List courseVOS){
+        Long[] ids = new Long[recommandCourseList.size()];
+        Iterator iterator = recommandCourseList.iterator();
+        int index = 0;
+        while(iterator.hasNext()){
+            ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
+        }
+        QueryVO queryVO = new QueryVO();
+        queryVO.setCourseIds(ids);
+        List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
+        recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
+        List<CourseVO> reccomandCourseVO = new ArrayList<CourseVO>();
+        //按照ord_num的顺序，将数据填充
+        for(int i = 0;i < ids.length;i ++){
+            iterator = recCourseVOS.iterator();
+            while(iterator.hasNext()){
+                CourseVO temp = (CourseVO) iterator.next();
+                if(temp.getCourseId() == ids[i]){
+                    temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
+                    temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
+                    reccomandCourseVO.add(temp);
+                }
+            }
+        }
+        return reccomandCourseVO;
     }
 }

@@ -26,6 +26,10 @@ import BannerList from '../components/recommand/bannerRecommand'
 
 import RecCourseList from '../components/recommand/courseRecommand'
 
+import CourseList from '../components/course/course'
+
+import CoursewareList from '../components/course/courseware'
+
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/components/Login'], resolve)
 
@@ -168,6 +172,17 @@ let router = new Router({
       children: [
         {path: '/admin/banner',component: BannerList, name: 'banner推荐', menuShow: true},
         {path: '/admin/recCourse',component: RecCourseList, name: '课程推荐', menuShow: true}
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: '课程管理',
+      menuShow: true,
+      iconCls: 'iconfont icon-setting1',
+      children: [
+        {path: '/admin/course',component: CourseList, name: '课程管理', menuShow: true},
+        {path: '/admin/courseware',component: CoursewareList, name: '课件管理', menuShow: true}
       ]
     },
   ]

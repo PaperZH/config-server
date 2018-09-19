@@ -42,17 +42,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <!--工具条-->
-      <el-col :span="24" class="toolbar" >
-        <el-pagination layout="total,sizes, prev,pager, next,jumper" background
-              @size-change="handleSizeChange"  
-              @current-change="handleCurrentChange" 
-              :page-size="limit"
-              :total="total"
-              :page-sizes="[10, 20, 30]">
-        </el-pagination>
-      </el-col>
       <!--新增界面-->
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
