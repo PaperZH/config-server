@@ -40,20 +40,6 @@
           </div>
         </el-card>
       </div>
-    </el-row>
-    <el-row :gutter="24">
-      <el-col :span="12">
-        <div>
-          <el-form :inline="true" class="demo-form-inline">
-            <el-form-item label="课程名">
-              <el-input  v-model="queryParams.courseName" placeholder="输入课程名称" size="small"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="handleSearch" size="small">查询</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
 
       <!--<el-col :span="8">-->
         <!--<div class="block" v-show="isShow" style="display: inline; text-align: center; margin-top: 2%;">-->
@@ -102,6 +88,18 @@
           loadFinished: false
         }
       },
+      computed: {
+        searchCourseName () {
+          if (sessionStorage.getItem('SearchCourseName')) {
+            this.queryParams.courseName = sessionStorage.getItem('SearchCourseName')
+          } else {
+            this.queryParams.courseName = null
+          }
+        }
+      },
+      watch: {
+        searchCourseName () {}
+      },
       methods: {
         // handleSizeChange (val) {
         //   this.queryParams.pageSize = val
@@ -127,15 +125,6 @@
             }
           })
         },
-        handleSearch () {
-          if (this.queryParams.courseName === null || this.queryParams.courseName.length === 0) {
-            this.queryParams.courseName = null
-          } else {
-            this.queryParams.courseName = this.queryParams.courseName.trim()
-          }
-          this.getCourseList()
-        },
-
         // 滚动加载数据
         scrollHandler () {
           // 如果已加载完所有的数据，或者正在加载数据，则直接不重复加载

@@ -199,7 +199,6 @@
           evaluateDialogVisible: false,
           studyDialogVisible: false,
           previewUrl: null,
-          sourceUrl: null,
           evaluateCourse: {
             evaluateScore: 5,
             evaluateContent: null
@@ -229,10 +228,14 @@
         }
       },
       mounted: function () {
-        let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
-        if (tempuser) {
-          this.userId = tempuser.userId
-          this.isLogin = true
+        this.getUserId()
+        if (this.userId === null) {
+          var timer = setInterval(() => {
+            this.getUserId()
+            if (this.userId != null) {
+              clearInterval(timer)
+            }
+          }, 2000)
         }
         let cId = sessionStorage.getItem('courseId')
         let id = this.$router.currentRoute.params.courseId
@@ -246,6 +249,16 @@
         }
       },
       methods: {
+        getUserId () {
+          let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+          if (tempuser) {
+            this.userId = tempuser.userId
+            this.isLogin = true
+          } else {
+            this.userId = null
+            this.isLogin = false
+          }
+        },
         handleStudyClick (row) {
           this.$store.dispatch('Post', {'url': '/api-home/course/addCourseReadNum/' + this.course.courseId}).then(res => {
             if (res.data.success === true) {

@@ -21,6 +21,16 @@ spring:
       max-file-size: 100Mb
       max-request-size: 100Mb
 
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 1024
+        max-wait: -1s
+        max-idle: 200
+    timeout: 500s
+
 zuul:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   host:

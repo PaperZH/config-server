@@ -19,22 +19,24 @@
           <el-menu-item index="ask" style="left: 31%" v-show="isMenu">问吧</el-menu-item>
 
           <div class="topInput" style="position: relative">
-            <div style="min-width: 50%;float: left;margin-left: 23px;height: 30px;margin-top: 5px">
-              <el-input  v-model="input" placeholder="搜索课程" suffix-icon="el-icon-search" size="small" v-show="isInput"></el-input>
+            <div style="min-width: 50%; float: left; margin-left: 23px; height: 30px; margin-top: 5px">
+              <el-input placeholder="搜索课程" v-model="courseName" class="input-with-select" size="small">
+                <el-button slot="append" icon="el-icon-search" @click="handleSearchCourse" ></el-button>
+              </el-input>
             </div>
             <div style="float: right;color: #f7f6f6;">
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">
-              <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
-              <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
-                <span class="el-dropdown-link" style="color: #faf7f7;">
-                 {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="user">个人中心</el-dropdown-item>
-                  <el-dropdown-item command="quit">退出</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+                <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
+                <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
+                  <span class="el-dropdown-link" style="color: #faf7f7;">
+                   {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="user">个人中心</el-dropdown-item>
+                    <el-dropdown-item command="quit">退出</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
           </div>
@@ -61,20 +63,13 @@
 </template>
 <script>
 export default {
+  inject: ['reload'],
   props: {
     activeIndex: {
       type: String,
       default: ''
     },
-    input: {
-      type: String,
-      default: ''
-    },
     isMenu: {
-      type: Boolean,
-      default: true
-    },
-    isInput: {
       type: Boolean,
       default: true
     }
@@ -91,6 +86,7 @@ export default {
       formLabelWidth: '120px',
       isShow: true,
       isUser: false,
+      courseName: null,
       form: {
         username: '',
         password: ''
@@ -99,7 +95,20 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
+      if (key === 'course') {
+        sessionStorage.removeItem('SearchCourseName')
+      }
       this.$emit('getActiveIndex', key)
+      this.reload()
+    },
+    handleSearchCourse () {
+      if (this.courseName !== null && this.courseName.trim() !== '') {
+        sessionStorage.setItem('SearchCourseName', this.courseName.trim())
+      } else {
+        sessionStorage.removeItem('SearchCourseName')
+      }
+      this.$router.push('course')
+      this.reload()
     },
     login: function () {
       let that = this

@@ -7,11 +7,9 @@ import com.ucar.qtc.common.constants.CommonConstants;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.MenuDTO;
 import com.ucar.qtc.common.dto.UserToken;
-import com.ucar.qtc.common.utils.IPUtils;
-import com.ucar.qtc.common.utils.JSONUtils;
-import com.ucar.qtc.common.utils.JwtUtils;
-import com.ucar.qtc.common.utils.ResponseResult;
+import com.ucar.qtc.common.utils.*;
 import com.ucar.qtc.zuul.api.MenuService;
+import com.ucar.qtc.zuul.service.RedisCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,9 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     MenuService menuService;
+
+    @Autowired
+    RedisCacheService redisCacheService;
 
     private String ignorePath = "/api-admin/login,/api-home/,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs";
 
@@ -71,13 +72,32 @@ public class AccessFilter extends ZuulFilter {
             setFailedRequest(ResponseResult.error401(), 200);
             return null;
         }
+
+        UserToken userToken = null;
         try {
-            UserToken userToken = JwtUtils.getInfoFromToken(accessToken);
+            userToken = JwtUtils.getInfoFromToken(accessToken);
             logger.info("用户信息: "+JSON.toJSONString(userToken));
         } catch (Exception e) {
+            logger.error("token校验出错: "+JSON.toJSONString(userToken));
             setFailedRequest(ResponseResult.error401(), 200);
             return null;
         }
+
+        String redisToken = redisCacheService.getString(userToken.getUsername());
+
+        if (StringUtils.isBlank(redisToken)) {
+            logger.info("登陆token已经失效: "+JSON.toJSONString(userToken));
+            setFailedRequest(ResponseResult.error401(), 200);
+            return null;
+        }
+
+        if (!StringUtils.equals(redisToken, accessToken) &&
+                !StringUtils.equals(userToken.getUserId(),"1")) {
+            logger.info("用户已经重新登陆: "+JSON.toJSONString(userToken));
+            setFailedRequest(ResponseResult.error401(), 200);
+            return null;
+        }
+
         FilterContextHandler.setToken(accessToken);
         if(!havePermission(request)){
             setFailedRequest(ResponseResult.error403(), 200);

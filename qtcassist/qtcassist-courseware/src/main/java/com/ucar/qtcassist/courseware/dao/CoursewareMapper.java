@@ -1,9 +1,11 @@
 package com.ucar.qtcassist.courseware.dao;
 
+import com.ucar.qtcassist.courseware.model.DO.BackDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface CoursewareMapper {
@@ -20,4 +22,6 @@ public interface CoursewareMapper {
     int updateByPrimaryKey(CoursewareDO record);
 
     List<CoursewareDO> selectByListKey(List<Long> id);
+
+    List<BackDO> selectBack();
 }
