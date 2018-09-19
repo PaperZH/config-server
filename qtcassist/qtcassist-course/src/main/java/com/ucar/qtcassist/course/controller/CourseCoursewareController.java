@@ -57,9 +57,9 @@ public class CourseCoursewareController implements CourseCoursewareApi {
         courseCourseware.setCoursewareId(coursewareId);
         int count = courseCoursewareService.insert(courseCourseware);
         if(count > 0) {
-            return Result.getSuccessResult("添加课件成功");
+            return Result.getSuccessResult(1);
         } else {
-            return Result.getBusinessException("添加课件失败","");
+            return Result.getBusinessException("0","");
         }
     }
 
