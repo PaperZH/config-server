@@ -51,7 +51,7 @@ public class CourseCoursewareController {
 
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public Result test() {
-        return courseCoursewareService.addCourseCourseware(1l, 2l);
+        return courseCoursewareService.addCourseCourseware(1L, 2L);
     }
 
 }
