@@ -8,6 +8,7 @@
     <result column="course_cover" property="courseCover" jdbcType="VARCHAR" />
     <result column="course_description" property="courseDescription" jdbcType="VARCHAR" />
     <result column="course_score" property="courseScore" jdbcType="REAL" />
+    <result column="teacher_id" property="teacherId" jdbcType="BIGINT" />
     <result column="read_num" property="readNum" jdbcType="INTEGER" />
     <result column="praise_num" property="praiseNum" jdbcType="INTEGER" />
     <result column="invalid_date" property="invalidDate" jdbcType="TIMESTAMP" />
@@ -17,8 +18,8 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, type_id, course_name, course_cover, course_description, course_score, read_num, 
-    praise_num, invalid_date, publish_time, update_time, del_flag
+    id, type_id, course_name, course_cover, course_description, course_score, teacher_id,
+    read_num, praise_num, invalid_date, publish_time, update_time, del_flag
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -36,12 +37,12 @@
 
   <insert id="insert" parameterType="com.ucar.qtcassist.api.model.DO.CourseDO" useGeneratedKeys="true" keyProperty="id">
     insert into assist_course (type_id, course_name,
-      course_cover, course_description, course_score, 
+      course_cover, course_description, course_score, teacher_id,
       read_num, praise_num, invalid_date, 
       publish_time, update_time
       )
-    values (#{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR},
-      #{courseCover,jdbcType=VARCHAR}, #{courseDescription,jdbcType=VARCHAR}, #{courseScore,jdbcType=REAL}, 
+    values (#{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR}, #{courseCover,jdbcType=VARCHAR},
+      #{courseDescription,jdbcType=VARCHAR}, #{courseScore,jdbcType=REAL}, #{teacherId, jdbcType=BIGINT},
       #{readNum,jdbcType=INTEGER}, #{praiseNum,jdbcType=INTEGER}, #{invalidDate,jdbcType=TIMESTAMP}, 
       #{publishTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -64,6 +65,9 @@
       </if>
       <if test="courseScore != null" >
         course_score,
+      </if>
+      <if test="teacherId != null" >
+        teacher_id,
       </if>
       <if test="readNum != null" >
         read_num,
@@ -99,6 +103,9 @@
       </if>
       <if test="courseScore != null" >
         #{courseScore,jdbcType=REAL},
+      </if>
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=BIGINT},
       </if>
       <if test="readNum != null" >
         #{readNum,jdbcType=INTEGER},
@@ -139,6 +146,9 @@
       <if test="courseScore != null" >
         course_score = #{courseScore,jdbcType=REAL},
       </if>
+      <if test="teacherId != null" >
+        teacher_id = #{teacherId,jdbcType=BIGINT},
+      </if>
       <if test="readNum != null" >
         read_num = #{readNum,jdbcType=INTEGER},
       </if>
@@ -168,6 +178,7 @@
       course_cover = #{courseCover,jdbcType=VARCHAR},
       course_description = #{courseDescription,jdbcType=VARCHAR},
       course_score = #{courseScore,jdbcType=REAL},
+      teacher_id = #{teacherId,jdbcType=BIGINT},
       read_num = #{readNum,jdbcType=INTEGER},
       praise_num = #{praiseNum,jdbcType=INTEGER},
       invalid_date = #{invalidDate,jdbcType=TIMESTAMP},
@@ -179,11 +190,12 @@
   <select id="getCourseIdAndCourseName" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
     select id, course_name, course_Description
     from assist_course
-    where
-    del_flag = 1 and invalid_date &gt; now()
-    <if test="courseName != null">
-      and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-    </if>
+    <where>
+      del_flag = 1 and invalid_date &gt; now()
+      <if test="courseName != null">
+        and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+      </if>
+    </where>
     <if test="startIndex!=null and pageSize!=null">
       limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
@@ -192,22 +204,22 @@
   <select id="getTotalByIdListAndCondition" resultType="java.lang.Integer" >
     select count(id)
     from assist_course
-    where
-    del_flag = 1
-    <if test="ids != null">
-      <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
-        #{id}
-      </foreach>
-    </if>
-    <if test="condition.courseName != null and condition.courseName != ''">
-      and course_name like CONCAT('%',#{condition.courseName, jdbcType=VARCHAR},'%')
-    </if>
-    <if test="condition.startDate != null">
-      and publish_time between #{condition.startDate, jdbcType=TIMESTAMP} and #{condition.endDate, jdbcType=TIMESTAMP}
-    </if>
-    <if test="condition.isInValidDate != null and condition.isInValidDate == true">
-      and invalid_date &gt; now()
-    </if>
+    <where>
+      <if test="condition.isInValidDate != null and condition.isInValidDate == true">
+        del_flag = 1 and invalid_date &gt; now()
+      </if>
+      <if test="ids != null">
+        <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="condition.courseName != null and condition.courseName != ''">
+        and course_name like CONCAT('%',#{condition.courseName, jdbcType=VARCHAR},'%')
+      </if>
+      <if test="condition.startDate != null">
+        and publish_time between #{condition.startDate, jdbcType=TIMESTAMP} and #{condition.endDate, jdbcType=TIMESTAMP}
+      </if>
+    </where>
   </select>
 
   <select id="getList" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
@@ -215,12 +227,9 @@
     <include refid="Base_Column_List" />
     from assist_course
     <where>
-      del_flag = 1
+      del_flag = 1 and invalid_date &gt; now()
       <if test="courseName != null">
         and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-      </if>
-      <if test="isInValidDate != null and isInValidDate == true">
-        and invalid_date &gt; now()
       </if>
     </where>
     <trim>
@@ -234,28 +243,40 @@
         limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
       </if>
     </trim>
-
   </select>
 
   <select id="getListByCondition" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List"/>
     from assist_course
-    where
-    del_flag = 1
-    <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
-      #{id}
-    </foreach>
-    <if test="isInValidDate != null and isInValidDate == true">
-      and invalid_date &gt; now()
-    </if>
-    <if test="courseName != null and courseName != ''">
-      and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-    </if>
-    <if test="startDate != null">
-      and publish_time between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}
-    </if>
+    <where>
+      <if test="isInValidDate != null and isInValidDate == true">
+        del_flag = 1 and invalid_date &gt; now()
+      </if>
+      <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
+        #{id}
+      </foreach>
+      <if test="courseName != null and courseName != ''">
+        and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+      </if>
+      <if test="startDate != null">
+        and publish_time between #{startDate, jdbcType=TIMESTAMP} and #{endDate, jdbcType=TIMESTAMP}
+      </if>
+    </where>
     <if test="startIndex != null">
+      limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getAllCourseIds" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
+    select id, invalid_date, del_flag
+    from assist_course
+    <where>
+      <if test="courseName != null">
+        course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    <if test="startIndex!=null and pageSize!=null">
       limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
     </if>
   </select>

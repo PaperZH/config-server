@@ -26,6 +26,9 @@ public class CourseConvertUtil {
         if(courseVO.getCourseScore() != null) {
             courseDO.setCourseScore(courseVO.getCourseScore());
         }
+        if(courseVO.getTeacherId() != null) {
+            courseDO.setTeacherId(courseVO.getTeacherId());
+        }
         if(courseVO.getInvalidDate() != null) {
             courseDO.setInvalidDate(courseVO.getInvalidDate());
         }
@@ -50,6 +53,9 @@ public class CourseConvertUtil {
         if(courseDO.getCourseScore() != null) {
             courseVO.setCourseScore(courseDO.getCourseScore());
         }
+        if(courseDO.getTeacherId() != null) {
+            courseVO.setTeacherId(courseDO.getTeacherId());
+        }
         if(courseDO.getPraiseNum() != null) {
             courseVO.setPraiseNum(courseDO.getPraiseNum());
         }
@@ -61,6 +67,15 @@ public class CourseConvertUtil {
         }
         if(courseDO.getPublishTime() != null) {
             courseVO.setPublishTime(courseDO.getPublishTime());
+        }
+        if(courseDO.getInvalidDate() != null && courseDO.getDelFlag() != null) {
+            if (courseDO.getDelFlag() == 0) {
+                courseVO.setStatus(0);
+            } else if (courseDO.getInvalidDate().after(new Date())) {
+                courseVO.setStatus(1);
+            } else {
+                courseVO.setStatus(2);
+            }
         }
         return courseVO;
     }

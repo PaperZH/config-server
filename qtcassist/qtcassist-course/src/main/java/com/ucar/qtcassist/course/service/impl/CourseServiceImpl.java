@@ -65,6 +65,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseDO> getAllCourseIds(QueryDO queryDO) {
+        return courseMapper.getAllCourseIds(queryDO);
+    }
+
+    @Override
     public Integer deleteListByIdList(Long[] ids) {
         return courseMapper.deleteListByIdList(ids);
     }

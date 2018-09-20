@@ -114,6 +114,7 @@ public class CourseController implements CourseApi {
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
      * @return
      */
     @Override
@@ -141,7 +142,7 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 获取所有在有效期内的课程的id和courseName
+     * 获取所有在有效期内的课程的id、courseName、courseDescription
      * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页(可以为null)
@@ -153,6 +154,29 @@ public class CourseController implements CourseApi {
         QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
         Map<String, Object> res = new HashMap<String,Object>();
         res.put("ids",courseService.getCourseIdAndCourseName(queryDO));
+        return res;
+    }
+
+    /**
+     * 获取所有课程的id、status
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
+    @Override
+    public Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
+        List<CourseDO> courseDOList = courseService.getAllCourseIds(queryDO);
+        Map<String, Object> res = new HashMap<String,Object>();
+        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
+        for(CourseDO courseDO : courseDOList) {
+            CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+            courseVO.setInvalidDate(null);
+            courseVOList.add(courseVO);
+        }
+        res.put("ids", courseVOList);
         return res;
     }
 
@@ -177,8 +201,7 @@ public class CourseController implements CourseApi {
 
         courseDetail.setCourse(courseVO);
 
-        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
-        String resultStr = adminFeginClient.getUserInfoById(userCourse.getUserId());
+        String resultStr = adminFeginClient.getUserInfoById(courseDO.getTeacherId());
 
         JSONObject jsonObject= (JSONObject) JSONObject.fromObject(resultStr).get("data");
         UserDTO user = (UserDTO)JSONObject.toBean(jsonObject, UserDTO.class);
@@ -205,8 +228,6 @@ public class CourseController implements CourseApi {
             }
             courseDetail.setCoursewares(coursewareDTOList);
         }
-
-
 
         List<EvaluateCourseDO> evaluates = evaluateCourseService.getListByCourseId(courseId);
         courseDetail.setEvaluates(evaluates);
