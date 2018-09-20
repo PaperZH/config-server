@@ -43,6 +43,8 @@
                            :on-remove="handleRemove"
                            :auto-upload="true"
                            :limit="1"
+                           accept="application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application
+                           /vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
                            :on-exceed="handleExceed"
                            :on-success="handleAvatarSuccess"
                            :before-upload="beforeAvatarUpload"
