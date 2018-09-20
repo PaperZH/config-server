@@ -13,17 +13,16 @@ eureka:
     prefer-ip-address: true
     instance-id: 10.104.108.177:${server.port}
 
-security:
-  basic:
-    enabled: false
-
-logging:
-  level:
-    root: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
 
 spring:
   application:
     name: api-home
+
 ribbon:
    ReadTimeout: 60000
    ConnectTimeout: 30000
