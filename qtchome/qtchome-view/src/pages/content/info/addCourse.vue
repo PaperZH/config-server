@@ -138,7 +138,7 @@
         courseWareTableItem12312: {
           name: '',
           describe: '',
-          typeName:'',
+          typeName: ''
         },
         coursewareTypeOptions: [],
         courseWareList: [],
@@ -146,7 +146,7 @@
           hour: '',
           name: '',
           typeId: '',
-          typeName:'',
+          typeName: '',
           describe: '',
           flag: '',
           baseCoursewareId: '',
@@ -169,7 +169,18 @@
       console.log(this.coursewareForm.courseId)
       // 得到课程的课件的集合
       console.log(this.$router.currentRoute.params.coursewares)
-      this.courseWareTable = this.$router.currentRoute.params.coursewares
+      console.log('mycars')
+      var mycars = []
+      mycars = this.$router.currentRoute.params.coursewares
+      console.log(mycars)
+      for (var i = 0; i < mycars.length; i++) {
+        var courseWareTableItem = {}
+        courseWareTableItem.name = mycars[i].name
+        courseWareTableItem.describe = mycars[i].description
+        courseWareTableItem.typeName = mycars[i].type
+        this.courseWareTable.push(courseWareTableItem)
+      }
+      // this.courseWareTable = this.$router.currentRoute.params.coursewares
       console.log(this.courseWareTable)
       // this.courseWareTable.push(this.$router.currentRoute.params.coursewares)
       // console.log(this.courseWareTable)
@@ -190,7 +201,7 @@
               this.addflag = fileRes.data.re
               if (this.addflag === 1) {
                 console.log(this.coursewareForm)
-                var courseWareTableItem = new Object();
+                var courseWareTableItem = {}
                 courseWareTableItem.name = this.coursewareForm.name
                 courseWareTableItem.describe = this.coursewareForm.describe
                 courseWareTableItem.typeName = this.coursewareForm.typeName
