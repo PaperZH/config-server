@@ -43,6 +43,8 @@
                            :on-remove="handleRemove"
                            :auto-upload="true"
                            :limit="1"
+                           accept="application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application
+                           /vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
                            :on-exceed="handleExceed"
                            :on-success="handleAvatarSuccess"
                            :before-upload="beforeAvatarUpload"
@@ -55,13 +57,14 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="分类:">
-                <el-select v-model="coursewareForm.typeName" placeholder="请选择分类" prop="typeName"
+                <el-select v-model="coursewareForm.typeName" value-key="id" placeholder="请选择分类" prop="typeName"
                            @change="handleChange">
                   <el-option
+                    ref="coursewareTypeOption"
                     v-for="item in coursewareTypeOptions"
                     :key="item.id"
                     :label="item.typeName"
-                    :value="item.id">
+                    :value="item">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -75,7 +78,7 @@
       </div>
     </el-card>
     <el-card class="box-card" shadow="never" style="margin-top: 3px" v-show="isShow"
-             v-for="(item,index) in course.courseWare " :key="index">
+             v-for="(item,index) in courseWareTable " :key="index">
       <el-row>
         <el-col :span="3">
           <div class="grid-content bg-purple" style="text-align: center">
@@ -105,8 +108,8 @@
           </div>
         </el-col>
         <el-col :span="10">
-          <div class="grid-content bg-purple" style="color:rgb(59, 99, 190); margin-top: 10px;"><span>分类:{{item.typeName}}</span><span
-            style="margin-left: 20px">作者:{{item.author}}</span></div>
+          <div class="grid-content bg-purple" style="color:rgb(59, 99, 190); margin-top: 10px;"><span>分类:{{item.typeName}}</span>
+            <!--<span style="margin-left: 20px">作者:{{item.author}}</span>--></div>
         </el-col>
       </el-row>
     </el-card>
@@ -131,8 +134,11 @@
         isShow: false,
         state4: '',
         addflag: '',
-        course: {
-          courseWare: []
+        courseWareTable: [],
+        courseWareTableItem12312: {
+          name: '',
+          describe: '',
+          typeName:'',
         },
         coursewareTypeOptions: [],
         courseWareList: [],
@@ -140,6 +146,7 @@
           hour: '',
           name: '',
           typeId: '',
+          typeName:'',
           describe: '',
           flag: '',
           baseCoursewareId: '',
@@ -161,8 +168,15 @@
       this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
       console.log(this.coursewareForm.courseId)
       // 得到课程的课件的集合
-      this.course.courseWare = this.$router.currentRoute.params.coursewares
-      console.log(this.course.courseWare)
+      console.log(this.$router.currentRoute.params.coursewares)
+      this.courseWareTable = this.$router.currentRoute.params.coursewares
+      console.log(this.courseWareTable)
+      // this.courseWareTable.push(this.$router.currentRoute.params.coursewares)
+      // console.log(this.courseWareTable)
+
+      if (this.courseWareTable.length > 0) {
+        this.isShow = true
+      }
       this.loadAll()
     },
     methods: {
@@ -176,8 +190,11 @@
               this.addflag = fileRes.data.re
               if (this.addflag === 1) {
                 console.log(this.coursewareForm)
-                this.course.courseWare.concat(this.coursewareForm)
-                console.log(this.course.courseWare)
+                var courseWareTableItem = new Object();
+                courseWareTableItem.name = this.coursewareForm.name
+                courseWareTableItem.describe = this.coursewareForm.describe
+                courseWareTableItem.typeName = this.coursewareForm.typeName
+                this.courseWareTable.push(courseWareTableItem)
                 this.addSuccessfully()
               } else {
 
@@ -222,14 +239,12 @@
           'data': ''
         }).then(coursewareListRes => {
           this.courseWareList = coursewareListRes.data.re
-          console.log(this.courseWareList)
         })
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllTypes`,
           'data': ''
         }).then(coursewareTypeListRes => {
           this.coursewareTypeOptions = coursewareTypeListRes.data.re
-          console.log(coursewareTypeListRes.data.re)
         })
       },
       querySearchAsync (queryString, cb) {
@@ -248,8 +263,8 @@
       },
 
       handleChange (item) {
-        console.log(item)
-        this.coursewareForm.typeId = item
+        this.coursewareForm.typeName = item.typeName
+        this.coursewareForm.typeId = item.id
       },
       uploadSuccessfully () {
         this.$alert('上传成功', '提示', {
@@ -263,12 +278,12 @@
             console.log('addSuccessfully')
             this.isShow = true
             this.coursewareForm.baseCoursewareId = ''
-            this.coursewareForm.courseId = ''
             this.coursewareForm.describe = ''
             this.coursewareForm.flag = ''
             this.coursewareForm.hour = ''
             this.coursewareForm.name = ''
             this.state4 = ''
+            console.log(this.courseWareTable)
           }
         })
       },
