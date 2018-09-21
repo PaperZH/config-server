@@ -34,13 +34,14 @@ public interface CourseApi {
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
      * @return
      */
     @PostMapping("/getRecCourseList")
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 
     /**
-     * 获取所有在有效期内的课程的id和courseName
+     * 获取所有在有效期内的课程的id、courseName、courseDescription
      * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
@@ -49,6 +50,17 @@ public interface CourseApi {
      */
     @PostMapping("/getCourseIdAndCourseName")
     Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
+
+    /**
+     * 获取所有课程的id、status
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
+    @PostMapping("/getAllCourseIds")
+    Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息

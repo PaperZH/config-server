@@ -21,7 +21,7 @@ public interface CourseMapper {
     int updateByPrimaryKey(CourseDO record);
 
     /**
-     * 获取所有课程的id和courseName
+     * 获取所有课程的id、courseName、courseDescription
      * @param queryDO (String courseName, Integer startIndex, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer startIndex 分页查询的起始索引
@@ -64,6 +64,13 @@ public interface CourseMapper {
      * @return
      */
     List<CourseDO> getListByCondition(QueryDO queryDO);
+
+    /**
+     * 查询所有的课程的id，invalid_data, del_flag
+     * @param queryDO
+     * @return
+     */
+    List<CourseDO> getAllCourseIds(QueryDO queryDO);
 
     /**
      * 根据课程id批量删除课程

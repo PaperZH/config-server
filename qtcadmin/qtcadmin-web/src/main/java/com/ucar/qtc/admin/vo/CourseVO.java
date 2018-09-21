@@ -14,6 +14,8 @@ public class CourseVO {
 
     private Integer praiseNum;
 
+    private Long teacherId;
+
     private Integer readNum;
 
     private Integer collectNum;
@@ -23,6 +25,9 @@ public class CourseVO {
     private String publishTime;
 
     private Integer orderNum;
+
+    //课程状态：0已删除，1正常，2失效
+    private Integer status;
 
     public Long getCourseId() {
         return courseId;
@@ -118,5 +123,13 @@ public class CourseVO {
 
     public void setRecCourseInfo(String recCourseInfo) {
         this.recCourseInfo = recCourseInfo;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
     }
 }

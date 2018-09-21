@@ -20,11 +20,16 @@ public class CourseVO {
 
     private Float courseScore;
 
+    private Long teacherId;
+
     private Integer praiseNum;
 
     private Integer readNum;
 
     private Integer collectNum;
+
+    //课程状态：0已删除，1正常，2失效
+    private Integer status;
 
     //详情才有
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -89,6 +94,14 @@ public class CourseVO {
         this.courseScore = courseScore;
     }
 
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
     public Integer getPraiseNum() {
         return praiseNum;
     }
@@ -127,5 +140,13 @@ public class CourseVO {
 
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

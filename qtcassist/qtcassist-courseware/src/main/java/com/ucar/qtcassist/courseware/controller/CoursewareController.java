@@ -65,6 +65,7 @@ public class CoursewareController implements CoursewareApi {
      * @param
      * @return
      */
+    @Override
     @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
     public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares() {
         return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
@@ -73,6 +74,7 @@ public class CoursewareController implements CoursewareApi {
     /**
      * 课件类型列表
      */
+    @Override
     @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
     public Result<List<CoursewareTypeDTO>> getAllType() {
         List<CoursewareTypeDTO> coursewareTypeDTOList = new ArrayList<>();
@@ -96,6 +98,7 @@ public class CoursewareController implements CoursewareApi {
      * @param
      * @return
      */
+    @Override
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
     public Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num) {
         CoursewareDO coursewareDO = new CoursewareDO();
@@ -114,6 +117,7 @@ public class CoursewareController implements CoursewareApi {
     /**
      * 课件上传
      */
+    @Override
     @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
     public Result uploadCourseware(MultipartFile file) throws Exception {
         InputStream in =file.getInputStream();
@@ -142,6 +146,7 @@ public class CoursewareController implements CoursewareApi {
     /**
      * 本地课件操作
      */
+    @Override
     @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
     public Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
         InputStream is = null;
@@ -184,12 +189,14 @@ public class CoursewareController implements CoursewareApi {
     /**
      * 完成本地上传后获取课件详情
      */
+    @Override
     @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
     public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
 
+    @Override
     @RequestMapping(value = "/queryList")
     public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO){
        return Result.getSuccessResult(coursewareService.queryPage(coursewareQueryVO));

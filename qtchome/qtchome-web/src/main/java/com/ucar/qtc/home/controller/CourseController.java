@@ -143,7 +143,7 @@ public class CourseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/addPraiseCourse/{userId}/{courseId}")
+    @RequestMapping(value = "/addPraiseCourse/{userId}/{courseId}" , method = RequestMethod.POST)
     ResponseResult addPraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.addPraiseCourse(userId, courseId);
     }
@@ -153,7 +153,7 @@ public class CourseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/isPraisedCourse/{userId}/{courseId}")
+    @RequestMapping(value = "/isPraisedCourse/{userId}/{courseId}", method = RequestMethod.POST)
     ResponseResult isPraisedCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.isPraisedCourse(userId, courseId);
     }
@@ -163,7 +163,7 @@ public class CourseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/deletePraiseCourse/{userId}/{courseId}")
+    @RequestMapping(value = "/deletePraiseCourse/{userId}/{courseId}", method = RequestMethod.POST)
     ResponseResult deletePraiseCourse(@PathVariable("userId") Long userId, @PathVariable("courseId") Long courseId){
         return courseService.deletePraiseCourse(userId, courseId);
     }
@@ -172,7 +172,7 @@ public class CourseController {
      * 添加课程评价
      * @return
      */
-    @RequestMapping(value = "/addEvaluateCourse")
+    @RequestMapping(value = "/addEvaluateCourse" , method = RequestMethod.POST)
     ResponseResult addEvaluateCourse(@RequestBody EvaluateCourseDO params){
         return courseService.addEvaluateCourse( params);
     }
@@ -181,8 +181,8 @@ public class CourseController {
      * 根据查询条件来获取发布的课程
      * @return
      */
-    @RequestMapping(value = "/getPublishedCourse", method = RequestMethod.GET)
-    ResponseResult getPublishedCourse(@RequestParam QueryVO params){
+    @RequestMapping(value = "/getPublishedCourse", method = RequestMethod.POST)
+    ResponseResult getPublishedCourse(@RequestBody QueryVO params){
         return courseService.queryPublishedCourse(params);
     }
 
@@ -190,9 +190,19 @@ public class CourseController {
      * 根据条件批量删除发布的课程
      * @return
      */
-    @RequestMapping(value = "/deletePublishedCourse")
+    @RequestMapping(value = "/deletePublishedCourse", method = RequestMethod.POST)
     ResponseResult deletePublishedCourse(@RequestBody QueryVO params){
         return courseService.deletePublishedCourse(params);
+    }
+
+    /**
+     * 根据课程ID来增加课程学习次数
+     * @param courseId 课程的id
+     * @return
+     */
+    @RequestMapping(value = "/addCourseReadNum/{courseId}", method = RequestMethod.POST)
+    ResponseResult addCourseReadNum(@PathVariable("courseId") Long courseId) {
+        return courseService.addCourseReadNum(courseId);
     }
 
     /**
