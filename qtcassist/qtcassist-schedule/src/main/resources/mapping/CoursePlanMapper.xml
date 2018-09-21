@@ -30,6 +30,13 @@
     </if>
   </select>
 
+  <select id="selectTotal"  resultType="java.lang.Integer">
+    select count(1) from assist_course where del_flag=1
+    <if test="courseName != null and courseName != ''">
+      and course_name like  concat('%', #{courseName}, '%')
+    </if>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from assist_course_plan
     where id = #{id,jdbcType=BIGINT}

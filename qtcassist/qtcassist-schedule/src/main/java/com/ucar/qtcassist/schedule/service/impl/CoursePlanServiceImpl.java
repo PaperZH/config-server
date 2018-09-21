@@ -52,4 +52,9 @@ public class CoursePlanServiceImpl implements CoursePlanService {
         return coursePlanMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public int selectTotal(QueryCourseDTO courseDTO) {
+        return coursePlanMapper.selectTotal(courseDTO);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ucar.qtcassist.schedule.controller;
 
+import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
@@ -67,7 +68,8 @@ public class CoursePlanController {
     @RequestMapping("/getCourseList")
     public Result get(@RequestBody QueryCourseDTO courseDTO){
         List<CoursePlanDO> coursePlanDO = coursePlanService.selectByCourseName(courseDTO);
-        return Result.getSuccessResult(coursePlanDO);
+        int total = coursePlanService.selectTotal(courseDTO);
+        return PageResult.getSuccessResult(coursePlanDO,total);
     }
 
     /**

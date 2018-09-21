@@ -21,5 +21,7 @@ public interface CoursePlanService {
 
     int updateByPrimaryKey(CoursePlanDO record);
 
+    int selectTotal(QueryCourseDTO courseDTO) ;
+
 
 }
