@@ -1,26 +1,56 @@
 <template>
   <el-dialog  :title="title" :visible.sync="visible" @close="$emit('update:courseopen', false)" >
     <el-dialog
-      width="30%"
+      width="50%"
       title="添加课程"
       :visible.sync="innerVisible"
       append-to-body>
-      <el-select style="width: 70%"
-        v-model="courseIds"
-        multiple
-        filterable
-        remote
-        reserve-keyword
+      <el-input style="width: 70%"
+        v-model="queryParams.courseName"
         placeholder="请输入关键词"
-        :remote-method="remoteMethod"
-        :loading="loading">
-        <el-option
-          v-for="item in courses"
-          :key="item.id"
-          :label="item.courseName"
-          :value="item.id">
-        </el-option>
-      </el-select>
+        >
+      </el-input><el-button type="primary" @click="remoteMethod">查询</el-button>
+      <el-checkbox-group v-model="courseIds" >
+          <el-table
+            :data="courses"
+            v-loading="loading"
+            stripe
+            tooltip-effect="dark"
+            style="width: 100%">
+            <el-table-column
+              width="55">
+              <template slot-scope="scope">
+                <el-checkbox :label="scope.row.id" >&nbsp</el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="课程名称"
+              prop="courseName"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="teacherName"
+              label="教师"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="courseDescription"
+              label="课程描述"
+             >
+            </el-table-column>
+          </el-table>
+      </el-checkbox-group>
+      <div class="block" style="text-align: right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="queryParams.currentPage"
+          :page-sizes="[6, 9, 12, 15]"
+          :page-size="queryParams.pageSize"
+          layout="total, prev, pager, next, jumper"
+          :total="total">
+        </el-pagination>
+      </div>
       <el-button type="primary" @click="addCourse()">添加</el-button>
     </el-dialog>
     <el-button type="primary" @click="addPlanCourse">添加计划课程</el-button>
@@ -74,7 +104,14 @@
         innerVisible: false,
         loading: false,
         courses: [],
-        courseIds: []
+        courseIds: [],
+        checkList: [],
+        total: 0,
+        queryParams: {
+          pageSize: 8,
+          currentPage: 1,
+          courseName: ''
+        }
       }
     },
     watch: {
@@ -85,6 +122,7 @@
     methods: {
       addPlanCourse () {
         this.innerVisible = true
+        this.remoteMethod()
       },
       handleDelete (row, index) {
         this.$confirm('是否要删除该记录?', '提示', {
@@ -102,6 +140,13 @@
             })
           })
         })
+      },
+      handleSizeChange (val) {
+        this.queryParams.pageSize = val
+      },
+      handleCurrentChange (val) {
+        this.queryParams.currentPage = val
+        this.remoteMethod()
       },
       addCourse () {
         if (this.courseIds.length === 0) {
@@ -123,18 +168,13 @@
           this.innerVisible = false
         }
       },
-      remoteMethod (query) {
-        if (query !== '') {
-          this.loading = true
-          setTimeout(() => {
-            this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseList', 'data': {'courseName': query}}).then(res => {
-              this.courses = res.data.re
-              this.loading = false
-            })
-          }, 500)
-        } else {
-          this.courses = []
-        }
+      remoteMethod () {
+        this.loading = true
+        this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseList', 'data': this.queryParams}).then(res => {
+          this.courses = res.data.re.rows
+          this.total = res.data.re.total
+          this.loading = false
+        })
       }
     }
   }

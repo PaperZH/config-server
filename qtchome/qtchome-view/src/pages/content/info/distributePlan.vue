@@ -147,7 +147,6 @@
         })
       },
       handleClick (row, index) {
-        console.log('delete')
         this.$confirm('是否要删除该记录?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -170,10 +169,8 @@
         this.getTeacherPlan()
       },
       getMes (data) {
-        console.log(data)
       },
       addStyleClick (o) {
-        console.log(o)
         if (o.style) {
           o.style = false
         } else {
@@ -189,6 +186,9 @@
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.loading = false
+          if (res.data.re == null) {
+            this.$message.error('加载失败，请重新加载')
+          }
           this.tableData = res.data.re.rows
           this.total = res.data.re.total
         })
