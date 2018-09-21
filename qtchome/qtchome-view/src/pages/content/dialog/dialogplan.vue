@@ -25,11 +25,12 @@
               >
             </el-date-picker>
           </el-form-item>
-              <el-input style="width: 50%;margin-left: 40px"
+        <el-button type="primary" @click="remoteMethod">查询</el-button>
+              <el-input style="width: 45%;margin-left: 5px"
                         v-model="queryParams.planTitle"
                         placeholder="请输入计划名称关键词"
               >
-              </el-input><el-button type="primary" @click="remoteMethod">查询</el-button>
+              </el-input>
               <el-table
                 :data="plans"
                 stripe
