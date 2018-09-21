@@ -205,13 +205,24 @@
     select count(id)
     from assist_course
     <where>
-      <if test="condition.isInValidDate != null and condition.isInValidDate == true">
-        del_flag = 1 and invalid_date &gt; now()
-      </if>
+      <choose>
+        <when test="condition.isInValidDate != null and condition.isInValidDate == true">
+          del_flag = 1 and invalid_date &gt; now()
+        </when>
+        <when test="condition.isInValidDate != null and condition.isInValidDate == false">
+          del_flag = 1
+        </when>
+        <otherwise>
+          1 = 1
+        </otherwise>
+      </choose>
       <if test="ids != null">
         <foreach item="id" collection="ids"  index="index" open=" and id in (" separator="," close=")">
           #{id}
         </foreach>
+      </if>
+      <if test="condition.userId != null">
+        and teacher_id = #{condition.userId, jdbcType=BIGINT}
       </if>
       <if test="condition.courseName != null and condition.courseName != ''">
         and course_name like CONCAT('%',#{condition.courseName, jdbcType=VARCHAR},'%')
@@ -233,12 +244,14 @@
       </if>
     </where>
     <trim>
-      <if test="orderType == 'time'">
-        order by publish_time desc
-      </if>
-      <if test="orderType == 'hot'">
-        order by praise_num desc
-      </if>
+      <choose>
+        <when test="orderType =='time'">
+          order by publish_time desc
+        </when>
+        <when test="orderType == 'hot'">
+          order by praise_num desc
+        </when>
+      </choose>
       <if test="startIndex != null and pageSize != null">
         limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
       </if>
@@ -250,12 +263,25 @@
     <include refid="Base_Column_List"/>
     from assist_course
     <where>
-      <if test="isInValidDate != null and isInValidDate == true">
-        del_flag = 1 and invalid_date &gt; now()
+      <choose>
+        <when test="isInValidDate != null and isInValidDate == true">
+          del_flag = 1 and invalid_date &gt; now()
+        </when>
+        <when test="isInValidDate != null and isInValidDate == false">
+          del_flag = 1
+        </when>
+        <otherwise>
+          1 = 1
+        </otherwise>
+      </choose>
+      <if test="courseIds != null">
+        <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
+          #{id}
+        </foreach>
       </if>
-      <foreach item="id" collection="courseIds" index="index" open="and id in (" separator="," close=")">
-        #{id}
-      </foreach>
+      <if test="userId != null">
+        and teacher_id = #{userId, jdbcType=BIGINT}
+      </if>
       <if test="courseName != null and courseName != ''">
         and course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
       </if>

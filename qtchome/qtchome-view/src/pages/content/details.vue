@@ -228,24 +228,51 @@
         }
       },
       mounted: function () {
-        this.getUserId()
-        if (this.userId === null) {
-          var timer = setInterval(() => {
-            this.getUserId()
-            if (this.userId != null) {
-              clearInterval(timer)
-            }
-          }, 2000)
-        }
         let cId = sessionStorage.getItem('courseId')
         let id = this.$router.currentRoute.params.courseId
         if (id) {
           this.$nextTick(function () {
             sessionStorage.setItem('courseId', id)
-            this.getCourseDetails(id)
+            this.getCourseDetail(id)
           })
         } else {
-          this.getCourseDetails(cId)
+          this.getCourseDetail(cId)
+        }
+        this.getUserId()
+        if (this.userId != null) {
+          this.isLogin = true
+        } else if (this.userId === null) {
+          this.isLogin = false
+          var timer = setInterval(() => {
+            this.getUserId()
+            if (this.userId != null) {
+              this.$store.dispatch('Post', {'url': '/api-home/course/isPraisedCourse/' + this.userId + '/' + this.course.courseId}).then(res => {
+                if (res.data.success === true) {
+                  if (res.data.re === true) {
+                    this.praise.isPraised = true
+                    this.praise.praiseText = '已赞'
+                  } else {
+                    this.praise.isPraised = false
+                    this.praise.praiseText = '点赞'
+                  }
+                }
+              })
+              this.$store.dispatch('Post', {'url': '/api-home/course/isCollectedCourse/' + this.userId + '/' + this.course.courseId}).then(res => {
+                if (res.data.success === true) {
+                  if (res.data.re === true) {
+                    this.collect.isCollected = true
+                    this.collect.collectText = '已藏'
+                  } else {
+                    this.collect.isCollected = false
+                    this.collect.collectText = '收藏'
+                  }
+                }
+              })
+
+              this.isLogin = true
+              clearInterval(timer)
+            }
+          }, 2000)
         }
       },
       methods: {
@@ -253,10 +280,8 @@
           let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
           if (tempuser) {
             this.userId = tempuser.userId
-            this.isLogin = true
           } else {
             this.userId = null
-            this.isLogin = false
           }
         },
         handleStudyClick (row) {
@@ -273,7 +298,7 @@
               if (res.data.success === true) {
                 this.praise.isPraised = false
                 this.praise.praiseText = '点赞'
-                this.getCourseDetails(val)
+                this.getCourseDetail(val)
               }
             })
           } else {
@@ -281,7 +306,7 @@
               if (res.data.success === true) {
                 this.praise.isPraised = true
                 this.praise.praiseText = '已赞'
-                this.getCourseDetails(val)
+                this.getCourseDetail(val)
               }
             })
           }
@@ -293,7 +318,7 @@
               if (res.data.success === true) {
                 this.collect.isCollected = false
                 this.collect.collectText = '收藏'
-                this.getCourseDetails(val)
+                this.getCourseDetail(val)
               }
             })
           } else {
@@ -301,7 +326,7 @@
               if (res.data.success === true) {
                 this.collect.isCollected = true
                 this.collect.collectText = '已藏'
-                this.getCourseDetails(val)
+                this.getCourseDetail(val)
               }
             })
           }
@@ -314,10 +339,10 @@
               this.$notify.success('评价成功')
             }
           })
-          this.getCourseDetails(val)
+          this.getCourseDetail(val)
         },
-        getCourseDetails (val) {
-          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + val}).then(res => {
+        getCourseDetail (val) {
+          this.$store.dispatch('Get', {'url': '/api-home/course/getCourseDetail/' + val}).then(res => {
             this.course = res.data.re.course
             if (res.data.re.coursewares != null) {
               this.tableData = res.data.re.coursewares

@@ -11,8 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface CollectCourseApi {
     /**
-     * 查询某个用户收藏的课程
-     * @param  queryVO (long userId, String courseName,Date startDate, Date endDate, int currentPage, int pageSize，Boolean isInvalidDate)
+     * 根据查询条件查询某个用户收藏的课程（有效课程）
+     * @param queryVO (long userId, String courseName, Date startDate, Date endDate, int currentPage, int pageSize)
+     * Long userId 用户id
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Date startDate 课程发布的起始时间
+     * Date endDate 课程发布的结束时间
+     * Integer currentPage 分页查询的当前页
+     * Integer pageSize 分布查询的每页的记录数目
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
     @PostMapping("/getCollectCourseList")
