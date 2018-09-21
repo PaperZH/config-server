@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +67,40 @@ public class UserController {
     ResponseResult get(@PathVariable("id") Long id ){
 		UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
     	return ResponseResult.ok().put("data",userDTO);
+	}
+
+	/**
+	 * 根据用户信息获得老师信息
+	 * @param id
+	 * @return
+	 */
+	@ApiOperation(value="根据ID获取用户老师信息", notes="根据ID获取用户老师信息")
+	@GetMapping(value="/getTeacherRelationInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	ResponseResult getTeacherRelationInfo(@RequestParam(value = "userId",required = true) Long id,@RequestParam(value = "relationType",required = true) int type){
+
+		List<UserDTO> teacher = new ArrayList<UserDTO>();
+		Iterator iterator = userService.getTeacherById(id,type).iterator();
+		while(iterator.hasNext()){
+			teacher.add(UserConvert.MAPPER.do2dto((UserDO)iterator.next()));
+		}
+		return ResponseResult.ok().put("teacher",teacher);
+	}
+
+	/**
+	 * 根据用户信息获得学员信息
+	 * @param id
+	 * @return
+	 */
+	@ApiOperation(value="根据ID获取用户学员信息", notes="根据ID获取用户学员信息")
+	@GetMapping(value="/getTeacherRelationInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	ResponseResult getStudentRelationInfo(@RequestParam(value = "userId",required = true) Long id,@RequestParam(value = "relationType",required = true) int type){
+
+		List<UserDTO> student = new ArrayList<UserDTO>();
+		Iterator iterator = userService.getStudentById(id,type).iterator();
+		while(iterator.hasNext()){
+			student.add(UserConvert.MAPPER.do2dto((UserDO)iterator.next()));
+		}
+		return ResponseResult.ok().put("student",student);
 	}
 
 	/**
@@ -123,7 +159,6 @@ public class UserController {
 		LoginUserDTO dto = currentUser();
 		return result.data(dto);
 	}
-
 
 	/**
 	 * 删除用户

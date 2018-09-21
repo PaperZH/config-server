@@ -1,9 +1,11 @@
 package com.ucar.qtc.admin.service.impl;
 
 import com.ucar.qtc.admin.dao.RecommandCourseDao;
+import com.ucar.qtc.admin.dao.UserDao;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.RecCourseService;
+import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Autowired
     private CourseServiceRpc courseService;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public RecommandCourseDO get(Long id) {
         return recommandCourseDao.get(id);
@@ -52,7 +57,7 @@ public class RecCourseServiceImpl implements RecCourseService {
         if(recommandCourseList.size() == 0){
             return null;
         }
-        return getRecCourseList(recommandCourseList,courses);
+        return getRecCourseList(recommandCourseList);
     }
 
     @Override
@@ -99,10 +104,9 @@ public class RecCourseServiceImpl implements RecCourseService {
     }
     /**
      * @param recommandCourseList 推荐课程列表
-     * @param courseVOS 课程信息列表
      * @return
      */
-    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList,List courseVOS){
+    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList){
         Long[] ids = new Long[recommandCourseList.size()];
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
@@ -122,6 +126,13 @@ public class RecCourseServiceImpl implements RecCourseService {
                 if(temp.getCourseId() == ids[i]){
                     temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
                     temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
+                    temp.setTeacherName(userDao.get(recommandCourseList.get(i).getTeacherId()).getNickname());
+                    if(recommandCourseList.get(i).getStatues()==0)
+                        temp.setStatus("已删除");
+                    else if(recommandCourseList.get(i).getStatues()==2)
+                        temp.setStatus("已失效");
+                    else
+                        temp.setStatus("有效");
                     reccomandCourseVO.add(temp);
                 }
             }

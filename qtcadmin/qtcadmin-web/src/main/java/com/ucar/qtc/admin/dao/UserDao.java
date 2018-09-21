@@ -18,9 +18,9 @@ public interface UserDao {
 	
 	List<UserDO> list(Map<String, Object> map);
 
-	List<UserDO> getTeacherById(Long userId);
+	List<UserDO> getTeacherById(Long id, int relationType);
 
-	List<UserDO> getStudentById(Long userId);
+	List<UserDO> getStudentById(Long id, int relationType);
 
 	int count(Map<String, Object> map);
 	
