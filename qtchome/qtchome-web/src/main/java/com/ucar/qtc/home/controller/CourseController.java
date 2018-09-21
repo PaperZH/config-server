@@ -5,7 +5,7 @@ import com.ucar.qtc.home.service.CourseService;
 import com.ucar.qtc.home.service.FileUploadService;
 import com.ucar.qtc.home.utils.ResponseResult;
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
-import com.ucar.qtcassist.api.model.VO.CourseUserVO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,8 +64,8 @@ public class CourseController {
      * @return
      */
     @ApiOperation(value="获取要课程基本信息", notes="get请求，传课程ID参数")
-    @RequestMapping(value = "/getDetails/{id}", method = RequestMethod.GET)
-    public ResponseResult getCourseDetails(@PathVariable long id){
+    @RequestMapping(value = "/getCourseDetail/{id}", method = RequestMethod.GET)
+    public ResponseResult getCourseDetail(@PathVariable long id){
         return courseService.getCourseDetail(id);
     }
 
@@ -80,14 +79,24 @@ public class CourseController {
         return fileUploadService.upload(file, "");
     }
 
+
+    /**
+     * 根据查询条件来获取发布的课程
+     * @return
+     */
+    @RequestMapping(value = "/getPublishCourseList", method = RequestMethod.POST)
+    ResponseResult getPublishCourseList(@RequestBody QueryVO queryVO){
+        return courseService.getPublishCourseList(queryVO);
+    }
+
     /**
      * 根据查询条件来获取发布的课程
      * @return
      */
     @ApiOperation(value="更改课程", notes="get请求，不需要传参")
-    @RequestMapping(value = "/updateUserCourse", method = RequestMethod.POST)
-    public ResponseResult updateUserCourse(@RequestBody CourseUserVO courseUserVO){
-        return courseService.updateUserCourse(courseUserVO);
+    @RequestMapping(value = "/updateCourse", method = RequestMethod.POST)
+    public ResponseResult updateCourse(@RequestBody CourseVO courseVO){
+        return courseService.updateCourse(courseVO);
     }
 
     /**
@@ -95,18 +104,27 @@ public class CourseController {
      * @return
      */
     @ApiOperation(value="添加课程基本信息", notes="post请求")
-    @RequestMapping(value = "/addUserCourse", method = RequestMethod.POST)
-    public ResponseResult addUserCourse(@RequestBody CourseUserVO courseUserVO){
-        return courseService.addUserCourse(courseUserVO);
+    @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
+    public ResponseResult addCourse(@RequestBody CourseVO courseVO){
+        return courseService.addCourse(courseVO);
+    }
+
+    /**
+     * 根据条件批量删除发布的课程
+     * @return
+     */
+    @RequestMapping(value = "/deleteCourseList", method = RequestMethod.POST)
+    ResponseResult deleteCourseList(@RequestBody QueryVO queryVO){
+        return courseService.deleteCourseList(queryVO);
     }
 
     /**
      * 根据查询条件来获取收藏的课程
      * @return
      */
-    @RequestMapping(value = "/getCollectCourse", method = RequestMethod.POST)
-    public ResponseResult getCollectCourse(@RequestBody QueryVO queryVO){
-        return courseService.queryCollectCourse(queryVO);
+    @RequestMapping(value = "/getCollectCourseList", method = RequestMethod.POST)
+    public ResponseResult getCollectCourseList(@RequestBody QueryVO queryVO){
+        return courseService.getCollectCourseList(queryVO);
     }
 
     /**
@@ -173,26 +191,8 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/addEvaluateCourse" , method = RequestMethod.POST)
-    ResponseResult addEvaluateCourse(@RequestBody EvaluateCourseDO params){
-        return courseService.addEvaluateCourse( params);
-    }
-
-    /**
-     * 根据查询条件来获取发布的课程
-     * @return
-     */
-    @RequestMapping(value = "/getPublishedCourse", method = RequestMethod.POST)
-    ResponseResult getPublishedCourse(@RequestBody QueryVO params){
-        return courseService.queryPublishedCourse(params);
-    }
-
-    /**
-     * 根据条件批量删除发布的课程
-     * @return
-     */
-    @RequestMapping(value = "/deletePublishedCourse", method = RequestMethod.POST)
-    ResponseResult deletePublishedCourse(@RequestBody QueryVO params){
-        return courseService.deletePublishedCourse(params);
+    ResponseResult addEvaluateCourse(@RequestBody EvaluateCourseDO evaluateCourseDO){
+        return courseService.addEvaluateCourse(evaluateCourseDO);
     }
 
     /**

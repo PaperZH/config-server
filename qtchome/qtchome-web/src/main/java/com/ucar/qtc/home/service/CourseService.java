@@ -2,7 +2,7 @@ package com.ucar.qtc.home.service;
 
 import com.ucar.qtc.home.utils.ResponseResult;
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
-import com.ucar.qtcassist.api.model.VO.CourseUserVO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +33,7 @@ public interface CourseService {
      * @return
      */
     @RequestMapping(value = "/collectCourse/getCollectCourseList")
-    public ResponseResult queryCollectCourse(QueryVO queryVO);
+    public ResponseResult getCollectCourseList(QueryVO queryVO);
 
     /**
      * 根据用户ID和课程ID来收藏课程.
@@ -95,32 +95,32 @@ public interface CourseService {
      * @param queryVO (long userId, String courseName,Date startTime, Date endTime, int currentPage, int pageSize)
      * @return
      */
-    @RequestMapping(value = "/userCourse/getUserCourseList")
-    public ResponseResult queryPublishedCourse(QueryVO queryVO);
+    @RequestMapping(value = "/course/getPublishCourseList")
+    public ResponseResult getPublishCourseList(QueryVO queryVO);
 
     /**
      * 用户添加课程
-     * @param courseUserVO ((long userId , Course course))
+     * @param courseVO
      * @return
      */
-    @RequestMapping(value = "/userCourse/addUserCourse")
-    public ResponseResult addUserCourse(CourseUserVO courseUserVO);
+    @RequestMapping(value = "/course/addCourse")
+    public ResponseResult addCourse(CourseVO courseVO);
 
     /**
      * 用户更新课程
-     * @param courseUserVO ((long userId , Course course))
+     * @param courseVO
      * @return
      */
-    @RequestMapping(value = "/userCourse/updateUserCourse")
-    public ResponseResult updateUserCourse(CourseUserVO courseUserVO);
+    @RequestMapping(value = "/course/updateCourse")
+    public ResponseResult updateCourse(CourseVO courseVO);
 
     /**
      * 根据用户ID和课程ID删除发布的课程
      * @param queryVO (long userId, long[] courseId)
      * @return
      */
-    @RequestMapping(value = "/userCourse/deleteUserCourseList")
-    public ResponseResult deletePublishedCourse(QueryVO queryVO);
+    @RequestMapping(value = "/course/deleteCourseList")
+    public ResponseResult deleteCourseList(QueryVO queryVO);
 
 
     @RequestMapping

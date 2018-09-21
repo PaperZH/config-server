@@ -1,16 +1,9 @@
-package com.ucar.qtcassist.api.model.DO;
+package com.ucar.qtcassist.schedule.vo;
 
-public class CoursePlanDO {
+public class CoursePlanVO {
     private Long id;
-
-    private Long planId;
-
-    private Long courseId;
-
-    private Long teacherId;
-
+    private String teacherName;
     private String courseName;
-
     private String courseDescription;
 
     public Long getId() {
@@ -21,20 +14,12 @@ public class CoursePlanDO {
         this.id = id;
     }
 
-    public Long getPlanId() {
-        return planId;
+    public String getTeacherName() {
+        return teacherName;
     }
 
-    public void setPlanId(Long planId) {
-        this.planId = planId;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public String getCourseName() {
@@ -53,21 +38,11 @@ public class CoursePlanDO {
         this.courseDescription = courseDescription;
     }
 
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
-    }
-
     @Override
     public String toString() {
-        return "CoursePlanDO{" +
+        return "CoursePlanVO{" +
                 "id=" + id +
-                ", planId=" + planId +
-                ", courseId=" + courseId +
-                ", teacherId=" + teacherId +
+                ", teacherName='" + teacherName + '\'' +
                 ", courseName='" + courseName + '\'' +
                 ", courseDescription='" + courseDescription + '\'' +
                 '}';

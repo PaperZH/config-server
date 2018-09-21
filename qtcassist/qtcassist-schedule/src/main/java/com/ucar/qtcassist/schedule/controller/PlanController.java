@@ -3,12 +3,18 @@ package com.ucar.qtcassist.schedule.controller;
 import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.PlanDO;
+import com.ucar.qtcassist.course.model.UserDTO;
+import com.ucar.qtcassist.course.service.AdminFeginClient;
 import com.ucar.qtcassist.schedule.dto.PlanDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.service.PlanService;
+import com.ucar.qtcassist.schedule.vo.PlanVO;
+import net.sf.json.JSONObject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +24,8 @@ public class PlanController {
 
     @Autowired
     private PlanService planService;
-
+    @Autowired
+    private AdminFeginClient adminFeginClient;
     /**
      * 删除培训计划
      * @param id 培训计划id
@@ -67,10 +74,22 @@ public class PlanController {
      */
     @RequestMapping("/getPlan")
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
-        System.out.println("daozzzzzzzzz");
         List<PlanDO> planList = planService.getPlanList(planDTO);
         Integer total = planService.getPlanTotal(planDTO);
-        return PageResult.getSuccessResult(planList,total);
+        List<PlanVO> planVOS = new ArrayList<>();
+        for (PlanDO planDO:planList) {
+            PlanVO planVO = new PlanVO();
+            BeanUtils.copyProperties(planDO, planVO);
+            Long builderId = planDO.getBuilderId();
+            String builderInfo = adminFeginClient.getUserInfoById(builderId);
+            JSONObject jsonObject= (JSONObject) JSONObject.fromObject(builderInfo).get("data");
+            if(jsonObject!=null) {
+                UserDTO user = (UserDTO) JSONObject.toBean(jsonObject, UserDTO.class);
+                planVO.setBuilderName(user.getNickname());
+            }
+            planVOS.add(planVO);
+        }
+        return PageResult.getSuccessResult(planVOS,total);
     }
 
     /**

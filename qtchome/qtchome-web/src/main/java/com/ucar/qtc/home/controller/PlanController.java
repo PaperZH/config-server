@@ -2,6 +2,7 @@ package com.ucar.qtc.home.controller;
 
 import com.ucar.qtc.home.dto.CoursePlanDTO;
 import com.ucar.qtc.home.dto.PlanDTO;
+import com.ucar.qtc.home.dto.QueryCourseDTO;
 import com.ucar.qtc.home.dto.QueryPlanDTO;
 import com.ucar.qtc.home.dto.UserPlanDTO;
 import com.ucar.qtc.home.dto.UserPlanListDTO;
@@ -137,12 +138,12 @@ public class PlanController {
 
     /**
      * 根据课程名称查询课程 1
-     * @param courseName
+     * @param courseDTO
      * @return
      */
     @RequestMapping("/getCourseList")
-    public ResponseResult getCourseByName(@RequestParam String courseName){
-        return planService.getCourseList(courseName);
+    public ResponseResult getCourseByName(QueryCourseDTO courseDTO){
+        return planService.getCourseList(courseDTO);
     }
     /**
      * 根据发布计划的Id获取课程信息+计划中间表ID 1
