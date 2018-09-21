@@ -123,20 +123,4 @@ public class CourseVO {
     public void setRecCourseInfo(String recCourseInfo) {
         this.recCourseInfo = recCourseInfo;
     }
-
-    public String getTeacherName() {
-        return teacherName;
-    }
-
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

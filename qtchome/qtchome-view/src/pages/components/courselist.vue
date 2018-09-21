@@ -40,7 +40,6 @@
           </div>
         </el-card>
       </div>
-
       <!--<el-col :span="8">-->
         <!--<div class="block" v-show="isShow" style="display: inline; text-align: center; margin-top: 2%;">-->
           <!--<el-pagination-->
@@ -56,125 +55,133 @@
       <!--</el-col>-->
 
     </el-row>
-
+    <div style="height: 50px; width:100%"
+         v-loading="load.loading"
+         :element-loading-text="load.loadTip"
+         element-loading-spinner="el-icon-loading">
+    </div>
   </div>
 
 </template>
 
 <script>
-    export default {
-      props: {
-        isShow: {
-          type: Boolean,
-          default: false
-        },
-        type: {
-          type: String,
-          default: ' '
-        }
+  export default {
+    props: {
+      isShow: {
+        type: Boolean,
+        default: false
       },
-      data () {
-        return {
-          total: 0,
-          queryParams: {
-            type: this.type,
-            currentPage: 1,
-            pageSize: 12,
-            courseName: null,
-            isInValidDate: true
-          },
-          tableData: [],
-          loading: false,
-          loadFinished: false
-        }
-      },
-      computed: {
-        searchCourseName () {
-          if (sessionStorage.getItem('SearchCourseName')) {
-            this.queryParams.courseName = sessionStorage.getItem('SearchCourseName')
-          } else {
-            this.queryParams.courseName = null
-          }
-        }
-      },
-      watch: {
-        searchCourseName () {}
-      },
-      methods: {
-        // handleSizeChange (val) {
-        //   this.queryParams.pageSize = val
-        //   this.queryParams.currentPage = 1
-        //   this.getCourseList()
-        // },
-        // handleCurrentChange (val) {
-        //   this.queryParams.currentPage = val
-        //   this.getCourseList()
-        // },
-
-        handleDetails (val) {
-          this.$router.push({name: 'details', params: val})
-        },
-        getCourseList () {
-          const url = '/api-home/course/getCourseList'
-          this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
-            this.total = res.data.re.total
-            this.tableData = res.data.re.rows
-            // 如果已加载完所有的数据，则不再加载
-            if (this.queryParams.currentPage * this.queryParams.pageSize >= this.total) {
-              this.loadFinished = true
-            }
-          })
-        },
-        // 滚动加载数据
-        scrollHandler () {
-          // 如果已加载完所有的数据，或者正在加载数据，则直接不重复加载
-          if (this.loadFinished || this.loading) {
-            return
-          }
-
-          var bodyScrollTop = 0
-          var documentScrollTop = 0
-          if (document.body) {
-            bodyScrollTop = document.body.scrollTop
-          }
-          if (document.documentElement) {
-            documentScrollTop = document.documentElement.scrollTop
-          }
-          // 滚动条滚动过的距离
-          var scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop
-          // 页面的高度
-          var clientHeight = document.body.clientHeight
-          // 可以滚动的距离
-          var scrollHeight = document.body.scrollHeight
-          // 距离底部50px时，才加载数据。滚动条到底部的条件即为：scrollTop + clientHeight == scrollHeight
-          if (scrollTop + clientHeight + 50 <= scrollHeight) {
-            return
-          }
-
-          // 正在加载数据
-          this.loading = true
-          const url = '/api-home/course/getCourseList'
-          this.queryParams.currentPage = this.queryParams.currentPage + 1
-          this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
-            this.total = res.data.re.total
-            this.tableData = this.tableData.concat(res.data.re.rows)
-            if (this.queryParams.currentPage * this.queryParams.pageSize >= this.total) {
-              // 已经加载完数据
-              this.loadFinished = true
-            }
-            // 加载数据结束
-            this.loading = false
-          }).catch(() => {
-            // 加载数据结束
-            this.loading = false
-          })
-        }
-      },
-      mounted () {
-        this.getCourseList()
-        window.addEventListener('scroll', this.scrollHandler)
+      type: {
+        type: String,
+        default: ' '
       }
+    },
+    data () {
+      return {
+        total: 0,
+        queryParams: {
+          type: this.type,
+          currentPage: 1,
+          pageSize: 12,
+          courseName: null,
+          isInValidDate: true
+        },
+        load: {
+          loading: false,
+          loadFinished: false,
+          loadTip: '正在加载...'
+        },
+        tableData: []
+      }
+    },
+    computed: {
+      searchCourseName () {
+        if (sessionStorage.getItem('SearchCourseName')) {
+          this.queryParams.courseName = sessionStorage.getItem('SearchCourseName')
+        } else {
+          this.queryParams.courseName = null
+        }
+      }
+    },
+    watch: {
+      searchCourseName () {}
+    },
+    methods: {
+      // handleSizeChange (val) {
+      //   this.queryParams.pageSize = val
+      //   this.queryParams.currentPage = 1
+      //   this.getCourseList()
+      // },
+      // handleCurrentChange (val) {
+      //   this.queryParams.currentPage = val
+      //   this.getCourseList()
+      // },
+
+      handleDetails (val) {
+        this.$router.push({name: 'details', params: val})
+      },
+      getCourseList () {
+        const url = '/api-home/course/getCourseList'
+        this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
+          this.total = res.data.re.total
+          this.tableData = res.data.re.rows
+          // 如果已加载完所有的数据，则不再加载
+          if (this.queryParams.currentPage * this.queryParams.pageSize >= this.total) {
+            this.loadFinished = true
+          }
+        })
+      },
+      // 滚动加载数据
+      scrollHandler () {
+        // 如果正在加载数据,或者已加载完所有的数据，则不重复加载
+        if (this.load.loading || this.load.loadFinished) {
+          return
+        }
+
+        var bodyScrollTop = 0
+        var documentScrollTop = 0
+        if (document.body) {
+          bodyScrollTop = document.body.scrollTop
+        }
+        if (document.documentElement) {
+          documentScrollTop = document.documentElement.scrollTop
+        }
+        // 滚动条滚动过的距离
+        var scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop
+        // 页面的高度
+        var clientHeight = document.body.clientHeight
+        // 可以滚动的距离
+        var scrollHeight = document.body.scrollHeight
+        // 距离底部50px时，才加载数据。滚动条到底部的条件即为：scrollTop + clientHeight == scrollHeight
+        if (scrollTop + clientHeight + 50 <= scrollHeight) {
+          return
+        }
+
+        // 正在加载数据
+        this.load.loading = true
+
+        const url = '/api-home/course/getCourseList'
+        this.queryParams.currentPage = this.queryParams.currentPage + 1
+        this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
+          this.total = res.data.re.total
+          this.tableData = this.tableData.concat(res.data.re.rows)
+          if (this.queryParams.currentPage * this.queryParams.pageSize >= this.total) {
+            // 已经加载完数据
+            this.load.loadFinished = true
+          }
+          // 加载数据结束
+          this.load.loading = false
+        }).catch(() => {
+          // 加载数据结束
+          this.load.loading = false
+        })
+      }
+    },
+    mounted () {
+      this.getCourseList()
+      window.addEventListener('scroll', this.scrollHandler)
     }
+  }
 </script>
 
 <style scoped>

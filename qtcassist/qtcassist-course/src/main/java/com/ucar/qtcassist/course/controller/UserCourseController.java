@@ -93,6 +93,8 @@ public class UserCourseController implements UserCourseApi {
         CourseVO courseVO = courseUser.getCourse();
         CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
 
+        courseDO.setTeacherId(userId);
+
         Date date = new Date();
         courseDO.setPublishTime(date);
         courseDO.setUpdateTime(date);
