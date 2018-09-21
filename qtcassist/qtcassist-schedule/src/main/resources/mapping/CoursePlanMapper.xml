@@ -20,9 +20,14 @@
   </select>
 
   <select id="selectByCourseName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id,course_name
-    from assist_course where del_flag=1 and course_name like  concat('%', #{courseName}, '%')
-    limit 0,10
+    select id,course_name,course_description
+    from assist_course where del_flag=1
+    <if test="courseName != null and courseName != ''">
+    and course_name like  concat('%', #{courseName}, '%')
+    </if>
+    <if test="offset !=null">
+      limit #{offset},#{pageSize}
+    </if>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >

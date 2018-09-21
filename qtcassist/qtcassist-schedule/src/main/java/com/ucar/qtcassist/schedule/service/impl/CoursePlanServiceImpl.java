@@ -4,6 +4,7 @@ package com.ucar.qtcassist.schedule.service.impl;
 import com.ucar.qtcassist.schedule.dao.CoursePlanMapper;
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
+import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,8 @@ public class CoursePlanServiceImpl implements CoursePlanService {
     }
 
     @Override
-    public List<CoursePlanDO> selectByCourseName(String courseName) {
-        return coursePlanMapper.selectByCourseName(courseName);
+    public List<CoursePlanDO> selectByCourseName(QueryCourseDTO courseDTO) {
+        return coursePlanMapper.selectByCourseName(courseDTO);
     }
 
     @Override

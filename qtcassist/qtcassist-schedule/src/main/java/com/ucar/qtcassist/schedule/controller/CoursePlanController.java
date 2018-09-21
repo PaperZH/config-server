@@ -5,6 +5,7 @@ import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
+import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +65,8 @@ public class CoursePlanController {
     }
 
     @RequestMapping("/getCourseList")
-    public Result get(@RequestBody String courseName){
-        List<CoursePlanDO> coursePlanDO = coursePlanService.selectByCourseName(courseName);
+    public Result get(@RequestBody QueryCourseDTO courseDTO){
+        List<CoursePlanDO> coursePlanDO = coursePlanService.selectByCourseName(courseDTO);
         return Result.getSuccessResult(coursePlanDO);
     }
 
