@@ -145,12 +145,12 @@ public class UserPlanController {
                 ) {
             UserPlanVO userPlanVO = new UserPlanVO();
             BeanUtils.copyProperties(plan, userPlanVO);
-            //微服务查询User姓名
+            //微服务查询用户姓名
             Long studentId = plan.getStudentId();
                 String studentInfo = adminFeginClient.getUserInfoById(studentId);
-                JSONObject jsonObject= (JSONObject) JSONObject.fromObject(studentInfo).get("data");
-                if(jsonObject!=null) {
-                    UserDTO user = (UserDTO) JSONObject.toBean(jsonObject, UserDTO.class);
+                JSONObject jsonStudent= (JSONObject) JSONObject.fromObject(studentInfo).get("data");
+                if(jsonStudent!=null) {
+                    UserDTO user = (UserDTO) JSONObject.toBean(jsonStudent, UserDTO.class);
                     userPlanVO.setStudentName(user.getNickname());
                 }
                 userPlanVOS.add(userPlanVO);
