@@ -20,6 +20,8 @@ import java.util.Set;
 public interface UserService {
 	UserDO get(Long id);
 
+	List<UserDO> getUsers( Long[] ids);
+
 	List<UserDO> getTeacherById(Long id, int relationType);
 
 	List<UserDO> getStudentById(Long id, int relationType);

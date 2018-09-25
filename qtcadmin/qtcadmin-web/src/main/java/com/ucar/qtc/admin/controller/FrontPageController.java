@@ -99,6 +99,16 @@ public class FrontPageController {
         return ResponseResult.ok().put("data",userDTO);
     }
 
+    @ApiOperation(value="根据IDS批量获取用户信息", notes="根据IDS批量获取用户信息")
+    @GetMapping(value="getUsersInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult getUsersInfoById(@RequestParam("ids") Long[] ids) {
+        List<UserDTO> userDTOS = new LinkedList<UserDTO>();
+        for (UserDO userDO:userService.getUsers(ids)){
+            userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+        }
+        return ResponseResult.ok().put("data",userDTOS);
+    }
+
     @ApiOperation(value="获取ID获取学员信息", notes="获取ID获取学员信息")
     @GetMapping(value="getStudentInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id,@RequestParam(value="id",defaultValue="-1")int type) {
@@ -106,6 +116,7 @@ public class FrontPageController {
         int relationType = (type == 0) ? null : type;
         for(UserDO userDO:userService.getStudentById(id,type)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+            System.out.println("执行成功");
         }
         return ResponseResult.ok().put("data",userDTOS);
     }

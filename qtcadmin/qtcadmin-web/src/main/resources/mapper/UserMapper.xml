@@ -8,6 +8,14 @@
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user where user_id = #{value}
 	</select>
 
+	<select id="getUsers" resultType="com.ucar.qtc.admin.domain.UserDO">
+		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
+		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user where user_id in
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</select>
+
 	<select id="getTeacherById" resultType="com.ucar.qtc.admin.domain.UserDO">
 		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user a
