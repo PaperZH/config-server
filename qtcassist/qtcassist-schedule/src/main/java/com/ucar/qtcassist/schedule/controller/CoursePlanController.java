@@ -11,7 +11,9 @@ import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
 import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
 import com.ucar.qtcassist.schedule.vo.CoursePlanVO;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -81,18 +83,19 @@ public class CoursePlanController {
         }else {
             List<CoursePlanDO> coursePlanDOS = coursePlanService.selectByCourseName(courseDTO);
             List<CoursePlanVO> coursePlanVOS = new ArrayList<>();
-            for (CoursePlanDO coursePlanDO:coursePlanDOS
-                 ) {
+            Long[] ids = new Long[coursePlanDOS.size()];
+            for (int i = 0; i < coursePlanDOS.size(); i++) {
+                CoursePlanDO coursePlanDO = coursePlanDOS.get(i);
+                ids[i]=coursePlanDO.getTeacherId();
+            }
+            //根据ids批量获取user信息
+            String resultStr = adminFeginClient.getUsersInfoByIds(ids);
+            JSONArray jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+            List<UserDTO> users = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
+            for (CoursePlanDO coursePlanDO:coursePlanDOS) {
                 CoursePlanVO coursePlanVO = new CoursePlanVO();
                 BeanUtils.copyProperties(coursePlanDO, coursePlanVO);
-                //远程查询User名称
-                Long teacherId = coursePlanDO.getTeacherId();
-                String teacherInfo = adminFeginClient.getUserInfoById(teacherId);
-                JSONObject jsonObject= (JSONObject) JSONObject.fromObject(teacherInfo).get("data");
-                if(jsonObject!=null) {
-                    UserDTO user = (UserDTO) JSONObject.toBean(jsonObject, UserDTO.class);
-                    coursePlanVO.setTeacherName(user.getNickname());
-                }
+                    coursePlanVO.setTeacherName(getNickName(coursePlanDO.getTeacherId(),users));
                 coursePlanVOS.add(coursePlanVO);
             }
             return PageResult.getSuccessResult(coursePlanVOS, total);
@@ -118,5 +121,14 @@ public class CoursePlanController {
     public CourseDO getCourse(@PathVariable("id") Long id) {
         CourseDO course = courseService.selectByPrimaryKey(id);
         return course;
+    }
+
+    public String getNickName(Long userId,List<UserDTO> users){
+        for (UserDTO user : users) {
+            if (userId.equals(user.getUserId())){
+                return user.getNickname();
+            }
+        }
+        return null;
     }
 }
