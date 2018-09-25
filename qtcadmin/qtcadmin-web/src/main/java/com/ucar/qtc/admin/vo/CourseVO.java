@@ -1,32 +1,48 @@
 package com.ucar.qtc.admin.vo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ucar.qtc.admin.domain.CourseTypeDO;
+
+import java.util.Date;
+
 public class CourseVO {
     private Long courseId;
 
     private String typeName;
+
+    private CourseTypeDO courseType;
 
     private String courseName;
 
     private String courseCover;
     //详情才有
     private String courseDescription;
-    //推荐信息
-    private String recCourseInfo;
+
+    private Float courseScore;
+
+    private Long teacherId;
 
     private Integer praiseNum;
 
     private Integer readNum;
 
     private Integer collectNum;
-    //详情才有
-    private String invalidDate;
 
-    private String publishTime;
+    //课程状态：0已删除，1正常，2失效
+    private Integer status;
 
     private Integer orderNum;
 
     private String teacherName;
 
-    private String status;
+    private String recCourseInfo;
+
+    //详情才有
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date invalidDate;
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date publishTime;
 
     public Long getCourseId() {
         return courseId;
@@ -42,6 +58,14 @@ public class CourseVO {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public CourseTypeDO getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(CourseTypeDO courseType) {
+        this.courseType = courseType;
     }
 
     public String getCourseName() {
@@ -68,6 +92,22 @@ public class CourseVO {
         this.courseDescription = courseDescription;
     }
 
+    public Float getCourseScore() {
+        return courseScore;
+    }
+
+    public void setCourseScore(Float courseScore) {
+        this.courseScore = courseScore;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
     public Integer getPraiseNum() {
         return praiseNum;
     }
@@ -92,20 +132,28 @@ public class CourseVO {
         this.collectNum = collectNum;
     }
 
-    public String getInvalidDate() {
+    public Date getInvalidDate() {
         return invalidDate;
     }
 
-    public void setInvalidDate(String invalidDate) {
+    public void setInvalidDate(Date invalidDate) {
         this.invalidDate = invalidDate;
     }
 
-    public String getPublishTime() {
+    public Date getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(String publishTime) {
+    public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getOrderNum() {
@@ -114,6 +162,14 @@ public class CourseVO {
 
     public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public String getRecCourseInfo() {

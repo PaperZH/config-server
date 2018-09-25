@@ -32,7 +32,7 @@ public class RecCourseServiceImpl implements RecCourseService {
     private CourseServiceRpc courseService;
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @Override
     public RecommandCourseDO get(Long id) {
@@ -47,7 +47,7 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Override
     public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
         //首先通过名字查询课程信息
-        List courses = (List) courseService.getCourseIdAndCourseName(queryVO).get("ids");
+        List courses = (List) courseService.getAllCourseIds(queryVO).get("ids");
         if(courses==null||courses.isEmpty()){
             return null;
         }
@@ -97,7 +97,10 @@ public class RecCourseServiceImpl implements RecCourseService {
         //取出课程信息ID
         while(iterator.hasNext()){
             Map tempMap = (Map)iterator.next();
-            ids.add(((Integer) tempMap.get("id")).longValue());
+            Integer tempId = (Integer) tempMap.get("courseId");
+            if(tempId!=null){
+                ids.add((tempId).longValue());
+            }
         }
         resMap.put("ids",ids);
         return resMap;
@@ -107,7 +110,8 @@ public class RecCourseServiceImpl implements RecCourseService {
      * @return
      */
     private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList){
-        Long[] ids = new Long[recommandCourseList.size()];
+        int size = recommandCourseList.size();
+        Long[] ids = new Long[size];
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
         while(iterator.hasNext()){
@@ -123,16 +127,11 @@ public class RecCourseServiceImpl implements RecCourseService {
             iterator = recCourseVOS.iterator();
             while(iterator.hasNext()){
                 CourseVO temp = (CourseVO) iterator.next();
-                if(temp.getCourseId() == ids[i]){
+                if(temp.getCourseId()== ids[i])
+                {
                     temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
                     temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
-                    temp.setTeacherName(userDao.get(recommandCourseList.get(i).getTeacherId()).getNickname());
-                    if(recommandCourseList.get(i).getStatues()==0)
-                        temp.setStatus("已删除");
-                    else if(recommandCourseList.get(i).getStatues()==2)
-                        temp.setStatus("已失效");
-                    else
-                        temp.setStatus("有效");
+                    String teacherName = (userService.get(temp.getTeacherId())).getNickname();
                     reccomandCourseVO.add(temp);
                 }
             }

@@ -92,7 +92,7 @@ public class UserController {
 	 * @return
 	 */
 	@ApiOperation(value="根据ID获取用户学员信息", notes="根据ID获取用户学员信息")
-	@GetMapping(value="/getTeacherRelationInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value="/getStudentRelationInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	ResponseResult getStudentRelationInfo(@RequestParam(value = "userId",required = true) Long id,@RequestParam(value = "relationType",required = true) int type){
 
 		List<UserDTO> student = new ArrayList<UserDTO>();

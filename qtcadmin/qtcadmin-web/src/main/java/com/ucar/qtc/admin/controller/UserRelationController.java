@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class UserRelationController {
     private UserRelationService userRelationService;
 
     @ApiOperation(value = "添加用户关联关系", notes = "注意是按照关系类别添加用户关系")
-    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult addRelation(@RequestBody UserRelationDO userRelationDO){
         if(userRelationService.saveUserRelation(userRelationDO)>1){
             return ResponseResult.ok();
