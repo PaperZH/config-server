@@ -120,10 +120,15 @@
           let data = {'courseId': val}
           this.$router.push({name: 'details', params: data})
         },
-        handleDelete (val) {
+        handleDelete () {
+          if (this.checkList.length === 0) {
+            alert('请选择要删除的课程')
+            return
+          }
           let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
           this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
             this.getCollectCourse()
+            this.checkList = []
           })
         },
         handleSearch () {
@@ -144,7 +149,7 @@
           this.getCollectCourse()
         },
         getCollectCourse () {
-          this.$store.dispatch('Post', {'url': '/api-home/course/getCollectCourse', 'data': this.queryParams}).then(res => {
+          this.$store.dispatch('Post', {'url': '/api-home/course/getCollectCourseList', 'data': this.queryParams}).then(res => {
             this.total = res.data.re.total
             this.tableData = res.data.re.rows
           })

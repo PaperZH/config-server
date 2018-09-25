@@ -102,7 +102,8 @@
           startDate: null,
           endDate: null,
           currentPage: 1,
-          pageSize: 6
+          pageSize: 6,
+          isInValidDate: false
         }
       }
     },
@@ -118,10 +119,15 @@
       handleRelease (item) {
         this.$router.push({name: 'release', params: item})
       },
-      handleDelete (val) {
+      handleDelete () {
+        if (this.checkList.length === 0) {
+          alert('请选择要删除的课程')
+          return
+        }
         let data = {'userId': this.queryParams.userId, 'courseIds': this.checkList}
-        this.$store.dispatch('Post', {'url': '/api-home/course/deletePublishedCourse', 'data': data}).then(res => {
+        this.$store.dispatch('Post', {'url': '/api-home/course/deleteCourseList', 'data': data}).then(res => {
           this.getPublishedCourse()
+          this.checkList = []
         })
       },
       handleSearch () {
@@ -142,7 +148,7 @@
         this.getPublishedCourse()
       },
       getPublishedCourse () {
-        this.$store.dispatch('Post', {'url': '/api-home/course/getPublishedCourse', 'data': this.queryParams}).then(res => {
+        this.$store.dispatch('Post', {'url': '/api-home/course/getPublishCourseList', 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
           this.tableData = res.data.re.rows
         })

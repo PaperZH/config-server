@@ -1,9 +1,11 @@
 package com.ucar.qtc.admin.service.impl;
 
 import com.ucar.qtc.admin.dao.RecommandCourseDao;
+import com.ucar.qtc.admin.dao.UserDao;
 import com.ucar.qtc.admin.domain.RecommandCourseDO;
 import com.ucar.qtc.admin.rpc.CourseServiceRpc;
 import com.ucar.qtc.admin.service.RecCourseService;
+import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Autowired
     private CourseServiceRpc courseService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public RecommandCourseDO get(Long id) {
         return recommandCourseDao.get(id);
@@ -42,7 +47,7 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Override
     public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
         //首先通过名字查询课程信息
-        List courses = (List) courseService.getCourseIdAndCourseName(queryVO).get("ids");
+        List courses = (List) courseService.getAllCourseIds(queryVO).get("ids");
         if(courses==null||courses.isEmpty()){
             return null;
         }
@@ -52,7 +57,7 @@ public class RecCourseServiceImpl implements RecCourseService {
         if(recommandCourseList.size() == 0){
             return null;
         }
-        return getRecCourseList(recommandCourseList,courses);
+        return getRecCourseList(recommandCourseList);
     }
 
     @Override
@@ -92,18 +97,21 @@ public class RecCourseServiceImpl implements RecCourseService {
         //取出课程信息ID
         while(iterator.hasNext()){
             Map tempMap = (Map)iterator.next();
-            ids.add(((Integer) tempMap.get("id")).longValue());
+            Integer tempId = (Integer) tempMap.get("courseId");
+            if(tempId!=null){
+                ids.add((tempId).longValue());
+            }
         }
         resMap.put("ids",ids);
         return resMap;
     }
     /**
      * @param recommandCourseList 推荐课程列表
-     * @param courseVOS 课程信息列表
      * @return
      */
-    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList,List courseVOS){
-        Long[] ids = new Long[recommandCourseList.size()];
+    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList){
+        int size = recommandCourseList.size();
+        Long[] ids = new Long[size];
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
         while(iterator.hasNext()){
@@ -119,9 +127,12 @@ public class RecCourseServiceImpl implements RecCourseService {
             iterator = recCourseVOS.iterator();
             while(iterator.hasNext()){
                 CourseVO temp = (CourseVO) iterator.next();
-                if(temp.getCourseId() == ids[i]){
+                if(temp.getCourseId()== ids[i])
+                {
                     temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
                     temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
+                    String teacherName = (userService.get(temp.getTeacherId())).getNickname();
+                    temp.setTeacherName(teacherName);
                     reccomandCourseVO.add(temp);
                 }
             }

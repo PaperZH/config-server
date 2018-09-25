@@ -15,26 +15,41 @@ import java.util.Map;
 
 public interface CourseApi {
     /**
-     * 根据类型获取分页后的课程列表
-     * @param queryVO (String courseName, Integer currentPage, Integer pageSize, String type)
+     * 根据类型获取分页后的课程列表(有效课程)
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize, String type, Boolean isInValidDate)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页
      * Integer pageSize 分布查询的每页的记录数目
      * String type 查询的排序类型，default（默认）, time(发布时间降序), hot(点赞数量降序)
-     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
     @PostMapping("/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
     /**
-     * 获取推荐课程列表
+     * 根据查询条件查询某个教师发布的课程（包括有效课程、未删除课程）
+     * @param queryVO (long userId, String courseName, Date startDate, Date endDate, int currentPage, int pageSize)
+     * Long userId 课程的teacherId
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Date startDate 课程发布的起始时间
+     * Date endDate 课程发布的结束时间
+     * Integer currentPage 分页查询的当前页
+     * Integer pageSize 分布查询的每页的记录数目
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
+     * @return
+     */
+    @PostMapping("/getPublishCourseList")
+    Result<Page<CourseVO>> getPublishCourseList(@RequestBody QueryVO queryVO);
+
+    /**
+     * 获取推荐课程列表（包括有效课程、未删除课程、所有课程）
      * @param queryVO(courseIds, courseName, currentPage, pageSize)
      * Long[] courseIds 要匹配的所有课程的id数组
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
-     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
     @PostMapping("/getRecCourseList")
@@ -69,6 +84,22 @@ public interface CourseApi {
      */
     @GetMapping("/getCourseDetail/{courseId}")
     Result<CourseDetailVO<CoursewareDTO>> getCourseDetail(@PathVariable("courseId") Long courseId);
+
+    /**
+     * 用户增加课程
+     * @param courseVO
+     * @return
+     */
+    @PostMapping("/addCourse")
+    Result<CourseVO> addCourse(@RequestBody CourseVO courseVO);
+
+    /**
+     * 用户更新课程
+     * @param courseVO
+     * @return
+     */
+    @PostMapping("/updateCourse")
+    Result<CourseVO> updateCourse(@RequestBody CourseVO courseVO);
 
     /**
      * 根据课程ID批量删除课程

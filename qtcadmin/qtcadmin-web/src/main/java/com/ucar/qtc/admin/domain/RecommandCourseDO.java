@@ -28,6 +28,10 @@ public class RecommandCourseDO implements Serializable{
 
     private Integer delFlag;
 
+    private Long teacherId;
+
+    private int statues;
+
     public Long getId() {
         return id;
     }
@@ -82,5 +86,25 @@ public class RecommandCourseDO implements Serializable{
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public static long getSeriserialVersionUID() {
+        return seriserialVersionUID;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public int getStatues() {
+        return statues;
+    }
+
+    public void setStatues(int statues) {
+        this.statues = statues;
     }
 }

@@ -7,23 +7,18 @@ import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
-import com.ucar.qtcassist.api.model.DO.UserCourseDO;
-import com.ucar.qtcassist.api.model.VO.CourseUserVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.CourseTypeService;
-import com.ucar.qtcassist.course.service.UserCourseService;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,9 +30,6 @@ import java.util.List;
 public class UserCourseController implements UserCourseApi {
 
     private static final Logger logger = LoggerFactory.getLogger(UserCourseController.class);
-
-    @Autowired
-    private UserCourseService userCourseService;
 
     @Autowired
     private CourseService courseService;
@@ -53,30 +45,23 @@ public class UserCourseController implements UserCourseApi {
     @Override
     public Result<Page<CourseVO>> getUserCourseList(@RequestBody QueryVO queryVO) {
         QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
-        List<Long> courseIdList = null;
         List<CourseDO> courseDOList = null;
         List<CourseVO> courseVOList =null;
         Integer total = 0;
 
-        courseIdList = userCourseService.selectCourseIdList(queryDO.getUserId());
-        if(courseIdList != null && courseIdList.size() > 0) {
-            //根据courseIdList, courseName, startDate, endDate等条件统计记录的总数
-            total = courseService.getTotalByIdListAndCondition(courseIdList, queryDO);
-            if(total > 0) {
-                queryDO.setCourseIdsFromList(courseIdList);
-                // 根据courseIdList, courseName, startDate, endDate, startIndex, pageSize等条件查询用户发布的课程列表
-                courseDOList = courseService.getListByCondition(queryDO);
-                courseVOList = new ArrayList<CourseVO>();
-                for (CourseDO courseDO : courseDOList) {
-                    CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
-                    CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+        total = courseService.getTotalByIdListAndCondition(null, queryDO);
+        if(total > 0) {
+            courseDOList = courseService.getListByCondition(queryDO);
+            courseVOList = new ArrayList<CourseVO>();
+            for (CourseDO courseDO : courseDOList) {
+                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
 
-                    courseVO.setTypeName(courseType.getTypeName());
-                    //查询收藏数
-                    courseVO.setCollectNum(10);
+                courseVO.setTypeName(courseType.getTypeName());
+                //查询收藏数
+                courseVO.setCollectNum(10);
 
-                    courseVOList.add(courseVO);
-                }
+                courseVOList.add(courseVO);
             }
         }
         return PageResult.getSuccessResult(courseVOList, total);
@@ -84,16 +69,12 @@ public class UserCourseController implements UserCourseApi {
 
     /**
      * 增加课程
-     * @param courseUser (long userId , CourseVO courseVO)
+     * @param courseVO (long userId , CourseVO courseVO)
      * @return
      */
     @Override
-    public Result<CourseVO> addUserCourse(@RequestBody CourseUserVO courseUser) {
-        Long userId = courseUser.getUserId();
-        CourseVO courseVO = courseUser.getCourse();
+    public Result<CourseVO> addUserCourse(@RequestBody CourseVO courseVO) {
         CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
-
-        courseDO.setTeacherId(userId);
 
         Date date = new Date();
         courseDO.setPublishTime(date);
@@ -117,41 +98,85 @@ public class UserCourseController implements UserCourseApi {
 
         int count = courseService.insertSelective(courseDO);
         if(count > 0) {
-            Long courseId = courseDO.getId();
-            UserCourseDO userCourse = new UserCourseDO();
-            userCourse.setUserId(userId);
-            userCourse.setCourseId(courseId);
-            userCourse.setPublishDate(date);
-            count = userCourseService.insertSelective(userCourse);
-            if(count >= 0) {
-                courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
-                return Result.getSuccessResult(courseVO);
-            }
+            return Result.getSuccessResult(courseVO);
         }
         return Result.getBusinessException("添加课程失败","");
     }
 
+//    public Result<CourseVO> addUserCourse(@RequestBody CourseUserVO courseUser) {
+//        Long userId = courseUser.getUserId();
+//        CourseVO courseVO = courseUser.getCourse();
+//        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+//
+//        courseDO.setTeacherId(userId);
+//
+//        Date date = new Date();
+//        courseDO.setPublishTime(date);
+//        courseDO.setUpdateTime(date);
+//        courseDO.setReadNum(0);
+//        courseDO.setPraiseNum(0);
+//
+//        if(courseDO.getInvalidDate() == null) {
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            String dateStr = sdf.format(date);
+//            String year = String.valueOf(Integer.valueOf(dateStr.substring(0,4)) + 10);
+//            String invalidDateStr = year.concat(dateStr.substring(4));
+//            Date invalidDate = null;
+//            try {
+//                invalidDate = sdf.parse(invalidDateStr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            courseDO.setInvalidDate(invalidDate);
+//        }
+//
+//        int count = courseService.insertSelective(courseDO);
+//        if(count > 0) {
+//            Long courseId = courseDO.getId();
+//            UserCourseDO userCourse = new UserCourseDO();
+//            userCourse.setUserId(userId);
+//            userCourse.setCourseId(courseId);
+//            userCourse.setPublishDate(date);
+//            count = userCourseService.insertSelective(userCourse);
+//            if(count >= 0) {
+//                courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+//                return Result.getSuccessResult(courseVO);
+//            }
+//        }
+//        return Result.getBusinessException("添加课程失败","");
+//    }
+
     /**
      * 用户更新课程
-     * @param courseUser (long userId , CourseVO courseVO)
+     * @param courseVO (long userId , CourseVO courseVO)
      * @return
      */
     @Override
-    public Result<CourseVO> updateUserCourse(@RequestBody CourseUserVO courseUser) {
-        Long userId = courseUser.getUserId();
-        CourseVO courseVO = courseUser.getCourse();
-        UserCourseDO userCourseDO = userCourseService.selectByCourseId(courseVO.getCourseId());
-
-        if(userId.equals(userCourseDO.getUserId())) {
-            CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
-            courseDO.setUpdateTime(new Date());
-            int count = courseService.updateByPrimaryKeySelective(courseDO);
-            if(count >= 0) {
-                return Result.getSuccessResult(courseVO);
-            }
+    public Result<CourseVO> updateUserCourse(@RequestBody CourseVO courseVO) {
+        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+        courseDO.setUpdateTime(new Date());
+        int count = courseService.updateByPrimaryKeySelective(courseDO);
+        if(count >= 0) {
+            return Result.getSuccessResult(courseVO);
         }
         return Result.getBusinessException("更新课程失败","");
     }
+
+//    public Result<CourseVO> updateUserCourse(@RequestBody CourseUserVO courseUser) {
+//        Long userId = courseUser.getUserId();
+//        CourseVO courseVO = courseUser.getCourse();
+//        UserCourseDO userCourseDO = userCourseService.selectByCourseId(courseVO.getCourseId());
+//
+//        if(userId.equals(userCourseDO.getUserId())) {
+//            CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+//            courseDO.setUpdateTime(new Date());
+//            int count = courseService.updateByPrimaryKeySelective(courseDO);
+//            if(count >= 0) {
+//                return Result.getSuccessResult(courseVO);
+//            }
+//        }
+//        return Result.getBusinessException("更新课程失败","");
+//    }
 
     /**
      * 根据用户ID和课程ID删除发布的课程
@@ -160,15 +185,10 @@ public class UserCourseController implements UserCourseApi {
      */
     @Override
     public Result deleteUserCourseList(@RequestBody QueryVO queryVO) {
-        Long userId = queryVO.getUserId();
         Long[] courseIds = queryVO.getCourseIds();
-
         int count = courseService.deleteListByIdList(courseIds);
         if(count > 0) {
-            count = userCourseService.deleteListByIdList(userId, courseIds);
-            if(count > 0) {
-                return Result.getSuccessResult("批量删除发布的课程信息成功");
-            }
+            return Result.getSuccessResult("批量删除发布的课程信息成功");
         }
         return Result.getBusinessException("批量删除发布的课程信息失败","");
     }

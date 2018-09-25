@@ -34,4 +34,7 @@ public interface CourseServiceRpc {
 
     @PostMapping("course/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
+
+    @PostMapping("course/getAllCourseIds")
+    Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO);
 }
