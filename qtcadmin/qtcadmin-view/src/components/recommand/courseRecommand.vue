@@ -24,12 +24,12 @@
 
       <!-- 列表 -->
       <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
-        <el-table-column label="预览" align="center" width="200">
+        <el-table-column label="预览" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.courseCover" height="80">
+            <img :src="scope.row.courseCover" height="100">
           </template>
         </el-table-column>
-         <el-table-column label="状态" width="80" prop="type" align="center">
+        <el-table-column label="状态" prop="scope" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 0" type="danger">已删除</el-tag>
             <el-tag v-if="scope.row.status === 1" type="success">正常</el-tag>
@@ -37,12 +37,12 @@
           </template>
         </el-table-column>
         <el-table-column label="老师姓名" prop="teacherName" width="120" align="center"></el-table-column>
-        <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
+        <el-table-column label="课程名" prop="courseName" width="150" align="center"></el-table-column>
         <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
          <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
         <el-table-column label="排序" prop="orderNum" width="80"  align="center"></el-table-column>       
-        <el-table-column label="推荐信息" prop="recCourseInfo" width="220" align="center"></el-table-column>
-        <el-table-column label="课程介绍" prop="courseDescription" width="220" align="center"></el-table-column>  
+        <el-table-column label="推荐信息" prop="recCourseInfo"  align="center"></el-table-column>
+        <el-table-column label="课程介绍" prop="courseDescription"  align="center"></el-table-column>  
        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>

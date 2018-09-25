@@ -46,18 +46,11 @@ public class RecCourseServiceImpl implements RecCourseService {
 
     @Override
     public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
-        //首先通过名字查询课程信息
-        List courses = (List) courseService.getAllCourseIds(queryVO).get("ids");
-        if(courses==null||courses.isEmpty()){
-            return null;
-        }
-        //通过查询课程的ID，查询推荐课程
-        Map<String,Object> courseResMap = getCoursesMap(courses);
-        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(courseResMap);
+        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(null);
         if(recommandCourseList.size() == 0){
             return null;
         }
-        return getRecCourseList(recommandCourseList);
+        return getRecCourseList(recommandCourseList,queryVO);
     }
 
     @Override
@@ -109,7 +102,7 @@ public class RecCourseServiceImpl implements RecCourseService {
      * @param recommandCourseList 推荐课程列表
      * @return
      */
-    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList){
+    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList,QueryVO queryVO){
         int size = recommandCourseList.size();
         Long[] ids = new Long[size];
         Iterator iterator = recommandCourseList.iterator();
@@ -117,7 +110,6 @@ public class RecCourseServiceImpl implements RecCourseService {
         while(iterator.hasNext()){
             ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
         }
-        QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(ids);
         List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
         recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
