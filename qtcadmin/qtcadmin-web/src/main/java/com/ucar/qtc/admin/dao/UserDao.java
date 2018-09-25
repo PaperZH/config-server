@@ -15,6 +15,8 @@ import java.util.Map;
 public interface UserDao {
 
 	UserDO get(Long userId);
+
+	List<UserDO> getUsers(Long[] ids);
 	
 	List<UserDO> list(Map<String, Object> map);
 
