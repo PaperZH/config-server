@@ -132,6 +132,7 @@ public class RecCourseServiceImpl implements RecCourseService {
                     temp.setOrderNum(recommandCourseList.get(i).getOrderNum());
                     temp.setRecCourseInfo(recommandCourseList.get(i).getDescription());
                     String teacherName = (userService.get(temp.getTeacherId())).getNickname();
+                    temp.setTeacherName(teacherName);
                     reccomandCourseVO.add(temp);
                 }
             }

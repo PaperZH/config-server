@@ -29,6 +29,14 @@
             <img :src="scope.row.courseCover" height="80">
           </template>
         </el-table-column>
+         <el-table-column label="状态" width="80" prop="type" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === 0" type="danger">已删除</el-tag>
+            <el-tag v-if="scope.row.status === 1" type="success">正常</el-tag>
+            <el-tag v-if="scope.row.status === 2" type="warning">已失效</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="老师姓名" prop="teacherName" width="120" align="center"></el-table-column>
         <el-table-column label="课程名" prop="courseName" width="120" align="center"></el-table-column>
         <el-table-column label="课程类型" prop="typeName" width="80"  align="center"></el-table-column>
          <el-table-column label="点赞数" prop="praiseNum" width="80"  align="center"></el-table-column>
