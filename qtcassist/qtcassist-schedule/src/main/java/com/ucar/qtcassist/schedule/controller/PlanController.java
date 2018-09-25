@@ -9,7 +9,9 @@ import com.ucar.qtcassist.schedule.dto.PlanDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.service.PlanService;
 import com.ucar.qtcassist.schedule.vo.PlanVO;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -77,16 +79,19 @@ public class PlanController {
         List<PlanDO> planList = planService.getPlanList(planDTO);
         Integer total = planService.getPlanTotal(planDTO);
         List<PlanVO> planVOS = new ArrayList<>();
+        Long[] ids = new Long[planList.size()];
+        for (int i = 0; i < planList.size(); i++) {
+            PlanDO plan = planList.get(i);
+            ids[i]=plan.getBuilderId();
+        }
+        //根据ids批量获取user信息
+        String resultStr = adminFeginClient.getUsersInfoByIds(ids);
+        JSONArray jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+        List<UserDTO> users = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
         for (PlanDO planDO:planList) {
             PlanVO planVO = new PlanVO();
             BeanUtils.copyProperties(planDO, planVO);
-            Long builderId = planDO.getBuilderId();
-            String builderInfo = adminFeginClient.getUserInfoById(builderId);
-            JSONObject jsonObject= (JSONObject) JSONObject.fromObject(builderInfo).get("data");
-            if(jsonObject!=null) {
-                UserDTO user = (UserDTO) JSONObject.toBean(jsonObject, UserDTO.class);
-                planVO.setBuilderName(user.getNickname());
-            }
+            planVO.setBuilderName(getNickName(planDO.getBuilderId(),users));
             planVOS.add(planVO);
         }
         return PageResult.getSuccessResult(planVOS,total);
@@ -109,4 +114,12 @@ public class PlanController {
         }
     }
 
+    public String getNickName(Long userId,List<UserDTO> users){
+        for (UserDTO user : users) {
+            if (userId.equals(user.getUserId())){
+                return user.getNickname();
+            }
+        }
+        return null;
+    }
 }

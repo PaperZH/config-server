@@ -62,11 +62,9 @@ public class UserPlanController {
     public Result getStudentsById(@PathVariable("id") Long id){
         String resultStr = adminFeginClient.getStudentInfoById(id);
         JSONArray  jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
-        System.out.println(jsonObject);
         List<UserDTO> user = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
         List<StudentVO> studentVOS = new ArrayList<>();
-        for (UserDTO userDTO:user
-                ) {
+        for (UserDTO userDTO:user) {
             StudentVO studentVO = new StudentVO();
             BeanUtils.copyProperties(userDTO,studentVO);
             studentVOS.add(studentVO);
@@ -133,6 +131,7 @@ public class UserPlanController {
         return Result.getSuccessResult(userPlan);
     }
 
+
     /**
      * 查询获取发布计划
      */
@@ -141,18 +140,20 @@ public class UserPlanController {
         Integer total = userPlanService.queryTotal(planDTO);
         List<UserPlanDTO> planList = userPlanService.queryUserPlan(planDTO);
         List<UserPlanVO> userPlanVOS = new ArrayList<>();
-        for (UserPlanDTO plan : planList
-                ) {
+        Long[] ids = new Long[planList.size()];
+        for (int i = 0; i < planList.size(); i++) {
+            UserPlanDTO plan = planList.get(i);
+            ids[i]=plan.getStudentId();
+        }
+        //根据ids批量获取user信息
+        String resultStr = adminFeginClient.getUsersInfoByIds(ids);
+        JSONArray  jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+        List<UserDTO> users = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
+        //将信息进行匹配装配
+        for (UserPlanDTO plan:planList){
             UserPlanVO userPlanVO = new UserPlanVO();
             BeanUtils.copyProperties(plan, userPlanVO);
-            //微服务查询用户姓名
-            Long studentId = plan.getStudentId();
-                String studentInfo = adminFeginClient.getUserInfoById(studentId);
-                JSONObject jsonStudent= (JSONObject) JSONObject.fromObject(studentInfo).get("data");
-                if(jsonStudent!=null) {
-                    UserDTO user = (UserDTO) JSONObject.toBean(jsonStudent, UserDTO.class);
-                    userPlanVO.setStudentName(user.getNickname());
-                }
+            userPlanVO.setStudentName(getNickName(plan.getStudentId(),users));
                 userPlanVOS.add(userPlanVO);
         }
         return PageResult.getSuccessResult(userPlanVOS, total);
@@ -172,5 +173,14 @@ public class UserPlanController {
         } else {
             return Result.getBusinessException("更新培训计划信息失败", "-2");
         }
+    }
+
+    public String getNickName(Long userId,List<UserDTO> users){
+        for (UserDTO user : users) {
+            if (userId.equals(user.getUserId())){
+                return user.getNickname();
+            }
+        }
+        return null;
     }
 }
