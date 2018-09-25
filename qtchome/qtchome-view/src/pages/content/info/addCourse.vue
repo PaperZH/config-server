@@ -5,9 +5,9 @@
         <span>添加课件</span>
       </div>
       <div class="text item">
-        <el-form ref="coursewareForm" :model="coursewareForm" :rules="checkRules" label-width="100px">
+        <el-form class="cForm" ref="coursewareForm" :model="coursewareForm" :rules="checkRules"  label-width="100px">
           <el-form-item>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="onAddCourseWare()">添加</el-button>
+            <el-button style="float: right; padding: 3px 0" type="primary" @click="onAddCourseWare()" >添加</el-button>
           </el-form-item>
           <el-row>
             <el-col :span="12">
@@ -29,14 +29,16 @@
                                  placeholder="请输入系统课件名"
                                  @select="handleSelect">
                   <template slot-scope="{ item }">
-                    <div class="name">课程名称：{{ item.value=item.coursewareName }}</div>
-                    <span class="addr">课程类型：{{item.typeName}}</span>
+                    <div class="name">课件名称：{{ item.value=item.coursewareName }}</div>
+                    <span class="addr">课件类型：{{item.typeName}}</span>
                   </template>
                 </el-autocomplete>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item :span="8" label="上传文件:" prop="fileUrl">
+              <el-form-item :span="8" label="上传文件:" prop="fileUrl"
+                            v-loading = "isUploading"
+                            element-loading-text="文件上传中"    >
                 <el-upload ref="upload"
                            :disabled="uploadIsDisabled"
                            action=""
@@ -134,6 +136,7 @@
         isShow: false,
         state4: '',
         addflag: '',
+        isUploading: false,
         courseWareTable: [],
         courseWareTableItem12312: {
           name: '',
@@ -163,16 +166,11 @@
       }
     },
     mounted () {
-      console.log(this.$router.currentRoute.params)
       // 得到课程的id
       this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
-      console.log(this.coursewareForm.courseId)
       // 得到课程的课件的集合
-      console.log(this.$router.currentRoute.params.coursewares)
-      console.log('mycars')
       var mycars = []
       mycars = this.$router.currentRoute.params.coursewares
-      console.log(mycars)
       for (var i = 0; i < mycars.length; i++) {
         var courseWareTableItem = {}
         courseWareTableItem.name = mycars[i].name
@@ -180,11 +178,6 @@
         courseWareTableItem.typeName = mycars[i].type
         this.courseWareTable.push(courseWareTableItem)
       }
-      // this.courseWareTable = this.$router.currentRoute.params.coursewares
-      console.log(this.courseWareTable)
-      // this.courseWareTable.push(this.$router.currentRoute.params.coursewares)
-      // console.log(this.courseWareTable)
-
       if (this.courseWareTable.length > 0) {
         this.isShow = true
       }
@@ -223,21 +216,27 @@
       },
       beforeAvatarUpload (file) {
         this.$refs.sys.disabled = true
+        this.isUploading = true
+        // this.uploadLoading()
         let tem = new FormData()
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
           if (fileRes.data.re != null) {
             this.coursewareForm.baseCoursewareId = fileRes.data.re
+            this.isUploading = false
             this.uploadSuccessfully()
             this.coursewareForm.flag = 1
           } else {
+            this.isUploading = false
             this.uploadfailed()
           }
         })
         console.log(file)
       },
-      handleAvatarSuccess (res, file) {
+      handleAvatarSuccess (response, file, fileList) {
+        console.log('handleAvatarSuccess')
+        console.log(response)
         console.log(file)
       },
       handleExceed (files, fileList) {
@@ -299,9 +298,22 @@
         })
       },
       uploadfailed () {
-        this.$alert('课件添加失败，请重试', '警告', {
+        this.$alert('课件添加失败，请重试', '提示', {
           confirmButtonText: '确定'
         })
+      },
+
+      uploadLoading() {
+        const loading = this.$loading({
+          // target: cForm,
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+        }, 2000);
       }
 
     }
