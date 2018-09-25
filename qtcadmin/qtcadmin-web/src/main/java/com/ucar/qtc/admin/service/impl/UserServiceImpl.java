@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDO> getUsers(Long[] ids) {
-        System.out.println(ids[1]);
 		return userMapper.getUsers(ids);
 	}
 

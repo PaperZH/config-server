@@ -102,7 +102,6 @@ public class FrontPageController {
     @ApiOperation(value="根据IDS批量获取用户信息", notes="根据IDS批量获取用户信息")
     @GetMapping(value="getUsersInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getUsersInfoById(@RequestParam("ids") Long[] ids) {
-        System.out.println(ids[0]);
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
         for (UserDO userDO:userService.getUsers(ids)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
