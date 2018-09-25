@@ -14,6 +14,9 @@ public interface AdminFeginClient {
     @RequestMapping(value = "/pages/getUserInfoById", method = RequestMethod.GET)
     public String getUserInfoById(@RequestParam("id") Long id);
 
+    @RequestMapping(value = "/pages/getUsersInfoById", method = RequestMethod.GET)
+    public String getUsersInfoByIds(@RequestParam("ids") Long[] ids);
+
     @RequestMapping(value="/pages/getStudentInfoById" ,method = RequestMethod.GET)
     public String getStudentInfoById(@RequestParam("id") Long teacherId);
 }
