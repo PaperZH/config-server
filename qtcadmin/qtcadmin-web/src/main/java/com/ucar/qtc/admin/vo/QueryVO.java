@@ -1,4 +1,6 @@
 package com.ucar.qtc.admin.vo;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class QueryVO {
@@ -10,8 +12,10 @@ public class QueryVO {
 
     private String type;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     private Integer currentPage;
@@ -84,11 +88,11 @@ public class QueryVO {
         this.pageSize = pageSize;
     }
 
-    public Boolean getInValidDate() {
+    public Boolean getIsInValidDate() {
         return isInValidDate;
     }
 
-    public void setInValidDate(Boolean inValidDate) {
-        isInValidDate = inValidDate;
+    public void setIsInValidDate(Boolean isInValidDate) {
+        this.isInValidDate = isInValidDate;
     }
 }

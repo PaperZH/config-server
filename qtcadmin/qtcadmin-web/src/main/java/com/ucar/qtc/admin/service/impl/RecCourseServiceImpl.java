@@ -48,13 +48,13 @@ public class RecCourseServiceImpl implements RecCourseService {
     @Override
     public ResponseResult listRecCourseByQuery(QueryVO queryVO){
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("currentPage",queryVO.getCurrentPage());
+        map.put("currentPage",(queryVO.getCurrentPage()-1)*queryVO.getPageSize());
         map.put("pageSize",queryVO.getPageSize());
         List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(map);
         if(recommandCourseList.size() == 0){
             return ResponseResult.error();
         }
-        return getRecCourseList(recommandCourseList,queryVO);
+        return getRecCourseList(recommandCourseList);
     }
 
     @Override
@@ -106,18 +106,21 @@ public class RecCourseServiceImpl implements RecCourseService {
      * @param recommandCourseList 推荐课程列表
      * @return
      */
-    private ResponseResult getRecCourseList(List<RecommandCourseDO> recommandCourseList, QueryVO queryVO){
-
-        int size = recommandCourseList.size();
+    private ResponseResult getRecCourseList(List<RecommandCourseDO> recommandCourseList){
+        //推荐课程列表总数
         int total = recommandCourseDao.count(null);
+        //获取推荐课程列表的id数组
+        int size = recommandCourseList.size();
         Long[] ids = new Long[size];
-
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
         while(iterator.hasNext()){
             ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
         }
+        //将推荐课程的id存放到QueryVO
+        QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(ids);
+        //通过调用assist服务，得到推荐课程详细信息
         List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
         recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
         List<CourseVO> reccomandCourseVO = new ArrayList<CourseVO>();

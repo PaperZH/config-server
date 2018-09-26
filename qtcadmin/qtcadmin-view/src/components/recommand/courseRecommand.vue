@@ -6,7 +6,7 @@
         <el-breadcrumb-item>推荐课程管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
-    <el-col :span="24" class="wrap-main" v-loading="loading" element-loading-text="拼命加载中">
+    <el-col :span="24" class="wrap-main">
        <!--工具条-->
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
         <el-form :inline="true" :model="reccourse">
@@ -23,7 +23,7 @@
       </el-col>
 
       <!-- 列表 -->
-      <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
+      <el-table :data="courseRows" border highlight-current-row v-loading="listloading" style="width: 100%;">
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.courseCover" height="100">
@@ -94,7 +94,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+          <el-button type="primary" @click.native="addSubmit" :loading="addloading">提交</el-button>
         </div>
       </el-dialog>
 
@@ -115,7 +115,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="editFormVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="editSubmit" :loading="addLoading">提交</el-button>
+          <el-button type="primary" @click.native="editSubmit" :loading="editloading">提交</el-button>
         </div>
       </el-dialog>
 
@@ -140,7 +140,10 @@
         total: 15,
         page: 1,
         limit: 8,
-        loading: false,
+        listloading: false,
+        editloading: false,
+        addloading: false,
+        listCourseLoading: false,
         addFormVisible: false,//新增界面是否显示
         addLoading: false,
         addFormRules: {
@@ -193,16 +196,15 @@
         let params = {
           courseName: query
         }
-        that.loading = true;
+        that.listCourseLoading = true;
         API.getCourse(params).then(
             function (result) {
-              that.coursedata = result;
-              that.loading = false;
+              that.listCourseLoading = false;
               that.ids = result.listCourse.ids;
             }
           )
           .catch(function (error) {
-            that.loading = false;
+            that.listCourseLoading = false;
             console.log(error);
             that.$message.error({
               message: "请求出现异常",
@@ -217,18 +219,18 @@
           pageSize: that.limit,
           courseName: that.reccourse.courseName
         }
-        that.loading = true;
+        that.listloading = true;
         API.getRecCourse(params).then(
             function (result) {
-              that.loading = false;
+              that.listloading = false;
               if (result&& result.code == 0) {
-                
                 that.courseRows = result.list;
-                that.loading=false;
+                that.total = result.total;
+                that.listloading=false;
               }
             },
             function (err) {
-              that.loading = false;
+              that.listloading = false;
               that.$message.error({
                 showClose: true,
                 message: err.toString(),
@@ -237,7 +239,7 @@
             }
           )
           .catch(function (error) {
-            that.loading = false;
+            that.listloading = false;
             that.$message.error({
               showClose: true,
               message: "请求出现异常",
@@ -263,10 +265,10 @@
         let that = this;
         this.$refs.addForm.validate((valid) => {
           if (valid) {
-            that.loading = true;
+            that.addloading = true;
             let para = Object.assign({}, this.addForm);
             API.add(para).then(function (result) {
-              that.loading = false;
+              that.addloading = false;
               if (result && parseInt(result.code) === 0) {
                 that.$message.success({showClose: true, message: '新增成功', duration: 2000});
                 // that.$refs['addForm'].resetFields();
@@ -276,10 +278,10 @@
                 that.$message.error({showClose: true, message: '新增失败', duration: 2000});
               }
             }, function (err) {
-              that.loading = false;
+              that.addloading = false;
               that.$message.error({showClose: true, message: err.toString(), duration: 2000});
             }).catch(function (error) {
-              that.loading = false;
+              that.addloading = false;
               that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
             });
 
@@ -306,7 +308,7 @@
         let that = this;
         this.$refs.editForm.validate(valid => {
           if (valid) {
-            that.loading = true;
+            that.editloading = true;
             let params = Object.assign({}, that.editForm);
             API.update(params).then(function (result) {
               if (result && parseInt(result.code) === 0) {
@@ -325,7 +327,7 @@
                   duration: 2000
                 });
                 that.editFormVisible = false;
-                that.loading = false;
+                that.editloading = false;
               }
             });
           }
@@ -340,11 +342,11 @@
         let params = Object.assign({}, {id:idsIds});
         this.$confirm("确认删除选中记录吗?", "提示", {type: "warning"})
           .then(() => {
-            that.loading = true;
+            that.removeloading = true;
             API.batchRemove(params)
               .then(
                 function (result) {
-                  that.loading = false;
+                  that.removeloading = false;
                   if (result && parseInt(result.code) === 0) {
                     that.$message.success({
                       showClose: true,
@@ -355,7 +357,7 @@
                   }
                 },
                 function (err) {
-                  that.loading = false;
+                  that.removeloading = false;
                   that.$message.error({
                     showClose: true,
                     message: err.toString(),
@@ -364,7 +366,7 @@
                 }
               )
               .catch(function (error) {
-                that.loading = false;
+                that.removeloading = false;
                 that.$message.error({
                   showClose: true,
                   message: "请求出现异常",

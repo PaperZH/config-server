@@ -80,7 +80,7 @@ public class FrontPageController {
         }
         QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(listIds);
-        queryVO.setInValidDate(true);
+        queryVO.setIsInValidDate(true);
         Map<String,Object> ids = new HashMap<String,Object>();
         ids.put("id",listIds);
         List<CourseVO> listCourseVo = courseService.getRecCourseList(queryVO).getRe();
