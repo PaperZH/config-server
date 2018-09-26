@@ -11,11 +11,6 @@
         select * from sys_recommand_course c
         WHERE
         c.del_flag = 1
-        <if test="ids != null">
-            <foreach item="item" collection="ids"  index="index" open=" and course_id in (" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         <if test="id != null and id != ''"> and id = #{id} </if>
         <if test="courseId != null and courseId != ''">
             and coursei_d = #{courseId}
@@ -29,6 +24,31 @@
                 order by order_num desc
             </otherwise>
         </choose>
+        <if test="currentPage !=null and pageSize != null">
+            limit #{currentPage}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="listCourseIds">
+        select course_id from sys_recommand_course c
+        WHERE
+        c.del_flag = 1
+        <if test="id != null and id != ''"> and id = #{id} </if>
+        <if test="courseId != null and courseId != ''">
+            and course_id = #{courseId}
+        </if>
+
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by order_num desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize != null">
+            limit #{currentPage}, #{pageSize}
+        </if>
     </select>
 
     <select id="count" resultType="int">

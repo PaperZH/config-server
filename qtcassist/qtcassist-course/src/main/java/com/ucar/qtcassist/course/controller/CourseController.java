@@ -8,7 +8,6 @@ import com.ucar.qtcassist.api.model.DO.CourseDO;
 import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
-import com.ucar.qtcassist.api.model.DO.UserCourseDO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
@@ -22,7 +21,6 @@ import com.ucar.qtcassist.course.service.CourseCoursewareService;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.course.service.CourseTypeService;
 import com.ucar.qtcassist.course.service.EvaluateCourseService;
-import com.ucar.qtcassist.course.service.UserCourseService;
 import com.ucar.qtcassist.course.util.CourseConvertUtil;
 import com.ucar.qtcassist.course.util.QueryConvertUtil;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
@@ -34,6 +32,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,9 +59,6 @@ public class CourseController implements CourseApi {
     private CoursewareService coursewareService;
 
     @Autowired
-    private UserCourseService userCourseService;
-
-    @Autowired
     private AdminFeginClient adminFeginClient;
 
     @Autowired
@@ -71,13 +68,13 @@ public class CourseController implements CourseApi {
     private EvaluateCourseService evaluateCourseService;
 
     /**
-     * 根据类型获取分页后的在有效期内的课程列表
-     * @param queryVO (String courseName, int currentPage, int pageSize, String type, Boolean isInValidDate)
+     * 根据类型获取分页后的课程列表(有效课程)
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize, String type, Boolean isInValidDate)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页
      * Integer pageSize 分布查询的每页的记录数目
      * String type 查询的排序类型，default（默认）, time(发布时间降序), hot(点赞数量降序)
-     * Boolean isInValidDate 是否在有效期内，true：必须在有效期内， false（或null）：不要求在有效期内
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
     @Override
@@ -108,12 +105,52 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 获取推荐课程列表
+     * 根据查询条件查询某个教师发布的课程（包括有效课程、未删除课程）
+     * @param queryVO (long userId, String courseName, Date startDate, Date endDate, int currentPage, int pageSize)
+     * Long userId 课程的teacherId
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Date startDate 课程发布的起始时间
+     * Date endDate 课程发布的结束时间
+     * Integer currentPage 分页查询的当前页
+     * Integer pageSize 分布查询的每页的记录数目
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
+     * @return
+     */
+    @Override
+    public Result<Page<CourseVO>> getPublishCourseList(@RequestBody QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
+        //根据courseName统计记录的总数
+        Integer total = courseService.getTotalByIdListAndCondition(null, queryDO);
+        if(total == 0) {
+            return PageResult.getSuccessResult(null, total);
+        } else {
+            List<CourseDO> courseDOList = null;
+            // 根据courseName, startIndex, pageSize, orderType等条件查询课程页列表
+            courseDOList = courseService.getListByCondition(queryDO);
+
+            List<CourseVO> courseVOList = new ArrayList<CourseVO>();
+            for (CourseDO courseDO : courseDOList) {
+                CourseTypeDO courseType = courseTypeService.selectByPrimaryKey(courseDO.getTypeId());
+                CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+
+                courseVO.setTypeName(courseType.getTypeName());
+                Integer collectNum = collectCourseService.getTotalByCourseId(courseVO.getCourseId());
+                courseVO.setCollectNum(collectNum);
+
+                courseVOList.add(courseVO);
+            }
+            return PageResult.getSuccessResult(courseVOList, total);
+        }
+    }
+
+    /**
+     * 获取推荐课程列表（包括有效课程、未删除课程、所有课程）
      * @param queryVO(courseIds, courseName, currentPage, pageSize)
      * Long[] courseIds 要匹配的所有课程的id数组
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有的课程）
      * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
     @Override
@@ -141,7 +178,7 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 获取所有在有效期内的课程的id和courseName
+     * 获取所有在有效期内的课程的id、courseName、courseDescription
      * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
      * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
      * Integer currentPage 分页查询的当前页(可以为null)
@@ -153,6 +190,29 @@ public class CourseController implements CourseApi {
         QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
         Map<String, Object> res = new HashMap<String,Object>();
         res.put("ids",courseService.getCourseIdAndCourseName(queryDO));
+        return res;
+    }
+
+    /**
+     * 获取所有课程的id、status
+     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
+     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
+     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
+     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
+     * @return
+     */
+    @Override
+    public Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO) {
+        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
+        List<CourseDO> courseDOList = courseService.getAllCourseIds(queryDO);
+        Map<String, Object> res = new HashMap<String,Object>();
+        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
+        for(CourseDO courseDO : courseDOList) {
+            CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
+            courseVO.setInvalidDate(null);
+            courseVOList.add(courseVO);
+        }
+        res.put("ids", courseVOList);
         return res;
     }
 
@@ -177,8 +237,7 @@ public class CourseController implements CourseApi {
 
         courseDetail.setCourse(courseVO);
 
-        UserCourseDO userCourse = userCourseService.selectByCourseId(courseId);
-        String resultStr = adminFeginClient.getUserInfoById(userCourse.getUserId());
+        String resultStr = adminFeginClient.getUserInfoById(courseDO.getTeacherId());
 
         JSONObject jsonObject= (JSONObject) JSONObject.fromObject(resultStr).get("data");
         UserDTO user = (UserDTO)JSONObject.toBean(jsonObject, UserDTO.class);
@@ -206,12 +265,62 @@ public class CourseController implements CourseApi {
             courseDetail.setCoursewares(coursewareDTOList);
         }
 
-
-
         List<EvaluateCourseDO> evaluates = evaluateCourseService.getListByCourseId(courseId);
         courseDetail.setEvaluates(evaluates);
 
         return Result.getSuccessResult(courseDetail);
+    }
+
+    /**
+     * 增加课程
+     * @param courseVO (long userId , CourseVO courseVO)
+     * @return
+     */
+    @Override
+    public Result<CourseVO> addCourse(@RequestBody CourseVO courseVO) {
+        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+
+        Date date = new Date();
+        courseDO.setPublishTime(date);
+        courseDO.setUpdateTime(date);
+        courseDO.setReadNum(0);
+        courseDO.setPraiseNum(0);
+
+        if(courseDO.getInvalidDate() == null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateStr = sdf.format(date);
+            String year = String.valueOf(Integer.valueOf(dateStr.substring(0,4)) + 10);
+            String invalidDateStr = year.concat(dateStr.substring(4));
+            Date invalidDate = null;
+            try {
+                invalidDate = sdf.parse(invalidDateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            courseDO.setInvalidDate(invalidDate);
+        }
+
+        int count = courseService.insertSelective(courseDO);
+        if(count > 0) {
+            return Result.getSuccessResult(courseVO);
+        }
+        return Result.getBusinessException("添加课程失败","");
+    }
+
+    /**
+     * 用户更新课程
+     * @param courseVO (long userId , CourseVO courseVO)
+     * @return
+     */
+    @Override
+    public Result<CourseVO> updateCourse(@RequestBody CourseVO courseVO) {
+        CourseDO courseDO = CourseConvertUtil.convertToCourseDO(courseVO);
+        courseDO.setUpdateTime(new Date());
+        int count = courseService.updateByPrimaryKeySelective(courseDO);
+        if(count >= 0) {
+            return Result.getSuccessResult(courseVO);
+        }
+        return Result.getBusinessException("更新课程失败","");
     }
 
     /**

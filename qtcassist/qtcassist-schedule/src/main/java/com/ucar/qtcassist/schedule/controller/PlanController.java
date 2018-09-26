@@ -3,12 +3,20 @@ package com.ucar.qtcassist.schedule.controller;
 import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.PlanDO;
+import com.ucar.qtcassist.course.model.UserDTO;
+import com.ucar.qtcassist.course.service.AdminFeginClient;
 import com.ucar.qtcassist.schedule.dto.PlanDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.service.PlanService;
+import com.ucar.qtcassist.schedule.vo.PlanVO;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +26,8 @@ public class PlanController {
 
     @Autowired
     private PlanService planService;
-
+    @Autowired
+    private AdminFeginClient adminFeginClient;
     /**
      * 删除培训计划
      * @param id 培训计划id
@@ -67,10 +76,25 @@ public class PlanController {
      */
     @RequestMapping("/getPlan")
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
-        System.out.println("daozzzzzzzzz");
         List<PlanDO> planList = planService.getPlanList(planDTO);
         Integer total = planService.getPlanTotal(planDTO);
-        return PageResult.getSuccessResult(planList,total);
+        List<PlanVO> planVOS = new ArrayList<>();
+        Long[] ids = new Long[planList.size()];
+        for (int i = 0; i < planList.size(); i++) {
+            PlanDO plan = planList.get(i);
+            ids[i]=plan.getBuilderId();
+        }
+        //根据ids批量获取user信息
+        String resultStr = adminFeginClient.getUsersInfoByIds(ids);
+        JSONArray jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+        List<UserDTO> users = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
+        for (PlanDO planDO:planList) {
+            PlanVO planVO = new PlanVO();
+            BeanUtils.copyProperties(planDO, planVO);
+            planVO.setBuilderName(getNickName(planDO.getBuilderId(),users));
+            planVOS.add(planVO);
+        }
+        return PageResult.getSuccessResult(planVOS,total);
     }
 
     /**
@@ -90,4 +114,12 @@ public class PlanController {
         }
     }
 
+    public String getNickName(Long userId,List<UserDTO> users){
+        for (UserDTO user : users) {
+            if (userId.equals(user.getUserId())){
+                return user.getNickname();
+            }
+        }
+        return null;
+    }
 }

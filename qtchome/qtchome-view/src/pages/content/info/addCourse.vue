@@ -5,46 +5,48 @@
         <span>添加课件</span>
       </div>
       <div class="text item">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form class="cForm" ref="coursewareForm" :model="coursewareForm" :rules="checkRules"  label-width="100px">
           <el-form-item>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="onAddCourseWare()">添加</el-button>
+            <el-button style="float: right; padding: 3px 0" type="primary" @click="onAddCourseWare()" >添加</el-button>
           </el-form-item>
           <el-row>
             <el-col :span="12">
               <el-form-item :span="10" label="课时:" prop="hour">
-                <el-input v-model="form.hour" placeholder=""></el-input>
+                <el-input v-model="coursewareForm.hour" placeholder=""></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item :span="12" label="课件名称:" prop="name">
-                <el-input v-model="form.name" placeholder=""></el-input>
+                <el-input v-model="coursewareForm.name" placeholder=""></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
                 <el-autocomplete ref="sys"
-
                                  popper-class="my-autocomplete"
                                  v-model="state4"
                                  :fetch-suggestions="querySearchAsync"
                                  placeholder="请输入系统课件名"
-                                 @select="handleSelect"
-                >
+                                 @select="handleSelect">
                   <template slot-scope="{ item }">
-                    <div class="name">课程名称：{{ item.value=item.coursewareName }}</div>
-                    <span class="addr">课程类型：{{item.typeName}}</span>
+                    <div class="name">课件名称：{{ item.value=item.coursewareName }}</div>
+                    <span class="addr">课件类型：{{item.typeName}}</span>
                   </template>
                 </el-autocomplete>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item :span="8" label="上传文件:" prop="fileUrl">
+              <el-form-item :span="8" label="上传文件:" prop="fileUrl"
+                            v-loading = "isUploading"
+                            element-loading-text="文件上传中"    >
                 <el-upload ref="upload"
                            :disabled="uploadIsDisabled"
                            action=""
                            :on-remove="handleRemove"
                            :auto-upload="true"
                            :limit="1"
+                           accept="application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application
+                           /vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
                            :on-exceed="handleExceed"
                            :on-success="handleAvatarSuccess"
                            :before-upload="beforeAvatarUpload"
@@ -55,32 +57,30 @@
                 </el-upload>
               </el-form-item>
             </el-col>
-
             <el-col :span="8">
               <el-form-item label="分类:">
-                <el-select v-model="form.typeName" placeholder="请选择分类" prop="typeName"
-                           @change="handleChange"
-                >
+                <el-select v-model="coursewareForm.typeName" value-key="id" placeholder="请选择分类" prop="typeName"
+                           @change="handleChange">
                   <el-option
+                    ref="coursewareTypeOption"
                     v-for="item in coursewareTypeOptions"
                     :key="item.id"
                     :label="item.typeName"
-                    :value="item.id"
-                  >
+                    :value="item">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item label="课件描述:" prop="describe">
-            <el-input v-model="form.describe" placeholder="请输入课程描述"
+            <el-input v-model="coursewareForm.describe" placeholder="请输入课程描述"
                       type="textarea" :rows="3"></el-input>
           </el-form-item>
         </el-form>
       </div>
     </el-card>
     <el-card class="box-card" shadow="never" style="margin-top: 3px" v-show="isShow"
-             v-for="(item,index) in course.courseWare " :key="index">
+             v-for="(item,index) in courseWareTable " :key="index">
       <el-row>
         <el-col :span="3">
           <div class="grid-content bg-purple" style="text-align: center">
@@ -110,8 +110,8 @@
           </div>
         </el-col>
         <el-col :span="10">
-          <div class="grid-content bg-purple" style="color:rgb(59, 99, 190); margin-top: 10px;"><span>分类:{{item.typeName}}</span><span
-            style="margin-left: 20px">作者:{{item.author}}</span></div>
+          <div class="grid-content bg-purple" style="color:rgb(59, 99, 190); margin-top: 10px;"><span>分类:{{item.typeName}}</span>
+            <!--<span style="margin-left: 20px">作者:{{item.author}}</span>--></div>
         </el-col>
       </el-row>
     </el-card>
@@ -119,151 +119,202 @@
 </template>
 <script>
   export default {
-    inject:['reload'],
+    inject: ['reload'],
     name: 'addCourse',
-    data() {
+    data () {
+      const validateCoursewareName = (rule, value, callback) => {
+        if (value === null) {
+          callback(new Error('课件名称不能为空'))
+        } else if (value.trim() === '') {
+          callback(new Error('课件名称不能为空'))
+        } else {
+          callback()
+        }
+      }
       return {
         uploadIsDisabled: false,
         isShow: false,
         state4: '',
-        course: {
-          courseWare: {}
+        addflag: '',
+        isUploading: false,
+        courseWareTable: [],
+        courseWareTableItem12312: {
+          name: '',
+          describe: '',
+          typeName: ''
         },
         coursewareTypeOptions: [],
         courseWareList: [],
-        form: {
+        coursewareForm: {
           hour: '',
           name: '',
           typeId: '',
+          typeName: '',
           describe: '',
           flag: '',
           baseCoursewareId: '',
           courseId: ''
-
+        },
+        checkRules: {
+          name: [
+              {required: true, trigger: 'blur', validator: validateCoursewareName}
+          ],
+          hour: [
+              {required: true, trigger: 'blur', message: '课时不能为空'}
+          ]
         }
       }
     },
-    mounted() {
-      console.log(this.$router.currentRoute.params)
+    mounted () {
       // 得到课程的id
-      this.form.courseId = this.$router.currentRoute.params.course.courseId
-      console.log(this.form.courseId)
+      this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
       // 得到课程的课件的集合
-      this.course.courseWare = this.$router.currentRoute.params.coursewares
-      console.log(this.course.courseWare)
+      var mycars = []
+      mycars = this.$router.currentRoute.params.coursewares
+      for (var i = 0; i < mycars.length; i++) {
+        var courseWareTableItem = {}
+        courseWareTableItem.name = mycars[i].name
+        courseWareTableItem.describe = mycars[i].description
+        courseWareTableItem.typeName = mycars[i].type
+        this.courseWareTable.push(courseWareTableItem)
+      }
+      if (this.courseWareTable.length > 0) {
+        this.isShow = true
+      }
       this.loadAll()
     },
     methods: {
-      onAddCourseWare() {
-        this.$store.dispatch('Post', {
-          'url': '/api-home/courseCourseware/addCourseCourseware',
-          'data': this.form
-        }).then(fileRes => {
-          if (fileRes.data.re == 1) {
-            this.addSuccessfully()
-          } else{
+      onAddCourseWare () {
+        this.$refs.coursewareForm.validate(valid => {
+          if (valid) {
+            this.$store.dispatch('Post', {
+              'url': '/api-home/courseCourseware/addCourseCourseware',
+              'data': this.coursewareForm
+            }).then(fileRes => {
+              this.addflag = fileRes.data.re
+              if (this.addflag === 1) {
+                console.log(this.coursewareForm)
+                var courseWareTableItem = {}
+                courseWareTableItem.name = this.coursewareForm.name
+                courseWareTableItem.describe = this.coursewareForm.describe
+                courseWareTableItem.typeName = this.coursewareForm.typeName
+                this.courseWareTable.push(courseWareTableItem)
+                this.addSuccessfully()
+              } else {
 
+              }
+              console.log('fileRes.data.re:' + fileRes.data.re)
+            })
           }
-          console.log('fileRes.data.re:' + fileRes.data.re)
         })
       },
-      handleRemove(file) {
+      handleRemove (file) {
         console.log(file)
       },
-      beforeRemove(file, fileList) {
+      beforeRemove (file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`)
       },
-      beforeAvatarUpload(file) {
+      beforeAvatarUpload (file) {
         this.$refs.sys.disabled = true
+        this.isUploading = true
+        // this.uploadLoading()
         let tem = new FormData()
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
           if (fileRes.data.re != null) {
-            this.form.baseCoursewareId = fileRes.data.re
+            this.coursewareForm.baseCoursewareId = fileRes.data.re
+            this.isUploading = false
             this.uploadSuccessfully()
-            this.form.flag = 1
+            this.coursewareForm.flag = 1
           } else {
+            this.isUploading = false
             this.uploadfailed()
           }
         })
         console.log(file)
       },
-      handleAvatarSuccess(res, file) {
+      handleAvatarSuccess (response, file, fileList) {
+        console.log('handleAvatarSuccess')
+        console.log(response)
         console.log(file)
       },
-      handleExceed(files, fileList) {
+      handleExceed (files, fileList) {
         console.log(this.$refs.upload)
         this.$message.warning(`已经选择上传文件`)
       },
-      loadAll() {
+      loadAll () {
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllBaseCoursewares`,
           'data': ''
         }).then(coursewareListRes => {
           this.courseWareList = coursewareListRes.data.re
-          console.log(this.courseWareList)
         })
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllTypes`,
           'data': ''
         }).then(coursewareTypeListRes => {
           this.coursewareTypeOptions = coursewareTypeListRes.data.re
-          console.log(coursewareTypeListRes.data.re)
         })
       },
-      querySearchAsync(queryString, cb) {
+      querySearchAsync (queryString, cb) {
         var courseWareList = this.courseWareList
         var results = queryString ? courseWareList.filter(this.createStateFilter(queryString)) : courseWareList
         cb(results)
       },
-      createStateFilter(queryString) {
+      createStateFilter (queryString) {
         return (courseWare) => {
           return (courseWare.coursewareName.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
-      handleSelect(item) {
-        this.form.baseCoursewareId = item.id
+      handleSelect (item) {
+        this.coursewareForm.baseCoursewareId = item.id
         this.uploadIsDisabled = true
       },
 
-      handleChange(item) {
-        console.log(item)
-        this.form.typeId = item
+      handleChange (item) {
+        this.coursewareForm.typeName = item.typeName
+        this.coursewareForm.typeId = item.id
       },
-      uploadSuccessfully() {
+      uploadSuccessfully () {
         this.$alert('上传成功', '提示', {
-          confirmButtonText: '确定',
-          /*callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }*/
-        });
+          confirmButtonText: '确定'
+        })
       },
-      uploadfailed() {
-        this.$alert('上传失败，请重试', '警告', {
-          confirmButtonText: '确定',
-        });
-      },
-      addSuccessfully() {
+      addSuccessfully () {
         this.$alert('课件添加成功', '提示', {
           confirmButtonText: '确定',
           callback: action => {
-            /*this.form.hour=''
-            this.form.describe=''
-            this.form.name=''
-            this.form.baseCoursewareId=''*/
-            this.reload()
+            console.log('addSuccessfully')
+            this.isShow = true
+            this.coursewareForm.baseCoursewareId = ''
+            this.coursewareForm.describe = ''
+            this.coursewareForm.flag = ''
+            this.coursewareForm.hour = ''
+            this.coursewareForm.name = ''
+            this.state4 = ''
+            console.log(this.courseWareTable)
           }
-        });
+        })
       },
-      uploadfailed() {
-        this.$alert('课件添加失败，请重试', '警告', {
-          confirmButtonText: '确定',
-        });
+      uploadfailed () {
+        this.$alert('课件添加失败，请重试', '提示', {
+          confirmButtonText: '确定'
+        })
       },
+
+      uploadLoading () {
+        const loading = this.$loading({
+          // target: cForm,
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        setTimeout(() => {
+          loading.close()
+        }, 2000)
+      }
 
     }
 

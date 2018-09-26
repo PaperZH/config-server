@@ -51,8 +51,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDO> getTeacherById(Long id) {
-		List<UserDO> users = userMapper.getTeacherById(id);
+	public List<UserDO> getUsers(Long[] ids) {
+		return userMapper.getUsers(ids);
+	}
+
+	@Override
+	public List<UserDO> getTeacherById(Long id, int relationType) {
+		List<UserDO> users = userMapper.getTeacherById(id,relationType);
 		for(UserDO userDO:users){
 			userDO.setRoleIds(userRoleMapper.listRoleId(userDO.getUserId()));
 			userDO.setDeptName(deptMapper.get(userDO.getDeptId()).getName());
@@ -61,8 +66,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDO> getStudentById(Long id) {
-		List<UserDO> users = userMapper.getStudentById(id);
+	public List<UserDO> getStudentById(Long id, int relationType) {
+		List<UserDO> users = userMapper.getStudentById(id,relationType);
 		for(UserDO userDO:users){
 			userDO.setRoleIds(userRoleMapper.listRoleId(userDO.getUserId()));
 			userDO.setDeptName(deptMapper.get(userDO.getDeptId()).getName());

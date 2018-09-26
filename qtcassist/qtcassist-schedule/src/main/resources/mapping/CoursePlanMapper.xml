@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="plan_id" property="planId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="teacher_id" property="teacherId" jdbcType="BIGINT" />
     <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
     <result column="course_description" property="courseDescription" jdbcType="VARCHAR"/>
   </resultMap>
@@ -20,9 +21,21 @@
   </select>
 
   <select id="selectByCourseName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id,course_name
-    from assist_course where del_flag=1 and course_name like  concat('%', #{courseName}, '%')
-    limit 0,10
+    select id,course_name,course_description,teacher_id
+    from assist_course where del_flag=1
+    <if test="courseName != null and courseName != ''">
+    and course_name like  concat('%', #{courseName}, '%')
+    </if>
+    <if test="offset !=null">
+      limit #{offset},#{pageSize}
+    </if>
+  </select>
+
+  <select id="selectTotal"  resultType="java.lang.Integer">
+    select count(1) from assist_course where del_flag=1
+    <if test="courseName != null and courseName != ''">
+      and course_name like  concat('%', #{courseName}, '%')
+    </if>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >

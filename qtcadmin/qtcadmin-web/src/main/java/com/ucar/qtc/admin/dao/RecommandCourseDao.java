@@ -16,6 +16,8 @@ public interface RecommandCourseDao {
 
     List<RecommandCourseDO> list(Map<String, Object> map);
 
+    List<Long> listCourseIds(Map<String,Object> map);
+
     int count(Map<String, Object> map);
 
     int save(RecommandCourseDO recommandCourseDO);
@@ -24,5 +26,5 @@ public interface RecommandCourseDao {
 
     int remove(Long id);
 
-    int batchremove(Long[] ids);
+    int batchRemove(Long[] ids);
 }

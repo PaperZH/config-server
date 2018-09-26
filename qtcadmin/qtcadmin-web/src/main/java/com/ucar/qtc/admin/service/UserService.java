@@ -20,9 +20,11 @@ import java.util.Set;
 public interface UserService {
 	UserDO get(Long id);
 
-	List<UserDO> getTeacherById(Long id);
+	List<UserDO> getUsers( Long[] ids);
 
-	List<UserDO> getStudentById(Long id);
+	List<UserDO> getTeacherById(Long id, int relationType);
+
+	List<UserDO> getStudentById(Long id, int relationType);
 
 	List<UserDO> list(Map<String, Object> map);
 

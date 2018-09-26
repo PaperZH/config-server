@@ -12,6 +12,8 @@ eureka:
     lease-expiration-duration-in-seconds: 20
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
+cache:
+  time: 5
 
 spring:
   application:

@@ -65,10 +65,13 @@ public class FrontPageController {
     @GetMapping(value="getRecCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(){
 
+        //得到所有推荐课程信息
+        int pageSize = 8;
         List<RecommandCourseDO> recommandCourseList = recCourseService.list(null);
         if(recommandCourseList.size() == 0){
             return ResponseResult.error(-1,"无推荐课程信息");
         }
+        //得到推荐课程id数组
         Long[] listIds = new Long[recommandCourseList.size()];
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
@@ -77,11 +80,12 @@ public class FrontPageController {
         }
         QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(listIds);
+        queryVO.setIsInValidDate(true);
         Map<String,Object> ids = new HashMap<String,Object>();
         ids.put("id",listIds);
         List<CourseVO> listCourseVo = courseService.getRecCourseList(queryVO).getRe();
         List<CourseVO> list = new ArrayList<CourseVO>();
-        for(int i = 0;i <listIds.length; i++){
+        for(int i = 0;i <listIds.length&&i<pageSize; i++){
             iterator = listCourseVo.iterator();
             while(iterator.hasNext()){
                 CourseVO tempCourseVO = (CourseVO)iterator.next();
@@ -99,21 +103,34 @@ public class FrontPageController {
         return ResponseResult.ok().put("data",userDTO);
     }
 
+    @ApiOperation(value="根据IDS批量获取用户信息", notes="根据IDS批量获取用户信息")
+    @GetMapping(value="getUsersInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult getUsersInfoById(@RequestParam("ids") Long[] ids) {
+        List<UserDTO> userDTOS = new LinkedList<UserDTO>();
+        for (UserDO userDO:userService.getUsers(ids)){
+            userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+        }
+        return ResponseResult.ok().put("data",userDTOS);
+    }
+
     @ApiOperation(value="获取ID获取学员信息", notes="获取ID获取学员信息")
     @GetMapping(value="getStudentInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id) {
+    public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id,@RequestParam(value="id",defaultValue="-1")int type) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
-        for(UserDO userDO:userService.getStudentById(id)){
+        int relationType = (type == 0) ? null : type;
+        for(UserDO userDO:userService.getStudentById(id,type)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
+            System.out.println("执行成功");
         }
         return ResponseResult.ok().put("data",userDTOS);
     }
 
     @ApiOperation(value="获取ID获取老师信息", notes="获取ID获取老师信息")
     @GetMapping(value="getTeacherInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseResult getTeacherInfoById(@RequestParam("id") Long id) {
+    public ResponseResult getTeacherInfoById(@RequestParam("id") Long id,@RequestParam(value="id",defaultValue="0")int type) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
-        for(UserDO userDO:userService.getTeacherById(id)){
+        int relationType = (type == 0) ? null : type;
+        for(UserDO userDO:userService.getTeacherById(id,type)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
         }
         return ResponseResult.ok().put("data",userDTOS);

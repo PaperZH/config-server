@@ -19,13 +19,13 @@ public class CoursewareDTO {
      * 名称
      */
     private String name;
-//    /**
-//     * 分类
-//     */
-//    private String type;
-//    /**
-//     * 作者
-//     * */
+    /**
+     * 分类
+     */
+    private String type;
+    /**
+     * 作者
+     * */
     /**
      * 描述
      */
@@ -52,13 +52,13 @@ public class CoursewareDTO {
         this.name = name;
     }
 
-    /*public String getType() {
+    public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
-    }*/
+    }
 
     public String getDescription() {
         return description;

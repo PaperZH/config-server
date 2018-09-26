@@ -121,7 +121,6 @@
           this.show = true
         },
         handleClick (row, index) {
-          console.log('delete')
           this.$confirm('是否要删除该记录?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -145,7 +144,6 @@
           this.message = data
         },
         handleCourse (planId) {
-          console.log('查看course')
           this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseByPlanId', 'data': {'planId': planId}}).then(res => {
             this.courseData = res.data.re
             this.id = planId

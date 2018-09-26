@@ -1,14 +1,24 @@
 package com.ucar.qtcassist.schedule.controller;
 
+import com.ucar.qtcassist.api.common.PageResult;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseDO;
+import com.ucar.qtcassist.course.model.UserDTO;
+import com.ucar.qtcassist.course.service.AdminFeginClient;
 import com.ucar.qtcassist.course.service.CourseService;
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
+import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 import com.ucar.qtcassist.schedule.service.CoursePlanService;
+import com.ucar.qtcassist.schedule.vo.CoursePlanVO;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +31,8 @@ public class CoursePlanController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private AdminFeginClient adminFeginClient;
     /**
      * 删除课程计划关系
      * @param id 计划课程id
@@ -64,9 +76,30 @@ public class CoursePlanController {
     }
 
     @RequestMapping("/getCourseList")
-    public Result get(@RequestBody String courseName){
-        List<CoursePlanDO> coursePlanDO = coursePlanService.selectByCourseName(courseName);
-        return Result.getSuccessResult(coursePlanDO);
+    public Result get(@RequestBody QueryCourseDTO courseDTO){
+        int total = coursePlanService.selectTotal(courseDTO);
+        if(total==0){
+            return PageResult.getSuccessResult("获得0条记录");
+        }else {
+            List<CoursePlanDO> coursePlanDOS = coursePlanService.selectByCourseName(courseDTO);
+            List<CoursePlanVO> coursePlanVOS = new ArrayList<>();
+            Long[] ids = new Long[coursePlanDOS.size()];
+            for (int i = 0; i < coursePlanDOS.size(); i++) {
+                CoursePlanDO coursePlanDO = coursePlanDOS.get(i);
+                ids[i]=coursePlanDO.getTeacherId();
+            }
+            //根据ids批量获取user信息
+            String resultStr = adminFeginClient.getUsersInfoByIds(ids);
+            JSONArray jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+            List<UserDTO> users = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
+            for (CoursePlanDO coursePlanDO:coursePlanDOS) {
+                CoursePlanVO coursePlanVO = new CoursePlanVO();
+                BeanUtils.copyProperties(coursePlanDO, coursePlanVO);
+                    coursePlanVO.setTeacherName(getNickName(coursePlanDO.getTeacherId(),users));
+                coursePlanVOS.add(coursePlanVO);
+            }
+            return PageResult.getSuccessResult(coursePlanVOS, total);
+        }
     }
 
     /**
@@ -88,5 +121,14 @@ public class CoursePlanController {
     public CourseDO getCourse(@PathVariable("id") Long id) {
         CourseDO course = courseService.selectByPrimaryKey(id);
         return course;
+    }
+
+    public String getNickName(Long userId,List<UserDTO> users){
+        for (UserDTO user : users) {
+            if (userId.equals(user.getUserId())){
+                return user.getNickname();
+            }
+        }
+        return null;
     }
 }

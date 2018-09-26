@@ -2,6 +2,7 @@ package com.ucar.qtcassist.schedule.dao;
 
 import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 import com.ucar.qtcassist.schedule.dto.CoursePlanDTO;
+import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface CoursePlanMapper {
 
     int updateByPrimaryKey(CoursePlanDO record);
 
-    List<CoursePlanDO> selectByCourseName(String courseName);
+    List<CoursePlanDO> selectByCourseName(QueryCourseDTO courseDTO);
+
+    int selectTotal(QueryCourseDTO courseDTO);
 }

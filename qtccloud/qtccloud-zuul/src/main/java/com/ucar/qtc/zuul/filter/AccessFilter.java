@@ -13,6 +13,7 @@ import com.ucar.qtc.zuul.service.RedisCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,9 @@ import java.util.Set;
 public class AccessFilter extends ZuulFilter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessFilter.class);
+
+    @Value("${cache.time}")
+    private String cacheTime;
 
     @Autowired
     MenuService menuService;
@@ -97,6 +101,8 @@ public class AccessFilter extends ZuulFilter {
             setFailedRequest(ResponseResult.error401(), 200);
             return null;
         }
+
+        redisCacheService.expire(userToken.getUsername(), Long.parseLong(cacheTime)*60*1000);
 
         FilterContextHandler.setToken(accessToken);
         if(!havePermission(request)){

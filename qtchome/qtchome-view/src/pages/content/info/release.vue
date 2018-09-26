@@ -21,7 +21,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item :span="8" label="作者:">
-            <el-input v-model="courseDetailForm.teacher.nickname" placeholder="" readonly></el-input>
+            <el-input v-model="courseDetailForm.course.teacherNickname" placeholder="" readonly></el-input>
           </el-form-item>
         </el-col>
         <el-col >
@@ -101,13 +101,11 @@
             courseCover: null,
             courseDescription: '暂无描述',
             courseScore: null,
+            teacherId: null,
+            teacherNickname: null,
             invalidDate: null
           },
-          coursewares: [],
-          teacher: {
-            userId: null,
-            nickname: null
-          }
+          coursewares: []
         },
         imageUrl: '',
         submitButtonText: null,
@@ -135,18 +133,17 @@
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
           this.submitButtonText = '更新课程'
-          this.$store.dispatch('Get', {'url': '/api-home/course/getDetails/' + courseId}).then(res => {
+          this.$store.dispatch('Get', {'url': '/api-home/course/getCourseDetail/' + courseId}).then(res => {
             this.courseDetailForm.course = res.data.re.course
+            this.courseDetailForm.course.teacherNickname = res.data.re.teacher.nickname
             this.courseDetailForm.coursewares = res.data.re.coursewares
-            this.courseDetailForm.teacher.userId = res.data.re.teacher.userId
-            this.courseDetailForm.teacher.nickname = res.data.re.teacher.nickname
           })
         } else {
           this.submitButtonText = '发布课程'
           let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
           if (tempuser) {
-            this.courseDetailForm.teacher.userId = tempuser.userId
-            this.courseDetailForm.teacher.nickname = tempuser.nickname
+            this.courseDetailForm.course.teacherId = tempuser.userId
+            this.courseDetailForm.course.teacherNickname = tempuser.nickname
           }
         }
       })
@@ -159,13 +156,12 @@
         this.$refs.courseDetailForm.validate(valid => {
           if (valid) {
             // 如果courseId存在，则是修改课程信息，否则是新建课程信息
-            let data = {'userId': this.courseDetailForm.teacher.userId, 'course': this.courseDetailForm.course}
             if (this.courseDetailForm.course.courseId != null) {
-              this.$store.dispatch('Post', {'url': '/api-home/course/updateUserCourse', 'data': data}).then(res => {
+              this.$store.dispatch('Post', {'url': '/api-home/course/updateCourse', 'data': this.courseDetailForm.course}).then(res => {
                 this.$router.push({name: 'addCourse', params: this.courseDetailForm})
               })
             } else {
-              this.$store.dispatch('Post', {'url': '/api-home/course/addUserCourse', 'data': data}).then(res => {
+              this.$store.dispatch('Post', {'url': '/api-home/course/addCourse', 'data': this.courseDetailForm.course}).then(res => {
                 this.courseDetailForm.course.courseId = res.data.re.courseId
                 this.$router.push({name: 'addCourse', params: this.courseDetailForm})
               })

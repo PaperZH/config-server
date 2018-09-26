@@ -8,18 +8,26 @@
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user where user_id = #{value}
 	</select>
 
+	<select id="getUsers" resultType="com.ucar.qtc.admin.domain.UserDO">
+		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
+		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user where user_id in
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</select>
+
 	<select id="getTeacherById" resultType="com.ucar.qtc.admin.domain.UserDO">
 		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user a
 		LEFT JOIN sys_user_relation b on b.user1_id = a.user_id
-		where b.user2_id = #{value}
+		where b.user2_id = #{id} and b.relation_type = #{relationType}
 	</select>
 
 	<select id="getStudentById" resultType="com.ucar.qtc.admin.domain.UserDO">
 		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user a
 		LEFT JOIN sys_user_relation b on b.user2_id = a.user_id
-		where b.user1_id = #{value}
+		where b.user1_id = #{value} and b.relation_type = #{relationType}
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.admin.domain.UserDO">

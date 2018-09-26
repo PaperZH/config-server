@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ucar.qtc.admin.dao.UserRelationDao">
+
+    <select id="getUserRelation" resultType="com.ucar.qtc.admin.domain.UserRelationDO">
+        SELECT * from sys_user_relation
+        <where>
+            del_flag = 1
+          <if test="user1Id != null">and user1_id = #{user1Id}</if>
+          <if test="user2Id != null">and user2_id = #{user2Id}</if>
+          <if test="relationType != null">and relation_tpe = #{relationType}</if>
+        </where>
+    </select>
+
+    <insert id="saveUserRelation" parameterType="com.ucar.qtc.admin.domain.UserRelationDO" useGeneratedKeys="true" >
+        insert into sys_user_relation
+        (
+        `user1_id`,
+        `user2_id`,
+        `relation_type`,
+        )
+        values
+        (
+        #{user1Id},
+        #{user2Id},
+        #{relationType}
+        )
+    </insert>
+
+    <update id="updateUserRelation" parameterType="com.ucar.qtc.admin.domain.UserRelationDO">
+        update sys_user_relation
+        <set>
+            <if test="user1Id != null">`user1_id` = #{user1_id}, </if>
+            <if test="user2Id != null">`user2_id` = #{user2_id}, </if>
+            <if test="relationType != null">`relation_type` = #{RelationType}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="removeUserRelation">
+        update sys_user_relation set del_flag = 0 where id = #{value}
+    </delete>
+
+</mapper>

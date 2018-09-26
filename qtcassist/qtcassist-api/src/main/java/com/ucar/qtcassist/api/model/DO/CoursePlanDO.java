@@ -7,6 +7,8 @@ public class CoursePlanDO {
 
     private Long courseId;
 
+    private Long teacherId;
+
     private String courseName;
 
     private String courseDescription;
@@ -51,12 +53,21 @@ public class CoursePlanDO {
         this.courseDescription = courseDescription;
     }
 
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
     @Override
     public String toString() {
         return "CoursePlanDO{" +
                 "id=" + id +
                 ", planId=" + planId +
                 ", courseId=" + courseId +
+                ", teacherId=" + teacherId +
                 ", courseName='" + courseName + '\'' +
                 ", courseDescription='" + courseDescription + '\'' +
                 '}';

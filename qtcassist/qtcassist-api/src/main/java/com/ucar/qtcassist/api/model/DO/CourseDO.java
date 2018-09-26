@@ -17,6 +17,8 @@ public class CourseDO {
 
     private Float courseScore;
 
+    private Long teacherId;
+
     private Integer readNum;
 
     private Integer praiseNum;
@@ -78,6 +80,14 @@ public class CourseDO {
 
     public void setCourseScore(Float courseScore) {
         this.courseScore = courseScore;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
     }
 
     public Integer getReadNum() {
