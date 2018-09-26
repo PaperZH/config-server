@@ -1,5 +1,5 @@
 <template>
-  <el-dialog  :title="title" :visible.sync="visible" @close="$emit('update:show', false)" :show="show" style="width: 80% ;margin-left:350px ">
+  <el-dialog  :title="title" :visible.sync="visible" @close="$emit('update:show', false)" :show="show" >
     <el-form ref="message" :model="message" label-width="80px"  :rules="rules">
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
           <el-form-item label="学员" :span="11" prop="studentIds">
@@ -52,7 +52,7 @@
                 <el-table-column
                   prop="builderName"
                   label="创建者"
-                  width="200"
+                  width="150"
                 >
                 </el-table-column>
                 <el-table-column
