@@ -2,7 +2,7 @@
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px; margin-top: 0px;">
 
-      <div v-for="(item, index) in tableData" :key="index" style="padding: 10px; margin-top: 3px; width: 23%; height: 290px; float: left">
+      <div v-for="(item, index) in tableData" :key="index" style="padding: 10px; margin-top: 3px; width: 22%; height: 290px; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
           <div v-on:click="handleDetails(item)">
             <div style="width: 100%; height: 200px;">
