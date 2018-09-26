@@ -32,14 +32,12 @@ spring:
     timeout: 500s
 
 zuul:
-  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+#  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   host:
     socket-timeout-millis: 60000
     connect-timeout-millis: 60000
 
 ribbon:
-  ReadTimeout: 60000
-  ConnectTimeout: 30000
   eureka:
     enabled: true
 
