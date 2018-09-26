@@ -85,12 +85,17 @@ public class FrontPageController {
         ids.put("id",listIds);
         List<CourseVO> listCourseVo = courseService.getRecCourseList(queryVO).getRe();
         List<CourseVO> list = new ArrayList<CourseVO>();
-        for(int i = 0;i <listIds.length&&i<pageSize; i++){
+        for(int i = 0;i <listIds.length; i++){
             iterator = listCourseVo.iterator();
             while(iterator.hasNext()){
                 CourseVO tempCourseVO = (CourseVO)iterator.next();
-                if(tempCourseVO.getCourseId() == listIds[i])
+                if(tempCourseVO.getCourseId().equals(listIds[i])) {
                     list.add(tempCourseVO);
+                    break;
+                }
+            }
+            if(list.size() == 8) {
+                break;
             }
         }
         return ResponseResult.ok().put("list",list);

@@ -1,7 +1,8 @@
 <template>
   <div  >
     <el-row >
-      <el-col :span="24"><div class="grid-content bg-purple-dark">
+      <el-col :span="24">
+        <div class="grid-content bg-purple-dark">
         <el-menu
           :default-active="activeIndex"
           class="el-menu-demo"
@@ -10,20 +11,22 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b" >
+
           <div style="float: left;position: absolute;margin-top: 17px;margin-left: 15px;">
             <img style="width: 70%;display: block;" src="static/logo.png"/>
           </div>
-          <el-menu-item index="home"style="left: 25%" v-show="isMenu">主页</el-menu-item>
-          <el-menu-item index="course" style="left: 27%" v-show="isMenu">课程</el-menu-item>
-          <el-menu-item index="summary" style="left: 29%" v-show="isMenu">课程计划</el-menu-item>
-          <el-menu-item index="ask" style="left: 31%" v-show="isMenu">问吧</el-menu-item>
+          <el-menu-item index="home"style="left: 20%" v-show="isMenu">主页</el-menu-item>
+          <el-menu-item index="course" style="left: 22%" v-show="isMenu">课程</el-menu-item>
+          <el-menu-item index="summary" style="left: 24%" v-show="isMenu">课程计划</el-menu-item>
+          <el-menu-item index="ask" style="left: 26%" v-show="isMenu">问吧</el-menu-item>
 
-          <div class="topInput" style="position: relative">
-            <div style="min-width: 50%; float: left; margin-left: 23px; height: 30px; margin-top: 5px">
-              <el-input placeholder="搜索课程" v-model="courseName" class="input-with-select" size="small">
-                <el-button slot="append" icon="el-icon-search" @click="handleSearchCourse" ></el-button>
-              </el-input>
-            </div>
+          <div style="float: left; position: absolute; left: 55%; margin-left: 0px; height: 30px; margin-top: 14px">
+            <el-input placeholder="搜索课程" v-model="courseName" class="input-with-select" size="small">
+              <el-button slot="append" icon="el-icon-search" @click="handleSearchCourse" ></el-button>
+            </el-input>
+          </div>
+
+          <div class="topInput">
             <div style="float: right;color: #f7f6f6;">
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">

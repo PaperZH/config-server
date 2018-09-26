@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class=" fillcontain">
     <el-card class="box-card" shadow="never">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
         <el-form-item label="名称">
@@ -29,7 +29,6 @@
           border
           style="width: 100%">
           <el-table-column
-            fixed
             prop="planTitle"
             label="计划名称"
             width="180">
