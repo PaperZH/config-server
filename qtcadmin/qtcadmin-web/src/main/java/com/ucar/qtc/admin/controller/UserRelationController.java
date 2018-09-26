@@ -58,4 +58,8 @@ public class UserRelationController {
         }
         return ResponseResult.error();
     }
+
+    public ResponseResult getRelation(@RequestBody UserRelationDO userRelationDO){
+        return null;
+    }
 }

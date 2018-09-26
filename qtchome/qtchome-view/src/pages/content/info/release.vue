@@ -31,7 +31,7 @@
               action=""
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv,text/plain"
+              accept="image/*"
               :before-upload="beforeAvatarUpload">
               <img v-if="courseDetailForm.course.courseCover" :src="courseDetailForm.course.courseCover" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon1"></i>

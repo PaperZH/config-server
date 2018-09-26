@@ -13,7 +13,7 @@ import java.util.List;
  **/
 @Service
 public interface UserRelationService {
-    public List<UserRelationDO> getUserRelation(Long user1Id, Long user2Id);
+    public List<UserRelationDO> getUserRelation(UserRelationDO userRelationDO);
 
     public int saveUserRelation(UserRelationDO userRelationDO);
 

@@ -65,10 +65,13 @@ public class FrontPageController {
     @GetMapping(value="getRecCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(){
 
+        //得到所有推荐课程信息
+        int pageSize = 8;
         List<RecommandCourseDO> recommandCourseList = recCourseService.list(null);
         if(recommandCourseList.size() == 0){
             return ResponseResult.error(-1,"无推荐课程信息");
         }
+        //得到推荐课程id数组
         Long[] listIds = new Long[recommandCourseList.size()];
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
@@ -77,6 +80,7 @@ public class FrontPageController {
         }
         QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(listIds);
+        queryVO.setIsInValidDate(true);
         Map<String,Object> ids = new HashMap<String,Object>();
         ids.put("id",listIds);
         List<CourseVO> listCourseVo = courseService.getRecCourseList(queryVO).getRe();
@@ -85,8 +89,13 @@ public class FrontPageController {
             iterator = listCourseVo.iterator();
             while(iterator.hasNext()){
                 CourseVO tempCourseVO = (CourseVO)iterator.next();
-                if(tempCourseVO.getCourseId() == listIds[i])
+                if(tempCourseVO.getCourseId().equals(listIds[i])) {
                     list.add(tempCourseVO);
+                    break;
+                }
+            }
+            if(list.size() == 8) {
+                break;
             }
         }
         return ResponseResult.ok().put("list",list);

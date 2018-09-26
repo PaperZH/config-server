@@ -21,6 +21,8 @@ public class UserRelationDO implements Serializable{
 
     private String relationType;
 
+    private Integer delfLag;
+
     public Long getId() {
         return id;
     }
@@ -55,6 +57,14 @@ public class UserRelationDO implements Serializable{
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Integer getDelfLag() {
+        return delfLag;
+    }
+
+    public void setDelfLag(Integer delfLag) {
+        this.delfLag = delfLag;
     }
 
     @Override

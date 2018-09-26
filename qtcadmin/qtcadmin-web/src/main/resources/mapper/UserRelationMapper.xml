@@ -5,7 +5,12 @@
 
     <select id="getUserRelation" resultType="com.ucar.qtc.admin.domain.UserRelationDO">
         SELECT * from sys_user_relation
-        where user1_id = #{user1Id} and user2_id = #{user2Id}
+        <where>
+            del_flag = 1
+          <if test="user1Id != null">and user1_id = #{user1Id}</if>
+          <if test="user2Id != null">and user2_id = #{user2Id}</if>
+          <if test="relationType != null">and relation_tpe = #{relationType}</if>
+        </where>
     </select>
 
     <insert id="saveUserRelation" parameterType="com.ucar.qtc.admin.domain.UserRelationDO" useGeneratedKeys="true" >
