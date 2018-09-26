@@ -43,11 +43,7 @@ public class RecCourseController {
     @Log("获取推荐课程列表信息")
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(@RequestBody QueryVO queryVO){
-       List<CourseVO> result = recCourseService.listRecCourseByQuery(queryVO);
-       if(result == null)
-           return ResponseResult.error();
-
-        return ResponseResult.ok().put("list",result);
+        return recCourseService.listRecCourseByQuery(queryVO);
     }
 
     @ApiOperation(value="保存推荐课程信息", notes="保存推荐课程信息")

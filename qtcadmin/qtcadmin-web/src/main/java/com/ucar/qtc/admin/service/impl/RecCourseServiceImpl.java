@@ -8,6 +8,7 @@ import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
+import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,10 +46,13 @@ public class RecCourseServiceImpl implements RecCourseService {
     }
 
     @Override
-    public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
-        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(null);
+    public ResponseResult listRecCourseByQuery(QueryVO queryVO){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("currentPage",queryVO.getCurrentPage());
+        map.put("pageSize",queryVO.getPageSize());
+        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(map);
         if(recommandCourseList.size() == 0){
-            return null;
+            return ResponseResult.error();
         }
         return getRecCourseList(recommandCourseList,queryVO);
     }
@@ -75,7 +79,7 @@ public class RecCourseServiceImpl implements RecCourseService {
 
     @Override
     public int batchremove(Long[] ids) {
-        return recommandCourseDao.batchremove(ids);
+        return recommandCourseDao.batchRemove(ids);
     }
 
     /**
@@ -102,9 +106,12 @@ public class RecCourseServiceImpl implements RecCourseService {
      * @param recommandCourseList 推荐课程列表
      * @return
      */
-    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList,QueryVO queryVO){
+    private ResponseResult getRecCourseList(List<RecommandCourseDO> recommandCourseList, QueryVO queryVO){
+
         int size = recommandCourseList.size();
+        int total = recommandCourseDao.count(null);
         Long[] ids = new Long[size];
+
         Iterator iterator = recommandCourseList.iterator();
         int index = 0;
         while(iterator.hasNext()){
@@ -129,6 +136,7 @@ public class RecCourseServiceImpl implements RecCourseService {
                 }
             }
         }
-        return reccomandCourseVO;
+        return ResponseResult.ok().put("total",total)
+                                    .put("list",reccomandCourseVO);
     }
 }

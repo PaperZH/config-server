@@ -18,6 +18,8 @@ public class QueryVO {
 
     private Integer pageSize;
 
+    private Boolean isInValidDate;
+
     public Long getUserId() {
         return userId;
     }
@@ -80,5 +82,13 @@ public class QueryVO {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Boolean getInValidDate() {
+        return isInValidDate;
+    }
+
+    public void setInValidDate(Boolean inValidDate) {
+        isInValidDate = inValidDate;
     }
 }
