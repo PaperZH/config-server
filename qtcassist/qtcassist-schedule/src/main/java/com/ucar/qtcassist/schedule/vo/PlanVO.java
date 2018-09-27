@@ -25,6 +25,14 @@ public class PlanVO {
         this.planContent = planContent;
     }
 
+    public Float getPlanScore() {
+        return planScore;
+    }
+
+    public void setPlanScore(Float planScore) {
+        this.planScore = planScore;
+    }
+
     public String getPlanDestination() {
         return planDestination;
     }
@@ -47,6 +55,7 @@ public class PlanVO {
                 "id=" + id +
                 ", planTitle='" + planTitle + '\'' +
                 ", planContent='" + planContent + '\'' +
+                ", planScore=" + planScore +
                 ", planDestination='" + planDestination + '\'' +
                 ", builderName='" + builderName + '\'' +
                 '}';
@@ -55,6 +64,7 @@ public class PlanVO {
     private Long id;
     private String planTitle;
     private String planContent;
+    private Float planScore;
     private String planDestination;
     private String builderName;
 

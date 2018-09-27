@@ -61,7 +61,7 @@
       handleClick (tab, event) {
       },
       onSubmit () {
-        let userInfo = {'id': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
+        let userInfo = {'userId': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
         this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
         })
       },
