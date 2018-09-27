@@ -294,19 +294,6 @@
     </if>
   </select>
 
-  <select id="getAllCourseIds" parameterType="com.ucar.qtcassist.api.model.DO.QueryDO" resultMap="BaseResultMap">
-    select id, invalid_date, del_flag
-    from assist_course
-    <where>
-      <if test="courseName != null">
-        course_name like CONCAT('%',#{courseName, jdbcType=VARCHAR},'%')
-      </if>
-    </where>
-    <if test="startIndex!=null and pageSize!=null">
-      limit #{startIndex, jdbcType=INTEGER},#{pageSize, jdbcType=INTEGER}
-    </if>
-  </select>
-
   <update id="deleteListByIdList" parameterType="java.lang.Long" >
     update assist_course
     set del_flag = 0

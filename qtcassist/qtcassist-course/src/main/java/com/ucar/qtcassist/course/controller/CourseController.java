@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/course")
 public class CourseController implements CourseApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
@@ -190,29 +189,6 @@ public class CourseController implements CourseApi {
         QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
         Map<String, Object> res = new HashMap<String,Object>();
         res.put("ids",courseService.getCourseIdAndCourseName(queryDO));
-        return res;
-    }
-
-    /**
-     * 获取所有课程的id、status
-     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
-     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
-     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
-     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
-     * @return
-     */
-    @Override
-    public Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO) {
-        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
-        List<CourseDO> courseDOList = courseService.getAllCourseIds(queryDO);
-        Map<String, Object> res = new HashMap<String,Object>();
-        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-        for(CourseDO courseDO : courseDOList) {
-            CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
-            courseVO.setInvalidDate(null);
-            courseVOList.add(courseVO);
-        }
-        res.put("ids", courseVOList);
         return res;
     }
 

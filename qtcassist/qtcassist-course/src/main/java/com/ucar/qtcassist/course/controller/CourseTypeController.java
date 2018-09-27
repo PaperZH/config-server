@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/courseType")
 public class CourseTypeController implements CourseTypeApi {
 
     @Autowired
