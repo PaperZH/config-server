@@ -15,7 +15,7 @@
           <div style="float: left;position: absolute;margin-top: 17px;margin-left: 15px;">
             <img style="width: 70%;display: block;" src="static/logo.png"/>
           </div>
-          <el-menu-item index="home"style="left: 20%" v-show="isMenu">主页</el-menu-item>
+          <el-menu-item index="home" style="left: 20%" v-show="isMenu">主页</el-menu-item>
           <el-menu-item index="course" style="left: 22%" v-show="isMenu">课程</el-menu-item>
           <el-menu-item index="summary" style="left: 24%" v-show="isMenu">课程计划</el-menu-item>
           <el-menu-item index="ask" style="left: 26%" v-show="isMenu">问吧</el-menu-item>
@@ -36,8 +36,8 @@
                    {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="user">个人中心</el-dropdown-item>
-                    <el-dropdown-item command="quit">退出</el-dropdown-item>
+                    <el-dropdown-item command="user"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人信息</span></el-dropdown-item>
+                    <el-dropdown-item command="quit"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;退出登录</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -48,12 +48,12 @@
       </el-col>
     </el-row>
     <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="500px">
-      <el-form :model="form">
+      <el-form :model="form" :rules="rules">
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input v-model="form.username" auto-complete="off"></el-input>
+          <el-input v-model="form.username" @keyup.enter.native="tabEnterFun" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+          <el-input type="password" v-model="form.password" @keyup.enter.native="login" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -83,6 +83,14 @@ export default {
         nickName: '',
         avatar: ''
       },
+      rules: {
+        username: [
+          { required: true, message: '请输入账号', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: ' 请输入密码', trigger: 'blur' }
+        ]
+      },
       data: [],
       router: [],
       dialogFormVisible: false,
@@ -97,6 +105,12 @@ export default {
     }
   },
   methods: {
+    tabEnterFun: function (e) {
+      var keyCode = window.event ? e.keyCode : e.which
+      if (keyCode === 13) {
+        this.$refs.passwordMark.$el.querySelector('input').focus()
+      }
+    },
     handleSelect (key, keyPath) {
       if (key === 'course') {
         sessionStorage.removeItem('SearchCourseName')
@@ -130,6 +144,8 @@ export default {
           that.dialogFormVisible = false
         }
       }).catch(() => {
+        that.$message.error('用户名或密码错误')
+        that.dialogFormVisible = false
         that.loading = false
         that.dialogFormVisible = false
       })
@@ -137,9 +153,11 @@ export default {
     handleCommand (val) {
       if (val === 'quit') {
         this.$confirm('确认退出？').then(_ => {
+          let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+          let userId = tempuser.userId
           this.isShow = true
           this.isUser = false
-          this.$store.dispatch('Logout', {'userId': 100}).then(res => {
+          this.$store.dispatch('Logout', {'userId': userId}).then(res => {
             sessionStorage.removeItem('access-token')
             sessionStorage.removeItem('access-menus')
             sessionStorage.removeItem('access-userinfo')
