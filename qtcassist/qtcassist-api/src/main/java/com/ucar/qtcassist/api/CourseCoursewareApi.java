@@ -7,21 +7,6 @@ import java.util.List;
 
 public interface CourseCoursewareApi {
 
-//    /**
-//     * 查询某个课程课件的具体课件信息
-//     * @param coursewareId
-//     * @return
-//     */
-//    @GetMapping("/getCourseCourseware/{coursewareId}")
-//    Result<CoursewareDO> getCourseCourseware(@PathVariable("coursewareId") Long coursewareId);
-//
-//    /**
-//     * 查看某一门课程的所有课件的具体信息
-//     * @param courseId 课程ID
-//     * @return 课件列表
-//     */
-//    @GetMapping("/getCourseCoursewareList/{courseId}")
-//    Result<List<CoursewareDO>> getCourseCoursewareList(@PathVariable("courseId") Long courseId);
 
     /**
      * 添加一个课程课件

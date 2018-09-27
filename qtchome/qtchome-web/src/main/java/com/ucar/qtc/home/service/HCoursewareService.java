@@ -18,22 +18,22 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
-@FeignClient(name = "qtcassist",path = "/courseware",configuration = FeignMultipartSupportConfig.class)
+@FeignClient(name = "qtcassist",configuration = FeignMultipartSupportConfig.class)
 public interface HCoursewareService  {
-    @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
+    @RequestMapping(value = "/frontPage/courseware/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
+    @RequestMapping(value = "/courseware/uploadCourseware", method = RequestMethod.POST,
     produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result uploadCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
 
-    @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
+    @RequestMapping(value = "/frontPage/courseware/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();
 
-    @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/addCourseware", method = RequestMethod.POST)
     Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num);
 
-    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/saveCourseware", method = RequestMethod.POST)
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
 

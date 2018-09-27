@@ -30,7 +30,6 @@ import java.util.List;
  * @since 2018年08月13日
  */
 @RestController
-@RequestMapping("/courseware")
 public class CoursewareController implements CoursewareApi {
     private static Logger LOGGER = LoggerFactory.getLogger(CoursewareController.class);
     @Autowired
@@ -52,7 +51,7 @@ public class CoursewareController implements CoursewareApi {
     /**
      * test
      */
-    @RequestMapping(value = "/addCoursewareFromLocal", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/addCoursewareFromLocal", method = RequestMethod.POST)
     //Result addCoursewareFromSys(@RequestBody MultipartFile file,@RequestBody UploadCoursewareDTO uploadCoursewareDTO,@RequestBody HttpServletRequest request) throws Exception;
 
     public Result addCoursewareFromSys(@RequestParam("file") MultipartFile file, @RequestParam("uploadCoursewareDTO") UploadCoursewareDTO uploadCoursewareDTO) throws Exception {
@@ -66,7 +65,7 @@ public class CoursewareController implements CoursewareApi {
      * @return
      */
     @Override
-    @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
+    @RequestMapping(value = "/frontPage/courseware/getAllBaseCoursewares", method = RequestMethod.POST)
     public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares() {
         return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
     }
@@ -75,7 +74,7 @@ public class CoursewareController implements CoursewareApi {
      * 课件类型列表
      */
     @Override
-    @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
+    @RequestMapping(value = "/frontPage/courseware/getAllType", method = RequestMethod.GET)
     public Result<List<CoursewareTypeDTO>> getAllType() {
         List<CoursewareTypeDTO> coursewareTypeDTOList = new ArrayList<>();
         List<CoursewareTypeDO> list = coursewareTypeService.getAllType();
@@ -99,7 +98,7 @@ public class CoursewareController implements CoursewareApi {
      * @return
      */
     @Override
-    @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/addCourseware", method = RequestMethod.POST)
     public Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num) {
         CoursewareDO coursewareDO = new CoursewareDO();
         BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(id);
@@ -118,7 +117,7 @@ public class CoursewareController implements CoursewareApi {
      * 课件上传
      */
     @Override
-    @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/uploadCourseware", method = RequestMethod.POST)
     public Result uploadCourseware(MultipartFile file) throws Exception {
         InputStream in =file.getInputStream();
         String name = file.getOriginalFilename();
@@ -129,17 +128,6 @@ public class CoursewareController implements CoursewareApi {
         baseCoursewareDO.setSourceUrl(sourceUrl);
         baseCoursewareService.addBaseCourseware(baseCoursewareDO);
         Long newBaseid=baseCoursewareDO.getId();
-
-        /*String res = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String date = simpleDateFormat.format(new Date());
-        if(!file.isEmpty()) {
-            String coursewareName = file.getOriginalFilename();
-            res = remoteFileService.saveTemFile(coursewareName);
-            File file1 = new File(date + "/" + res);
-            System.out.println(file1.getAbsolutePath());
-            FileUtils.copyInputStreamToFile(file.getInputStream(), file1);
-        }*/
         return Result.getSuccessResult(newBaseid);
     }
 
@@ -147,7 +135,7 @@ public class CoursewareController implements CoursewareApi {
      * 本地课件操作
      */
     @Override
-    @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/saveCourseware", method = RequestMethod.POST)
     public Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
         InputStream is = null;
             try {
@@ -190,14 +178,14 @@ public class CoursewareController implements CoursewareApi {
      * 完成本地上传后获取课件详情
      */
     @Override
-    @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/courseware/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
     public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
 
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
 
     @Override
-    @RequestMapping(value = "/queryList")
+    @RequestMapping(value = "/courseware/queryList")
     public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO){
        return Result.getSuccessResult(coursewareService.queryPage(coursewareQueryVO));
     }

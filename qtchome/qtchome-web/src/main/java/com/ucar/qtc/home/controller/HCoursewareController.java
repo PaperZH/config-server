@@ -18,24 +18,23 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
-@RequestMapping("/courseware")
 @RestController
 public class HCoursewareController {
 
     @Autowired
     HCoursewareService hcoursewareService;
 
-    @RequestMapping(value = "/getAllBaseCoursewares")
+    @RequestMapping(value = "/frontPage/courseware/getAllBaseCoursewares")
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
         return hcoursewareService.getAllBaseCoursewares();
     }
 
-    @RequestMapping(value = "/getAllTypes")
+    @RequestMapping(value = "/frontPage/courseware/getAllTypes")
     Result<List<CoursewareTypeDTO>> getAllTypes(){
         return hcoursewareService.getAllType();
     }
 
-    @RequestMapping(value = "/upLoad",method = RequestMethod.POST)
+    @RequestMapping(value = "/courseware/upLoad",method = RequestMethod.POST)
     Result upLoad( MultipartFile file) throws Exception{
         return hcoursewareService.uploadCourseware(file);
     }

@@ -276,14 +276,14 @@
       },
       loadAll () {
         this.$store.dispatch('Post', {
-          'url': `/api-home/courseware/getAllBaseCoursewares`,
+          'url': `/api-home/frontPage/courseware/getAllBaseCoursewares`,
           'data': ''
         }).then(coursewareListRes => {
           this.courseWareList = coursewareListRes.data.re
           console.log(this.courseWareList)
         })
         this.$store.dispatch('Post', {
-          'url': `/api-home/courseware/getAllTypes`,
+          'url': `/api-home/frontPage/courseware/getAllTypes`,
           'data': ''
         }).then(coursewareTypeListRes => {
           this.coursewareTypeOptions = coursewareTypeListRes.data.re
