@@ -66,7 +66,6 @@ public class PlanController {
      */
     @GetMapping("/get/{id}")
     public Result get(@PathVariable("id") Long id) {
-        System.out.println("asdasd");
         PlanDO plan = planService.selectByPrimaryKey(id);
         return Result.getSuccessResult(plan);
     }
