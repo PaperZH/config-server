@@ -66,13 +66,6 @@ public interface CourseMapper {
     List<CourseDO> getListByCondition(QueryDO queryDO);
 
     /**
-     * 查询所有的课程的id，invalid_data, del_flag
-     * @param queryDO
-     * @return
-     */
-    List<CourseDO> getAllCourseIds(QueryDO queryDO);
-
-    /**
      * 根据课程id批量删除课程
      * @param ids
      * @return

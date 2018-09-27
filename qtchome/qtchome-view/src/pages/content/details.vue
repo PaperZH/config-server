@@ -285,7 +285,7 @@
           }
         },
         handleStudyClick (row) {
-          this.$store.dispatch('Post', {'url': '/api-home/frontPage/addCourseReadNum/' + this.course.courseId}).then(res => {
+          this.$store.dispatch('Post', {'url': '/api-home/frontPage/course/addCourseReadNum/' + this.course.courseId}).then(res => {
             if (res.data.success === true) {
               this.previewUrl = row.preUrl
               this.studyDialogVisible = true
@@ -342,7 +342,7 @@
           this.getCourseDetail(val)
         },
         getCourseDetail (val) {
-          this.$store.dispatch('Get', {'url': '/api-home/frontPage/getCourseDetail/' + val}).then(res => {
+          this.$store.dispatch('Get', {'url': '/api-home/frontPage/course/getCourseDetail/' + val}).then(res => {
             this.course = res.data.re.course
             if (res.data.re.coursewares != null) {
               this.tableData = res.data.re.coursewares
