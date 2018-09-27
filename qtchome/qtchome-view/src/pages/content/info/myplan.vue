@@ -91,7 +91,6 @@
         handleCurrentChange (val) {
           this.queryParams.currentPage = val
           this.getStudentPlan()
-          console.log(`当前页: ${val}`)
         },
         onAddPlan (val) {
           this.$store.dispatch('Get', {'url': '/api-home/plan/getPlanDetails', 'data': {'planId': val}}).then(res => {
