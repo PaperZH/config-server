@@ -103,13 +103,13 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content" >
-            <el-button type="primary" @click="handleStudyClick(scope.row)" size="small">查看</el-button>
+            <el-button type="primary" @click="scanClick(item)" size="small">查看</el-button>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content" >
             <el-button type="primary" size="small">
-              <a :href="scope.row.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
+              <a :href="item.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
               </el-button>
           </div>
         </el-col>
@@ -133,6 +133,7 @@
         </el-col>
       </el-row>
     </el-card>
+
     <div>
       <el-dialog id="studyDialog" title="" :visible.sync="studyDialogVisible" width="100%">
         <iframe :src="previewUrl" style="width:100%; height: 600px"></iframe>
@@ -175,7 +176,9 @@
           describe: '',
           flag: '',
           baseCoursewareId: '',
-          courseId: ''
+          courseId: '',
+          sourceUrl: '',
+          preUrl: ''
         },
         checkRules: {
           name: [
@@ -200,6 +203,8 @@
         courseWareTableItem.name = mycars[i].name
         courseWareTableItem.describe = mycars[i].description
         courseWareTableItem.typeName = mycars[i].type
+        courseWareTableItem.sourceUrl = mycars[i].sourceUrl
+        courseWareTableItem.preUrl = mycars[i].preUrl
         this.courseWareTable.push(courseWareTableItem)
       }
       if (this.courseWareTable.length > 0) {
@@ -222,6 +227,8 @@
                 courseWareTableItem.name = this.coursewareForm.name
                 courseWareTableItem.describe = this.coursewareForm.describe
                 courseWareTableItem.typeName = this.coursewareForm.typeName
+                courseWareTableItem.sourceUrl = this.coursewareForm.sourceUrl
+                courseWareTableItem.preUrl = this.coursewareForm.preUrl
                 this.courseWareTable.push(courseWareTableItem)
                 this.addSuccessfully()
               } else {
@@ -273,6 +280,7 @@
           'data': ''
         }).then(coursewareListRes => {
           this.courseWareList = coursewareListRes.data.re
+          console.log(this.courseWareList)
         })
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/getAllTypes`,
@@ -293,6 +301,8 @@
       },
       handleSelect (item) {
         this.coursewareForm.baseCoursewareId = item.id
+        this.coursewareForm.preUrl = item.preUrl
+        this.coursewareForm.sourceUrl = item.sourceUrl
         this.uploadIsDisabled = true
       },
 
@@ -317,6 +327,8 @@
             this.coursewareForm.hour = ''
             this.coursewareForm.name = ''
             this.state4 = ''
+            this.uploadIsDisabled = true
+            this.$refs.sys.disabled = true
             console.log(this.courseWareTable)
           }
         })
@@ -339,13 +351,9 @@
           loading.close()
         }, 2000)
       },
-      handleStudyClick (row) {
-        this.$store.dispatch('Post', {'url': '/api-home/course/addCourseReadNum/' + this.course.courseId}).then(res => {
-          if (res.data.success === true) {
-            this.previewUrl = row.preUrl
-            this.studyDialogVisible = true
-          }
-        })
+      scanClick (item) {
+        this.previewUrl = item.preUrl
+        this.studyDialogVisible = true
       }
 
     }

@@ -5,11 +5,11 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://10.104.108.177:8001/eureka/
-    registry-fetch-interval-seconds: 15
+    registry-fetch-interval-seconds: 5
     healthcheck:
       enabled: true
   instance:
-    lease-renewal-interval-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 20
     prefer-ip-address: true
     instance-id: 10.104.108.177:${server.port}

@@ -23,6 +23,14 @@ public class BaseCoursewareListDTO {
      * 课件类型id
      */
     private Long typeId;
+    /**
+     * 查看链接（PDF）
+     * */
+    private String preUrl;
+    /**
+     *下载链接
+     * */
+    private String sourceUrl;
 
     public Long getId() {
         return id;
@@ -54,5 +62,21 @@ public class BaseCoursewareListDTO {
 
     public void setTypeId(Long typeId) {
         this.typeId = typeId;
+    }
+
+    public String getPreUrl() {
+        return preUrl;
+    }
+
+    public void setPreUrl(String preUrl) {
+        this.preUrl = preUrl;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 }
