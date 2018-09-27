@@ -79,46 +79,71 @@
         </el-form>
       </div>
     </el-card>
-    <el-card class="box-card" shadow="never" style="margin-top: 3px" v-show="isShow"
+    <el-card class="box-card" shadow="hover" style="margin-top: 10px"  v-show="isShow"
              v-for="(item,index) in courseWareTable " :key="index">
       <el-row>
         <el-col :span="3">
-          <div class="grid-content bg-purple" style="text-align: center">
-            <div style="border:1px solid #ebeef5;"><span>第{{index+1}}课</span></div>
+          <div class="grid-content " style="text-align: center">
+            <div ><span>第{{index+1}}课</span></div>
           </div>
         </el-col>
-        <el-col :span="14">
-          <div class="grid-content bg-purple" style="text-align: center">
-            <div style="border: 1px solid red;width: 178px;margin-left: 152px;"><span>{{item.name}}</span></div>
+
+        <el-col :span="6">
+          <div class="grid-content " style="text-align: left">
+            <div style="color:rgb(59, 99, 190); "><span>课件名称: {{item.name}}</span></div>
+            <!--border: 1px solid red;width: 178px;margin-left: 102px;-->
           </div>
         </el-col>
-        <el-col :span="7">
-          <div class="grid-content bg-purple">
+        <el-col :span="6">
+          <div class="grid-content " style="color:rgb(59, 99, 190); "><span>课程分类: {{item.typeName}}</span>
+            </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="grid-content"></div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content" >
+            <el-button type="primary" @click="handleStudyClick(scope.row)" size="small">查看</el-button>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content" >
+            <el-button type="primary" size="small">
+              <a :href="scope.row.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
+              </el-button>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
             <div style="text-align: right"><i class="el-icon-close"></i></div>
           </div>
         </el-col>
-        <el-col :span="4">
-          <div class="grid-content bg-purple" style="text-align: center">
+        <el-col :span="3">
+          <div class="grid-content " style="text-align: center">
             课件描述：
           </div>
         </el-col>
         <el-col :span="20">
-          <div class="grid-content bg-purple">{{item.describe}}</div>
-        </el-col>
-        <el-col :span="13">
-          <div class="grid-content bg-purple" style="text-align: center">
-          </div>
-        </el-col>
-        <el-col :span="10">
-          <div class="grid-content bg-purple" style="color:rgb(59, 99, 190); margin-top: 10px;"><span>分类:{{item.typeName}}</span>
-            <!--<span style="margin-left: 20px">作者:{{item.author}}</span>--></div>
+          <!--<el-input-->
+            <!--type="textarea"-->
+            <!--:autosize="{ minRows: 2, maxRows: 4}"-->
+            <!--v-model="textarea3">-->
+          <!--</el-input>-->
+          <div class="grid-content " style="border: 1px solid #ebeef5;">{{item.describe}}</div>
         </el-col>
       </el-row>
     </el-card>
+    <div>
+      <el-dialog id="studyDialog" title="" :visible.sync="studyDialogVisible" width="100%">
+        <iframe :src="previewUrl" style="width:100%; height: 600px"></iframe>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
+  import Drawupplan from './drawupplan'
   export default {
+    components: {Drawupplan},
     inject: ['reload'],
     name: 'addCourse',
     data () {
@@ -132,17 +157,14 @@
         }
       }
       return {
+        studyDialogVisible: false,
+        previewUrl: null,
         uploadIsDisabled: false,
         isShow: false,
         state4: '',
         addflag: '',
         isUploading: false,
         courseWareTable: [],
-        courseWareTableItem12312: {
-          name: '',
-          describe: '',
-          typeName: ''
-        },
         coursewareTypeOptions: [],
         courseWareList: [],
         coursewareForm: {
@@ -171,6 +193,8 @@
       // 得到课程的课件的集合
       var mycars = []
       mycars = this.$router.currentRoute.params.coursewares
+      console.log('mycars')
+      console.log(mycars)
       for (var i = 0; i < mycars.length; i++) {
         var courseWareTableItem = {}
         courseWareTableItem.name = mycars[i].name
@@ -314,6 +338,14 @@
         setTimeout(() => {
           loading.close()
         }, 2000)
+      },
+      handleStudyClick (row) {
+        this.$store.dispatch('Post', {'url': '/api-home/course/addCourseReadNum/' + this.course.courseId}).then(res => {
+          if (res.data.success === true) {
+            this.previewUrl = row.preUrl
+            this.studyDialogVisible = true
+          }
+        })
       }
 
     }

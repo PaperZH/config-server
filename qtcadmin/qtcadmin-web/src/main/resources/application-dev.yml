@@ -56,7 +56,7 @@ jdbc:
     filters: stat,wall,slf4j
 
 mybatis:
-  mapper-locations: mapper/**Mapper.xml
+  mapper-locations: classpath*:mapper/*.xml
   configuration:
       map-underscore-to-camel-case: true
 
