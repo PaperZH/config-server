@@ -126,14 +126,14 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        this.$store.dispatch('Get', {'url': '/api-home/course/getCourseTypeList'}).then(res => {
+        this.$store.dispatch('Get', {'url': '/api-home/frontPage/getCourseTypeList'}).then(res => {
           this.courseTypeList = res.data.re
         })
 
         let courseId = this.$router.currentRoute.params.courseId
         if (courseId != null) {
           this.submitButtonText = '更新课程'
-          this.$store.dispatch('Get', {'url': '/api-home/course/getCourseDetail/' + courseId}).then(res => {
+          this.$store.dispatch('Get', {'url': '/api-home/frontPage/getCourseDetail/' + courseId}).then(res => {
             this.courseDetailForm.course = res.data.re.course
             this.courseDetailForm.course.teacherNickname = res.data.re.teacher.nickname
             this.courseDetailForm.coursewares = res.data.re.coursewares
@@ -186,7 +186,7 @@
         }
         let fd = new FormData()
         fd.append('file', file)
-        this.$store.dispatch('Post', {'url': '/api-home/course/file/upload', 'data': fd}).then(res => {
+        this.$store.dispatch('Post', {'url': '/api-home/frontPage/file/upload', 'data': fd}).then(res => {
           this.courseDetailForm.course.courseCover = res.data.fileUrl
         })
       },
