@@ -109,8 +109,10 @@
         getStudentPlan () {
           this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
             this.loading = false
-            this.dataPlan = res.data.re.rows
-            this.total = res.data.re.total
+            if (res.data.success) {
+              this.dataPlan = res.data.re.rows
+              this.total = res.data.re.total
+            }
           })
         },
         formatterFinished (row, column, cellValue, index) {

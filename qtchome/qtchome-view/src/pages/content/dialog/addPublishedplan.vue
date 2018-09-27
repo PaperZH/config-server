@@ -71,8 +71,7 @@
         plan: this.message.plan,
         rules: {
           studentGetScore: [
-            { required: true, message: '请输入计划学分', trigger: 'blur' },
-            {pattern: /^[1-9](\d){0,2}$/, message: '请输入有效分数'}
+            {required: true, trigger: 'blur', validator: this.validPlanScore}
           ]
         }
       }
@@ -101,8 +100,20 @@
               this.visible = false
             })
           } else {
+            return false
           }
         })
+      },
+      validPlanScore (rule, value, callback) {
+        var MobileRegex = /^[1-9](\d){0,2}$/
+        let totalScore = this.message.planScore
+        if (!MobileRegex.test(value)) {
+          callback(new Error('请输入最多3位有效分数！'))
+        } else if (value > totalScore) {
+          callback(new Error('评分不得大于总分'))
+        } else {
+          callback()
+        }
       },
       onCan () {
         this.activeName = '3'

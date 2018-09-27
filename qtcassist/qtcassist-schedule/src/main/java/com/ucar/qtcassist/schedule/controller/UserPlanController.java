@@ -62,6 +62,9 @@ public class UserPlanController {
     public Result getStudentsById(@PathVariable("id") Long id){
         String resultStr = adminFeginClient.getStudentInfoById(id);
         JSONArray  jsonObject= (JSONArray) JSONObject.fromObject(resultStr).get("data");
+        if (jsonObject == null){
+            return Result.getBusinessException("暂未有学员分配","-2");
+        }
         List<UserDTO> user = (List<UserDTO>) JSONArray.toList(jsonObject,new UserDTO(),new JsonConfig());
         List<StudentVO> studentVOS = new ArrayList<>();
         for (UserDTO userDTO:user) {
@@ -78,7 +81,6 @@ public class UserPlanController {
      */
     @GetMapping("/getDetails/{id}")
     public Result getDetails(@PathVariable("id") Long id){
-        System.out.println(id);
         //获取用户计划
         UserPlanDO userPlanDO = userPlanService.selectByPrimaryKey(id);
 
@@ -111,7 +113,6 @@ public class UserPlanController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody UserPlanListDTO userPlan) {
-        System.out.println(userPlan);
         int count = userPlanService.insertSelective(userPlan);
         if(count != 0) {
             return Result.getSuccessResult("添加培训计划信息成功");
@@ -138,6 +139,9 @@ public class UserPlanController {
     @RequestMapping("/getPlan")
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
         Integer total = userPlanService.queryTotal(planDTO);
+        if (total==0){
+            return Result.getBusinessException("没有查到数据","-2");
+        }
         List<UserPlanDTO> planList = userPlanService.queryUserPlan(planDTO);
         List<UserPlanVO> userPlanVOS = new ArrayList<>();
         Long[] ids = new Long[planList.size()];

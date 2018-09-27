@@ -16,7 +16,7 @@ public interface CourseTypeApi {
      * @param courseType 课程类型对象
      * @return
      */
-    @PostMapping("/addCourseType")
+    @PostMapping("/courseType/addCourseType")
     Result addCourseType(@RequestBody CourseTypeDO courseType);
 
     /**
@@ -24,14 +24,14 @@ public interface CourseTypeApi {
      * @param courseTypeId 课程类型id
      * @return
      */
-    @GetMapping("/getCourseType/{courseTypeId}")
+    @GetMapping("/frontPage/courseType/getCourseType/{courseTypeId}")
     Result<CourseTypeDO> getCourseType(@PathVariable("courseTypeId") Long courseTypeId);
 
     /**
      * 查询所有的课程类型对象
      * @return
      */
-    @GetMapping("/getCourseTypeList")
+    @GetMapping("/frontPage/courseType/getCourseTypeList")
     Result<List<CourseTypeDO>> getCourseTypeList();
 
     /**
@@ -39,7 +39,7 @@ public interface CourseTypeApi {
      * @param courseType 课程类型对象
      * @return
      */
-    @PostMapping("/updateCourseType")
+    @PostMapping("/courseType/updateCourseType")
     Result updateCourseType(@RequestBody CourseTypeDO courseType);
 
     /**
@@ -47,6 +47,6 @@ public interface CourseTypeApi {
      * @param courseTypeId 课程类型id
      * @return
      */
-    @GetMapping("/deleteCourseType/{courseTypeId}")
+    @GetMapping("/courseType/{courseTypeId}")
     Result deleteCourseType(@PathVariable("courseTypeId") Long courseTypeId);
 }

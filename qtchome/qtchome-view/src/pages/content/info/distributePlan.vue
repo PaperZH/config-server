@@ -179,17 +179,22 @@
       getStudents () {
         let teacherId = this.$store.getters.userId
         this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': teacherId}}).then(res => {
-          this.indexList = res.data.re
+          if (res.data.success) {
+            this.indexList = res.data.re
+          }
+        }).catch(error => {
+          console.log(error)
         })
       },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.loading = false
-          if (res.data.re == null) {
-            this.$message.error('加载失败，请重新加载')
+          if (res.data.success) {
+            this.tableData = res.data.re.rows
+            this.total = res.data.re.total
           }
-          this.tableData = res.data.re.rows
-          this.total = res.data.re.total
+        }).catch(error => {
+          console.log(error)
         })
       }
     },
