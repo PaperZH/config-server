@@ -12,12 +12,20 @@
           </el-form-item>
         </el-col>
         <el-popover
-          placement="right"
-          width="400"
+          placement="right-start"
+          width="500"
           trigger="click">
           <el-table :data="message.courses">
             <el-table-column width="150" property="courseName" label="课程名称"></el-table-column>
-            <el-table-column width="100" property="courseDescription" label="课程描述"></el-table-column>
+            <el-table-column  show-overflow-tooltip property="courseDescription" label="课程描述"></el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="100">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="handleSearch(scope.row.courseId)">详情</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <el-button slot="reference">查看课程信息</el-button>
         </el-popover>
@@ -88,6 +96,9 @@
         this.$store.dispatch('Post', {'url': '/api-home/plan/updatePublishedPlan', 'data': data}).then(res => {
           this.visible = false
         })
+      },
+      handleSearch (courseId) {
+        this.$router.push({name: 'details', params: {'courseId': courseId}})
       },
       onCan () {
         this.activeName = '4'

@@ -2,6 +2,7 @@ package com.ucar.qtc.admin.dao;
 
 import com.ucar.qtc.admin.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public interface UserDao {
 
 	List<UserDO> getTeacherById(Long id, int relationType);
 
-	List<UserDO> getStudentById(Long id, int relationType);
+	List<UserDO> getStudentById(@Param("id") Long id,@Param("relationType") int relationType);
 
 	int count(Map<String, Object> map);
 	

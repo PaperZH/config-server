@@ -39,7 +39,7 @@
         }
       },
       created: function () {
-        this.$store.dispatch('Get', {'url': '/api-home/setTop/getBanner'}).then(res => {
+        this.$store.dispatch('Get', {'url': '/api-home/frontPage/getBanner'}).then(res => {
           this.images = res.data.page.rows
         })
       },

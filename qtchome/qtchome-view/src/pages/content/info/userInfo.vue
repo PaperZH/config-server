@@ -17,7 +17,7 @@
             <label style="margin-left: 37px;">头像：</label>
             <el-upload
               class="avatar-uploader"
-              action="http://127.0.0.1:8002/api-home/course/file/upload"
+              :action="avatarUrl"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="image/jpeg,image/gif,image/png"
@@ -48,6 +48,7 @@
     data () {
       return {
         activeName: 'first',
+        avatarUrl: process.env.API_ROOT + '/api-home/course/file/upload',
         form: {
           name: '',
           nickname: '',
@@ -58,15 +59,13 @@
     },
     methods: {
       handleClick (tab, event) {
-        console.log(tab, event)
       },
       onSubmit () {
-        let userInfo = {'id': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
+        let userInfo = {'userId': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
         this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
         })
       },
       handleAvatarSuccess (res, file) {
-        console.log(res.fileUrl)
         this.form.avatar = res.fileUrl
       },
       beforeAvatarUpload (file) {

@@ -62,7 +62,7 @@
       }
     },
     created () {
-      this.$store.dispatch('Get', {'url': '/api-home/course/getRecCourseList'}).then(res => {
+      this.$store.dispatch('Get', {'url': '/api-home/frontPage/getRecCourseList'}).then(res => {
         this.tableData = res.data.list
       })
     }
