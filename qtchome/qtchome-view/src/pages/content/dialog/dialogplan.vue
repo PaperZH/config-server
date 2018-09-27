@@ -146,18 +146,19 @@
         }
         this.$refs['message'].validate((valid) => {
           if (valid) {
-            if (this.message.date.length <= 1) {
-              this.$message.error('请输入日期')
-              return
-            }
             this.params.startDate = this.message.date[0]
             this.params.endDate = this.message.date[1]
             this.params.studentIds = this.message.studentIds
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.params}).then(res => {
-              this.$refs['message'].resetFields()
-              this.params.planId = ''
-              this.$emit('getTeacherPlan')
-              this.visible = false
+              if (res.data.success) {
+                this.$refs['message'].resetFields()
+                this.params.planId = ''
+                this.$emit('getTeacherPlan')
+                this.$message.success('发布成功')
+                this.visible = false
+              } else {
+                this.$message.error('发布失败')
+              }
             })
           } else {
             return false
@@ -173,9 +174,16 @@
       remoteMethod () {
         this.loading = true
         this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
-          this.plans = res.data.re.rows
-          this.total = res.data.re.total
           this.loading = false
+          if (res.data.success) {
+            this.plans = res.data.re.rows
+            this.total = res.data.re.total
+          } else {
+            this.plans = null
+            this.total = 0
+          }
+        }).catch(error => {
+          console.log(error)
         })
       },
       onCan () {
