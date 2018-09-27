@@ -79,7 +79,7 @@ public class CoursePlanController {
     public Result get(@RequestBody QueryCourseDTO courseDTO){
         int total = coursePlanService.selectTotal(courseDTO);
         if(total==0){
-            return PageResult.getSuccessResult("获得0条记录");
+            return Result.getBusinessException("没有查到数据","-2");
         }else {
             List<CoursePlanDO> coursePlanDOS = coursePlanService.selectByCourseName(courseDTO);
             List<CoursePlanVO> coursePlanVOS = new ArrayList<>();
