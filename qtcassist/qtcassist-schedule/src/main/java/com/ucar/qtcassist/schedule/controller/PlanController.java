@@ -77,6 +77,9 @@ public class PlanController {
     public Result getPlan(@RequestBody QueryPlanDTO planDTO){
         List<PlanDO> planList = planService.getPlanList(planDTO);
         Integer total = planService.getPlanTotal(planDTO);
+        if (total==0){
+            return Result.getBusinessException("没有查到数据","-2");
+        }
         List<PlanVO> planVOS = new ArrayList<>();
         Long[] ids = new Long[planList.size()];
         for (int i = 0; i < planList.size(); i++) {
@@ -103,9 +106,7 @@ public class PlanController {
      */
     @RequestMapping("/update")
     public Result update(@RequestBody PlanDTO plan) {
-        System.out.println(plan);
         int count = planService.updateByPrimaryKeySelective(plan);
-        System.out.println(count);
         if(count != 0) {
             return Result.getSuccessResult("更新培训计划信息成功");
         } else {

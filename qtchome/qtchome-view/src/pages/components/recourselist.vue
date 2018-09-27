@@ -1,6 +1,6 @@
 <template>
   <div class=" fillcontain">
-    <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px; margin-top: 0px;">
+    <!-- <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px; margin-top: 0px;" > -->
 
       <div v-for="(item, index) in tableData" :key="index" style="padding: 10px; margin-top: 3px; width: 22%; height: 290px; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >

@@ -165,8 +165,12 @@
         getTeacherPlan () {
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
             this.loading = false
-            this.tableData = res.data.re.rows
-            this.total = res.data.re.total
+            if (res.data.success) {
+              this.tableData = res.data.re.rows
+              this.total = res.data.re.total
+            }
+          }).catch(error => {
+            console.log(error)
           })
         }
       },
