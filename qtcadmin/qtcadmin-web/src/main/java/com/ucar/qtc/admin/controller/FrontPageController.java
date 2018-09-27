@@ -120,10 +120,10 @@ public class FrontPageController {
 
     @ApiOperation(value="获取ID获取学员信息", notes="获取ID获取学员信息")
     @GetMapping(value="getStudentInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id,@RequestParam(value="id",defaultValue="-1")int type) {
+    public ResponseResult getStudentInfoById(@RequestParam(value="id",defaultValue="0") Long id,@RequestParam(value="type",defaultValue="1")int type) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
         int relationType = (type == 0) ? null : type;
-        for(UserDO userDO:userService.getStudentById(id,type)){
+        for(UserDO userDO:userService.getStudentById(id,relationType)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
             System.out.println("执行成功");
         }
@@ -132,10 +132,10 @@ public class FrontPageController {
 
     @ApiOperation(value="获取ID获取老师信息", notes="获取ID获取老师信息")
     @GetMapping(value="getTeacherInfoById", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseResult getTeacherInfoById(@RequestParam("id") Long id,@RequestParam(value="id",defaultValue="0")int type) {
+    public ResponseResult getTeacherInfoById(@RequestParam("id") Long id,@RequestParam(value="type",defaultValue="1")int type) {
         List<UserDTO> userDTOS = new LinkedList<UserDTO>();
         int relationType = (type == 0) ? null : type;
-        for(UserDO userDO:userService.getTeacherById(id,type)){
+        for(UserDO userDO:userService.getTeacherById(id,relationType)){
             userDTOS.add(UserConvert.MAPPER.do2dto(userDO));
         }
         return ResponseResult.ok().put("data",userDTOS);

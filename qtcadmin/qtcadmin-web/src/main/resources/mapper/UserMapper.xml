@@ -20,14 +20,14 @@
 		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user a
 		LEFT JOIN sys_user_relation b on b.user1_id = a.user_id
-		where b.user2_id = #{id} and b.relation_type = #{relationType}
+		where b.user2_id = #{arg0} and b.relation_type = #{arg1}
 	</select>
 
 	<select id="getStudentById" resultType="com.ucar.qtc.admin.domain.UserDO">
 		select `user_id`,`username`,`password`,`name`,`userno`,`sex`,`nickname`,`email`,`mobile`,`dept_id`,
 		`birth`,`avatar`,`address`,`create_time`,`update_time` from sys_user a
 		LEFT JOIN sys_user_relation b on b.user2_id = a.user_id
-		where b.user1_id = #{value} and b.relation_type = #{relationType}
+		where b.user1_id = #{id} and b.relation_type = #{relationType}
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.admin.domain.UserDO">
