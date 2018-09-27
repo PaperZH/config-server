@@ -5,17 +5,20 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://${spring.cloud.client.ip-address}:8001/eureka/
+    registry-fetch-interval-seconds: 15
     healthcheck:
       enabled: true
   instance:
     lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
+    lease-expiration-duration-in-seconds: 20
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
-security:
-  basic:
-    enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 cache:
   time: 5

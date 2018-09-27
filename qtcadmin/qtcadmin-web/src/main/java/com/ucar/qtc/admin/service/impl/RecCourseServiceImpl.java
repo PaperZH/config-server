@@ -8,6 +8,7 @@ import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
+import com.ucar.qtc.common.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,17 +46,13 @@ public class RecCourseServiceImpl implements RecCourseService {
     }
 
     @Override
-    public List<CourseVO> listRecCourseByQuery(QueryVO queryVO){
-        //首先通过名字查询课程信息
-        List courses = (List) courseService.getAllCourseIds(queryVO).get("ids");
-        if(courses==null||courses.isEmpty()){
-            return null;
-        }
-        //通过查询课程的ID，查询推荐课程
-        Map<String,Object> courseResMap = getCoursesMap(courses);
-        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(courseResMap);
+    public ResponseResult listRecCourseByQuery(QueryVO queryVO){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("currentPage",(queryVO.getCurrentPage()-1)*queryVO.getPageSize());
+        map.put("pageSize",queryVO.getPageSize());
+        List<RecommandCourseDO> recommandCourseList = recommandCourseDao.list(map);
         if(recommandCourseList.size() == 0){
-            return null;
+            return ResponseResult.error();
         }
         return getRecCourseList(recommandCourseList);
     }
@@ -82,7 +79,7 @@ public class RecCourseServiceImpl implements RecCourseService {
 
     @Override
     public int batchremove(Long[] ids) {
-        return recommandCourseDao.batchremove(ids);
+        return recommandCourseDao.batchRemove(ids);
     }
 
     /**
@@ -109,7 +106,10 @@ public class RecCourseServiceImpl implements RecCourseService {
      * @param recommandCourseList 推荐课程列表
      * @return
      */
-    private List<CourseVO> getRecCourseList(List<RecommandCourseDO> recommandCourseList){
+    private ResponseResult getRecCourseList(List<RecommandCourseDO> recommandCourseList){
+        //推荐课程列表总数
+        int total = recommandCourseDao.count(null);
+        //获取推荐课程列表的id数组
         int size = recommandCourseList.size();
         Long[] ids = new Long[size];
         Iterator iterator = recommandCourseList.iterator();
@@ -117,8 +117,10 @@ public class RecCourseServiceImpl implements RecCourseService {
         while(iterator.hasNext()){
             ids[index++] = ((RecommandCourseDO)iterator.next()).getCourseId();
         }
+        //将推荐课程的id存放到QueryVO
         QueryVO queryVO = new QueryVO();
         queryVO.setCourseIds(ids);
+        //通过调用assist服务，得到推荐课程详细信息
         List<CourseVO> recCourseVOS = new ArrayList<CourseVO>();
         recCourseVOS = courseService.getRecCourseList(queryVO).getRe();
         List<CourseVO> reccomandCourseVO = new ArrayList<CourseVO>();
@@ -137,6 +139,7 @@ public class RecCourseServiceImpl implements RecCourseService {
                 }
             }
         }
-        return reccomandCourseVO;
+        return ResponseResult.ok().put("total",total)
+                                    .put("list",reccomandCourseVO);
     }
 }

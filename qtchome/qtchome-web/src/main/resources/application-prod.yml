@@ -5,6 +5,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://10.104.108.177:8001/eureka/
+    registry-fetch-interval-seconds: 15
     healthcheck:
       enabled: true
   instance:
@@ -13,19 +14,13 @@ eureka:
     prefer-ip-address: true
     instance-id: 10.104.108.177:${server.port}
 
-security:
-  basic:
-    enabled: false
-
-logging:
-  level:
-    root: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 spring:
   application:
     name: api-home
-ribbon:
-   ReadTimeout: 60000
-   ConnectTimeout: 30000
-   eureka:
-     enabled: true
+

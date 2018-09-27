@@ -56,16 +56,6 @@
               :page-sizes="[10, 20, 30]">
         </el-pagination>
       </el-col>
-<!-- 
-      <el-col :span="24" class="version" style="margin-top:20px">
-        <div style="margin-left: auto; margin-right: auto;text-align: center">
-          <span>版权所有版权所有版权所有版权所有版权所有版权所有</span>
-        </div>
-        <div style="margin-left: auto; margin-right: auto;text-align: center">
-          <span>版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有版权所有</span>
-        </div>
-      </el-col> -->
-      
 
       <!--新增界面-->
       <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">

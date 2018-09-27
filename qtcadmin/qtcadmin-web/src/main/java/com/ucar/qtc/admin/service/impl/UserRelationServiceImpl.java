@@ -21,8 +21,8 @@ public class UserRelationServiceImpl implements UserRelationService
     private UserRelationDao userRelationDao;
 
     @Override
-    public List<UserRelationDO> getUserRelation(Long user1Id, Long user2Id) {
-        return userRelationDao.getUserRelation(user1Id,user2Id);
+    public List<UserRelationDO> getUserRelation(UserRelationDO userRelationDO) {
+        return userRelationDao.getUserRelation(userRelationDO);
     }
 
     @Override

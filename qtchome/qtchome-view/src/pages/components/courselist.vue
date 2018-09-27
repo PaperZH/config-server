@@ -2,7 +2,7 @@
   <div class=" fillcontain">
     <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px; margin-top: 0px;">
 
-      <div v-for="(item, index) in tableData" :key="index" style="padding: 10px; margin-top: 3px; width: 23%; height: 290px; float: left">
+      <div v-for="(item, index) in tableData" :key="index" style="padding: 10px; margin-top: 3px; width: 22%; height: 290px; float: left">
         <el-card :body-style="{ padding: '0px',transition: 'all .2s linear' } " >
           <div v-on:click="handleDetails(item)">
             <div style="width: 100%; height: 200px;">
@@ -41,7 +41,7 @@
         </el-card>
       </div>
       <!--<el-col :span="8">-->
-        <!--<div class="block" v-show="isShow" style="display: inline; text-align: center; margin-top: 2%;">-->
+        <!--<div class="block" style="display: inline; text-align: center; margin-top: 2%;">-->
           <!--<el-pagination-->
             <!--@size-change="handleSizeChange"-->
             <!--@current-change="handleCurrentChange"-->
@@ -66,21 +66,11 @@
 
 <script>
   export default {
-    props: {
-      isShow: {
-        type: Boolean,
-        default: false
-      },
-      type: {
-        type: String,
-        default: ' '
-      }
-    },
     data () {
       return {
         total: 0,
         queryParams: {
-          type: this.type,
+          type: 'default',
           currentPage: 1,
           pageSize: 12,
           courseName: null,
@@ -119,6 +109,12 @@
 
       handleDetails (val) {
         this.$router.push({name: 'details', params: val})
+      },
+      init () {
+        this.total = 0
+        this.tableData = []
+        this.queryParams.type = sessionStorage.getItem('type')
+        this.queryParams.currentPage = 1
       },
       getCourseList () {
         const url = '/api-home/course/getCourseList'
@@ -178,8 +174,12 @@
       }
     },
     mounted () {
+      this.init()
       this.getCourseList()
       window.addEventListener('scroll', this.scrollHandler)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.scrollHandler)
     }
   }
 </script>
