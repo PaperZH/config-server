@@ -23,13 +23,13 @@
       </el-col>
 
       <!-- 列表 -->
-      <el-table :data="courseRows" border highlight-current-row v-loading="listloading" style="width: 100%;">
+      <el-table :data="courseRows" border highlight-current-row v-loading="loading" style="width: 100%;">
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.courseCover" height="100">
           </template>
         </el-table-column>
-        <el-table-column label="状态" prop="scope" align="center">
+        <el-table-column label="状态" prop="scope" width="100" align="center" >
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 0" type="danger">已删除</el-tag>
             <el-tag v-if="scope.row.status === 1" type="success">正常</el-tag>
@@ -140,7 +140,7 @@
         total: 15,
         page: 1,
         limit: 8,
-        listloading: false,
+        loading: false,
         editloading: false,
         addloading: false,
         listCourseLoading: false,
@@ -219,18 +219,18 @@
           pageSize: that.limit,
           courseName: that.reccourse.courseName
         }
-        that.listloading = true;
+        that.loading = true;
         API.getRecCourse(params).then(
             function (result) {
               that.listloading = false;
               if (result&& result.code == 0) {
                 that.courseRows = result.list;
                 that.total = result.total;
-                that.listloading=false;
+                that.loading=false;
               }
             },
             function (err) {
-              that.listloading = false;
+              that.loading = false;
               that.$message.error({
                 showClose: true,
                 message: err.toString(),
@@ -239,7 +239,7 @@
             }
           )
           .catch(function (error) {
-            that.listloading = false;
+            that.loading = false;
             that.$message.error({
               showClose: true,
               message: "请求出现异常",
@@ -292,11 +292,9 @@
        removeRecCourse: function (id) {
         let that = this
         return API.remove({id: id}).then(res => {
-          
           if (res.code === 0) {
             that.searchRecCourse();
             that.$message.success(res.msg);
-            
           }else{
              that.$message.error(res.msg);
           }
@@ -312,6 +310,7 @@
             let params = Object.assign({}, that.editForm);
             API.update(params).then(function (result) {
               if (result && parseInt(result.code) === 0) {
+                that.editloading = false;
                 that.$message.success({
                   showClose: true,
                   message: "修改成功",
@@ -321,14 +320,15 @@
                 that.editFormVisible = false;
                 that.searchRecCourse();
               } else {
+                that.editloading = false;
                 that.$message.error({
                   showClose: true,
                   message: "修改失败",
                   duration: 2000
                 });
                 that.editFormVisible = false;
-                that.editloading = false;
               }
+              
             });
           }
         });
