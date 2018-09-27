@@ -33,8 +33,6 @@
                selectByExampleQueryId="false" />
         <table tableName="assist_course_type" domainObjectName="CourseTypeDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
-        <table tableName="assist_user_course" domainObjectName="UserCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />
         <table tableName="assist_collect_course" domainObjectName="CollectCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" />
         <table tableName="assist_praise_course" domainObjectName="PraiseCourseDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
