@@ -41,8 +41,8 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     RedisCacheService redisCacheService;
 
-    private String ignorePath = "/api-admin/login,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs," +
-            "/api-admin/(\\w)+/frontPage";
+    private String ignorePath = "/api-admin/login,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs,/api-home/login," +
+            "/api-home/[(\\w)-/]*/frontPage";
 
     @Override
     public String filterType() {
@@ -153,7 +153,7 @@ public class AccessFilter extends ZuulFilter {
     private boolean isStartWith(String requestUri) {
         boolean flag = false;
         String preStr = "^";
-        String suffer = "[\\w/-]+$";
+        String suffer = "[\\w/-]{0,}$";
         for (String s : ignorePath.split(",")) {
             s = preStr+s+suffer;
             if (Pattern.matches(s,requestUri)) {
