@@ -17,7 +17,6 @@
         border
         style="width: 100%">
         <el-table-column
-          fixed
           prop="planTitle"
           label="计划名称"
           width="250">
@@ -127,14 +126,19 @@
             type: 'warning'
           }).then(() => {
             this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlan', 'data': {'planId': row.id}}).then(res => {
-              this.tableData.splice(index, 1)
-              this.$message.success('删除成功')
+              if (res.data.success) {
+                this.tableData.splice(index, 1)
+                this.$message.success('删除成功')
+              } else {
+                this.$message.error('删除失败')
+              }
             }).catch(_ => {
               this.$message({
                 type: 'info',
                 message: '删除失败'
               })
             })
+          }).catch(_ => {
           })
         },
         handleEdit (val) {
@@ -155,19 +159,15 @@
           this.queryParams.currentPage = val
           this.getTeacherPlan()
         },
-        formatterFinished (row, column, cellValue, index) {
-          if (cellValue === true) {
-            return '已完成'
-          } else {
-            return '未完成'
-          }
-        },
         getTeacherPlan () {
           this.$store.dispatch('Get', {'url': '/api-home/plan/getTeacherPlan', 'data': this.queryParams}).then(res => {
             this.loading = false
             if (res.data.success) {
               this.tableData = res.data.re.rows
               this.total = res.data.re.total
+            } else {
+              this.tableData = null
+              this.total = 0
             }
           }).catch(error => {
             console.log(error)

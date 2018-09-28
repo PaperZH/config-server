@@ -152,14 +152,19 @@
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.id}}).then(res => {
-            this.tableData.splice(index, 1)
-            this.$message.success('删除成功')
-          }).catch(_ => {
+            if (res.data.success) {
+              this.tableData.splice(index, 1)
+              this.$message.success('删除成功')
+            } else {
+              this.$message.error('删除失败')
+            }
+          }).catch(() => {
             this.$message({
               type: 'info',
               message: '删除失败'
             })
           })
+        }).catch(_ => {
         })
       },
       handleCurrentChange (val) {
@@ -182,8 +187,7 @@
           if (res.data.success) {
             this.indexList = res.data.re
           }
-        }).catch(error => {
-          console.log(error)
+        }).catch(_ => {
         })
       },
       getTeacherPlan () {
@@ -192,9 +196,11 @@
           if (res.data.success) {
             this.tableData = res.data.re.rows
             this.total = res.data.re.total
+          } else {
+            this.tableData = null
+            this.total = 0
           }
-        }).catch(error => {
-          console.log(error)
+        }).catch(_ => {
         })
       }
     },

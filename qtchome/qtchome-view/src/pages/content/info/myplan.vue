@@ -112,8 +112,11 @@
             if (res.data.success) {
               this.dataPlan = res.data.re.rows
               this.total = res.data.re.total
+            } else {
+              this.dataPlan = null
+              this.total = 0
             }
-          })
+          }).catch(_ => {})
         },
         formatterFinished (row, column, cellValue, index) {
           if (cellValue === undefined) {
