@@ -3,7 +3,7 @@
     <el-form ref="message" :model="message" label-width="80px"  >
       <el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
         <el-col :span="11">
-          <el-form-item label="导师" :span="11" style="margin-left: -30px">
+          <el-form-item label="导师" :span="11" style="margin-left: -30px" >
             <el-input
               placeholder="教师姓名"
               v-model="message.teacherName"
@@ -92,9 +92,14 @@
     },
     methods: {
       onSubmit () {
+        let studentSummary = this.message.studentSummary
+        if (studentSummary === null || studentSummary === '') {
+          this.$message.error('请输入总结')
+          return false
+        }
         let data = {
           'studentEvaluateContent': this.message.studentEvaluateContent,
-          'studentSummary': this.message.studentSummary,
+          'studentSummary': studentSummary,
           'id': this.message.id
         }
         this.$store.dispatch('Post', {'url': '/api-home/plan/updatePublishedPlan', 'data': data}).then(res => {

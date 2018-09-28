@@ -29,8 +29,14 @@
       </el-table-column>
       <el-table-column
         prop="studentGetScore"
+        width="150"
         :formatter="formatterFinished"
-        label="评分">
+        label="得分">
+      </el-table-column>
+      <el-table-column
+        prop="planScore"
+        width="150"
+        label="总分">
       </el-table-column>
       <el-table-column
         fixed="right"

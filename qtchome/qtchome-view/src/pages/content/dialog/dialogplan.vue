@@ -116,7 +116,7 @@
             {type: 'array', required: true, message: '请选择学员', trigger: 'blur'}
           ],
           date: [
-            {required: true, message: '请选择日期', trigger: 'blur'}
+            {type: 'array', required: true, message: '请选择日期', trigger: 'blur'}
           ]
         },
         params: {
@@ -141,7 +141,7 @@
     methods: {
       onSubmit () {
         if (this.params.planId == null) {
-          this.$message.error('请添加计划')
+          this.$message.error('请选择一个计划')
           return
         }
         this.$refs['message'].validate((valid) => {
@@ -152,7 +152,8 @@
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedPlan', 'data': this.params}).then(res => {
               if (res.data.success) {
                 this.$refs['message'].resetFields()
-                this.params.planId = ''
+                this.message.date = []
+                this.params.planId = null
                 this.$emit('getTeacherPlan')
                 this.$message.success('发布成功')
                 this.visible = false

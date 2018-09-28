@@ -49,14 +49,14 @@
             >
           </el-table-column>
           <el-table-column
-            prop="studentGetScore"
-            label="评分"
+            label="状态"
             width="100">
             <template slot-scope="scope">
               <p v-if="scope.row.studentGetScore!=null">
-                {{scope.row.studentGetScore}}
+                已完成
               </p>
-              <p v-else>暂未评分</p>
+              <p v-else-if="scope.row.studentSummary!=null">暂未评分</p>
+              <p v-else>未完成</p>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="200px">

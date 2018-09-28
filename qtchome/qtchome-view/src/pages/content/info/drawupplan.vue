@@ -169,8 +169,7 @@
               this.tableData = null
               this.total = 0
             }
-          }).catch(error => {
-            console.log(error)
+          }).catch(_ => {
           })
         }
       },
