@@ -12,13 +12,13 @@ public interface AdminService {
      * 获得banner轮播图
      * @return
      */
-    @GetMapping("/pages/frontPage/getRecBanner")
+    @GetMapping("/pages/getRecBanner")
     public ResponseResult getBanner();
 
     /**
      * 获取推荐课程列表
      * @return
      */
-    @GetMapping(value = "/pages/frontPage/getRecCourse")
+    @GetMapping(value = "/pages/getRecCourse")
     public ResponseResult getRecCourse();
 }

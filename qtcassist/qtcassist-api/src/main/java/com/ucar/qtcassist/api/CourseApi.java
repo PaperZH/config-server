@@ -24,7 +24,7 @@ public interface CourseApi {
      * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
-    @PostMapping("/frontPage/course/getCourseList")
+    @PostMapping("/frontPage/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -39,7 +39,7 @@ public interface CourseApi {
      * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
-    @PostMapping("/course/getPublishCourseList")
+    @PostMapping("/getPublishCourseList")
     Result<Page<CourseVO>> getPublishCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -52,7 +52,7 @@ public interface CourseApi {
      * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
-    @PostMapping("/frontPage/course/getRecCourseList")
+    @PostMapping("/frontPage/getRecCourseList")
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -63,7 +63,7 @@ public interface CourseApi {
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
      * @return
      */
-    @PostMapping("/frontPage/course/getCourseIdAndCourseName")
+    @PostMapping("/frontPage/getCourseIdAndCourseName")
     Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
 
     /**
@@ -71,7 +71,7 @@ public interface CourseApi {
      * @param courseId 要查询的课程的id
      * @return
      */
-    @GetMapping("/frontPage/course/getCourseDetail/{courseId}")
+    @GetMapping("/frontPage/getCourseDetail/{courseId}")
     Result<CourseDetailVO<CoursewareDTO>> getCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
@@ -79,7 +79,7 @@ public interface CourseApi {
      * @param courseVO
      * @return
      */
-    @PostMapping("/course/addCourse")
+    @PostMapping("/addCourse")
     Result<CourseVO> addCourse(@RequestBody CourseVO courseVO);
 
     /**
@@ -87,7 +87,7 @@ public interface CourseApi {
      * @param courseVO
      * @return
      */
-    @PostMapping("/course/updateCourse")
+    @PostMapping("/updateCourse")
     Result<CourseVO> updateCourse(@RequestBody CourseVO courseVO);
 
     /**
@@ -95,7 +95,7 @@ public interface CourseApi {
      * @param queryVO (long[] courseIds)
      * @return
      */
-    @PostMapping("/course/deleteCourseList")
+    @PostMapping("/deleteCourseList")
     Result deleteCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -103,7 +103,7 @@ public interface CourseApi {
      * @param courseId 课程的id
      * @return
      */
-    @GetMapping("/frontPage/course/addCourseReadNum/{courseId}")
+    @GetMapping("/frontPage/addCourseReadNum/{courseId}")
     Result addCourseReadNum(@PathVariable("courseId") Long courseId);
 
 }
