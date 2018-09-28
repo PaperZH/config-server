@@ -24,7 +24,7 @@ public interface CourseApi {
      * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
-    @PostMapping("/getCourseList")
+    @PostMapping("/frontPage/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -52,7 +52,7 @@ public interface CourseApi {
      * Boolean isInValidDate 课程状态，true：有效课程（未删除未过期）， false：未删除课程（未删除）， null：所有课程
      * @return
      */
-    @PostMapping("/getRecCourseList")
+    @PostMapping("/frontPage/getRecCourseList")
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 
     /**
@@ -63,26 +63,15 @@ public interface CourseApi {
      * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
      * @return
      */
-    @PostMapping("/getCourseIdAndCourseName")
+    @PostMapping("/frontPage/getCourseIdAndCourseName")
     Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
-
-    /**
-     * 获取所有课程的id、status
-     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
-     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
-     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
-     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
-     * @return
-     */
-    @PostMapping("/getAllCourseIds")
-    Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO);
 
     /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
      * @param courseId 要查询的课程的id
      * @return
      */
-    @GetMapping("/getCourseDetail/{courseId}")
+    @GetMapping("/frontPage/getCourseDetail/{courseId}")
     Result<CourseDetailVO<CoursewareDTO>> getCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
@@ -114,7 +103,7 @@ public interface CourseApi {
      * @param courseId 课程的id
      * @return
      */
-    @GetMapping("/addCourseReadNum/{courseId}")
+    @GetMapping("/frontPage/addCourseReadNum/{courseId}")
     Result addCourseReadNum(@PathVariable("courseId") Long courseId);
 
 }

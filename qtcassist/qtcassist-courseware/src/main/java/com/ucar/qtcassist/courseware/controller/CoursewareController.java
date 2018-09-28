@@ -3,6 +3,7 @@ package com.ucar.qtcassist.courseware.controller;
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.CoursewareApi;
 import com.ucar.qtcassist.api.model.*;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
@@ -66,7 +67,7 @@ public class CoursewareController implements CoursewareApi {
      * @return
      */
     @Override
-    @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
+    @RequestMapping(value = "/frontPage/getAllBaseCoursewares", method = RequestMethod.POST)
     public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares() {
         return Result.getSuccessResult(baseCoursewareService.getAllBaseCoursewares());
     }
@@ -75,7 +76,7 @@ public class CoursewareController implements CoursewareApi {
      * 课件类型列表
      */
     @Override
-    @RequestMapping(value = "/getAllType", method = RequestMethod.GET)
+    @RequestMapping(value = "/frontPage/getAllType", method = RequestMethod.GET)
     public Result<List<CoursewareTypeDTO>> getAllType() {
         List<CoursewareTypeDTO> coursewareTypeDTOList = new ArrayList<>();
         List<CoursewareTypeDO> list = coursewareTypeService.getAllType();
@@ -129,17 +130,6 @@ public class CoursewareController implements CoursewareApi {
         baseCoursewareDO.setSourceUrl(sourceUrl);
         baseCoursewareService.addBaseCourseware(baseCoursewareDO);
         Long newBaseid=baseCoursewareDO.getId();
-
-        /*String res = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String date = simpleDateFormat.format(new Date());
-        if(!file.isEmpty()) {
-            String coursewareName = file.getOriginalFilename();
-            res = remoteFileService.saveTemFile(coursewareName);
-            File file1 = new File(date + "/" + res);
-            System.out.println(file1.getAbsolutePath());
-            FileUtils.copyInputStreamToFile(file.getInputStream(), file1);
-        }*/
         return Result.getSuccessResult(newBaseid);
     }
 
@@ -200,5 +190,11 @@ public class CoursewareController implements CoursewareApi {
     @RequestMapping(value = "/queryList")
     public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO){
        return Result.getSuccessResult(coursewareService.queryPage(coursewareQueryVO));
+    }
+
+    @Override
+    @RequestMapping(value = "/getAddCoursewarePageList" ,method = RequestMethod.POST)
+    public Result getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO){
+        return null;
     }
 }

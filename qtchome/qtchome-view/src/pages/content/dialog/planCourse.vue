@@ -131,14 +131,19 @@
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePlanCourse', 'data': {'id': row.id}}).then(res => {
-            this.courseData.splice(index, 1)
-            this.$message.success('删除成功')
+            if (res.data.success) {
+              this.courseData.splice(index, 1)
+              this.$message.success('删除成功')
+            } else {
+              this.$message.error('删除失败')
+            }
           }).catch(_ => {
             this.$message({
               type: 'info',
               message: '删除失败'
             })
           })
+        }).catch(_ => {
         })
       },
       handleSizeChange (val) {
@@ -149,7 +154,7 @@
         this.remoteMethod()
       },
       addCourse () {
-        if (this.courseIds.length === 0) {
+        if (this.courseIds === null || this.courseIds.length === 0) {
           this.$message({
             message: '请添加至少一个课程',
             type: 'warning'
@@ -157,7 +162,13 @@
         } else {
           let data = {'planId': this.id, 'courseIds': this.courseIds}
           this.$store.dispatch('Post', {'url': '/api-home/plan/addPublishedCourse', 'data': data}).then(res => {
-            this.$emit('handleCourse', this.id)
+            if (res.data.success) {
+              this.courseIds = []
+              this.$message.success('添加成功')
+              this.$emit('handleCourse', this.id)
+            } else {
+              this.$message.error('添加失败')
+            }
           }).catch(_ => {
             this.$message({
               showClose: true,
@@ -171,9 +182,14 @@
       remoteMethod () {
         this.loading = true
         this.$store.dispatch('Get', {'url': '/api-home/plan/getCourseList', 'data': this.queryParams}).then(res => {
-          this.courses = res.data.re.rows
-          this.total = res.data.re.total
           this.loading = false
+          if (res.data.success) {
+            this.courses = res.data.re.rows
+            this.total = res.data.re.total
+          } else {
+            this.courses = null
+            this.total = 0
+          }
         })
       }
     }

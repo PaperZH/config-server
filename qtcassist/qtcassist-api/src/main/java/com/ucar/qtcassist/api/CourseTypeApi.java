@@ -24,14 +24,14 @@ public interface CourseTypeApi {
      * @param courseTypeId 课程类型id
      * @return
      */
-    @GetMapping("/getCourseType/{courseTypeId}")
+    @GetMapping("/frontPage/getCourseType/{courseTypeId}")
     Result<CourseTypeDO> getCourseType(@PathVariable("courseTypeId") Long courseTypeId);
 
     /**
      * 查询所有的课程类型对象
      * @return
      */
-    @GetMapping("/getCourseTypeList")
+    @GetMapping("/frontPage/getCourseTypeList")
     Result<List<CourseTypeDO>> getCourseTypeList();
 
     /**

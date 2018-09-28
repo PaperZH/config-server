@@ -1,0 +1,36 @@
+package com.ucar.qtcassist.base.common.config;
+
+import com.ucar.qtcassist.base.common.intercepter.AuthIntercepter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+/**
+ * @program: train
+ * @description: SpringMVC拦截器
+ * @author: guodong.zhang
+ * @create: 2018-09-27 14:25
+ */
+@Configuration
+public class AuthConfig extends WebMvcConfigurationSupport {
+
+    @Bean
+    public AuthIntercepter authIntercepter() {
+        return new AuthIntercepter();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        InterceptorRegistration addInterceptor = registry.addInterceptor(authIntercepter());
+
+        // 排除配置
+        addInterceptor.excludePathPatterns("/login**");
+        addInterceptor.excludePathPatterns("/error**");
+        addInterceptor.excludePathPatterns("/**/frontPage/**");
+        // 拦截配置
+        addInterceptor.addPathPatterns("/**");
+    }
+}
+

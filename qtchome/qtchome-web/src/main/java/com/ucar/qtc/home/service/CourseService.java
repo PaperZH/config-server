@@ -16,7 +16,7 @@ public interface CourseService {
      * @param queryVO (String courseName, int currentPage, int pageSize, String type)
      * @return
      */
-    @RequestMapping(value = "/course/getCourseList")
+    @RequestMapping(value = "/course/frontPage/getCourseList")
     public ResponseResult getCourseList(QueryVO queryVO);
 
     /**
@@ -24,7 +24,7 @@ public interface CourseService {
      * @param courseId
      * @return
      */
-    @RequestMapping(value = "/course/getCourseDetail/{courseId}")
+    @RequestMapping(value = "/course/frontPage/getCourseDetail/{courseId}")
     public ResponseResult getCourseDetail(@PathVariable("courseId") Long courseId);
 
     /**
@@ -122,23 +122,19 @@ public interface CourseService {
     @RequestMapping(value = "/course/deleteCourseList")
     public ResponseResult deleteCourseList(QueryVO queryVO);
 
-
-    @RequestMapping
-    public ResponseResult getPlanList(String planName);
-
     /**
      * 根据课程ID来增加课程学习次数
      * @param courseId 课程的id
      * @return
      */
-    @RequestMapping(value = "/course/addCourseReadNum/{courseId}")
+    @RequestMapping(value = "/course/frontPage/addCourseReadNum/{courseId}")
     public ResponseResult addCourseReadNum(@PathVariable("courseId") Long courseId);
 
     /**
      * 获取课程类型列表
      * @return
      */
-    @RequestMapping(value = "/courseType/getCourseTypeList")
+    @RequestMapping(value = "/courseType/frontPage/getCourseTypeList")
     public ResponseResult getCourseTypeList();
 
 }

@@ -194,29 +194,6 @@ public class CourseController implements CourseApi {
     }
 
     /**
-     * 获取所有课程的id、status
-     * @param queryVO (String courseName, Integer currentPage, Integer pageSize)
-     * String courseName 课程名称的模糊查询字符串（可以为null，表示查询所有课程）
-     * Integer currentPage 分页查询的当前页（可以为null，表示查询所有的）
-     * Integer pageSize 分布查询的每页的记录数目（可以为null，表示查询所有的）
-     * @return
-     */
-    @Override
-    public Map<String, Object> getAllCourseIds(@RequestBody QueryVO queryVO) {
-        QueryDO queryDO = QueryConvertUtil.convertToQueryDO(queryVO);
-        List<CourseDO> courseDOList = courseService.getAllCourseIds(queryDO);
-        Map<String, Object> res = new HashMap<String,Object>();
-        List<CourseVO> courseVOList = new ArrayList<CourseVO>();
-        for(CourseDO courseDO : courseDOList) {
-            CourseVO courseVO = CourseConvertUtil.convertToCourseVO(courseDO);
-            courseVO.setInvalidDate(null);
-            courseVOList.add(courseVO);
-        }
-        res.put("ids", courseVOList);
-        return res;
-    }
-
-    /**
      * 根据课程ID获取课程详细信息，包括课程基本信息+教师信息+课件信息
      * @param courseId 要查询的课程的id
      * @return
@@ -302,6 +279,10 @@ public class CourseController implements CourseApi {
 
         int count = courseService.insertSelective(courseDO);
         if(count > 0) {
+//            CourseVO course = CourseConvertUtil.convertToCourseVO(courseDO);
+//            course.setCourseType(courseVO.getCourseType());
+//            course.setTypeName(courseVO.getCourseType().getTypeName());
+            courseVO.setCourseId(courseDO.getId());
             return Result.getSuccessResult(courseVO);
         }
         return Result.getBusinessException("添加课程失败","");
@@ -309,7 +290,7 @@ public class CourseController implements CourseApi {
 
     /**
      * 用户更新课程
-     * @param courseVO (long userId , CourseVO courseVO)
+     * @param courseVO (CourseVO courseVO)
      * @return
      */
     @Override
@@ -348,9 +329,9 @@ public class CourseController implements CourseApi {
     public Result addCourseReadNum(@PathVariable Long courseId) {
         int count = courseService.addCourseReadNum(courseId);
         if(count > 0) {
-            return Result.getSuccessResult("批量删除课程信息成功");
+            return Result.getSuccessResult("增加课程阅读量成功");
         } else {
-            return Result.getSuccessResult("批量删除课程信息失败");
+            return Result.getSuccessResult("增加课程阅读量失败");
         }
     }
 

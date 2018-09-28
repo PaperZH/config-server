@@ -29,8 +29,14 @@
       </el-table-column>
       <el-table-column
         prop="studentGetScore"
+        width="150"
         :formatter="formatterFinished"
-        label="评分">
+        label="得分">
+      </el-table-column>
+      <el-table-column
+        prop="planScore"
+        width="150"
+        label="总分">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -109,9 +115,14 @@
         getStudentPlan () {
           this.$store.dispatch('Get', {'url': '/api-home/plan/getStudentPlan', 'data': this.queryParams}).then(res => {
             this.loading = false
-            this.dataPlan = res.data.re.rows
-            this.total = res.data.re.total
-          })
+            if (res.data.success) {
+              this.dataPlan = res.data.re.rows
+              this.total = res.data.re.total
+            } else {
+              this.dataPlan = null
+              this.total = 0
+            }
+          }).catch(_ => {})
         },
         formatterFinished (row, column, cellValue, index) {
           if (cellValue === undefined) {

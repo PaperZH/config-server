@@ -26,13 +26,13 @@ public interface CourseServiceRpc {
      * @param queryVO
      * @return
      */
-    @PostMapping("course/getCourseIdAndCourseName")
+    @PostMapping("course/frontPage/getCourseIdAndCourseName")
     Map<String, Object> getCourseIdAndCourseName(@RequestBody QueryVO queryVO);
 
-    @PostMapping("course/getRecCourseList")
+    @PostMapping("course/frontPage/getRecCourseList")
     Result<List<CourseVO>> getRecCourseList(@RequestBody QueryVO queryVO);
 
-    @PostMapping("course/getCourseList")
+    @PostMapping("course/frontPage/getCourseList")
     Result<Page<CourseVO>> getCourseList(@RequestBody QueryVO queryVO);
 
 }

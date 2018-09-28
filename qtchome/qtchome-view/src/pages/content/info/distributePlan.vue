@@ -49,14 +49,14 @@
             >
           </el-table-column>
           <el-table-column
-            prop="studentGetScore"
-            label="评分"
+            label="状态"
             width="100">
             <template slot-scope="scope">
               <p v-if="scope.row.studentGetScore!=null">
-                {{scope.row.studentGetScore}}
+                已完成
               </p>
-              <p v-else>暂未评分</p>
+              <p v-else-if="scope.row.studentSummary!=null">暂未评分</p>
+              <p v-else>未完成</p>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="200px">
@@ -152,14 +152,19 @@
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('Get', {'url': '/api-home/plan/deletePublishedPlan', 'data': {'planId': row.id}}).then(res => {
-            this.tableData.splice(index, 1)
-            this.$message.success('删除成功')
-          }).catch(_ => {
+            if (res.data.success) {
+              this.tableData.splice(index, 1)
+              this.$message.success('删除成功')
+            } else {
+              this.$message.error('删除失败')
+            }
+          }).catch(() => {
             this.$message({
               type: 'info',
               message: '删除失败'
             })
           })
+        }).catch(_ => {
         })
       },
       handleCurrentChange (val) {
@@ -179,17 +184,23 @@
       getStudents () {
         let teacherId = this.$store.getters.userId
         this.$store.dispatch('Get', {'url': '/api-home/plan/getStudents', 'data': {'teacherId': teacherId}}).then(res => {
-          this.indexList = res.data.re
+          if (res.data.success) {
+            this.indexList = res.data.re
+          }
+        }).catch(_ => {
         })
       },
       getTeacherPlan () {
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.loading = false
-          if (res.data.re == null) {
-            this.$message.error('加载失败，请重新加载')
+          if (res.data.success) {
+            this.tableData = res.data.re.rows
+            this.total = res.data.re.total
+          } else {
+            this.tableData = null
+            this.total = 0
           }
-          this.tableData = res.data.re.rows
-          this.total = res.data.re.total
+        }).catch(_ => {
         })
       }
     },

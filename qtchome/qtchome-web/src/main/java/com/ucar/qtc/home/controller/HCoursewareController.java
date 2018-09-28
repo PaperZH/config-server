@@ -18,19 +18,19 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
-@RequestMapping("/courseware")
 @RestController
+@RequestMapping("/courseware")
 public class HCoursewareController {
 
     @Autowired
     HCoursewareService hcoursewareService;
 
-    @RequestMapping(value = "/getAllBaseCoursewares")
+    @RequestMapping(value = "/frontPage/getAllBaseCoursewares")
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
         return hcoursewareService.getAllBaseCoursewares();
     }
 
-    @RequestMapping(value = "/getAllTypes")
+    @RequestMapping(value = "/frontPage/getAllTypes")
     Result<List<CoursewareTypeDTO>> getAllTypes(){
         return hcoursewareService.getAllType();
     }

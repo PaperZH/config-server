@@ -117,7 +117,7 @@
         this.queryParams.currentPage = 1
       },
       getCourseList () {
-        const url = '/api-home/frontPage/getCourseList'
+        const url = '/api-home/course/frontPage/getCourseList'
         this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
           this.tableData = res.data.re.rows
@@ -156,7 +156,7 @@
         // 正在加载数据
         this.load.loading = true
 
-        const url = '/api-home/frontPage/getCourseList'
+        const url = '/api-home/course/frontPage/getCourseList'
         this.queryParams.currentPage = this.queryParams.currentPage + 1
         this.$store.dispatch('Post', {'url': url, 'data': this.queryParams}).then(res => {
           this.total = res.data.re.total
