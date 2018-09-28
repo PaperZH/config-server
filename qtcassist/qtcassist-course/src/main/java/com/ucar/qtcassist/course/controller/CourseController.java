@@ -9,7 +9,10 @@ import com.ucar.qtcassist.api.model.DO.CourseTypeDO;
 import com.ucar.qtcassist.api.model.DO.EvaluateCourseDO;
 import com.ucar.qtcassist.api.model.DO.QueryDO;
 import com.ucar.qtcassist.api.model.Result;
-import com.ucar.qtcassist.api.model.VO.*;
+import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
+import com.ucar.qtcassist.api.model.VO.CourseVO;
+import com.ucar.qtcassist.api.model.VO.QueryVO;
+import com.ucar.qtcassist.api.model.VO.TeacherVO;
 import com.ucar.qtcassist.base.common.constant.UrlPrefixConstant;
 import com.ucar.qtcassist.course.model.UserDTO;
 import com.ucar.qtcassist.course.service.AdminFeginClient;
@@ -327,4 +330,5 @@ public class CourseController implements CourseApi {
             return Result.getSuccessResult("批量删除课程信息失败");
         }
     }
+
 }
