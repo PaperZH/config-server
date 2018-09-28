@@ -41,6 +41,8 @@ zuul:
     connect-timeout-millis: 60000
 
 ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
   eureka:
     enabled: true
 
