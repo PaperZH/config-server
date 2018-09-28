@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author shijie.xu
  * @since 2018年09月05日
  */
-@RequestMapping("/courseCourseware")
 @RestController
 public class CourseCoursewareController {
     @Autowired
@@ -30,7 +29,7 @@ public class CourseCoursewareController {
     private static Logger LOGGER = LoggerFactory.getLogger(CourseCoursewareController.class);
 
 
-    @RequestMapping(value = "/addCourseCourseware", method = RequestMethod.POST)
+    @RequestMapping(value = "/courseCourseware/addCourseCourseware", method = RequestMethod.POST)
     public Result add(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
         System.out.println(courseCoursewareDTO.getFlag());
         if(courseCoursewareDTO.getFlag() == 1) {

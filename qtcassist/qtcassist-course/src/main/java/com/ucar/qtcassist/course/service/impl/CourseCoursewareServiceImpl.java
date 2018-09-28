@@ -1,8 +1,14 @@
 package com.ucar.qtcassist.course.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
+import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.course.dao.CourseCoursewareMapper;
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
 import com.ucar.qtcassist.course.service.CourseCoursewareService;
+import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,6 +17,9 @@ import java.util.List;
 public class CourseCoursewareServiceImpl implements CourseCoursewareService {
     @Autowired
     private CourseCoursewareMapper courseCoursewareMapper;
+
+    @Autowired
+    private CoursewareService coursewareService;
 
     @Override
     public int deleteByPrimaryKey(Long id) {
@@ -45,6 +54,22 @@ public class CourseCoursewareServiceImpl implements CourseCoursewareService {
     @Override
     public List<Long> getCoursewareIdListByCourseId(Long courseId) {
         return courseCoursewareMapper.getCoursewareIdListByCourseId(courseId);
+    }
+
+    @Override
+    public AddCoursewarePageListDTO getAddCoursewareListByCourseId(AddCoursewareQueryVO addCoursewareQueryVO) {
+        AddCoursewarePageListDTO addCoursewarePageListDTO = new AddCoursewarePageListDTO();
+        Integer pageNo = addCoursewareQueryVO.getPageNo();
+        Integer pageSize = addCoursewareQueryVO.getPageSize();
+        pageNo = pageNo == null ? 1 : pageNo;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNo, pageSize);
+        List<Long> addCoursewareList = courseCoursewareMapper.getCoursewareIdListByCourseId(addCoursewareQueryVO.getCourseId());
+        PageInfo pageInfo = new PageInfo<>(addCoursewareList);
+        List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(addCoursewareList);
+        addCoursewarePageListDTO.setCount(pageInfo.getTotal());
+        addCoursewarePageListDTO.setCoursewareDTOList(coursewareDTOList);
+        return addCoursewarePageListDTO;
     }
 
     @Override

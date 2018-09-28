@@ -1,3 +1,4 @@
+/*
 package com.ucar.qtc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
@@ -10,17 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.ERROR_TYPE;
 
+*/
 /**
  * Description: TODO
  *
  * @author wangyang
  * @since 2018/9/20
- */
+ *//*
+
 
 @Component
 public class PrintErrorFilter extends ZuulFilter {
 
-    /** 日志记录器 */
+    */
+/** 日志记录器 *//*
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintErrorFilter.class);
 
     private static final String SEND_ERROR_FILTER_RAN = "sendErrorFilter.ran";
@@ -54,3 +59,4 @@ public class PrintErrorFilter extends ZuulFilter {
 
 
 }
+*/

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/courseCourseware")
 public class CourseCoursewareController implements CourseCoursewareApi {
 
     @Autowired
@@ -49,7 +48,7 @@ public class CourseCoursewareController implements CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
-    @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
+    @RequestMapping(value = "/courseCourseware/addCourseCourseware",method = RequestMethod.POST)
     public Result addCourseCourseware(@RequestParam("courseId") Long courseId,
                                @RequestParam("coursewareId") Long coursewareId) {
         CourseCoursewareDO courseCourseware = new CourseCoursewareDO();
