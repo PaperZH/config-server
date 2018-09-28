@@ -5,11 +5,11 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://${spring.cloud.client.ip-address}:8001/eureka/
-    registry-fetch-interval-seconds: 15
+    registry-fetch-interval-seconds: 5
     healthcheck:
       enabled: true
   instance:
-    lease-renewal-interval-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 20
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
@@ -41,8 +41,8 @@ zuul:
     connect-timeout-millis: 60000
 
 ribbon:
-  ReadTimeout: 10000
-  ConnectTimeout: 10000
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
   eureka:
     enabled: true
 

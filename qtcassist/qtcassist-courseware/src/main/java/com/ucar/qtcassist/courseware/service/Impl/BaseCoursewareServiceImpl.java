@@ -2,6 +2,7 @@ package com.ucar.qtcassist.courseware.service.Impl;
 
 import com.ucar.qtcassist.api.model.BaseCoursewareDTO;
 import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
+import com.ucar.qtcassist.courseware.constant.FileConstant;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.model.DO.BaseCoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
@@ -43,8 +44,10 @@ public class BaseCoursewareServiceImpl implements BaseCoursewareService {
             baseCoursewareListDTO.setId(baseCoursewareDO.getId());
             baseCoursewareListDTO.setCoursewareName(baseCoursewareDO.getCoursewareName());
             baseCoursewareListDTO.setTypeId(baseCoursewareDO.getTypeId());
+            baseCoursewareListDTO.setPreUrl(FileConstant.URLPREFIX+baseCoursewareDO.getPreviewUrl());
+            baseCoursewareListDTO.setSourceUrl(FileConstant.URLPREFIX+baseCoursewareDO.getSourceUrl());
             for(int j=0;j< typeList.size();j++){
-                if(typeList.get(j).getId()==baseCoursewareDO.getTypeId()){
+                if(typeList.get(j).getId().equals(baseCoursewareDO.getTypeId())){
                     baseCoursewareListDTO.setTypeName(typeList.get(j).getTypeName());
                 }
             }

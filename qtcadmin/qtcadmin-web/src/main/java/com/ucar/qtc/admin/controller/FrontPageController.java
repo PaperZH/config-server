@@ -45,7 +45,7 @@ public class FrontPageController {
     private UserService userService;
 
     @ApiOperation(value="获取推荐图片", notes="获取推荐图片")
-    @GetMapping(value="frontPage/getRecBanner", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value="getRecBanner", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult bannerList() {
         int limit = 6;
         int offset = 0;
@@ -62,7 +62,7 @@ public class FrontPageController {
     }
 
     @ApiOperation(value="获取推荐课程", notes="获取推荐课程")
-    @GetMapping(value="frontPage/getRecCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value="getRecCourse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult getRecourseList(){
 
         //得到所有推荐课程信息

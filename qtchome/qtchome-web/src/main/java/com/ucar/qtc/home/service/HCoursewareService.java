@@ -20,14 +20,14 @@ import java.util.List;
  */
 @FeignClient(name = "qtcassist",path = "/courseware",configuration = FeignMultipartSupportConfig.class)
 public interface HCoursewareService  {
-    @RequestMapping(value = "/getAllBaseCoursewares", method = RequestMethod.POST)
+    @RequestMapping(value = "/frontPage/getAllBaseCoursewares", method = RequestMethod.POST)
     Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares();
 
     @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST,
     produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result uploadCourseware(@RequestPart(value="file") MultipartFile file) throws Exception;
 
-    @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
+    @RequestMapping(value = "/frontPage/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();
 
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)

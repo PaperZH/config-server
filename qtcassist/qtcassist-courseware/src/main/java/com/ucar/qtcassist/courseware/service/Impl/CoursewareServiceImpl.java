@@ -2,9 +2,11 @@ package com.ucar.qtcassist.courseware.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.BackCoursewareDTO;
 import com.ucar.qtcassist.api.model.BackDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareMapper;
@@ -34,6 +36,7 @@ public class CoursewareServiceImpl implements CoursewareService {
     private CoursewareMapper coursewareMapper;
     @Autowired
     private CoursewareTypeMapper coursewareTypeMapper;
+
 
     @Override
     public Long addCourseware(CoursewareDO coursewareDO) {
@@ -108,4 +111,5 @@ public class CoursewareServiceImpl implements CoursewareService {
         backDTO.setCount(pageInfo.getTotal());
         return backDTO;
     }
+
 }
