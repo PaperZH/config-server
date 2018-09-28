@@ -89,9 +89,14 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$store.dispatch('Post', {'url': '/api-home/plan/addPlan', 'data': this.message}).then(res => {
-              this.$emit('EditClick')
-              this.$refs.message.resetFields()
-              this.visible = false
+              if (res.data.success) {
+                this.$emit('EditClick')
+                this.$refs.message.resetFields()
+                this.$message.success('操作成功')
+                this.visible = false
+              } else {
+                this.$message.error('操作失败')
+              }
             })
           } else {
             return false

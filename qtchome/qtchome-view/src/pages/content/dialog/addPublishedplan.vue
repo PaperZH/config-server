@@ -96,8 +96,13 @@
               'teacherEvaluateContent': this.message.teacherEvaluateContent,
               'id': this.message.id}
             this.$store.dispatch('Post', {'url': '/api-home/plan/updatePublishedPlan', 'data': data}).then(res => {
-              this.$emit('getTeacherPlan')
-              this.visible = false
+              if (res.data.success) {
+                this.$emit('getTeacherPlan')
+                this.$message.success('评价成功')
+                this.visible = false
+              } else {
+                this.$message.error('评价失败')
+              }
             })
           } else {
             return false

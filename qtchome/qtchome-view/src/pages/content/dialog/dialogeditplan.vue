@@ -92,9 +92,18 @@
     },
     methods: {
       onSubmit () {
-        let data = {'studentEvaluateContent': this.message.studentEvaluateContent, 'studentSummary': this.message.studentSummary, 'id': this.message.id}
+        let data = {
+          'studentEvaluateContent': this.message.studentEvaluateContent,
+          'studentSummary': this.message.studentSummary,
+          'id': this.message.id
+        }
         this.$store.dispatch('Post', {'url': '/api-home/plan/updatePublishedPlan', 'data': data}).then(res => {
-          this.visible = false
+          if (res.data.success) {
+            this.$message.success('总结成功')
+            this.visible = false
+          } else {
+            this.$message.error('总结失败')
+          }
         })
       },
       handleSearch (courseId) {
