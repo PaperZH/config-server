@@ -2,13 +2,14 @@ package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.common.Page;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
-import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
@@ -104,7 +105,5 @@ public interface CourseApi {
      */
     @GetMapping("/frontPage/addCourseReadNum/{courseId}")
     Result addCourseReadNum(@PathVariable("courseId") Long courseId);
-
-
 
 }
