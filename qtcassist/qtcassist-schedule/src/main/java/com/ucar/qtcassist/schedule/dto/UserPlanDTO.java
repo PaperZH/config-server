@@ -63,6 +63,22 @@ public class UserPlanDTO {
         this.endDate = endDate;
     }
 
+    public String getStudentSummary() {
+        return studentSummary;
+    }
+
+    public void setStudentSummary(String studentSummary) {
+        this.studentSummary = studentSummary;
+    }
+
+    public Float getPlanScore() {
+        return planScore;
+    }
+
+    public void setPlanScore(Float planScore) {
+        this.planScore = planScore;
+    }
+
     @Override
     public String toString() {
         return "UserPlanDTO{" +
@@ -70,7 +86,9 @@ public class UserPlanDTO {
                 ", teacherId=" + teacherId +
                 ", studentId=" + studentId +
                 ", planTitle='" + planTitle + '\'' +
+                ", studentSummary='" + studentSummary + '\'' +
                 ", studentGetScore=" + studentGetScore +
+                ", planScore=" + planScore +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
@@ -80,7 +98,9 @@ public class UserPlanDTO {
     private Long teacherId;
     private Long studentId;
     private String planTitle;
+    private String studentSummary;
     private Float studentGetScore;
+    private Float planScore;
     private Date startDate;
     private Date endDate;
 }

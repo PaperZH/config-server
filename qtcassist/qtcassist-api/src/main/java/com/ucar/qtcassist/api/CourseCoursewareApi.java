@@ -40,4 +40,5 @@ public interface CourseCoursewareApi {
     Result deleteCourseCourseware(@PathVariable("courseId") Long courseId,
                                   @PathVariable("coursewareId") Long coursewareId);
 
+
 }

@@ -61,11 +61,29 @@ public class UserPlanVO {
         this.endDate = endDate;
     }
 
+    public String getStudentSummary() {
+        return studentSummary;
+    }
+
+    public void setStudentSummary(String studentSummary) {
+        this.studentSummary = studentSummary;
+    }
+
+    public Float getPlanScore() {
+        return planScore;
+    }
+
+    public void setPlanScore(Float planScore) {
+        this.planScore = planScore;
+    }
+
     private Long id;
     private String teacherName;
     private String studentName;
     private String planTitle;
+    private String studentSummary;
     private Float studentGetScore;
+    private Float planScore;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
