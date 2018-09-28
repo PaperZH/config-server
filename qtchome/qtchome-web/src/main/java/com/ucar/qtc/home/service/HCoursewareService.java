@@ -31,7 +31,7 @@ public interface HCoursewareService  {
     Result<List<CoursewareTypeDTO>> getAllType();
 
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
-    Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num);
+    Result addCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
     @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);

@@ -26,7 +26,7 @@ public interface CourseCoursewareService {
      * @param addCoursewareQueryVO
      * @return
      */
-    AddCoursewarePageListDTO getAddCoursewareListByCourseId(AddCoursewareQueryVO addCoursewareQueryVO);
+    AddCoursewarePageListDTO getAddCoursewareList(AddCoursewareQueryVO addCoursewareQueryVO);
 
     Long getIdByCourseIdAndCoursewareId(Long courseId, Long coursewareId);
 }

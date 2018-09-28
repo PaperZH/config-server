@@ -23,4 +23,8 @@ management:
 spring:
   application:
     name: api-home
+  servlet:
+      multipart:
+        max-file-size: 100Mb
+        max-request-size: 100Mb
 

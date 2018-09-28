@@ -190,6 +190,7 @@
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.loading = false
           if (res.data.success) {
+            console.log(res.data.re.rows)
             this.tableData = res.data.re.rows
             this.total = res.data.re.total
           }

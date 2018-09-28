@@ -1,6 +1,8 @@
 package com.ucar.qtcassist.api;
 
+import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,5 +42,5 @@ public interface CourseCoursewareApi {
     Result deleteCourseCourseware(@PathVariable("courseId") Long courseId,
                                   @PathVariable("coursewareId") Long coursewareId);
 
-
+    Result<AddCoursewarePageListDTO> getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO);
 }

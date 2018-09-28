@@ -79,6 +79,58 @@
         </el-form>
       </div>
     </el-card>
+    <div style="margin-top: 10px">
+      <el-table
+        :data="courseWareTable"
+        border
+        style="width: 100%">
+        <el-table-column
+          prop="id"
+          label="课时"
+          width="70">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="课件名称"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          label="课程分类 "
+          width="100"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="课件描述"
+        >
+        </el-table-column>
+        <el-table-column label="操作" width="200px">
+          <template slot-scope="scope">
+            <el-button
+              @click="handleEdit(scope.row.id)"
+              size="mini"
+              type="info"
+            >查看</el-button>
+            <el-button
+              @click="handleClick(scope.row,scope.$index)"
+              size="mini"
+              type="danger"
+            >下载</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block" style="text-align: center">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[100, 200, 300, 400]"
+          :page-size="5"
+          layout="total, prev, pager, next, jumper"
+          :total=coursewareTotal>
+        </el-pagination>
+      </div>
+    </div>
     <el-card class="box-card" shadow="hover" style="margin-top: 10px"  v-show="isShow"
              v-for="(item,index) in courseWareTable " :key="index">
       <el-row>
@@ -158,6 +210,12 @@
         }
       }
       return {
+        coursewareQury: {
+          pageNo: '1',
+          pageSize: '5',
+          courseId: ''
+        },
+        coursewareTotal: 0,
         studyDialogVisible: false,
         previewUrl: null,
         uploadIsDisabled: false,
@@ -193,24 +251,26 @@
     mounted () {
       // 得到课程的id
       this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
+      this.coursewareQury.courseId = this.$router.currentRoute.params.course.courseId
       // 得到课程的课件的集合
-      var mycars = []
-      mycars = this.$router.currentRoute.params.coursewares
-      console.log('mycars')
-      console.log(mycars)
-      for (var i = 0; i < mycars.length; i++) {
-        var courseWareTableItem = {}
-        courseWareTableItem.name = mycars[i].name
-        courseWareTableItem.describe = mycars[i].description
-        courseWareTableItem.typeName = mycars[i].type
-        courseWareTableItem.sourceUrl = mycars[i].sourceUrl
-        courseWareTableItem.preUrl = mycars[i].preUrl
-        this.courseWareTable.push(courseWareTableItem)
-      }
-      if (this.courseWareTable.length > 0) {
-        this.isShow = true
-      }
+      // var mycars = []
+      // mycars = this.$router.currentRoute.params.coursewares
+      // console.log('mycars')
+      // console.log(mycars)
+      // for (var i = 0; i < mycars.length; i++) {
+      //   var courseWareTableItem = {}
+      //   courseWareTableItem.name = mycars[i].name
+      //   courseWareTableItem.describe = mycars[i].description
+      //   courseWareTableItem.typeName = mycars[i].type
+      //   courseWareTableItem.sourceUrl = mycars[i].sourceUrl
+      //   courseWareTableItem.preUrl = mycars[i].preUrl
+      //   this.courseWareTable.push(courseWareTableItem)
+      // }
+      // if (this.courseWareTable.length > 0) {
+      //   this.isShow = true
+      // }
       this.loadAll()
+      this.getCoursewareList()
     },
     methods: {
       onAddCourseWare () {
@@ -225,11 +285,13 @@
                 console.log(this.coursewareForm)
                 var courseWareTableItem = {}
                 courseWareTableItem.name = this.coursewareForm.name
-                courseWareTableItem.describe = this.coursewareForm.describe
-                courseWareTableItem.typeName = this.coursewareForm.typeName
+                courseWareTableItem.description = this.coursewareForm.describe
+                courseWareTableItem.type = this.coursewareForm.typeName
                 courseWareTableItem.sourceUrl = this.coursewareForm.sourceUrl
                 courseWareTableItem.preUrl = this.coursewareForm.preUrl
                 this.courseWareTable.push(courseWareTableItem)
+                this.uploadIsDisabled = false
+                this.$refs.sys.disabled = false
                 this.addSuccessfully()
               } else {
 
@@ -275,6 +337,7 @@
         this.$message.warning(`已经选择上传文件`)
       },
       loadAll () {
+
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/frontPage/getAllBaseCoursewares`,
           'data': ''
@@ -327,8 +390,6 @@
             this.coursewareForm.hour = ''
             this.coursewareForm.name = ''
             this.state4 = ''
-            this.uploadIsDisabled = true
-            this.$refs.sys.disabled = true
             console.log(this.courseWareTable)
           }
         })
@@ -354,10 +415,27 @@
       scanClick (item) {
         this.previewUrl = item.preUrl
         this.studyDialogVisible = true
+      },
+
+      handleCurrentChange (val) {
+        // this.loading = true
+        this.coursewareQury.pageNo = val
+        this.getCoursewareList()
+      },
+
+      getCoursewareList(){
+        this.$store.dispatch('Post', {'url': '/api-home/courseCourseware/getAddCoursewarePageList', 'data': this.coursewareQury}).then(res => {
+          this.loading = false
+          if (res.data.success) {
+            console.log(res.data)
+            this.courseWareTable = res.data.re.coursewareDTOList
+            this.coursewareTotal = res.data.re.count
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       }
-
     }
-
   }
 </script>
 

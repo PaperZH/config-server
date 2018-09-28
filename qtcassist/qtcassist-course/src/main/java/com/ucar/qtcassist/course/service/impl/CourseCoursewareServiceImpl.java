@@ -57,7 +57,7 @@ public class CourseCoursewareServiceImpl implements CourseCoursewareService {
     }
 
     @Override
-    public AddCoursewarePageListDTO getAddCoursewareListByCourseId(AddCoursewareQueryVO addCoursewareQueryVO) {
+    public AddCoursewarePageListDTO getAddCoursewareList(AddCoursewareQueryVO addCoursewareQueryVO) {
         AddCoursewarePageListDTO addCoursewarePageListDTO = new AddCoursewarePageListDTO();
         Integer pageNo = addCoursewareQueryVO.getPageNo();
         Integer pageSize = addCoursewareQueryVO.getPageSize();

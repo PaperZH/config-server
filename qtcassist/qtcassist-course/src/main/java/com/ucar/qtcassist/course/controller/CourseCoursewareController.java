@@ -1,8 +1,10 @@
 package com.ucar.qtcassist.course.controller;
 
 import com.ucar.qtcassist.api.CourseCoursewareApi;
+import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.Result;
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.course.service.CourseCoursewareService;
 import com.ucar.qtcassist.courseware.service.CoursewareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/courseCourseware")
 public class CourseCoursewareController implements CourseCoursewareApi {
 
     @Autowired
@@ -48,7 +51,8 @@ public class CourseCoursewareController implements CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
-    @RequestMapping(value = "/courseCourseware/addCourseCourseware",method = RequestMethod.POST)
+    @Override
+    @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
     public Result addCourseCourseware(@RequestParam("courseId") Long courseId,
                                @RequestParam("coursewareId") Long coursewareId) {
         CourseCoursewareDO courseCourseware = new CourseCoursewareDO();
@@ -100,5 +104,11 @@ public class CourseCoursewareController implements CourseCoursewareApi {
         } else {
             return Result.getBusinessException("删除课件失败","");
         }
+    }
+
+    @Override
+    @RequestMapping(value = "/getAddCoursewarePageList",method = RequestMethod.POST)
+    public Result<AddCoursewarePageListDTO> getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO){
+        return Result.getSuccessResult(courseCoursewareService.getAddCoursewareList(addCoursewareQueryVO));
     }
 }
