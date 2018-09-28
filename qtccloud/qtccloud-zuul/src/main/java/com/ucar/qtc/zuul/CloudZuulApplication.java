@@ -33,10 +33,6 @@ public class CloudZuulApplication {
 		return new AccessFilter();
 	}
 
-	@Bean
-	public PrintErrorFilter printErrorFilter(){
-		return new PrintErrorFilter();
-	}
 
 	@Bean
 	public CorsFilter corsFilter() {
