@@ -279,6 +279,10 @@ public class CourseController implements CourseApi {
 
         int count = courseService.insertSelective(courseDO);
         if(count > 0) {
+//            CourseVO course = CourseConvertUtil.convertToCourseVO(courseDO);
+//            course.setCourseType(courseVO.getCourseType());
+//            course.setTypeName(courseVO.getCourseType().getTypeName());
+            courseVO.setCourseId(courseDO.getId());
             return Result.getSuccessResult(courseVO);
         }
         return Result.getBusinessException("添加课程失败","");
@@ -286,7 +290,7 @@ public class CourseController implements CourseApi {
 
     /**
      * 用户更新课程
-     * @param courseVO (long userId , CourseVO courseVO)
+     * @param courseVO (CourseVO courseVO)
      * @return
      */
     @Override
@@ -325,9 +329,9 @@ public class CourseController implements CourseApi {
     public Result addCourseReadNum(@PathVariable Long courseId) {
         int count = courseService.addCourseReadNum(courseId);
         if(count > 0) {
-            return Result.getSuccessResult("批量删除课程信息成功");
+            return Result.getSuccessResult("增加课程阅读量成功");
         } else {
-            return Result.getSuccessResult("批量删除课程信息失败");
+            return Result.getSuccessResult("增加课程阅读量失败");
         }
     }
 
