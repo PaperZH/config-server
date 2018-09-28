@@ -42,7 +42,7 @@ public class AccessFilter extends ZuulFilter {
     RedisCacheService redisCacheService;
 
     private String ignorePath = "/api-admin/login,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs,/api-home/login," +
-            "/api-home/[(\\w)-/]*/frontPage";
+            "/api-home[(\\w)-/]*/frontPage";
 
     @Override
     public String filterType() {
