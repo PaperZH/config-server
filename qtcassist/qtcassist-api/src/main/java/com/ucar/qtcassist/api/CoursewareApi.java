@@ -1,6 +1,7 @@
 package com.ucar.qtcassist.api;
 
 import com.ucar.qtcassist.api.model.*;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,9 @@ public interface CoursewareApi {
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
     @RequestMapping(value = "/queryList" )
-    public Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO);
+    Result<BackDTO> queryList(@RequestBody CoursewareQueryVO coursewareQueryVO);
+
+    @RequestMapping("/getAddCoursewarePageList")
+    Result getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO);
 
 }
