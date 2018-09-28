@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/course")
 public class CourseController implements CourseApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);

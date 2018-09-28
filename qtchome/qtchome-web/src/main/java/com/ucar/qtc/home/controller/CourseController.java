@@ -62,7 +62,7 @@ public class CourseController {
      * @return
      */
     @ApiOperation(value="获取要课程列表,返回课程基本信息", notes="get请求，不需要传参")
-    @RequestMapping(value = "/frontPage/course/getCourseList" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/course/frontPage/getCourseList" ,method = RequestMethod.POST)
     public ResponseResult getCourseList(@RequestBody QueryVO queryVO){
         return  courseService.getCourseList(queryVO);
     }
@@ -73,7 +73,7 @@ public class CourseController {
      * @return
      */
     @ApiOperation(value="获取要课程基本信息", notes="get请求，传课程ID参数")
-    @RequestMapping(value = "/frontPage/course/getCourseDetail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/course/frontPage/getCourseDetail/{id}", method = RequestMethod.GET)
     public ResponseResult getCourseDetail(@PathVariable long id){
         return courseService.getCourseDetail(id);
     }
@@ -93,7 +93,7 @@ public class CourseController {
      * @param courseId 课程的id
      * @return
      */
-    @RequestMapping(value = "/frontPage/course/addCourseReadNum/{courseId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/course/frontPage/addCourseReadNum/{courseId}", method = RequestMethod.POST)
     ResponseResult addCourseReadNum(@PathVariable("courseId") Long courseId) {
         return courseService.addCourseReadNum(courseId);
     }
@@ -102,7 +102,7 @@ public class CourseController {
      * 获取课程类型列表
      * @return
      */
-    @RequestMapping(value = "/frontPage/courseType/getCourseTypeList",method = RequestMethod.GET)
+    @RequestMapping(value = "/courseType/frontPage/getCourseTypeList",method = RequestMethod.GET)
     ResponseResult getCourseTypeList(){
         return courseService.getCourseTypeList();
     }
