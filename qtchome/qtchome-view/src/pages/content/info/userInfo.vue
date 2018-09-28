@@ -63,6 +63,11 @@
       onSubmit () {
         let userInfo = {'userId': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
         this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
+          if (res.data.success) {
+            this.$message.success('更新成功')
+          } else {
+            this.$message.error('更新失败')
+          }
         })
       },
       handleAvatarSuccess (res, file) {
