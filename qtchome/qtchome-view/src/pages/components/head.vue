@@ -170,13 +170,19 @@ export default {
     }
   },
   mounted: function () {
-    let tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+    let tempuser = null
+    tempuser = sessionStorage.getItem('access-userinfo')
     if (tempuser) {
       this.userInfo.nickName = tempuser.nickname
       this.userInfo.avatar = tempuser.avatar
       this.$store.commit('SET_USERID', tempuser.userId)
       this.isShow = false
       this.isUser = true
+    } else {
+      this.isShow = true
+      this.isUser = false
+      this.userInfo.nickName = ''
+      this.userInfo.avatar = ''
     }
   }
 }

@@ -1,7 +1,8 @@
 import axios from 'axios'
-// import { Message, MessageBox } from 'element-ui'
-// import store from '../store'
-// import qs from 'qs'
+import {
+  bus
+} from './bus'
+import router from './router/index'
 // 创建axios实例
 const service = axios.create({
   timeout: 60000, // 请求超时时间
@@ -18,4 +19,21 @@ service.interceptors.request.use(config => {
   console.log(error) // for debug
   Promise.reject(error)
 })
+// 添加一个响应拦截器
+service.interceptors.response.use(function (response) {
+  if (response.data && response.data.code) {
+    if (parseInt(response.data.code) === 401) {
+      window.location.reload()
+      bus.$message.error('用户未登录')
+      sessionStorage.removeItem('access-token')
+      sessionStorage.removeItem('access-menus')
+      sessionStorage.removeItem('access-userinfo')
+      router.push('/home')
+    }
+  }
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})
+
 export default service
