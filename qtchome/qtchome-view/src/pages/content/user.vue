@@ -32,6 +32,8 @@ export default {
     this.menus = JSON.parse(sessionStorage.getItem('access-menus'))
     if (this.menus != null) {
       this.$router.push(this.menus[0].path)
+    } else {
+      this.$router.push('/home')
     }
   },
   methods: {

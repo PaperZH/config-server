@@ -65,6 +65,7 @@
 
 </template>
 <script>
+import {bus} from '../../bus'
 export default {
   inject: ['reload'],
   props: {
@@ -169,10 +170,20 @@ export default {
       }
     }
   },
+  created: function () {
+    bus.$on('headRefresh', () => {
+      this.isShow = true
+      this.isUser = false
+      this.reload()
+    })
+    bus.$on('clickLogin', () => {
+      this.dialogFormVisible = true
+    })
+  },
   mounted: function () {
     let tempuser = null
-    tempuser = sessionStorage.getItem('access-userinfo')
-    if (tempuser) {
+    tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+    if (tempuser && tempuser != null) {
       this.userInfo.nickName = tempuser.nickname
       this.userInfo.avatar = tempuser.avatar
       this.$store.commit('SET_USERID', tempuser.userId)

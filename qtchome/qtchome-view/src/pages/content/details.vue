@@ -49,14 +49,14 @@
                     <span>课时数：{{tableData.length}}</span><br/><br/>
                     <span>有效期：{{course.invalidDate}}</span>
                   </div>
-                  <div style="height: 100px; text-align: center; margin-top: 30px;" v-show="isLogin">
+                  <div style="height: 100px; text-align: center; margin-top: 30px;" v-show="true">
                     <el-button type="primary" round @click="handlePraiseCourse(course.courseId)">
                       {{praise.praiseText}}
                     </el-button>
                     <el-button type="success" round @click="handleCollectCourse(course.courseId)">
                       {{collect.collectText}}
                     </el-button>
-                    <el-button type="info" round @click="evaluateDialogVisible = true">
+                    <el-button type="info" round @click="handleEvaluateCourse()">
                       评价
                     </el-button>
                   </div>
@@ -188,6 +188,7 @@
 
 <script>
     import Breadcrumb from '@/pages/components/breadcrumb' //  面包屑 导航
+    import {bus} from '../../bus'
     export default {
       components: {
         'tabs-breadcrumb': Breadcrumb
@@ -230,6 +231,7 @@
       mounted: function () {
         let cId = sessionStorage.getItem('courseId')
         let id = this.$router.currentRoute.params.courseId
+        this.getUserId()
         if (id) {
           this.$nextTick(function () {
             sessionStorage.setItem('courseId', id)
@@ -238,11 +240,8 @@
         } else {
           this.getCourseDetail(cId)
         }
-        this.getUserId()
-        if (this.userId != null) {
-          this.isLogin = true
-        } else if (this.userId === null) {
-          this.isLogin = false
+
+        if (this.userId === null) {
           var timer = setInterval(() => {
             this.getUserId()
             if (this.userId != null) {
@@ -269,10 +268,9 @@
                 }
               })
 
-              this.isLogin = true
               clearInterval(timer)
             }
-          }, 2000)
+          }, 1000)
         }
       },
       methods: {
@@ -293,42 +291,68 @@
           })
         },
         handlePraiseCourse (val) {
-          if (this.praise.isPraised === true) {
-            this.$store.dispatch('Post', {'url': '/api-home/course/deletePraiseCourse/' + this.userId + '/' + val}).then(res => {
-              if (res.data.success === true) {
-                this.praise.isPraised = false
-                this.praise.praiseText = '点赞'
-                this.getCourseDetail(val)
-              }
-            })
+          this.getUserId()
+          if (this.userId == null) {
+            bus.$emit('clickLogin')
           } else {
-            this.$store.dispatch('Post', {'url': '/api-home/course/addPraiseCourse/' + this.userId + '/' + val}).then(res => {
-              if (res.data.success === true) {
-                this.praise.isPraised = true
-                this.praise.praiseText = '已赞'
-                this.getCourseDetail(val)
-              }
-            })
+            if (this.praise.isPraised === true) {
+              this.$store.dispatch('Post', {'url': '/api-home/course/deletePraiseCourse/' + this.userId + '/' + val}).then(res => {
+                if (res.data.success === true) {
+                  this.praise.isPraised = false
+                  this.praise.praiseText = '点赞'
+                  this.getCourseDetail(val)
+                } else {
+                  bus.$emit('clickLogin')
+                }
+              })
+            } else {
+              this.$store.dispatch('Post', {'url': '/api-home/course/addPraiseCourse/' + this.userId + '/' + val}).then(res => {
+                if (res.data.success === true) {
+                  this.praise.isPraised = true
+                  this.praise.praiseText = '已赞'
+                  this.getCourseDetail(val)
+                } else {
+                  bus.$emit('clickLogin')
+                }
+              })
+            }
           }
         },
         handleCollectCourse (val) {
-          if (this.collect.isCollected === true) {
-            let data = {'userId': this.userId, 'courseIds': [val]}
-            this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
-              if (res.data.success === true) {
-                this.collect.isCollected = false
-                this.collect.collectText = '收藏'
-                this.getCourseDetail(val)
-              }
-            })
+          this.getUserId()
+          if (this.userId == null) {
+            bus.$emit('clickLogin')
           } else {
-            this.$store.dispatch('Post', {'url': '/api-home/course/addCollectCourse/' + this.userId + '/' + val}).then(res => {
-              if (res.data.success === true) {
-                this.collect.isCollected = true
-                this.collect.collectText = '已藏'
-                this.getCourseDetail(val)
-              }
-            })
+            if (this.collect.isCollected === true) {
+              let data = {'userId': this.userId, 'courseIds': [val]}
+              this.$store.dispatch('Post', {'url': '/api-home/course/deleteCollectCourseList', 'data': data}).then(res => {
+                if (res.data.success === true) {
+                  this.collect.isCollected = false
+                  this.collect.collectText = '收藏'
+                  this.getCourseDetail(val)
+                } else {
+                  bus.$emit('clickLogin')
+                }
+              })
+            } else {
+              this.$store.dispatch('Post', {'url': '/api-home/course/addCollectCourse/' + this.userId + '/' + val}).then(res => {
+                if (res.data.success === true) {
+                  this.collect.isCollected = true
+                  this.collect.collectText = '已藏'
+                  this.getCourseDetail(val)
+                } else {
+                  bus.$emit('clickLogin')
+                }
+              })
+            }
+          }
+        },
+        handleEvaluateCourse () {
+          this.getUserId()
+          if (this.userId == null) {
+            bus.$emit('clickLogin')
+          } else {
+            this.evaluateDialogVisible = true
           }
         },
         addEvaluateCourse (val) {
@@ -337,9 +361,11 @@
           this.$store.dispatch('Post', {'url': '/api-home/course/addEvaluateCourse', 'data': data}).then(res => {
             if (res.data.success === true) {
               this.$notify.success('评价成功')
+              this.getCourseDetail(val)
+            } else {
+              bus.$emit('clickLogin')
             }
           })
-          this.getCourseDetail(val)
         },
         getCourseDetail (val) {
           this.$store.dispatch('Get', {'url': '/api-home/course/frontPage/getCourseDetail/' + val}).then(res => {
