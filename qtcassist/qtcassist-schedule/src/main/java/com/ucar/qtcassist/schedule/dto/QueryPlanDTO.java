@@ -1,7 +1,19 @@
 package com.ucar.qtcassist.schedule.dto;
 
-
+/**
+ * @description: 查询计划参数封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class QueryPlanDTO {
+    private Long userId;
+    private Long teacherId;
+    private Long studentId;
+    private String planTitle;
+    private Integer currentPage;
+    private Integer pageSize;
+    private Integer offset;
+
     public Long getUserId() {
         return userId;
     }
@@ -76,12 +88,4 @@ public class QueryPlanDTO {
                 ", offset=" + offset +
                 '}';
     }
-
-    private Long userId;
-    private Long teacherId;
-    private Long studentId;
-    private String planTitle;
-    private Integer currentPage;
-    private Integer pageSize;
-    private Integer offset;
 }

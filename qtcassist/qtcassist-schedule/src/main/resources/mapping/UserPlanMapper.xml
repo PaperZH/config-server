@@ -21,7 +21,9 @@
         <result column="teacher_id" jdbcType="BIGINT" property="teacherId"/>
         <result column="student_id" jdbcType="BIGINT" property="studentId"/>
         <result column="plan_title" jdbcType="VARCHAR" property="planTitle"/>
+        <result column="student_summary" jdbcType="VARCHAR" property="studentSummary"/>
         <result column="student_get_score" jdbcType="REAL" property="studentGetScore"/>
+        <result column="plan_score" property="planScore" jdbcType="REAL" />
         <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
         <result column="end_date" jdbcType="TIMESTAMP" property="endDate"/>
     </resultMap>
@@ -51,7 +53,7 @@
     </select>
 
     <select id="queryUserPlan" resultMap="UserPlanResultMap" parameterType="com.ucar.qtcassist.schedule.dto.QueryPlanDTO">
-  select assist_user_plan.id, teacher_id, student_id, plan_title,  student_get_score,
+  select assist_user_plan.id, teacher_id, student_id, plan_title,  student_get_score,student_summary,plan_score,
       start_date, end_date
     from assist_user_plan left join assist_plan  on assist_user_plan.plan_id = assist_plan.id
     <include refid="Base_Condition"/>

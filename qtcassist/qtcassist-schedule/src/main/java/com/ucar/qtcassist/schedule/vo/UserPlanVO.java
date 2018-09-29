@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class UserPlanVO {
     public Long getId() {
         return id;
@@ -61,11 +65,44 @@ public class UserPlanVO {
         this.endDate = endDate;
     }
 
+    public String getStudentSummary() {
+        return studentSummary;
+    }
+
+    public void setStudentSummary(String studentSummary) {
+        this.studentSummary = studentSummary;
+    }
+
+    public Float getPlanScore() {
+        return planScore;
+    }
+
+    public void setPlanScore(Float planScore) {
+        this.planScore = planScore;
+    }
+
+    @Override
+    public String toString() {
+        return "UserPlanVO{" +
+                "id=" + id +
+                ", teacherName='" + teacherName + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", planTitle='" + planTitle + '\'' +
+                ", studentSummary='" + studentSummary + '\'' +
+                ", studentGetScore=" + studentGetScore +
+                ", planScore=" + planScore +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
+    }
+
     private Long id;
     private String teacherName;
     private String studentName;
     private String planTitle;
+    private String studentSummary;
     private Float studentGetScore;
+    private Float planScore;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

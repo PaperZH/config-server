@@ -1,7 +1,7 @@
 package com.ucar.qtc.zuul;
 
 import com.ucar.qtc.zuul.filter.AccessFilter;
-//import com.ucar.qtc.zuul.filter.PrintErrorFilter;
+import com.ucar.qtc.zuul.filter.PrintErrorFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -33,10 +33,6 @@ public class CloudZuulApplication {
 		return new AccessFilter();
 	}
 
-	/*@Bean
-	public PrintErrorFilter printErrorFilter(){
-		return new PrintErrorFilter();
-	}*/
 
 	@Bean
 	public CorsFilter corsFilter() {
