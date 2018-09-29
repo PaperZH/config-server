@@ -1,5 +1,9 @@
 package com.ucar.qtcassist.api.model.DO;
 
+/**
+ * @author cong.li
+ * @date 2018/9/29 15:04
+ */
 public class CoursePlanDO {
     private Long id;
 
