@@ -47,12 +47,12 @@ public class FileDownLoad {
             }
             String location = date + "/" + uuid + "." + suffix;
             resFile = new File(location);
-            FileOutputStream fs = new FileOutputStream(resFile);
-
             byte[] buffer = new byte[1204];
-            int length;
-            while((byteread = inStream.read(buffer)) != -1) {
-                fs.write(buffer, 0, byteread);
+
+            try(FileOutputStream fs = new FileOutputStream(resFile)){
+                while((byteread = inStream.read(buffer)) != -1) {
+                    fs.write(buffer, 0, byteread);
+                }
             }
             LOGGER.info("downLoad successfully......");
             return resFile;
