@@ -12,7 +12,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item :span="10" label="课时:" prop="hour">
-                <el-input v-model="coursewareForm.hour" placeholder=""></el-input>
+                <label style="letter-spacing:5px;">第{{coursewareForm.hour}}课时</label>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -23,6 +23,7 @@
             <el-col :span="8">
               <el-form-item label="系统课件:" prop="">
                 <el-autocomplete ref="sys"
+                                 :disabled="selectIsDisabled"
                                  popper-class="my-autocomplete"
                                  v-model="state4"
                                  :fetch-suggestions="querySearchAsync"
@@ -85,7 +86,7 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="id"
+          prop="num"
           label="课时"
           width="70">
         </el-table-column>
@@ -108,15 +109,16 @@
         <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <el-button
-              @click="handleEdit(scope.row.id)"
+              @click="scanClick(scope.row)"
               size="mini"
               type="info"
             >查看</el-button>
             <el-button
-              @click="handleClick(scope.row,scope.$index)"
               size="mini"
               type="danger"
-            >下载</el-button>
+            >
+              <a :href="scope.row.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
+              </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -131,61 +133,6 @@
         </el-pagination>
       </div>
     </div>
-    <el-card class="box-card" shadow="hover" style="margin-top: 10px"  v-show="isShow"
-             v-for="(item,index) in courseWareTable " :key="index">
-      <el-row>
-        <el-col :span="3">
-          <div class="grid-content " style="text-align: center">
-            <div ><span>第{{index+1}}课</span></div>
-          </div>
-        </el-col>
-
-        <el-col :span="6">
-          <div class="grid-content " style="text-align: left">
-            <div style="color:rgb(59, 99, 190); "><span>课件名称: {{item.name}}</span></div>
-            <!--border: 1px solid red;width: 178px;margin-left: 102px;-->
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content " style="color:rgb(59, 99, 190); "><span>课程分类: {{item.typeName}}</span>
-            </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="grid-content"></div>
-        </el-col>
-        <el-col :span="2">
-          <div class="grid-content" >
-            <el-button type="primary" @click="scanClick(item)" size="small">查看</el-button>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div class="grid-content" >
-            <el-button type="primary" size="small">
-              <a :href="item.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
-              </el-button>
-          </div>
-        </el-col>
-        <el-col :span="1">
-          <div class="grid-content ">
-            <div style="text-align: right"><i class="el-icon-close"></i></div>
-          </div>
-        </el-col>
-        <el-col :span="3">
-          <div class="grid-content " style="text-align: center">
-            课件描述：
-          </div>
-        </el-col>
-        <el-col :span="20">
-          <!--<el-input-->
-            <!--type="textarea"-->
-            <!--:autosize="{ minRows: 2, maxRows: 4}"-->
-            <!--v-model="textarea3">-->
-          <!--</el-input>-->
-          <div class="grid-content " style="border: 1px solid #ebeef5;">{{item.describe}}</div>
-        </el-col>
-      </el-row>
-    </el-card>
-
     <div>
       <el-dialog id="studyDialog" title="" :visible.sync="studyDialogVisible" width="100%">
         <iframe :src="previewUrl" style="width:100%; height: 600px"></iframe>
@@ -219,6 +166,7 @@
         studyDialogVisible: false,
         previewUrl: null,
         uploadIsDisabled: false,
+        selectIsDisabled: false,
         isShow: false,
         state4: '',
         addflag: '',
@@ -241,34 +189,18 @@
         checkRules: {
           name: [
               {required: true, trigger: 'blur', validator: validateCoursewareName}
-          ],
-          hour: [
-              {required: true, trigger: 'blur', message: '课时不能为空'}
           ]
+          // hour: [
+          //     {required: true, trigger: 'blur', message: '课时不能为空'}
+          // ]
         }
       }
     },
     mounted () {
       // 得到课程的id
+      console.log(this.$router.currentRoute.params.course.courseId)
       this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
       this.coursewareQury.courseId = this.$router.currentRoute.params.course.courseId
-      // 得到课程的课件的集合
-      // var mycars = []
-      // mycars = this.$router.currentRoute.params.coursewares
-      // console.log('mycars')
-      // console.log(mycars)
-      // for (var i = 0; i < mycars.length; i++) {
-      //   var courseWareTableItem = {}
-      //   courseWareTableItem.name = mycars[i].name
-      //   courseWareTableItem.describe = mycars[i].description
-      //   courseWareTableItem.typeName = mycars[i].type
-      //   courseWareTableItem.sourceUrl = mycars[i].sourceUrl
-      //   courseWareTableItem.preUrl = mycars[i].preUrl
-      //   this.courseWareTable.push(courseWareTableItem)
-      // }
-      // if (this.courseWareTable.length > 0) {
-      //   this.isShow = true
-      // }
       this.loadAll()
       this.getCoursewareList()
     },
@@ -283,16 +215,15 @@
               this.addflag = fileRes.data.re
               if (this.addflag === 1) {
                 console.log(this.coursewareForm)
-                var courseWareTableItem = {}
-                courseWareTableItem.name = this.coursewareForm.name
-                courseWareTableItem.description = this.coursewareForm.describe
-                courseWareTableItem.type = this.coursewareForm.typeName
-                courseWareTableItem.sourceUrl = this.coursewareForm.sourceUrl
-                courseWareTableItem.preUrl = this.coursewareForm.preUrl
-                this.courseWareTable.push(courseWareTableItem)
-                this.uploadIsDisabled = false
-                this.$refs.sys.disabled = false
+                this.getCoursewareList()
                 this.addSuccessfully()
+                this.coursewareForm.baseCoursewareId = ''
+                this.coursewareForm.describe = ''
+                this.coursewareForm.flag = ''
+                this.coursewareForm.name = ''
+                this.state4 = ''
+                this.uploadIsDisabled = false
+                this.selectIsDisabled = false
               } else {
 
               }
@@ -308,7 +239,6 @@
         return this.$confirm(`确定移除 ${file.name}？`)
       },
       beforeAvatarUpload (file) {
-        this.$refs.sys.disabled = true
         this.isUploading = true
         // this.uploadLoading()
         let tem = new FormData()
@@ -316,6 +246,7 @@
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
           console.log(fileRes.data.re)
           if (fileRes.data.re != null) {
+            this.selectIsDisabled = true
             this.coursewareForm.baseCoursewareId = fileRes.data.re
             this.isUploading = false
             this.uploadSuccessfully()
@@ -337,7 +268,6 @@
         this.$message.warning(`已经选择上传文件`)
       },
       loadAll () {
-
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/frontPage/getAllBaseCoursewares`,
           'data': ''
@@ -383,13 +313,13 @@
           confirmButtonText: '确定',
           callback: action => {
             console.log('addSuccessfully')
-            this.isShow = true
             this.coursewareForm.baseCoursewareId = ''
             this.coursewareForm.describe = ''
             this.coursewareForm.flag = ''
-            this.coursewareForm.hour = ''
             this.coursewareForm.name = ''
             this.state4 = ''
+            this.uploadIsDisabled = false
+            this.selectIsDisabled = false
             console.log(this.courseWareTable)
           }
         })
@@ -413,6 +343,7 @@
         }, 2000)
       },
       scanClick (item) {
+        console.log(item)
         this.previewUrl = item.preUrl
         this.studyDialogVisible = true
       },
@@ -422,19 +353,23 @@
         this.coursewareQury.pageNo = val
         this.getCoursewareList()
       },
-
-      getCoursewareList(){
+      getCoursewareList () {
         this.$store.dispatch('Post', {'url': '/api-home/courseCourseware/getAddCoursewarePageList', 'data': this.coursewareQury}).then(res => {
           this.loading = false
           if (res.data.success) {
             console.log(res.data)
             this.courseWareTable = res.data.re.coursewareDTOList
             this.coursewareTotal = res.data.re.count
+            this.sethour()
           }
         }).catch(error => {
           console.log(error)
         })
+      },
+      sethour () {
+        this.coursewareForm.hour = this.coursewareTotal + 1
       }
+
     }
   }
 </script>

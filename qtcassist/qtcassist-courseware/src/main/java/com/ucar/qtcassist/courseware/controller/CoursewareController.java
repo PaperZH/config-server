@@ -10,6 +10,7 @@ import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.*;
+import com.ucar.qtcassist.courseware.util.FileDownLoad;
 import com.ucar.qtcassist.courseware.util.MesListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ public class CoursewareController implements CoursewareApi {
     private FileService fileService;
     @Autowired
     MesListener mesListener;
+    @Autowired
+    FileDownLoad fileDownLoad;
 
 
     /**
@@ -195,5 +198,12 @@ public class CoursewareController implements CoursewareApi {
     @RequestMapping(value = "/getAddCoursewarePageList" ,method = RequestMethod.POST)
     public Result getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO){
         return null;
+    }
+
+    @Override
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    public Result<File> downLoadCourseware(Long baseCoursewareId){
+        BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(baseCoursewareId);
+        return Result.getSuccessResult(fileDownLoad.downloadNet(baseCoursewareDTO.getSourceUrl()));
     }
 }

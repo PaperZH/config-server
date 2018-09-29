@@ -278,6 +278,7 @@ public class CourseController implements CourseApi {
         }
 
         int count = courseService.insertSelective(courseDO);
+        courseVO.setCourseId(courseDO.getId());
         if(count > 0) {
             return Result.getSuccessResult(courseVO);
         }

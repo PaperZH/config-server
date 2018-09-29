@@ -1,6 +1,7 @@
 package com.ucar.qtcassist.course.dao;
 
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
+import com.ucar.qtcassist.api.model.HasBaseCoursewareDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -23,4 +24,6 @@ public interface CourseCoursewareMapper {
     List<Long> getCoursewareIdListByCourseId(Long courseId);
 
     Long getIdByCourseIdAndCoursewareId(@Param("courseId") Long courseId, @Param("coursewareId") Long coursewareId);
+
+    Integer hasBasecourseware(HasBaseCoursewareDTO hasBaseCoursewareDTO);
 }
