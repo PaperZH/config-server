@@ -2,7 +2,16 @@ package com.ucar.qtcassist.schedule.dto;
 
 import java.util.Arrays;
 
+/**
+ * @description: 增加计划课程参数封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class CoursePlanDTO {
+    private Long id;
+    private Long planId;
+    private Long[] courseIds;
+
     public Long getId() {
         return id;
     }
@@ -35,8 +44,4 @@ public class CoursePlanDTO {
                 ", courseIds=" + Arrays.toString(courseIds) +
                 '}';
     }
-
-    private Long id;
-    private Long planId;
-    private Long[] courseIds;
 }

@@ -1,6 +1,18 @@
 package com.ucar.qtcassist.schedule.dto;
 
+/**
+ * @description: 制定计划结果封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class PlanDTO {
+    private Long id;
+    private Long userId;
+    private String planTitle;
+    private String planContent;
+    private String planDestination;
+    private Float planScore;
+
     public Long getId() {
         return id;
     }
@@ -60,11 +72,4 @@ public class PlanDTO {
                 ", planScore=" + planScore +
                 '}';
     }
-
-    private Long id;
-    private Long userId;
-    private String planTitle;
-    private String planContent;
-    private String planDestination;
-    private Float planScore;
 }

@@ -1,16 +1,19 @@
 package com.ucar.qtcassist.schedule.service.impl;
 
-import com.ucar.qtcassist.schedule.dao.PlanMapper;
 import com.ucar.qtcassist.api.model.DO.PlanDO;
+import com.ucar.qtcassist.schedule.dao.PlanMapper;
 import com.ucar.qtcassist.schedule.dto.PlanDTO;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.service.PlanService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 @Service
 public class PlanServiceImpl implements PlanService {
 
@@ -53,7 +56,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public int getPlanTotal(QueryPlanDTO planDTO){
+    public int getPlanTotal(QueryPlanDTO planDTO) {
         return planMapper.queryTotal(planDTO);
     }
 

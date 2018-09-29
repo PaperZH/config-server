@@ -1,8 +1,21 @@
 package com.ucar.qtcassist.schedule.dto;
 
+import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * @description: 增加计划参数封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class UserPlanListDTO {
+    private Long id;
+    private Long teacherId;
+    private Long[] studentIds;
+    private Date startDate;
+    private Date endDate;
+    private Long planId;
+
     public Long getId() {
         return id;
     }
@@ -56,18 +69,11 @@ public class UserPlanListDTO {
         return "UserPlanListDTO{" +
                 "id=" + id +
                 ", teacherId=" + teacherId +
-                ", studentIds=" + studentIds +
+                ", studentIds=" + Arrays.toString(studentIds) +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", planId=" + planId +
                 '}';
     }
-
-    private Long id;
-    private Long teacherId;
-    private Long[] studentIds;
-    private Date startDate;
-    private Date endDate;
-    private Long planId;
 
 }

@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class UserPlanVO {
     public Long getId() {
         return id;
@@ -75,6 +79,21 @@ public class UserPlanVO {
 
     public void setPlanScore(Float planScore) {
         this.planScore = planScore;
+    }
+
+    @Override
+    public String toString() {
+        return "UserPlanVO{" +
+                "id=" + id +
+                ", teacherName='" + teacherName + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", planTitle='" + planTitle + '\'' +
+                ", studentSummary='" + studentSummary + '\'' +
+                ", studentGetScore=" + studentGetScore +
+                ", planScore=" + planScore +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 
     private Long id;
