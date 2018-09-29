@@ -1,6 +1,16 @@
 package com.ucar.qtcassist.schedule.dto;
 
+/**
+ * @description: 查询课程参数封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class QueryCourseDTO {
+    private String courseName;
+    private Integer currentPage;
+    private Integer pageSize;
+    private Integer offset;
+
     public String getCourseName() {
         return courseName;
     }
@@ -48,9 +58,4 @@ public class QueryCourseDTO {
                 ", offset=" + offset +
                 '}';
     }
-
-    private String courseName;
-    private Integer currentPage;
-    private Integer pageSize;
-    private Integer offset;
 }

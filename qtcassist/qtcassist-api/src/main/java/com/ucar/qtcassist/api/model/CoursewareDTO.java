@@ -24,6 +24,10 @@ public class CoursewareDTO {
      */
     private String type;
     /**
+     * 课时
+     * */
+    private Long Num;
+    /**
      * 作者
      * */
     /**
@@ -98,5 +102,18 @@ public class CoursewareDTO {
 
     public void setPreUrl(String preUrl) {
         this.preUrl = preUrl;
+    }
+
+    public Long getNum() {
+        return Num;
+    }
+
+    public void setNum(Long num) {
+        Num = num;
+    }
+
+    @Override
+    public String toString() {
+        return "CoursewareDTO{" + "id=" + id + ", name='" + name + '\'' + ", type='" + type + '\'' + ", Num='" + Num + '\'' + ", description='" + description + '\'' + ", publishTime=" + publishTime + ", preUrl='" + preUrl + '\'' + ", sourceUrl='" + sourceUrl + '\'' + '}';
     }
 }

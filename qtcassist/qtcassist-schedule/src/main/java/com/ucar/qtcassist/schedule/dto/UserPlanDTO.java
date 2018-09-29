@@ -1,10 +1,23 @@
 package com.ucar.qtcassist.schedule.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 
+/**
+ * @description: 查询结果封装类
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class UserPlanDTO {
+    private Long id;
+    private Long teacherId;
+    private Long studentId;
+    private String planTitle;
+    private String studentSummary;
+    private Float studentGetScore;
+    private Float planScore;
+    private Date startDate;
+    private Date endDate;
+
     public Long getId() {
         return id;
     }
@@ -36,8 +49,6 @@ public class UserPlanDTO {
     public void setPlanTitle(String planTitle) {
         this.planTitle = planTitle;
     }
-
-
 
     public Float getStudentGetScore() {
         return studentGetScore;
@@ -93,14 +104,4 @@ public class UserPlanDTO {
                 ", endDate=" + endDate +
                 '}';
     }
-
-    private Long id;
-    private Long teacherId;
-    private Long studentId;
-    private String planTitle;
-    private String studentSummary;
-    private Float studentGetScore;
-    private Float planScore;
-    private Date startDate;
-    private Date endDate;
 }
