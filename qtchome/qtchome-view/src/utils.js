@@ -1,7 +1,5 @@
 import axios from 'axios'
-import {
-  bus
-} from './bus'
+import {bus} from './bus'
 
 // 创建axios实例
 const service = axios.create({

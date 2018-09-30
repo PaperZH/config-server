@@ -271,9 +271,6 @@ public class CourseController implements CourseApi {
         int count = courseService.insertSelective(courseDO);
         courseVO.setCourseId(courseDO.getId());
         if(count > 0) {
-//            CourseVO course = CourseConvertUtil.convertToCourseVO(courseDO);
-//            course.setCourseType(courseVO.getCourseType());
-//            course.setTypeName(courseVO.getCourseType().getTypeName());
             courseVO.setCourseId(courseDO.getId());
             return Result.getSuccessResult(courseVO);
         }
