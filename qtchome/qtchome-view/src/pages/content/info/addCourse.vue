@@ -381,8 +381,8 @@
         this.coursewareForm.hour = this.coursewareTotal + 1
       },
       downloadClick (item) {
-        console.log(item.sourceUrl)
-        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?fileName=' + item.coursewareName + '&sourceUrl=' + item.sourceUrl
+        const base = process.env.API_ROOT
+        window.location.href = base + '/api-home/courseware/frontPage/downLoadCourseware?fileName=' + item.coursewareName + '&sourceUrl=' + item.sourceUrl
       }
 
     }
