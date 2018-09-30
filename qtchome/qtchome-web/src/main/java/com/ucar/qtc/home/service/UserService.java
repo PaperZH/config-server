@@ -16,6 +16,14 @@ public interface UserService {
      */
     @RequestMapping("/pages/getUserInfoById")
     ResponseResult getUser(@RequestParam("id") long userId);
+
+    /**
+     * 获取当前登陆用户信息
+     * @return
+     */
+    @RequestMapping("/user/front/currentUser")
+    ResponseResult currentUser();
+
     /**
      * 更新用户信息
      * @param map (User user)
@@ -23,6 +31,4 @@ public interface UserService {
      */
     @RequestMapping("/pages/updateUserInfo")
     ResponseResult updateUser(Map<String, Object> map);
-
-
 }

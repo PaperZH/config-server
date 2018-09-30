@@ -171,10 +171,18 @@ export default {
     }
   },
   created: function () {
-    bus.$on('headRefresh', () => {
+    bus.$on('headLogout', () => {
       this.isShow = true
       this.isUser = false
       this.reload()
+    })
+    bus.$on('headRefresh', () => {
+      this.$store.dispatch('Post', {'url': '/api-home/user/currentUser'}).then(res => {
+        let result = res.data
+        this.userInfo.nickName = result.user.nickname
+        this.userInfo.avatar = result.user.avatar
+        sessionStorage.setItem('access-userinfo', JSON.stringify(result.user))
+      })
     })
     bus.$on('clickLogin', () => {
       this.dialogFormVisible = true

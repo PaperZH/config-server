@@ -18,6 +18,7 @@
             <el-upload
               class="avatar-uploader"
               :action="avatarUrl"
+              :headers="headers"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="image/jpeg,image/gif,image/png"
@@ -44,11 +45,12 @@
   </el-tabs>
 </template>
 <script>
+  import {bus} from '../../../bus'
   export default {
     data () {
       return {
         activeName: 'first',
-        avatarUrl: process.env.API_ROOT + '/api-home/course/file/upload',
+        avatarUrl: process.env.API_ROOT + '/api-home/file/upload',
         form: {
           name: '',
           nickname: '',
@@ -63,7 +65,8 @@
       onSubmit () {
         let userInfo = {'userId': this.$store.getters.userId, 'nickname': this.form.nickname, 'avatar': this.form.avatar}
         this.$store.dispatch('Post', {'url': '/api-home/user/update', 'data': userInfo}).then(res => {
-          if (res.data.success) {
+          if (res.data.code === 0) {
+            bus.$emit('headRefresh')
             this.$message.success('更新成功')
           } else {
             this.$message.error('更新失败')
@@ -82,6 +85,13 @@
         }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
+        }
+      }
+    },
+    computed: {
+      headers () {
+        return {
+          'Authorization': sessionStorage.getItem('access-token')
         }
       }
     },

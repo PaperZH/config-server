@@ -23,7 +23,7 @@ service.interceptors.response.use(function (response) {
       sessionStorage.removeItem('access-token')
       sessionStorage.removeItem('access-menus')
       sessionStorage.removeItem('access-userinfo')
-      bus.$emit('headRefresh')
+      bus.$emit('headLogout')
     }
   }
   return response

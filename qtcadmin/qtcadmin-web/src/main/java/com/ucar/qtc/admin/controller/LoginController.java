@@ -5,6 +5,7 @@ import com.ucar.qtc.admin.service.MenuService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.common.annotation.Log;
+import com.ucar.qtc.common.constants.CommonConstants;
 import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.LoginDTO;
 import com.ucar.qtc.common.dto.UserToken;
@@ -69,8 +70,7 @@ public class LoginController {
             return ResponseResult.error("用户或密码错误");
         }
         UserDO userDO = userDOs.get(0);
-        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
-                userDO.getName(), userDO.getNickname(), userDO.getAvatar());
+        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString());
         String token = "";
         try {
             token = JwtUtils.generateToken(userToken, 2 * 60 * 60 * 1000);
@@ -80,6 +80,10 @@ public class LoginController {
 
         // redis缓存保存token
         redisCacheService.put(userDO.getUsername(),token, Long.parseLong(cacheTime)*60*1000);
+
+        // redis缓存用户信息
+        redisCacheService.put(CommonConstants.REDIS_USER_INFO_PREFIX+userDO.getUserId(),
+                userDO);
 
         //首先清除用户缓存权限
         menuService.clearCache(userDO.getUserId());
@@ -112,8 +116,7 @@ public class LoginController {
             return ResponseResult.error("用户或密码错误");
         }
         UserDO userDO = userDOs.get(0);
-        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString(),
-                userDO.getName(), userDO.getNickname(), userDO.getAvatar());
+        UserToken userToken = new UserToken(userDO.getUsername(), userDO.getUserId().toString());
         String token = "";
         try {
             token = JwtUtils.generateToken(userToken, 2 * 60 * 60 * 1000);
@@ -123,6 +126,10 @@ public class LoginController {
 
         // redis缓存保存token
         redisCacheService.put(userDO.getUsername(),token, Long.parseLong(cacheTime)*60*1000);
+
+        // redis缓存用户信息
+        redisCacheService.put(CommonConstants.REDIS_USER_INFO_PREFIX+userDO.getUserId(),
+                userDO);
 
         return ResponseResult.ok("登录成功")
                 .put("token", token).put("user", userDO)
@@ -143,6 +150,8 @@ public class LoginController {
     ResponseResult logout(HttpServletRequest request, HttpServletResponse response) {
         menuService.clearCache(Long.parseLong(FilterContextHandler.getUserID()));
         redisCacheService.remove(FilterContextHandler.getUsername());
+        redisCacheService.remove(CommonConstants.REDIS_USER_INFO_PREFIX+
+                                FilterContextHandler.getUserID());
         return ResponseResult.ok();
     }
 }
