@@ -31,12 +31,12 @@
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">
                 <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
-                <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
+                <el-dropdown style="float: right;margin-top: 12px" @command="handleCommand">
                   <span class="el-dropdown-link" style="color: #faf7f7;">
                    {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="user"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人信息</span></el-dropdown-item>
+                    <el-dropdown-item command="user"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人中心</span></el-dropdown-item>
                     <el-dropdown-item command="quit"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;退出登录</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
