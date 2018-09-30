@@ -302,7 +302,7 @@
                   this.praise.praiseText = '点赞'
                   this.getCourseDetail(val)
                 } else {
-                  this.$message.error('登录信息已失效，请重新登录后再重试！');
+                  this.$message.error('登录信息已失效，请重新登录后再重试！')
                 }
               })
             } else {
@@ -312,7 +312,7 @@
                   this.praise.praiseText = '已赞'
                   this.getCourseDetail(val)
                 } else {
-                  this.$message.error('登录信息已失效，请重新登录后再重试！');
+                  this.$message.error('登录信息已失效，请重新登录后再重试！')
                 }
               })
             }
@@ -331,7 +331,7 @@
                   this.collect.collectText = '收藏'
                   this.getCourseDetail(val)
                 } else {
-                  this.$message.error('登录信息已失效，请重新登录后再重试！');
+                  this.$message.error('登录信息已失效，请重新登录后再重试！')
                 }
               })
             } else {
@@ -341,7 +341,7 @@
                   this.collect.collectText = '已藏'
                   this.getCourseDetail(val)
                 } else {
-                  this.$message.error('登录信息已失效，请重新登录后再重试！');
+                  this.$message.error('登录信息已失效，请重新登录后再重试！')
                 }
               })
             }
@@ -363,7 +363,7 @@
               this.$notify.success('评价成功')
               this.getCourseDetail(val)
             } else {
-              this.$message.error('登录信息已失效，请重新登录后再重试！');
+              this.$message.error('登录信息已失效，请重新登录后再重试！')
             }
           })
         },
