@@ -12,19 +12,21 @@ public class AddCoursewarePageListDTO {
     /**
      * 课件列表
      * */
-    private List<CoursewareDTO> coursewareDTOList;
+    private List<AddCoursewareListDTO> addCoursewareListDTO;
     /**
      * 总条数
      * */
     private Long count;
 
-    public List<CoursewareDTO> getCoursewareDTOList() {
-        return coursewareDTOList;
+    public List<AddCoursewareListDTO> getAddCoursewareListDTO() {
+        return addCoursewareListDTO;
     }
 
-    public void setCoursewareDTOList(List<CoursewareDTO> coursewareDTOList) {
-        this.coursewareDTOList = coursewareDTOList;
+    public void setAddCoursewareListDTO(List<AddCoursewareListDTO> addCoursewareListDTO) {
+        this.addCoursewareListDTO = addCoursewareListDTO;
     }
+
+
 
     public Long getCount() {
         return count;
@@ -36,6 +38,6 @@ public class AddCoursewarePageListDTO {
 
     @Override
     public String toString() {
-        return "AddCoursewarePageListDTO{" + "coursewareDTOList=" + coursewareDTOList + ", count=" + count + '}';
+        return "AddCoursewarePageListDTO{" + "addCoursewareListDTO=" + addCoursewareListDTO + ", count=" + count + '}';
     }
 }

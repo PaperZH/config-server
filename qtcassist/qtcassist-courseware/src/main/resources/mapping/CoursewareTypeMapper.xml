@@ -62,6 +62,6 @@
     <select id="getAllTypes" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from assist_course_type
+        from assist_courseware_type
     </select>
 </mapper>

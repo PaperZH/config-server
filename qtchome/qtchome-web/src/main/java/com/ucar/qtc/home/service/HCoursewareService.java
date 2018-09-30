@@ -1,10 +1,7 @@
 package com.ucar.qtc.home.service;
 
 import com.ucar.qtc.home.config.FeignMultipartSupportConfig;
-import com.ucar.qtcassist.api.model.BaseCoursewareListDTO;
-import com.ucar.qtcassist.api.model.CourseCoursewareDTO;
-import com.ucar.qtcassist.api.model.CoursewareTypeDTO;
-import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +16,7 @@ import java.util.List;
  * @author shijie.xu
  * @since 2018年08月30日
  */
+
 @FeignClient(name = "qtcassist",path = "/courseware",configuration = FeignMultipartSupportConfig.class)
 public interface HCoursewareService  {
     @RequestMapping(value = "/frontPage/getAllBaseCoursewares", method = RequestMethod.POST)
@@ -40,5 +38,6 @@ public interface HCoursewareService  {
     @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.GET)
     Result<File> downLoadCourseware(Long baseCoursewareId);
 
-
+    @RequestMapping(value = "/frontPage/getBaseCourseware", method = RequestMethod.POST)
+    Result<BaseCoursewareDTO> getBaseCourseware(@RequestBody Long baseCoursewareId);
 }

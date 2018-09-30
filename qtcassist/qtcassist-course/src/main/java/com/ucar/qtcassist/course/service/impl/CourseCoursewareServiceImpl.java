@@ -2,6 +2,7 @@ package com.ucar.qtcassist.course.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ucar.qtcassist.api.model.AddCoursewareListDTO;
 import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.api.model.HasBaseCoursewareDTO;
@@ -65,11 +66,10 @@ public class CourseCoursewareServiceImpl implements CourseCoursewareService {
         pageNo = pageNo == null ? 1 : pageNo;
         pageSize = pageSize == null ? 5 : pageSize;
         PageHelper.startPage(pageNo, pageSize);
-        List<Long> addCoursewareList = courseCoursewareMapper.getCoursewareIdListByCourseId(addCoursewareQueryVO.getCourseId());
+        List<AddCoursewareListDTO> addCoursewareList = courseCoursewareMapper.getCoursewareListByCourseId(addCoursewareQueryVO.getCourseId());
         PageInfo pageInfo = new PageInfo<>(addCoursewareList);
-        List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(addCoursewareList);
         addCoursewarePageListDTO.setCount(pageInfo.getTotal());
-        addCoursewarePageListDTO.setCoursewareDTOList(coursewareDTOList);
+        addCoursewarePageListDTO.setAddCoursewareListDTO(addCoursewareList);
         return addCoursewarePageListDTO;
     }
 

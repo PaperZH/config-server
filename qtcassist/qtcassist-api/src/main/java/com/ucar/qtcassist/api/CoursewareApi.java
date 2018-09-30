@@ -27,8 +27,8 @@ public interface CoursewareApi {
     @RequestMapping(value = "/uploadCourseware", method = RequestMethod.POST)
     Result uploadCourseware(MultipartFile file) throws Exception;
 
-    @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
-    Result getBaseCourseware(@PathVariable("baseCoursewareId") Long baseCoursewareId);
+    @RequestMapping(value = "/frontPage/getBaseCourseware", method = RequestMethod.POST)
+    public Result<BaseCoursewareDTO> getBaseCourseware(@RequestParam Long baseCoursewareId);
 
     @RequestMapping(value = "/getAllType",method = RequestMethod.GET)
     Result<List<CoursewareTypeDTO>> getAllType();

@@ -182,9 +182,8 @@ public class CoursewareController implements CoursewareApi {
      * 完成本地上传后获取课件详情
      */
     @Override
-    @RequestMapping(value = "/getBaseCourseware/{baseCoursewareId}", method = RequestMethod.GET)
-    public Result<BaseCoursewareDTO> getBaseCourseware(@PathVariable Long baseCoursewareId) {
-
+    @RequestMapping(value = "/frontPage/getBaseCourseware", method = RequestMethod.POST)
+    public Result<BaseCoursewareDTO> getBaseCourseware(@RequestBody Long baseCoursewareId) {
         return Result.getSuccessResult(baseCoursewareService.getBaseCourseware(baseCoursewareId));
     }
 

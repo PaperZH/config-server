@@ -6,6 +6,15 @@
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
     <result column="courseware_id" property="coursewareId" jdbcType="BIGINT" />
   </resultMap>
+  <resultMap id="getCoursewareListByCourseIdResultMap" type="com.ucar.qtcassist.api.model.AddCoursewareListDTO">
+    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR"/>
+    <result column="base_courseware_id" property="baseCoursewareId" jdbcType="BIGINT"/>
+    <result column="courseware_num" property="coursewareNum" jdbcType="BIGINT"/>
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+    <result column="courseware_description" property="coursewareDescription" jdbcType="VARCHAR"/>
+    <result column="type_name" property="coursewareTypeName" jdbcType="VARCHAR"/>
+    <result column="source_url" property="sourceUrl" jdbcType="VARCHAR"/>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, course_id, courseware_id
   </sql>
@@ -77,4 +86,14 @@
     LEFT JOIN assist_courseware ac on acc.courseware_id = ac.id
     where acc.course_id = #{courseId} and ac.base_courseware_id = #{baseCoursewareId}
   </select>
+  <select id="getCoursewareListByCourseId" parameterType="java.lang.Long" resultMap="getCoursewareListByCourseIdResultMap">
+    select ac.courseware_name,ac.base_courseware_id,ac.courseware_num,ac.publish_time,ac.courseware_description,acty.type_name,abc.source_url
+    from assist_base_courseware abc,assist_courseware_type acty,assist_course_courseware acc
+    LEFT JOIN assist_courseware ac
+    on acc.courseware_id = ac.id
+    where acc.course_id = #{courseId} and acty.id = ac.type_id AND abc.id = ac.base_courseware_id
+    ORDER BY ac.publish_time desc
+  </select>
+
+
 </mapper>

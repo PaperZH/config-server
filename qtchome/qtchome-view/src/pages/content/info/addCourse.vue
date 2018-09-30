@@ -86,23 +86,29 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="num"
+          prop="coursewareNum"
           label="课时"
-          width="70">
+          width="50">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="coursewareName"
           label="课件名称"
-          width="100">
+          width="80">
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="课程分类 "
+          prop="coursewareTypeName"
+          label="课件分类 "
+          width="80"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="publishTime"
+          label="发布时间 "
           width="100"
         >
         </el-table-column>
         <el-table-column
-          prop="description"
+          prop="coursewareDescription"
           label="课件描述"
         >
         </el-table-column>
@@ -200,7 +206,6 @@
     },
     mounted () {
       // 得到课程的id
-      console.log(this.$router.currentRoute.params.course.courseId)
       this.coursewareForm.courseId = this.$router.currentRoute.params.course.courseId
       this.coursewareQury.courseId = this.$router.currentRoute.params.course.courseId
       this.loadAll()
@@ -216,7 +221,6 @@
             }).then(fileRes => {
               this.addflag = fileRes.data.re
               if (this.addflag === 1) {
-                console.log(this.coursewareForm)
                 this.getCoursewareList()
                 this.addSuccessfully()
                 this.coursewareForm.baseCoursewareId = ''
@@ -235,7 +239,6 @@
         })
       },
       handleRemove (file) {
-        console.log(file)
       },
       beforeRemove (file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`)
@@ -246,7 +249,6 @@
         let tem = new FormData()
         tem.append('file', file)
         this.$store.dispatch('Post', {'url': `/api-home/courseware/upLoad`, 'data': tem}).then(fileRes => {
-          console.log(fileRes.data.re)
           if (fileRes.data.re != null) {
             this.selectIsDisabled = true
             this.coursewareForm.baseCoursewareId = fileRes.data.re
@@ -258,7 +260,6 @@
             this.uploadfailed()
           }
         })
-        console.log(file)
       },
       handleAvatarSuccess (response, file, fileList) {
         console.log('handleAvatarSuccess')
@@ -275,7 +276,6 @@
           'data': ''
         }).then(coursewareListRes => {
           this.courseWareList = coursewareListRes.data.re
-          console.log(this.courseWareList)
         })
         this.$store.dispatch('Post', {
           'url': `/api-home/courseware/frontPage/getAllTypes`,
@@ -314,7 +314,6 @@
         this.$alert('课件添加成功', '提示', {
           confirmButtonText: '确定',
           callback: action => {
-            console.log('addSuccessfully')
             this.coursewareForm.baseCoursewareId = ''
             this.coursewareForm.describe = ''
             this.coursewareForm.flag = ''
@@ -346,10 +345,21 @@
       },
       scanClick (item) {
         console.log(item)
-        this.previewUrl = item.preUrl
-        this.studyDialogVisible = true
+        this.$store.dispatch('Post', {
+          'url': `/api-home/courseware/frontPage/scanCourseware`,
+          'data': item.baseCoursewareId
+        }).then(coursewareRes => {
+          console.log(coursewareRes.data.re)
+          if (typeof (coursewareRes.data.re) !== 'undefined') {
+            this.previewUrl = coursewareRes.data.re
+            this.studyDialogVisible = true
+          } else {
+            this.$alert('课件暂不支持查看，请稍后重试', '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       },
-
       handleCurrentChange (val) {
         // this.loading = true
         this.coursewareQury.pageNo = val
@@ -359,8 +369,7 @@
         this.$store.dispatch('Post', {'url': '/api-home/courseCourseware/getAddCoursewarePageList', 'data': this.coursewareQury}).then(res => {
           this.loading = false
           if (res.data.success) {
-            console.log(res.data)
-            this.courseWareTable = res.data.re.coursewareDTOList
+            this.courseWareTable = res.data.re.addCoursewareListDTO
             this.coursewareTotal = res.data.re.count
             this.sethour()
           }
@@ -373,7 +382,7 @@
       },
       downloadClick (item) {
         console.log(item.sourceUrl)
-        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?sourceUrl=' + item.sourceUrl + ''
+        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?fileName=' + item.coursewareName + '&sourceUrl=' + item.sourceUrl
       }
 
     }
