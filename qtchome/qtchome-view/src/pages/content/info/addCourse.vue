@@ -373,7 +373,7 @@
       },
       downloadClick (item) {
         console.log(item.sourceUrl)
-        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?sourceUrl=' + item.sourceUrl
+        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?sourceUrl=' + item.sourceUrl + ''
       }
 
     }
