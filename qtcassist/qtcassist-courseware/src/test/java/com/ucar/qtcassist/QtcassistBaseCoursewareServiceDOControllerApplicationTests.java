@@ -154,6 +154,7 @@ public class QtcassistBaseCoursewareServiceDOControllerApplicationTests extends 
 
     }
 
+
     @Before
     public void setUpBeforeClass() throws Exception {
         System.out.println("***********here init first***************");

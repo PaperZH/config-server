@@ -42,16 +42,6 @@ public class FilterContextHandler {
         return returnObjectValue(value);
     }
 
-    public static String getNickname() {
-        Object value = get(CommonConstants.CONTEXT_NICKNAME);
-        return returnObjectValue(value);
-    }
-
-    public static String getName() {
-        Object value = get(CommonConstants.CONTEXT_NAME);
-        return returnObjectValue(value);
-    }
-
     public static String getToken() {
         Object value = get(CommonConstants.CONTEXT_TOKEN);
         return returnObjectValue(value);
@@ -61,20 +51,12 @@ public class FilterContextHandler {
         set(CommonConstants.CONTEXT_TOKEN, token);
     }
 
-    public static void setName(String name) {
-        set(CommonConstants.CONTEXT_NAME, name);
-    }
-
     public static void setUserID(String userID) {
         set(CommonConstants.CONTEXT_USER_ID, userID);
     }
 
     public static void setUsername(String username) {
         set(CommonConstants.CONTEXT_USERNAME, username);
-    }
-
-    public static void setNickname(String nickname) {
-        set(CommonConstants.CONTEXT_NICKNAME, nickname);
     }
 
     private static String returnObjectValue(Object value) {

@@ -11,6 +11,9 @@ import com.ucar.qtc.admin.service.RecCourseService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.vo.CourseVO;
 import com.ucar.qtc.admin.vo.QueryVO;
+import com.ucar.qtc.common.constants.CommonConstants;
+import com.ucar.qtc.common.context.FilterContextHandler;
+import com.ucar.qtc.common.service.RedisCacheService;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
 import com.ucar.qtc.common.utils.ResponseResult;
@@ -43,6 +46,9 @@ public class FrontPageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    RedisCacheService redisCacheService;
 
     @ApiOperation(value="获取推荐图片", notes="获取推荐图片")
     @GetMapping(value="getRecBanner", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -151,7 +157,9 @@ public class FrontPageController {
         user.setNickname(userDO.getNickname());
         user.setAvatar(userDO.getAvatar());
         if(userService.update(user)>0){
-         return ResponseResult.ok();
+            redisCacheService.put(CommonConstants.REDIS_USER_INFO_PREFIX+
+                    user.getUserId(), user);
+            return ResponseResult.ok();
         }
         return ResponseResult.error();
     }

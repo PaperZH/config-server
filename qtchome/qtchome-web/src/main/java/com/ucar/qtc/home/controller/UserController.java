@@ -20,6 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     UserService userService;
     /**
@@ -29,12 +30,15 @@ public class UserController {
     @RequestMapping(value = "/get/{userId}")
     public ResponseResult getUser(@PathVariable long userId){
         return userService.getUser(userId);
-//        HashMap<String,Object> hashMap = new HashMap<>();
-//        hashMap.put("name" , "lee");
-//        hashMap.put("nickname","shuaige");
-//        hashMap.put("email","baidu@qq.com");
-//        hashMap.put("avatar","static/image/2.jpg");
-//        return ResponseResult.ok().put("user",hashMap);
+    }
+
+    /**
+     * 获取当前登陆用户信息
+     * @return
+     */
+    @RequestMapping(value = "/currentUser",method = RequestMethod.POST)
+    public ResponseResult currentUser(){
+        return userService.currentUser();
     }
 
     /**

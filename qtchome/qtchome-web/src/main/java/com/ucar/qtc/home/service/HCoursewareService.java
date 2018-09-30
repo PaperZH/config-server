@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -31,10 +32,13 @@ public interface HCoursewareService  {
     Result<List<CoursewareTypeDTO>> getAllType();
 
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
-    Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num);
+    Result addCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
     @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
+
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    Result<File> downLoadCourseware(Long baseCoursewareId);
 
 
 }

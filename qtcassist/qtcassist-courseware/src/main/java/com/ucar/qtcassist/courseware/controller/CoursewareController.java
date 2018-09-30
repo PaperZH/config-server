@@ -10,6 +10,7 @@ import com.ucar.qtcassist.courseware.model.DO.CoursewareDO;
 import com.ucar.qtcassist.courseware.model.DO.CoursewareTypeDO;
 import com.ucar.qtcassist.courseware.model.DTO.FileDTO;
 import com.ucar.qtcassist.courseware.service.*;
+import com.ucar.qtcassist.courseware.util.FileDownLoad;
 import com.ucar.qtcassist.courseware.util.MesListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ public class CoursewareController implements CoursewareApi {
     private FileService fileService;
     @Autowired
     MesListener mesListener;
+    @Autowired
+    FileDownLoad fileDownLoad;
 
 
     /**
@@ -101,16 +104,15 @@ public class CoursewareController implements CoursewareApi {
      */
     @Override
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
-    public Result addCourseware(@RequestParam(value = "id") Long id, @RequestParam(value = "num") Long num) {
+    public Result addCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO) {
         CoursewareDO coursewareDO = new CoursewareDO();
-        BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(id);
-        coursewareDO.setBaseCoursewareId(id);
-        coursewareDO.setCoursewareDescription(baseCoursewareDTO.getCoursewareDescription());
-        coursewareDO.setCoursewareName(baseCoursewareDTO.getCoursewareName());
-        coursewareDO.setPublishTime(baseCoursewareDTO.getPublishTime());
-        coursewareDO.setUpdateTime(baseCoursewareDTO.getUpdateTime());
-        coursewareDO.setTypeId(baseCoursewareDTO.getTypeId());
-        coursewareDO.setCoursewareNum(num);
+        coursewareDO.setBaseCoursewareId(courseCoursewareDTO.getBaseCoursewareId());
+        coursewareDO.setCoursewareDescription(courseCoursewareDTO.getDescribe());
+        coursewareDO.setCoursewareName(courseCoursewareDTO.getName());
+        coursewareDO.setPublishTime(new Date(System.currentTimeMillis()));
+        coursewareDO.setUpdateTime(new Date(System.currentTimeMillis()));
+        coursewareDO.setTypeId(courseCoursewareDTO.getTypeId());
+        coursewareDO.setCoursewareNum(courseCoursewareDTO.getHour());
         coursewareService.addCourseware(coursewareDO);
         return Result.getSuccessResult(coursewareDO.getId());
     }
@@ -196,5 +198,12 @@ public class CoursewareController implements CoursewareApi {
     @RequestMapping(value = "/getAddCoursewarePageList" ,method = RequestMethod.POST)
     public Result getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO){
         return null;
+    }
+
+    @Override
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    public Result<File> downLoadCourseware(Long baseCoursewareId){
+        BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(baseCoursewareId);
+        return Result.getSuccessResult(fileDownLoad.downloadNet(baseCoursewareDTO.getSourceUrl()));
     }
 }

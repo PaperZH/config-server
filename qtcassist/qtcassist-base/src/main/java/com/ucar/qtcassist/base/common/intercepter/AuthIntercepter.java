@@ -27,8 +27,6 @@ public class AuthIntercepter extends HandlerInterceptorAdapter {
         FilterContextHandler.setToken(token);
         logger.info("拦截前台token: "+token);
         FilterContextHandler.setUsername(userToken.getUsername());
-        FilterContextHandler.setName(userToken.getName());
-        FilterContextHandler.setNickname(userToken.getNickname());
         FilterContextHandler.setUserID(userToken.getUserId());
         return super.preHandle(request, response, handler);
     }

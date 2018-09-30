@@ -7,7 +7,6 @@ import com.ucar.qtc.admin.service.RoleService;
 import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.common.annotation.Log;
-import com.ucar.qtc.common.context.FilterContextHandler;
 import com.ucar.qtc.common.dto.LoginUserDTO;
 import com.ucar.qtc.common.utils.PageUtils;
 import com.ucar.qtc.common.utils.Query;
@@ -39,25 +38,6 @@ public class UserController {
     RoleService roleService;
 
 	/**
-	 * 登录的当前用户，前台需要验证用户登录的页面可以调用此方法
-	 * @return
-	 */
-	@ApiOperation(value="当前登陆用户", notes="当前登陆用户")
-    @GetMapping(value="/currentUser", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	LoginUserDTO currentUser(){
-		LoginUserDTO loginUserDTO = new LoginUserDTO();
-		loginUserDTO.setId(FilterContextHandler.getUserID());
-		UserDO userDo = userService.get(Long.parseLong(FilterContextHandler.getUserID().toString()));
-		loginUserDTO.setUsername(userDo.getUsername());
-		loginUserDTO.setName(userDo.getName());
-		loginUserDTO.setNickname(userDo.getNickname());
-		loginUserDTO.setAvatar(userDo.getAvatar());
-		loginUserDTO.setEmail(userDo.getEmail());
-		loginUserDTO.setUserno(userDo.getUserno());
-		return loginUserDTO;
-	}
-
-	/**
 	 * 根据用户id获取用户
 	 * @param id
 	 * @return
@@ -67,6 +47,31 @@ public class UserController {
     ResponseResult get(@PathVariable("id") Long id ){
 		UserDTO userDTO = UserConvert.MAPPER.do2dto(userService.get(id));
     	return ResponseResult.ok().put("data",userDTO);
+	}
+
+	/**
+	 * 登录的当前用户，前台需要验证用户登录的页面可以调用此方法
+	 * @return
+	 */
+	@ApiOperation(value="当前登陆用户", notes="当前登陆用户")
+	@GetMapping(value="/currentUser", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	LoginUserDTO currentUser(){
+		LoginUserDTO user = userService.currentUser();
+		return user;
+	}
+
+	/**
+	 * 登录的当前用户，前台需要验证用户登录的页面可以调用此方法
+	 * @return
+	 */
+	@ApiOperation(value="前台当前登陆用户", notes="前台当前登陆用户")
+	@GetMapping(value="/front/currentUser", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	ResponseResult frontCurrentUser(){
+		UserDO userDO = userService.frontCurrentUser();
+		if (userDO == null) {
+			return ResponseResult.error("获取当前用户信息为空");
+		}
+		return ResponseResult.ok("获取用户信息成功").put("user",userDO);
 	}
 
 	/**
@@ -156,7 +161,7 @@ public class UserController {
 	@PostMapping(value="/changeProfile", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	ResponseResult changeProfile(@RequestBody UserDO user) {
 		ResponseResult result = ResponseResult.operate(userService.changeProfile(user) > 0);
-		LoginUserDTO dto = currentUser();
+		LoginUserDTO dto = userService.currentUser();
 		return result.data(dto);
 	}
 

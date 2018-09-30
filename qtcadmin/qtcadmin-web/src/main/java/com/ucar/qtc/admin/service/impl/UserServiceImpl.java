@@ -11,6 +11,10 @@ import com.ucar.qtc.admin.service.UserService;
 import com.ucar.qtc.admin.utils.BuildTree;
 import com.ucar.qtc.admin.utils.MD5Utils;
 import com.ucar.qtc.admin.vo.UserVO;
+import com.ucar.qtc.common.constants.CommonConstants;
+import com.ucar.qtc.common.context.FilterContextHandler;
+import com.ucar.qtc.common.dto.LoginUserDTO;
+import com.ucar.qtc.common.service.RedisCacheService;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,8 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	@Autowired
     UserDao userMapper;
 
@@ -39,13 +45,17 @@ public class UserServiceImpl implements UserService {
 	@Autowired
     DeptDao deptMapper;
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	@Autowired
+	RedisCacheService redisCacheService;
 
 	@Override
 	public UserDO get(Long id) {
 		List<Long> roleIds = userRoleMapper.listRoleId(id);
 		UserDO user = userMapper.get(id);
-		user.setDeptName(deptMapper.get(user.getDeptId()).getName());
+		Long deptId = user.getDeptId();
+		if(deptId != null && deptId != 0){
+			user.setDeptName(deptMapper.get(deptId).getName());
+		}
 		user.setRoleIds(roleIds);
 		return user;
 	}
@@ -123,6 +133,44 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return r;
+	}
+
+	@Override
+	public LoginUserDTO currentUser() {
+		LoginUserDTO loginUserDTO = new LoginUserDTO();
+		loginUserDTO.setId(FilterContextHandler.getUserID());
+		UserDO userDo = redisCacheService.get(CommonConstants.REDIS_USER_INFO_PREFIX+
+									FilterContextHandler.getUserID(), UserDO.class);
+		if (userDo == null) {
+			userDo = get(Long.parseLong(FilterContextHandler.getUserID().toString()));
+			if (userDo == null) {
+				return loginUserDTO;
+			}
+			redisCacheService.put(CommonConstants.REDIS_USER_INFO_PREFIX+
+					FilterContextHandler.getUserID(), userDo);
+		}
+		loginUserDTO.setUsername(userDo.getUsername());
+		loginUserDTO.setName(userDo.getName());
+		loginUserDTO.setNickname(userDo.getNickname());
+		loginUserDTO.setAvatar(userDo.getAvatar());
+		loginUserDTO.setEmail(userDo.getEmail());
+		loginUserDTO.setUserno(userDo.getUserno());
+		return loginUserDTO;
+	}
+
+	@Override
+	public UserDO frontCurrentUser() {
+		UserDO userDo = redisCacheService.get(CommonConstants.REDIS_USER_INFO_PREFIX+
+				FilterContextHandler.getUserID(), UserDO.class);
+		if (userDo == null) {
+			userDo = get(Long.parseLong(FilterContextHandler.getUserID().toString()));
+			if (userDo == null) {
+				return null;
+			}
+			redisCacheService.put(CommonConstants.REDIS_USER_INFO_PREFIX+
+					FilterContextHandler.getUserID(), userDo);
+		}
+		return userDo;
 	}
 
 	@Override

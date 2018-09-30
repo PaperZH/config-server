@@ -1,7 +1,9 @@
 package com.ucar.qtc.home.service;
 
 import com.ucar.qtcassist.api.CourseCoursewareApi;
+import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.Result;
+import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ public interface CourseCoursewareService extends CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
+    @Override
     @RequestMapping(value = "/addCourseCourseware",method = RequestMethod.POST)
     Result addCourseCourseware(@RequestParam("courseId") Long courseId,
                                @RequestParam("coursewareId") Long coursewareId);
@@ -30,6 +33,7 @@ public interface CourseCoursewareService extends CourseCoursewareApi {
      * @param newCoursewareId
      * @return
      */
+    @Override
     @GetMapping("/updateCourseCourseware/{courseId}/{oldCoursewareId}/{newCoursewareId}")
     Result updateCourseCourseware(@PathVariable("courseId") Long courseId,
                                   @PathVariable("oldCoursewareId") Long oldCoursewareId,
@@ -41,7 +45,17 @@ public interface CourseCoursewareService extends CourseCoursewareApi {
      * @param coursewareId
      * @return
      */
+    @Override
     @GetMapping("/deleteCourseCourseware/{courseId}/{coursewareId}")
     Result deleteCourseCourseware(@PathVariable("courseId") Long courseId,
                                   @PathVariable("coursewareId") Long coursewareId);
+
+    /**
+     *分页 coursewareList
+     * @param addCoursewareQueryVO
+     * @return AddCoursewarePageListDTO
+     */
+    @Override
+    @RequestMapping(value = "/getAddCoursewarePageList",method = RequestMethod.POST)
+    Result<AddCoursewarePageListDTO> getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO);
 }
