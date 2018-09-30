@@ -116,8 +116,9 @@
             <el-button
               size="mini"
               type="danger"
+              @click="downloadClick(scope.row)"
             >
-              <a :href="scope.row.sourceUrl" style="text-decoration: none; color: #fff;" download>下载</a>
+              下载
               </el-button>
           </template>
         </el-table-column>
@@ -162,6 +163,7 @@
           pageSize: '5',
           courseId: ''
         },
+        url: 'http://127.0.0.1:8002/api-home/',
         coursewareTotal: 0,
         studyDialogVisible: false,
         previewUrl: null,
@@ -368,6 +370,10 @@
       },
       sethour () {
         this.coursewareForm.hour = this.coursewareTotal + 1
+      },
+      downloadClick (item) {
+        console.log(item.sourceUrl)
+        window.location.href = 'http://127.0.0.1:8002/api-home/courseware/frontPage/downLoadCourseware?sourceUrl=' + item.sourceUrl
       }
 
     }

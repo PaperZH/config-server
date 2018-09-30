@@ -201,7 +201,7 @@ public class CoursewareController implements CoursewareApi {
     }
 
     @Override
-    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.GET)
     public Result<File> downLoadCourseware(Long baseCoursewareId){
         BaseCoursewareDTO baseCoursewareDTO = baseCoursewareService.getBaseCourseware(baseCoursewareId);
         return Result.getSuccessResult(fileDownLoad.downloadNet(baseCoursewareDTO.getSourceUrl()));

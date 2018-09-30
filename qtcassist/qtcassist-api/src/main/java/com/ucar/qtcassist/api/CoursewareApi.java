@@ -55,6 +55,6 @@ public interface CoursewareApi {
      * @param baseCoursewareId
      * @return
      */
-    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.GET)
     Result<File> downLoadCourseware(Long baseCoursewareId);
 }

@@ -37,7 +37,7 @@ public interface HCoursewareService  {
     @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
-    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.GET)
     Result<File> downLoadCourseware(Long baseCoursewareId);
 
 

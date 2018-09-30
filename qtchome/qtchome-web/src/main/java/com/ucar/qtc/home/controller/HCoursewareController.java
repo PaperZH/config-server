@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 /**
@@ -27,6 +30,7 @@ public class HCoursewareController {
 
     @Autowired
     HCoursewareService hcoursewareService;
+    public static final String URLPREFIX = "http://udfstest.10101111.com/ucarudfs/resource/";
 
     @RequestMapping(value = "/frontPage/getAllBaseCoursewares")
     public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
@@ -43,22 +47,21 @@ public class HCoursewareController {
         return hcoursewareService.uploadCourseware(file);
     }
 
-    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
-    public void downLoadCourseware(HttpServletResponse response, @RequestParam Long baseCoursewareId){
-        Result<File> res = hcoursewareService.downLoadCourseware(baseCoursewareId);
-        File temFile =  res.getRe();
+    @RequestMapping(value = "/frontPage/downLoadCourseware" ,method = RequestMethod.GET)
+    public void downLoadCourseware(HttpServletResponse response, @RequestParam String sourceUrl){
         try {
-            InputStream is = new FileInputStream(temFile);
-            response.reset();
-            response.setContentType("bin");
-            response.addHeader("Content-Disposition", "attachment; id="+baseCoursewareId);
-            byte[] b = new byte[100];
-            int len;
-            while ((len = is.read(b)) > 0){
-                response.getOutputStream().write(b, 0, len);
+            URL url = new URL(sourceUrl);
+            URLConnection conn = url.openConnection();
+            try(InputStream inStream = conn.getInputStream()){
+                response.reset();
+                response.setContentType("bin");
+                response.addHeader("Content-Disposition", "attachment;");
+                byte[] b = new byte[100];
+                int len;
+                while ((len = inStream.read(b)) > 0){
+                    response.getOutputStream().write(b, 0, len);
+                }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
         }
