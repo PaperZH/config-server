@@ -123,7 +123,7 @@
           teacherId: '',
           planTitle: null,
           currentPage: 1,
-          pageSize: 8
+          pageSize: 5
         }
       }
     },
