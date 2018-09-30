@@ -1,5 +1,5 @@
 <template>
-  <div class=" fillcontain">
+  <div class=" fillcontain" style="margin-bottom: 1px">
     <el-card class="box-card" shadow="never">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
         <el-form-item label="名称">
@@ -26,7 +26,6 @@
         <el-table
           v-loading="loading"
           :data="tableData"
-          border
           style="width: 100%">
           <el-table-column
             prop="planTitle"
@@ -88,7 +87,6 @@
         </div>
       </div>
     </el-card>
-
   </div>
 </template>
 
@@ -125,7 +123,7 @@
           teacherId: '',
           planTitle: null,
           currentPage: 1,
-          pageSize: 5
+          pageSize: 8
         }
       }
     },

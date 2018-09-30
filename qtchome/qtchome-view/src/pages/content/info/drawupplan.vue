@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class=" fillcontain">
   <el-card class="box-card" shadow="never">
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
       <el-form-item label="名称">
@@ -14,22 +14,23 @@
       <el-table
         v-loading="loading"
         :data="tableData"
-        border
         style="width: 100%">
         <el-table-column
           prop="planTitle"
           label="计划名称"
-          width="250">
+          min-width="100">
         </el-table-column>
         <el-table-column
           prop="planContent"
           label="培训内容"
-          width="390">
+          show-overflow-tooltip
+          >
         </el-table-column>
         <el-table-column
           prop="planDestination"
           label="培训目的"
-          width="390">
+          show-overflow-tooltip
+          >
         </el-table-column>
         <el-table-column
           prop="planScore"
@@ -38,7 +39,7 @@
         </el-table-column>
         <el-table-column
           label="课程"
-          width="100"
+          min-width="100"
         >
           <template slot-scope="scope" >
             <el-button
@@ -49,7 +50,7 @@
             >分配课程</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" min-width ="150">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
             <el-button type="primary" icon="el-icon-delete"  @click="handleClick(scope.row,scope.$index)"></el-button>
