@@ -7,9 +7,12 @@ import com.ucar.qtcassist.api.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -26,17 +29,38 @@ public class HCoursewareController {
     HCoursewareService hcoursewareService;
 
     @RequestMapping(value = "/frontPage/getAllBaseCoursewares")
-    Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
+    public Result<List<BaseCoursewareListDTO>> getAllBaseCoursewares(){
         return hcoursewareService.getAllBaseCoursewares();
     }
 
     @RequestMapping(value = "/frontPage/getAllTypes")
-    Result<List<CoursewareTypeDTO>> getAllTypes(){
+    public Result<List<CoursewareTypeDTO>> getAllTypes(){
         return hcoursewareService.getAllType();
     }
 
     @RequestMapping(value = "/upLoad",method = RequestMethod.POST)
-    Result upLoad( MultipartFile file) throws Exception{
+    public Result upLoad( MultipartFile file) throws Exception{
         return hcoursewareService.uploadCourseware(file);
+    }
+
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    public void downLoadCourseware(HttpServletResponse response, @RequestParam Long baseCoursewareId){
+        Result<File> res = hcoursewareService.downLoadCourseware(baseCoursewareId);
+        File temFile =  res.getRe();
+        try {
+            InputStream is = new FileInputStream(temFile);
+            response.reset();
+            response.setContentType("bin");
+            response.addHeader("Content-Disposition", "attachment; id="+baseCoursewareId);
+            byte[] b = new byte[100];
+            int len;
+            while ((len = is.read(b)) > 0){
+                response.getOutputStream().write(b, 0, len);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

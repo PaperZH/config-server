@@ -70,4 +70,11 @@
     from assist_course_courseware
     where course_id = #{courseId, jdbcType=BIGINT} and courseware_id = #{coursewareId, jdbcType=BIGINT}
   </select>
+
+  <select id="hasBasecourseware" parameterType="com.ucar.qtcassist.api.model.HasBaseCoursewareDTO" resultType="java.lang.Integer">
+    select count(ac.base_courseware_id)
+    from assist_course_courseware acc
+    LEFT JOIN assist_courseware ac on acc.courseware_id = ac.id
+    where acc.course_id = #{courseId} and ac.base_courseware_id = #{baseCoursewareId}
+  </select>
 </mapper>

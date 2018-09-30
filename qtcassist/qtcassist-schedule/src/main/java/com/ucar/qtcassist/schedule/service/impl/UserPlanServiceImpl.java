@@ -1,17 +1,20 @@
 package com.ucar.qtcassist.schedule.service.impl;
 
-import com.ucar.qtcassist.schedule.dao.UserPlanMapper;
 import com.ucar.qtcassist.api.model.DO.UserPlanDO;
+import com.ucar.qtcassist.schedule.dao.UserPlanMapper;
 import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanDTO;
 import com.ucar.qtcassist.schedule.dto.UserPlanListDTO;
 import com.ucar.qtcassist.schedule.service.UserPlanService;
-import com.ucar.qtcassist.schedule.vo.PlanDetailsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 @Service
 public class UserPlanServiceImpl implements UserPlanService {
 

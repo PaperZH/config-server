@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ucar.qtcassist.api.model.AddCoursewarePageListDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
+import com.ucar.qtcassist.api.model.HasBaseCoursewareDTO;
 import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.course.dao.CourseCoursewareMapper;
 import com.ucar.qtcassist.api.model.DO.CourseCoursewareDO;
@@ -57,7 +58,7 @@ public class CourseCoursewareServiceImpl implements CourseCoursewareService {
     }
 
     @Override
-    public AddCoursewarePageListDTO getAddCoursewareListByCourseId(AddCoursewareQueryVO addCoursewareQueryVO) {
+    public AddCoursewarePageListDTO getAddCoursewareList(AddCoursewareQueryVO addCoursewareQueryVO) {
         AddCoursewarePageListDTO addCoursewarePageListDTO = new AddCoursewarePageListDTO();
         Integer pageNo = addCoursewareQueryVO.getPageNo();
         Integer pageSize = addCoursewareQueryVO.getPageSize();
@@ -75,5 +76,10 @@ public class CourseCoursewareServiceImpl implements CourseCoursewareService {
     @Override
     public Long getIdByCourseIdAndCoursewareId(Long courseId, Long coursewareId) {
         return courseCoursewareMapper.getIdByCourseIdAndCoursewareId(courseId, coursewareId);
+    }
+
+    @Override
+    public Integer hasBasecourseware(HasBaseCoursewareDTO hasBaseCoursewareDTO) {
+        return courseCoursewareMapper.hasBasecourseware(hasBaseCoursewareDTO);
     }
 }

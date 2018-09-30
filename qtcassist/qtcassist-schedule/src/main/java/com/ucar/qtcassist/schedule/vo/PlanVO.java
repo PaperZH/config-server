@@ -1,5 +1,9 @@
 package com.ucar.qtcassist.schedule.vo;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class PlanVO {
     public Long getId() {
         return id;

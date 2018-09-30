@@ -4,6 +4,10 @@ import com.ucar.qtcassist.api.model.DO.CoursePlanDO;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public class PlanDetailsVO {
     public Long getId() {
         return id;

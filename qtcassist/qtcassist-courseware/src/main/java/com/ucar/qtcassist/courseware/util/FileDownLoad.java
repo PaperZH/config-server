@@ -40,29 +40,29 @@ public class FileDownLoad {
             String suffix = sourceUrl.substring(point + 1, sourceUrl.length());
             LOGGER.info(suffix);
             //根据文件名后缀判断文件类型
-            String loc = date+"/";
-            File dir =new File(loc);
+            String loc = date + "/";
+            File dir = new File(loc);
             if(!dir.exists()) {
                 dir.mkdirs();
             }
             String location = date + "/" + uuid + "." + suffix;
             resFile = new File(location);
-            byte[] buffer = new byte[1204];
-
-            try(FileOutputStream fs = new FileOutputStream(resFile)){
+            try(FileOutputStream fs = new FileOutputStream(resFile)) {
+                byte[] buffer = new byte[1204];
+                int length;
                 while((byteread = inStream.read(buffer)) != -1) {
                     fs.write(buffer, 0, byteread);
                 }
+                LOGGER.info("Mq DownLoad successfully......");
+                return resFile;
             }
-            LOGGER.info("downLoad successfully......");
-            return resFile;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            LOGGER.error("downLoad failed......");
+            LOGGER.error("Mq DownLoad failed......");
         } catch (IOException e) {
             e.printStackTrace();
-            LOGGER.error("downLoad failed......");
+            LOGGER.error("Mq DownLoad failed......");
         }
         return resFile;
     }

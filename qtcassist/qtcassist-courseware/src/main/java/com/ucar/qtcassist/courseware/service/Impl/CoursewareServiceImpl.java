@@ -8,6 +8,7 @@ import com.ucar.qtcassist.api.model.BackDTO;
 import com.ucar.qtcassist.api.model.CoursewareDTO;
 import com.ucar.qtcassist.api.model.VO.AddCoursewareQueryVO;
 import com.ucar.qtcassist.api.model.VO.CoursewareQueryVO;
+import com.ucar.qtcassist.courseware.constant.FileConstant;
 import com.ucar.qtcassist.courseware.dao.BaseCoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareMapper;
 import com.ucar.qtcassist.courseware.dao.CoursewareTypeMapper;
@@ -71,10 +72,11 @@ public class CoursewareServiceImpl implements CoursewareService {
                 coursewareDTO.setDescription(coursewareDOList.get(i).getCoursewareDescription());
                 coursewareDTO.setId(coursewareDOList.get(i).getId());
                 coursewareDTO.setPublishTime(coursewareDOList.get(i).getPublishTime());
-                coursewareDTO.setSourceUrl(baseCoursewareDO.getSourceUrl());
-                coursewareDTO.setPreUrl(baseCoursewareDO.getPreviewUrl());
+                coursewareDTO.setSourceUrl(FileConstant.URLPREFIX+baseCoursewareDO.getSourceUrl());
+                coursewareDTO.setPreUrl(FileConstant.URLPREFIX+baseCoursewareDO.getPreviewUrl());
                 CoursewareTypeDO coursewareTypeDO = coursewareTypeMapper.selectByPrimaryKey(coursewareDOList.get(i).getTypeId());
                 coursewareDTO.setType(coursewareTypeDO.getTypeName());
+                coursewareDTO.setNum(coursewareDOList.get(i).getCoursewareNum());
                 coursewareDTOList.add(coursewareDTO);
             }
             return coursewareDTOList;

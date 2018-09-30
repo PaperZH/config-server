@@ -6,6 +6,10 @@ import com.ucar.qtcassist.schedule.dto.QueryPlanDTO;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public interface PlanService {
     int deleteByPrimaryKey(Long id);
 

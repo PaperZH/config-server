@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 @Component
 public interface UserPlanMapper {
     int deleteByPrimaryKey(Long id);

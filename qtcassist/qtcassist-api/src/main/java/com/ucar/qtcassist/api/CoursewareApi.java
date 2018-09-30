@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public interface CoursewareApi {
      * @return
      */
     @RequestMapping(value = "/addCourseware", method = RequestMethod.POST)
-    Result addCourseware(@RequestParam(value = "id") Long id,@RequestParam(value = "num") Long num);
+    Result addCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
 
     @RequestMapping(value = "/saveCourseware", method = RequestMethod.POST)
     Result saveCourseware(@RequestBody CourseCoursewareDTO courseCoursewareDTO);
@@ -49,4 +50,11 @@ public interface CoursewareApi {
     @RequestMapping("/getAddCoursewarePageList")
     Result getAddCoursewarePageList(@RequestBody AddCoursewareQueryVO addCoursewareQueryVO);
 
+    /**
+     * 根据baseCoursewareId 下载对应的文件
+     * @param baseCoursewareId
+     * @return
+     */
+    @RequestMapping(value = "/downLoadCourseware" ,method = RequestMethod.POST)
+    Result<File> downLoadCourseware(Long baseCoursewareId);
 }

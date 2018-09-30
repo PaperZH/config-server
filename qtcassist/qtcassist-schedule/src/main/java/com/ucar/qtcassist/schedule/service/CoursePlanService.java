@@ -6,6 +6,10 @@ import com.ucar.qtcassist.schedule.dto.QueryCourseDTO;
 
 import java.util.List;
 
+/**
+ * @author: cong.li
+ * @date: 2018/9/29 14:18
+ */
 public interface CoursePlanService {
     int deleteByPrimaryKey(Long id);
 
@@ -21,7 +25,7 @@ public interface CoursePlanService {
 
     int updateByPrimaryKey(CoursePlanDO record);
 
-    int selectTotal(QueryCourseDTO courseDTO) ;
+    int selectTotal(QueryCourseDTO courseDTO);
 
 
 }
