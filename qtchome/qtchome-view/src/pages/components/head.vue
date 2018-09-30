@@ -31,12 +31,12 @@
               <el-button style="margin-top: 1.7%;" class="fa fa-user-o"  type="text" @click="dialogFormVisible = true" v-show="isShow">登录</el-button>
               <div style="margin-top: 0.8%;" v-show="isUser">
                 <img style="width: 40px;height: 40px ;border-radius:20px" :src="userInfo.avatar"/>&nbsp&nbsp
-                <el-dropdown style="float: right;margin-top: 12px" trigger="click" @command="handleCommand">
+                <el-dropdown style="float: right;margin-top: 12px" @command="handleCommand">
                   <span class="el-dropdown-link" style="color: #faf7f7;">
                    {{userInfo.nickName}}<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="user"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人信息</span></el-dropdown-item>
+                    <el-dropdown-item command="user"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<span style="color: #555;font-size: 14px;">个人中心</span></el-dropdown-item>
                     <el-dropdown-item command="quit"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;退出登录</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -65,6 +65,7 @@
 
 </template>
 <script>
+import {bus} from '../../bus'
 export default {
   inject: ['reload'],
   props: {
@@ -169,10 +170,28 @@ export default {
       }
     }
   },
+  created: function () {
+    bus.$on('headLogout', () => {
+      this.isShow = true
+      this.isUser = false
+      this.reload()
+    })
+    bus.$on('headRefresh', () => {
+      this.$store.dispatch('Post', {'url': '/api-home/user/currentUser'}).then(res => {
+        let result = res.data
+        this.userInfo.nickName = result.user.nickname
+        this.userInfo.avatar = result.user.avatar
+        sessionStorage.setItem('access-userinfo', JSON.stringify(result.user))
+      })
+    })
+    bus.$on('clickLogin', () => {
+      this.dialogFormVisible = true
+    })
+  },
   mounted: function () {
     let tempuser = null
-    tempuser = sessionStorage.getItem('access-userinfo')
-    if (tempuser) {
+    tempuser = JSON.parse(sessionStorage.getItem('access-userinfo'))
+    if (tempuser && tempuser != null) {
       this.userInfo.nickName = tempuser.nickname
       this.userInfo.avatar = tempuser.avatar
       this.$store.commit('SET_USERID', tempuser.userId)

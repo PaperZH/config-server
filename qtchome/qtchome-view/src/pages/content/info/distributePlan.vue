@@ -1,5 +1,5 @@
 <template>
-  <div class=" fillcontain">
+  <div class=" fillcontain" style="margin-bottom: 1px">
     <el-card class="box-card" shadow="never">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left: 50px">
         <el-form-item label="名称">
@@ -26,7 +26,6 @@
         <el-table
           v-loading="loading"
           :data="tableData"
-          border
           style="width: 100%">
           <el-table-column
             prop="planTitle"
@@ -88,7 +87,6 @@
         </div>
       </div>
     </el-card>
-
   </div>
 </template>
 
@@ -194,7 +192,6 @@
         this.$store.dispatch('Get', {'url': '/api-home/plan/getPublishedPlan', 'data': this.queryParams}).then(res => {
           this.loading = false
           if (res.data.success) {
-            console.log(res.data.re.rows)
             this.tableData = res.data.re.rows
             this.total = res.data.re.total
           } else {

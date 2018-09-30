@@ -41,8 +41,9 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     RedisCacheService redisCacheService;
 
-    private String ignorePath = "/api-admin/login,/api-admin/pages,/api-admin/homeLogin,/v2/api-docs,/api-home/login," +
+    private String ignorePath = "/api-admin/login,/api-admin/pages,/api-admin/homeLogin,[(\\w)-/]*v2/api-docs,/api-home/login," +
             "/api-home[(\\w)-/]*/frontPage";
+    private String excludePath = "/api-admin/user/currentUser,/api-home/user/currentUser,/api-admin/logout,/api-home/logout";
 
     @Override
     public String filterType() {
@@ -141,6 +142,12 @@ public class AccessFilter extends ZuulFilter {
 
     private boolean havePermission(HttpServletRequest request){
         String currentURL = request.getRequestURI();
+        for (String s : excludePath.split(",")) {
+            if (s.startsWith(currentURL)) {
+                 return true;
+            }
+        }
+
         List<MenuDTO> menuDTOS = menuService.userMenus();
         for(MenuDTO menuDTO:menuDTOS){
             if(currentURL!=null&&null!=menuDTO.getUrl()&&currentURL.startsWith(menuDTO.getUrl())){

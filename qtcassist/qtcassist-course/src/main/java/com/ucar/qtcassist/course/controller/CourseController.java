@@ -13,7 +13,6 @@ import com.ucar.qtcassist.api.model.VO.CourseDetailVO;
 import com.ucar.qtcassist.api.model.VO.CourseVO;
 import com.ucar.qtcassist.api.model.VO.QueryVO;
 import com.ucar.qtcassist.api.model.VO.TeacherVO;
-import com.ucar.qtcassist.base.common.constant.UrlPrefixConstant;
 import com.ucar.qtcassist.course.model.UserDTO;
 import com.ucar.qtcassist.course.service.AdminFeginClient;
 import com.ucar.qtcassist.course.service.CollectCourseService;
@@ -231,14 +230,6 @@ public class CourseController implements CourseApi {
             courseDetail.setCoursewares(null);
         } else {
             List<CoursewareDTO> coursewareDTOList = coursewareService.selectCoursewareList(coursewareIdList);
-            String preUrl = null;
-            String sourceUrl = null;
-            for(CoursewareDTO coursewareDTO : coursewareDTOList) {
-                preUrl = UrlPrefixConstant.COURSEWARE_URL_PREFIX + coursewareDTO.getPreUrl();
-                sourceUrl = UrlPrefixConstant.COURSEWARE_URL_PREFIX + coursewareDTO.getSourceUrl();
-                coursewareDTO.setPreUrl(preUrl);
-                coursewareDTO.setSourceUrl(sourceUrl);
-            }
             courseDetail.setCoursewares(coursewareDTOList);
         }
 
@@ -280,9 +271,6 @@ public class CourseController implements CourseApi {
         int count = courseService.insertSelective(courseDO);
         courseVO.setCourseId(courseDO.getId());
         if(count > 0) {
-//            CourseVO course = CourseConvertUtil.convertToCourseVO(courseDO);
-//            course.setCourseType(courseVO.getCourseType());
-//            course.setTypeName(courseVO.getCourseType().getTypeName());
             courseVO.setCourseId(courseDO.getId());
             return Result.getSuccessResult(courseVO);
         }

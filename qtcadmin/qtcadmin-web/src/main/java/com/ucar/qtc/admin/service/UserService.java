@@ -4,6 +4,7 @@ import com.ucar.qtc.admin.domain.Tree;
 import com.ucar.qtc.admin.domain.DeptDO;
 import com.ucar.qtc.admin.domain.UserDO;
 import com.ucar.qtc.admin.vo.UserVO;
+import com.ucar.qtc.common.dto.LoginUserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,9 @@ public interface UserService {
 
 	int update(UserDO user);
 
+	LoginUserDTO currentUser();
+
+	UserDO frontCurrentUser();
 
 	/**
 	 * 更新个人信息

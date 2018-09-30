@@ -6,23 +6,15 @@ import com.taobao.metamorphosis.client.MetaMessageSessionFactory;
 import com.taobao.metamorphosis.client.consumer.LoadBalanceStrategy;
 import com.taobao.metamorphosis.client.consumer.MessageConsumer;
 import com.taobao.metamorphosis.client.consumer.MessageListener;
-import com.taobao.metamorphosis.client.extension.spring.DefaultMessageListener;
-import com.taobao.metamorphosis.client.extension.spring.JavaSerializationMessageBodyConverter;
-import com.taobao.metamorphosis.client.extension.spring.MessageListenerContainer;
-import com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFactoryBean;
-import com.taobao.metamorphosis.client.extension.spring.MetaqTemplate;
 import com.taobao.metamorphosis.client.extension.spring.MetaqTopic;
 import com.taobao.metamorphosis.client.producer.MessageProducer;
 import com.taobao.metamorphosis.utils.ZkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Description: Mq相关的bean
@@ -32,31 +24,32 @@ import java.util.Map;
  */
 
 @Configuration
+@ConditionalOnBean(name = "mesListener")
 public class MqConfig {
 
-    @Autowired(required=false)
+    @Autowired
     @Qualifier("mesListener")
     private MessageListener messageListener;
 
     @Value("${metaq.consumer.start-up}")
     boolean mataqConsumerStartUp;
 
-    @Bean(name="sessionFactory")
+    @Bean(name = "sessionFactory")
     public MessageSessionFactory sessionFactory() throws Exception {
         final MetaClientConfig metaClientConfig = new MetaClientConfig();
-        final ZkUtils.ZKConfig zkConfig = new ZkUtils.ZKConfig("10.104.107.222:5181",30000,30000,5000);
+        final ZkUtils.ZKConfig zkConfig = new ZkUtils.ZKConfig("10.104.107.222:5181", 30000, 30000, 5000);
         metaClientConfig.setZkConfig(zkConfig);
         MessageSessionFactory sessionFactory = new MetaMessageSessionFactory(metaClientConfig);
-        if (messageListener != null && mataqConsumerStartUp) {
+        if(mataqConsumerStartUp) {
             MessageConsumer consumer = sessionFactory.createConsumer(defaultTopic().getConsumerConfig());
             consumer.subscribe(defaultTopic().getTopic(), 1024 * 1024, messageListener);
             consumer.completeSubscribe();
         }
 
-        return  sessionFactory;
+        return sessionFactory;
     }
 
-    @Bean(name="defaultProducer")
+    @Bean(name = "defaultProducer")
     public MessageProducer defaultProducer() throws Exception {
         MessageProducer messageProducer = sessionFactory().createProducer();
         messageProducer.publish(defaultTopic().getTopic());
@@ -78,8 +71,8 @@ public class MqConfig {
     //    return  metaqTemplate;
     //}
 
-    @Bean(name="defaultTopic")
-    public MetaqTopic defaultTopic (){
+    @Bean(name = "defaultTopic")
+    public MetaqTopic defaultTopic() {
         MetaqTopic metaqTopic = new MetaqTopic();
         metaqTopic.setGroup("ucar_abs");
         metaqTopic.setTopic("ucarabs_emp_update_topic");
@@ -92,9 +85,8 @@ public class MqConfig {
         metaqTopic.setAlwaysConsumeFromMaxOffset(false);
         metaqTopic.setLoadBalanceStrategyType(LoadBalanceStrategy.Type.DEFAULT);
         metaqTopic.setMaxIncreaseFetchDataRetries(5);
-        return  metaqTopic;
+        return metaqTopic;
     }
-
 
     //@Bean(name="listenerContainer")
     //public MessageListenerContainer listenerContainer() throws Exception {
