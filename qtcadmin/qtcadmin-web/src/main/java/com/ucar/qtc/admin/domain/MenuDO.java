@@ -26,6 +26,8 @@ public class MenuDO implements Serializable {
 	private String perms;
 	//类型   0：目录   1：菜单   2：按钮
 	private Integer type;
+	//菜单类别   0：前台   1：后台
+	private Integer menuType;
 	//菜单图标
 	private String icon;
 	//排序
@@ -176,5 +178,13 @@ public class MenuDO implements Serializable {
 
 	public void setMenu_type(Integer menu_type) {
 		this.menu_type = menu_type;
+	}
+
+	public Integer getMenuType() {
+		return menuType;
+	}
+
+	public void setMenuType(Integer menuType) {
+		this.menuType = menuType;
 	}
 }

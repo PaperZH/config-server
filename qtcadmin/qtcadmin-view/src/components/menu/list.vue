@@ -28,6 +28,13 @@
             <el-tag v-if="scope.row.object.type === 2">操作</el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="类别" prop="object.type">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.object.menuType === null"></el-tag>
+            <el-tag v-if="scope.row.object.menuType === 0" type="danger">前台</el-tag>
+            <el-tag v-if="scope.row.object.menuType === 1" type="success">后台</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="路径" prop="object.url"></el-table-column>
         <el-table-column label="图标" prop="object.icon"></el-table-column>
         <el-table-column label="权限" prop="object.perms"></el-table-column>
@@ -64,6 +71,12 @@
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="addForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="类别" prop="type">
+            <el-radio-group v-model="addForm.menuType">
+              <el-radio :label="0">前台</el-radio>
+              <el-radio :label="1">后台</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -96,6 +109,13 @@
           <el-form-item label="排序" prop="orderNum">
             <el-input v-model="editForm.orderNum" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="类别" prop="type">
+            <el-radio-group v-model="editForm.menuType">
+              <el-radio :label="0">前台</el-radio>
+              <el-radio :label="1">后台</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -143,7 +163,7 @@
         let that = this
         API.menus().then(
           function (result) {
-            that.menudata = result
+            that.menudata = result  
           }
         )
       },

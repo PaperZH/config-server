@@ -9,7 +9,7 @@
 	</select>
 
 	<select id="list" resultType="com.ucar.qtc.admin.domain.MenuDO">
-		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
+		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`menu_type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
 		from sys_menu a
 		<where>
 			a.del_flag = 1
@@ -36,7 +36,7 @@
 	</select>
 
 	<select id="listFront" resultType="com.ucar.qtc.admin.domain.MenuDO">
-		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
+		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`menu_type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
 		from sys_menu a
 		<where>
 			a.del_flag = 1
@@ -64,7 +64,8 @@
 	</select>
 
 	<select id="listBack" resultType="com.ucar.qtc.admin.domain.MenuDO">
-		select `menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
+		select
+		`menu_id`,`parent_id`,`name`,`url`,`perms`,`component`,`type`,`menu_type`,`menu_type`,`icon`,`order_num`,`create_time`,`update_time`,`del_flag`
 		from sys_menu a
 		<where>
 			a.del_flag = 1
@@ -114,6 +115,7 @@
 		`component`,
 		`perms`,
 		`type`,
+		`menu_type`,
 		`icon`,
 		`order_num`,
 		`del_flag`
@@ -126,6 +128,7 @@
 		#{component},
 		#{perms},
 		#{type},
+		#{menuType},
 		#{icon},
 		#{orderNum},
 		#{delFlag}
@@ -141,6 +144,7 @@
 			<if test="component != null">`component` = #{component}, </if>
 			<if test="perms != null">`perms` = #{perms}, </if>
 			<if test="type != null">`type` = #{type}, </if>
+			<if test="type != null">`menu_type` = #{menuType}, </if>
 			<if test="icon != null">`icon` = #{icon}, </if>
 			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
 		</set>
