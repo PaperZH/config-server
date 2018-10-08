@@ -1,5 +1,0 @@
-## dev | prod | test
-
-spring:
-  profiles:
-    active: @environment@
